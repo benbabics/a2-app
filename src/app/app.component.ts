@@ -1,5 +1,4 @@
 import { Component, Inject, Injector } from "@angular/core";
-import { Platform, NavController, IonicApp } from "ionic-angular";
 import { StatusBar } from "@ionic-native/status-bar";
 import { SplashScreen } from "@ionic-native/splash-screen";
 
@@ -11,7 +10,7 @@ import { WexPlatform } from "../providers";
 import "chart.js";
 
 @Component({
-  templateUrl: "app.html"
+  templateUrl: "app.html",
 })
 export class MyApp {
 
@@ -23,10 +22,10 @@ export class MyApp {
   constructor(
     splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private sessionManager: SessionManager,
+    sessionManager: SessionManager,
     private platform: WexPlatform,
     @Inject(AppSymbols.RootPage) public rootPage: any,
-    private injector: Injector) {
+    injector: Injector) {
     MyApp._injector = injector;
 
     platform.ready().then(() => {

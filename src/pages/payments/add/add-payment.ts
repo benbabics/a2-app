@@ -12,7 +12,6 @@ import {
   Select
 } from "ionic-angular";
 import { SecurePage } from "../../secure-page";
-import { PaymentProvider } from "@angular-wex/api-providers";
 import { Session, UserPayment } from "../../../models";
 import { InvoiceSummary, BankAccount, Payment } from "@angular-wex/models";
 import { WexValidateCurrencyParams } from "@angular-wex/validators";
@@ -102,7 +101,7 @@ export class AddPaymentFlowAmountSection extends AddPaymentFlowSection<TextInput
   }
 
   public onEnter(): Promise<any> {
-    return new Promise((resolve, reject) => setTimeout(() => {
+    return new Promise((resolve) => setTimeout(() => {
       //Focus the input field
       this.getFormInput().setFocus();
       resolve();
@@ -129,7 +128,7 @@ export class AddPaymentFlowDateSection extends AddPaymentFlowSection<DateTime> {
 
   public onEnter(): Promise<any> {
     //Open the datepicker
-    return new Promise((resolve, reject) => setTimeout(() => {
+    return new Promise((resolve) => setTimeout(() => {
       this.getFormInput().open();
       resolve();
     }, 0));
@@ -158,7 +157,7 @@ export class AddPaymentFlowBankAccountSection extends AddPaymentFlowSection<Sele
 
   public onEnter(): Promise<any> {
     //Open the datepicker
-    return new Promise((resolve, reject) => setTimeout(() => {
+    return new Promise((resolve) => setTimeout(() => {
       this.getFormInput().open();
       resolve();
     }, 0));
@@ -210,7 +209,6 @@ export class AddPaymentPage extends SecurePage {
     injector: Injector,
     public navCtrl: NavController,
     public navParams: NavParams,
-    private paymentProvider: PaymentProvider,
     private viewController: ViewController,
     public keyboard: Keyboard
   ) {

@@ -3,11 +3,11 @@ import * as _ from "lodash";
 import { NavBarController } from "../../providers";
 import { Component, Injector } from "@angular/core";
 import { NavController, NavParams, PopoverController, Platform, ToastOptions } from 'ionic-angular';
-import { Company, InvoiceSummary, Payment, CompanyStub, User } from "@angular-wex/models";
+import { InvoiceSummary, CompanyStub } from "@angular-wex/models";
 import { Session } from "../../models";
 import { SecurePage } from "../secure-page";
 import { OptionsPopoverPage } from "./options-popover/options-popover";
-import { InvoiceProvider, BrandProvider } from "@angular-wex/api-providers";
+import { BrandProvider } from "@angular-wex/api-providers";
 import { WexAppBackButtonController } from '../../providers/wex-app-back-button-controller';
 
 interface ChartDisplayConfig {
@@ -31,10 +31,7 @@ export class LandingPage extends SecurePage {
     Session.Field.User,
     Session.Field.InvoiceSummary,
     Session.Field.Payments
-  ];
-  private readonly BACK_TO_EXIT_ACTION_PRIORITY = 102;
-  private readonly DEFAULT_CACHE_TTL = 4320; //72 hours
-  private exitTimerPromise: Promise<any>;
+  ]; //72 hours
   private isCurrentView: boolean;
 
   public readonly chartColors = this.CONSTANTS.CHART.COLORS;
@@ -51,7 +48,6 @@ export class LandingPage extends SecurePage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private invoiceProvider: InvoiceProvider,
     private popoverCtrl: PopoverController,
     private brandProvider: BrandProvider,
     private navBarController: NavBarController,

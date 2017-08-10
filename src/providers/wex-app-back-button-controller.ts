@@ -1,4 +1,3 @@
-import { NavController } from "ionic-angular";
 import { Platform, App } from 'ionic-angular';
 import { Injectable } from '@angular/core';
 

@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import {
-  IFingerprintVerificationOptions,
   INativeFingerprintService,
   FingerprintAvailabilityDetails,
   FingerprintProfile,
@@ -10,11 +9,11 @@ import {
 @Injectable()
 export class MockFingerprintService implements INativeFingerprintService {
 
-  public clearProfile(id: string): Promise<any> {
+  public clearProfile(): Promise<any> {
     return Promise.reject("Mock fingerprint service has no profiles.")
   }
 
-  public hasProfile(id: string): Promise<any> {
+  public hasProfile(): Promise<any> {
     return Promise.reject("Mock fingerprint service has no profiles.");
   }
 
@@ -25,7 +24,7 @@ export class MockFingerprintService implements INativeFingerprintService {
     });
   }
 
-  public verify(options: IFingerprintVerificationOptions): Promise<FingerprintProfile|FingerprintVerificationError> {
+  public verify(): Promise<FingerprintProfile|FingerprintVerificationError> {
     return Promise.reject({
       exceededAttempts: false,
       userCanceled: false,

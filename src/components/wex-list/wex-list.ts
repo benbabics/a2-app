@@ -3,11 +3,6 @@ import { Component, Input, TemplateRef, ContentChild, Query } from "@angular/cor
 import { Value } from "../../decorators/value";
 import { WexGreeking } from "../index";
 
-interface ItemListGroup {
-  heading: string;
-  items: any[];
-}
-
 @Component({
   selector: "wex-list",
   templateUrl: "wex-list.html"

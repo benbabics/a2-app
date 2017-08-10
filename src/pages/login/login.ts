@@ -28,18 +28,22 @@ export namespace LoginPageNavParams {
 
 declare const cordova: any;
 
+interface X {
+
+}
+
 @Component({
   selector: "page-login",
   templateUrl: "login.html"
 })
-export class LoginPage extends Page {
+export class LoginPage extends Page implements X {
   @ViewChild("content") content: Content;
   @ViewChild("keyboardSpacer") keyboardSpacer: ElementRef;
 
   @Value("STORAGE.KEYS.USERNAME") private readonly USERNAME_KEY: string;
 
   private _onKeyboardOpen = event => this.onKeyboardOpen(event);
-  private _onKeyboardClose = event => this.onKeyboardClose(event);
+  private _onKeyboardClose = () => this.onKeyboardClose();
 
   public fingerprintAuthAvailable: boolean = false;
   public fingerprintProfileAvailable: boolean = false;
@@ -138,7 +142,7 @@ export class LoginPage extends Page {
     this.keyboardSpacer.nativeElement.style.height = `${event.keyboardHeight}px`;
   }
 
-  private onKeyboardClose(event: any) {
+  private onKeyboardClose() {
     this.content.getNativeElement().classList.remove("keyboard-open");
     this.keyboardSpacer.nativeElement.style.height = "0px";
   }

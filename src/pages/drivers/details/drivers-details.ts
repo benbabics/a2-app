@@ -3,17 +3,13 @@ import { ActionSheetButton } from 'ionic-angular/components/action-sheet/action-
 import { ActionSheetController, Events, ToastOptions, Platform } from 'ionic-angular';
 import * as _ from "lodash";
 import { Component, Injector } from '@angular/core';
-import { NavParams, App } from 'ionic-angular';
+import { NavParams } from 'ionic-angular';
 import { Driver, DriverStatus, OnlineApplication } from '@angular-wex/models';
 import { DriverProvider } from "@angular-wex/api-providers"
 import { DetailsPage } from "../../details-page";
-import { SessionManager } from './../../../providers/session-manager';
 import { ActionSheetOptions } from 'ionic-angular/components/action-sheet/action-sheet-options';
 import { WexAlertController } from '../../../components/wex-alert-controller/wex-alert-controller';
 
-type DriverDetailsOnlineApplicationFilter = {
-  [P in keyof Driver.Details]?: OnlineApplication[];
-};
 interface DriverStatusDetails {
   id: DriverStatus;
   label: string;
@@ -29,7 +25,6 @@ export class DriversDetailsPage extends DetailsPage {
   public isChangingStatus: boolean = false;
 
   constructor(
-    private app:      App,
     public navParams: NavParams,
     private actionSheetController: ActionSheetController,
     private wexAlertController: WexAlertController,

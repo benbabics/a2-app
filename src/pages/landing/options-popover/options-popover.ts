@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import { SessionManager } from "../../../providers";
 import { App, ViewController } from "ionic-angular";
 import { ContactUsPage } from "../../contact-us/contact-us";
-import { LoginPage } from "../../login/login";
 import { SettingsPage } from '../../settings/settings';
 import { TermsOfUsePage } from "../../terms-of-use/terms-of-use";
 import { PrivacyPolicyPage } from "../../privacy-policy/privacy-policy";

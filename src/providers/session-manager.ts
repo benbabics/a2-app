@@ -36,8 +36,6 @@ export class SessionManager {
 
   private _sessionStateObserver = new BehaviorSubject(null);
 
-  private static fingerprintAuthenticationTermsAccepted = false;
-
   constructor(
     @Inject(AppSymbols.RootPage) private rootPage: any,
     private authProvider: AuthProvider,

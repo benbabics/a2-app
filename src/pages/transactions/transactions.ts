@@ -310,8 +310,6 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
     return this.selectedListView.greekingData;
   }
 
-  public set greekingData(data) { }
-
   public get hasMoreItems(): boolean {
     return this.selectedListView.hasMoreItems();
   }
@@ -336,8 +334,6 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
   public get listLabels(): string[] {
     return this.selectedListView.listLabels;
   }
-
-  public set listLabels(labels) { }
 
   public goToDetailPage(item: TransactionListModelType) {
     return this.selectedListView.goToDetailPage(item);

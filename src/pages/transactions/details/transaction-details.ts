@@ -1,8 +1,6 @@
-import * as _ from "lodash";
 import { Component, Injector } from '@angular/core';
-import { NavParams, App } from 'ionic-angular';
+import { NavParams } from 'ionic-angular';
 import { DetailsPage } from "../../details-page";
-import { SessionManager } from './../../../providers/session-manager';
 import { Transaction } from "@angular-wex/models";
 
 @Component({
@@ -14,7 +12,6 @@ export class TransactionDetailsPage extends DetailsPage {
 
   constructor(
     injector: Injector,
-    private app: App,
     public navParams: NavParams
   ) {
     super( "Transactions.Details", injector );

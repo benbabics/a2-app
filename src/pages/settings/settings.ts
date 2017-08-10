@@ -1,9 +1,6 @@
 import * as _ from "lodash";
 import { Platform } from "ionic-angular";
-import {
-  Fingerprint,
-  SessionManager
-} from "../../providers/";
+import { Fingerprint } from "../../providers/";
 import { Session } from "../../models/";
 import { Value } from "../../decorators/value";
 import { Component, ChangeDetectorRef, Injector } from "@angular/core";
@@ -24,7 +21,6 @@ export class SettingsPage extends SecurePage {
   public platformFingerprintLabel: string = this.resolvePlatformConstant( this.CONSTANTS.fingerprintAuthName );
 
   constructor(
-    sessionManager: SessionManager,
     private fingerprint: Fingerprint,
     private platform: Platform,
     private dialogs: Dialogs,

@@ -18,7 +18,7 @@ export class PrivacyPolicyPage extends Page {
     this.sectionVisibility = new Array<boolean>(14);
   }
 
-  private openUrl(url: string): void {
+  public openUrl(url: string): void {
     this.inAppBrowser.create(url);
   }
 
@@ -30,15 +30,15 @@ export class PrivacyPolicyPage extends Page {
       });
   }
 
-  private sectionIsVisible(sectionNumber: number): boolean {
+  public sectionIsVisible(sectionNumber: number): boolean {
     return this.sectionVisibility[sectionNumber];
   }
 
-  private sectionIsHidden(sectionNumber: number): boolean {
+  public sectionIsHidden(sectionNumber: number): boolean {
     return !this.sectionVisibility[sectionNumber];
   }
 
-  private toggleSectionVisibility(sectionNumber: number): void {
+  public toggleSectionVisibility(sectionNumber: number): void {
     this.sectionVisibility[sectionNumber] = !this.sectionVisibility[sectionNumber];
   }
 }

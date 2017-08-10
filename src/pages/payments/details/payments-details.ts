@@ -1,4 +1,3 @@
-import { App } from 'ionic-angular';
 import { NavParams } from 'ionic-angular';
 import { Component, Injector } from '@angular/core';
 import { DetailsPage } from "../../details-page";
@@ -21,7 +20,6 @@ export class PaymentsDetailsPage extends DetailsPage {
   public payment: Payment;
 
   constructor(
-    private app: App,
     public navParams: NavParams,
     injector: Injector
   ) {

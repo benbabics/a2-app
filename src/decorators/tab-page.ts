@@ -1,7 +1,6 @@
 import { WexAppBackButtonController } from "./../providers";
 import { NavBarController } from './../providers/nav-bar-controller';
 import { MyApp } from './../app/app.component';
-import { Injector } from '@angular/core';
 import { LandingPage } from '../pages/landing/landing';
 
 type GenericConstructor = { new (...args: any[]): any };
