@@ -1,10 +1,7 @@
-import { Injectable, style } from '@angular/core';
-import { Http } from '@angular/http';
+import { Injectable } from '@angular/core';
 import { AppVersion } from "@ionic-native/app-version";
-import * as _ from "lodash";
 import { Observable } from "rxjs";
 import { Value } from '../decorators/value';
-import { Platform } from 'ionic-angular';
 import { VersionStatus } from "@angular-wex/models";
 import { WexPlatform } from './platform';
 import { VersionCheckProvider } from "@angular-wex/api-providers";
@@ -37,7 +34,6 @@ export class WexAppVersionCheck {
     }
 
     constructor(
-        private http: Http,
         private appVersion: AppVersion,
         private wexPlatform: WexPlatform,
         private versionCheckProvider: VersionCheckProvider
