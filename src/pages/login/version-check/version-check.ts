@@ -30,8 +30,7 @@ import { Market } from '@ionic-native/market';
   }
 
   public update() {
-    let platform = this.wexPlatform.isAndroid ? "android" : "ios";
-    this.market.open(this.CONSTANTS.APP_STORES[platform]);
+    this.market.open(this.CONSTANTS.APP_STORES[this.wexPlatform.os]);
   }
 
 
