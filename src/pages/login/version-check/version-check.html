@@ -15,7 +15,13 @@
 
 
     <ion-footer>
-        <button block (click)="update()" ion-button>{{ CONSTANTS.BUTTONS.update }}</button>
-        <button block *ngIf="canSkipUpdate" (click)="skipUpdate()" ion-button outline>{{ CONSTANTS.BUTTONS.notNow }}</button>
+        <ion-row>
+            <ion-col >
+                <button block (click)="update()" ion-button>{{ CONSTANTS.BUTTONS.update }}</button>
+            </ion-col>
+            <ion-col *ngIf="canSkipUpdate">
+                <button block (click)="skipUpdate()" ion-button outline>{{ CONSTANTS.BUTTONS.notNow }}</button>
+            </ion-col>
+        </ion-row>
     </ion-footer>
 </ion-content>
