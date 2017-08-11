@@ -15,6 +15,7 @@ import { Dialogs } from "@ionic-native/dialogs";
 import { Keyboard } from "@ionic-native/keyboard";
 import { Response } from "@angular/http";
 import { UserCredentials } from "@angular-wex/models";
+import { FingerprintVerificationError } from '../../providers/fingerprint/native-fingerprint-service';
 
 export type LoginPageNavParams = keyof {
   fromLogOut,
@@ -161,13 +162,16 @@ export class LoginPage extends Page {
         }, (error: Response) => {
           let errorCode: string = error instanceof Response ? error.json().error_description : error;
 
-          console.error(error instanceof Response ? error.json().error : error);
+          let fingerprintVerificationError: FingerprintVerificationError = error instanceof Response ? error.json().error : error;
+          console.error(fingerprintVerificationError);
 
-          this.appSnackbarController.createQueued({
-            message: this.getLoginErrorDisplayText(errorCode),
-            cssClass: "red",
-            showCloseButton: true
-          }).present();
+          if (!fingerprintVerificationError.userCanceled) {
+            this.appSnackbarController.createQueued({
+              message: this.getLoginErrorDisplayText(errorCode),
+              cssClass: "red",
+              showCloseButton: true
+            }).present();
+          }
         });
     }
   }
@@ -256,16 +260,16 @@ export class LoginPage extends Page {
   public verifyFingerprintRemoval(): Promise<void> {
     if (this.fingerprintProfileAvailable) {
       return this.dialogs.confirm(
-          this.resolvePlatformConstant(this.CONSTANTS.touchId.warningPrompt.message),
-          this.CONSTANTS.touchId.warningPrompt.title, [
-            this.CONSTANTS.touchId.warningPrompt.buttons.ok,
-            this.CONSTANTS.touchId.warningPrompt.buttons.cancel
-          ]).then((result: number) => {
-            if (result === 1) {
-              this.clearFingerprintProfile(this.user.username);
-              this.clearForm();
-            }
-          });
+        this.resolvePlatformConstant(this.CONSTANTS.touchId.warningPrompt.message),
+        this.CONSTANTS.touchId.warningPrompt.title, [
+          this.CONSTANTS.touchId.warningPrompt.buttons.ok,
+          this.CONSTANTS.touchId.warningPrompt.buttons.cancel
+        ]).then((result: number) => {
+          if (result === 1) {
+            this.clearFingerprintProfile(this.user.username);
+            this.clearForm();
+          }
+        });
     }
     else {
       return Promise.resolve();
