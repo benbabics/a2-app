@@ -28,7 +28,7 @@ export namespace LoginPageNavParams {
 
 export namespace LoginError {
   export const PASSWORD_CHANGED = "PASSWORD_CHANGED";
-  export const BAD_CREDENTIALS = "unauthorized";
+  export const UNAUTHORIZED = "unauthorized";
 }
 
 declare const cordova: any;
@@ -168,7 +168,7 @@ export class LoginPage extends Page {
 
           console.error(error instanceof Response ? error.json().error : error);
 
-           if (this.fingerprintProfileAvailable && errorCode === LoginError.BAD_CREDENTIALS) {
+           if (this.fingerprintProfileAvailable && errorCode === LoginError.UNAUTHORIZED) {
             errorCode = LoginError.PASSWORD_CHANGED;
 
             let id = this.user.username.toLowerCase();
