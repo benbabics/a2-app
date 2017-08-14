@@ -28,7 +28,7 @@ export namespace LoginPageNavParams {
 
 export namespace LoginError {
   export const PASSWORD_CHANGED = "PASSWORD_CHANGED";
-  export const BAD_CREDENTIALS = "BAD_CREDENTIALS";
+  export const BAD_CREDENTIALS = "unauthorized";
 }
 
 declare const cordova: any;
