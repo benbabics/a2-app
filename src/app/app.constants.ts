@@ -88,8 +88,7 @@ export namespace ConstantsInfo {
       CURRENT: "%%=PLATFORM%%",
       ANDROID: "android",
       IOS: "ios",
-      MOCK: "mock",
-      BROWSER: "browser"
+      MOCK: "mock"
     },
     //# User Idle
     USER_IDLE: {
