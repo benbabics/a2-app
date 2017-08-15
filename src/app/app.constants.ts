@@ -13,7 +13,7 @@ export namespace ConstantsInfo {
       KEYS: {
         USERNAME: "USERNAME",
         AUTH_TOKEN: "AUTH_TOKEN",
-        LAST_TRANSACTION_VIEW: "TRANSACTION_SECTION"
+        LAST_TRANSACTION_VIEW: "LAST_TRANSACTION_VIEW"
       }
     },
     //# OAuth
