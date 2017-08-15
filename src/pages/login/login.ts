@@ -28,6 +28,11 @@ export namespace LoginPageNavParams {
   export const fromTimeout: LoginPageNavParams = "fromTimeout";
 }
 
+export namespace LoginError {
+  export const PASSWORD_CHANGED = "PASSWORD_CHANGED";
+  export const UNAUTHORIZED = "unauthorized";
+}
+
 declare const cordova: any;
 
 @Component({
@@ -167,6 +172,14 @@ export class LoginPage extends Page {
           let errorCode: string = error instanceof Response ? error.json().error_description : error;
 
           console.error(error instanceof Response ? error.json().error : error);
+
+           if (this.fingerprintProfileAvailable && errorCode === LoginError.UNAUTHORIZED) {
+            errorCode = LoginError.PASSWORD_CHANGED;
+
+            let id = this.user.username.toLowerCase();
+            this.fingerprint.clearProfile(id);
+            this.fingerprintProfileAvailable = false;
+          }
 
           this.appSnackbarController.createQueued({
             message: this.getLoginErrorDisplayText(errorCode),

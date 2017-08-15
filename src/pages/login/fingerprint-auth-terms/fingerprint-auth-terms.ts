@@ -8,7 +8,7 @@ import { WexPlatform } from "../../../providers";
   templateUrl: "fingerprint-auth-terms.html"
 })
 export class FingerprintAuthenticationTermsPage extends Page {
-  private terms: string;
+  public terms: string;
 
   constructor(
     private platform: WexPlatform,
