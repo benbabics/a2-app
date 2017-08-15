@@ -35,7 +35,7 @@
         "ionic:run:ios:release": "yarn ionic:run:ios -- --aot --release --prod",
         "install:globals": "yarn global add ionic@3.4.0 cordova@7.0.1 fs-extra superagent strip-ansi",
         "postinstall": "yarn install:globals",
-        "serve:www": "http-server www"
+        "serve:www": "http-server platforms/browser/www"
     },
     "dependencies": {
         "@angular-wex/api-providers": "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#7c6ba6f2f77",
@@ -90,7 +90,7 @@
         "ionicons": "3.0.0",
         "lodash": "^4.17.4",
         "moment": "^2.18.1",
-        "nativesettingsopener": "1.0.1",
+        "nativesettingsopener": "^1.0.1",
         "ng2-charts": "^1.5.0",
         "promise.prototype.finally": "^2.0.1",
         "rxjs": "5.4.0",
@@ -142,7 +142,9 @@
             "cordova-plugin-inappbrowser": {},
             "cordova-plugin-network-information": {},
             "cordova-plugin-google-analytics": {},
-            "cordova-plugin-market": {}
+            "cordova-plugin-market": {},
+            "com.xmartlabs.cordova.market": {},
+            "com.phonegap.plugins.nativesettingsopener": {}
         }
     }
 }

@@ -25,7 +25,7 @@ export class WexPlatform extends Platform {
   }
 
   public get isMock(): boolean {
-    return this.os === Constants.PLATFORM.MOCK || WexPlatform.MOCK_REGEX.test(document.URL);
+    return this.os === Constants.PLATFORM.MOCK || WexPlatform.MOCK_REGEX.test(document.URL) || this.isIonicWebView;
   }
 
   public get isIos(): boolean {
@@ -46,5 +46,9 @@ export class WexPlatform extends Platform {
 
   public isOs(os: string): boolean {
     return os.toLowerCase() === this.os;
+  }
+
+  public get isIonicWebView(): boolean {
+    return window.location.href.indexOf('com.ionic.viewapp') > -1;
   }
 }
