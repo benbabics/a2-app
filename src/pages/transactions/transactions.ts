@@ -10,6 +10,8 @@ import { TransactionDetailsPage } from './details/transaction-details';
 import { Transaction, Driver, Card, Model } from "@angular-wex/models";
 import { TransactionProvider, PostedTransactionSearchFilterBy } from "@angular-wex/api-providers";
 import { TabPage } from '../../decorators/tab-page';
+import { Value } from '../../decorators/value';
+import { LocalStorageService } from 'angular-2-local-storage/dist';
 
 export type TransactionListModelType = Card | Driver | Transaction;
 export type TransactionListModelTypeDetails = Card.Details | Driver.Details | Transaction.Details;
@@ -226,6 +228,7 @@ class TransactionsPageFilteredListView extends TransactionsPageDateView {
   templateUrl: "transactions.html"
 })
 export class TransactionsPage extends StaticListPage<TransactionListModelType, TransactionListModelTypeDetails> {
+  @Value("STORAGE.KEYS.LAST_TRANSACTION_VIEW") private readonly LAST_TRANSACTION_VIEW_KEY: string;
 
   private static readonly ListViews: Map<TransactionListType, AbstractTransactionsPageListViewConstructor> = (() => {
     let listView = new Map();
@@ -241,11 +244,11 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
   public selectedListView: AbstractTransactionsPageListView;
   public session: Session;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public injector: Injector) {
+  constructor(private localStorageService: LocalStorageService, public navCtrl: NavController, public navParams: NavParams, public injector: Injector) {
     super("Transactions", injector);
 
     this.filter = this.navParams.get(TransactionsParams.Filter);
-    this.selectList(navParams.get(TransactionsParams.SelectedList) || TransactionListType.CardNumber);
+    this.selectList(navParams.get(TransactionsParams.SelectedList) || TransactionListType.Date);
   }
 
   private selectList(listType: TransactionListType) {
@@ -266,6 +269,9 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
 
       this.selectedListView = new listViewType(this);
     }
+
+    // Re-render the list
+    this.fetchResults().subscribe();
   }
 
   protected fetch(options?: StaticListPage.FetchOptions): Observable<any[]> {
@@ -322,15 +328,20 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
   }
 
   public onSelectList(selection: SegmentButton) {
+    this.localStorageService.set(this.LAST_TRANSACTION_VIEW_KEY, selection.value);
     this.selectList(selection.value as TransactionListType);
-
-    // Re-render the list
-    this.fetchResults().subscribe();
   }
 
   public onInfinite(event: any): Promise<TransactionListModelType> {
     return this.fetchResults(FetchOptions.NextPage)
       .toPromise()
       .then(() => event.complete());
+  }
+
+  public ionViewDidEnter() {
+    let transactionListType = this.localStorageService.get(this.LAST_TRANSACTION_VIEW_KEY) as TransactionListType;
+    if (!_.isNil(transactionListType)) {
+      this.selectList(transactionListType);
+    }
   }
 }

@@ -15,6 +15,7 @@ import { Dialogs } from "@ionic-native/dialogs";
 import { Keyboard } from "@ionic-native/keyboard";
 import { Response } from "@angular/http";
 import { UserCredentials } from "@angular-wex/models";
+import { FingerprintVerificationError } from '../../providers/fingerprint/native-fingerprint-service';
 import { WexAppVersionCheck } from '../../providers/wex-app-version-check';
 import { VersionCheck } from './version-check/version-check';
 
@@ -171,7 +172,8 @@ export class LoginPage extends Page {
         }, (error: Response) => {
           let errorCode: string = error instanceof Response ? error.json().error_description : error;
 
-          console.error(error instanceof Response ? error.json().error : error);
+          let fingerprintVerificationError: FingerprintVerificationError = error instanceof Response ? error.json().error : error;
+          console.error(fingerprintVerificationError);
 
            if (this.fingerprintProfileAvailable && errorCode === LoginError.UNAUTHORIZED) {
             errorCode = LoginError.PASSWORD_CHANGED;
@@ -181,11 +183,13 @@ export class LoginPage extends Page {
             this.fingerprintProfileAvailable = false;
           }
 
-          this.appSnackbarController.createQueued({
-            message: this.getLoginErrorDisplayText(errorCode),
-            cssClass: "red",
-            showCloseButton: true
-          }).present();
+          if (!fingerprintVerificationError.userCanceled) {
+            this.appSnackbarController.createQueued({
+              message: this.getLoginErrorDisplayText(errorCode),
+              cssClass: "red",
+              showCloseButton: true
+            }).present();
+          }
         });
     }
   }

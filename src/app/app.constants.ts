@@ -12,7 +12,8 @@ export namespace ConstantsInfo {
       ID: "FLEET_MANAGER-",
       KEYS: {
         USERNAME: "USERNAME",
-        AUTH_TOKEN: "AUTH_TOKEN"
+        AUTH_TOKEN: "AUTH_TOKEN",
+        LAST_TRANSACTION_VIEW: "LAST_TRANSACTION_VIEW"
       }
     },
     //# OAuth
