@@ -49,6 +49,7 @@ export class WexPlatform extends Platform {
   }
 
   public get isIonicWebView(): boolean {
-    return window.location.href.indexOf('com.ionic.viewapp') > -1;
+    const APP_ID = "7a49ff3d";
+    return window.location.href.indexOf('com.ionic.viewapp') > -1 || window.location.href.indexOf(APP_ID) > -1;
   }
 }
