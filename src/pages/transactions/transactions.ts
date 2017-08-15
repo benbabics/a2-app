@@ -204,7 +204,7 @@ class TransactionsPageFilteredListView extends TransactionsPageDateView {
 
     if (doRequest) {
       return this.requestor.request(this.transactionsPage.session, {
-        filterType: this.filterType,
+        filterBy: this.filterType,
         filterValue: this.filterValue
       }).map(response => response.items);
     }
