@@ -1,13 +1,14 @@
 import { WexAlertController } from './../../../components/wex-alert-controller/wex-alert-controller';
-import { CardProvider } from '@angular-wex/api-providers';
+import { CardProvider, PostedTransactionSearchFilterBy } from '@angular-wex/api-providers';
 import { CardsReissuePage } from "./../reissue/cards-reissue";
 import { Component, Injector } from "@angular/core";
-import { NavParams, App, ActionSheetController, Events, ToastOptions, Platform } from 'ionic-angular';
+import { NavParams, App, ActionSheetController, Events, ToastOptions, Platform, NavController } from 'ionic-angular';
 import { ActionSheetOptions, ActionSheetButton } from "ionic-angular/components/action-sheet/action-sheet-options";
 import { DetailsPage } from "../../details-page";
 import { Card, CardStatus } from "@angular-wex/models";
 import { WexAppSnackbarController } from "../../../components";
 import * as _ from "lodash";
+import { TransactionsPage, TransactionListType } from '../../transactions/transactions';
 
 export type CardsDetailsNavParams = keyof {
   card,
@@ -51,6 +52,7 @@ export class CardsDetailsPage extends DetailsPage {
     private cardProvider: CardProvider,
     private events: Events,
     private wexAlertController: WexAlertController,
+    private navController: NavController,
     private platform: Platform
   ) {
     super("Cards.Details", injector);
@@ -182,5 +184,12 @@ export class CardsDetailsPage extends DetailsPage {
     if (this.canReissue) {
       this.app.getRootNav().push(CardsReissuePage, { card: this.card });
     }
+  }
+
+  public viewTransactions() {
+    this.navController.push(TransactionsPage, {
+      selectedList: TransactionListType.Date,
+      filter: [PostedTransactionSearchFilterBy.Card, this.card.details.cardId]
+    });
   }
 }

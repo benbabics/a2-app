@@ -1,14 +1,15 @@
 import { WexAppSnackbarController } from './../../../components/wex-app-snackbar-controller/wex-app-snackbar-controller';
 import { ActionSheetButton } from 'ionic-angular/components/action-sheet/action-sheet-options';
-import { ActionSheetController, Events, ToastOptions, Platform } from 'ionic-angular';
+import { ActionSheetController, Events, ToastOptions, Platform, NavController } from 'ionic-angular';
 import * as _ from "lodash";
 import { Component, Injector } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 import { Driver, DriverStatus, OnlineApplication } from '@angular-wex/models';
-import { DriverProvider } from "@angular-wex/api-providers";
+import { DriverProvider, PostedTransactionSearchFilterBy } from '@angular-wex/api-providers';
 import { DetailsPage } from "../../details-page";
 import { ActionSheetOptions } from 'ionic-angular/components/action-sheet/action-sheet-options';
 import { WexAlertController } from '../../../components/wex-alert-controller/wex-alert-controller';
+import { TransactionsPage, TransactionListType } from '../../transactions/transactions';
 
 interface DriverStatusDetails {
   id: DriverStatus;
@@ -33,6 +34,7 @@ export class DriversDetailsPage extends DetailsPage {
     private wexAppSnackbarController: WexAppSnackbarController,
     private events: Events,
     private platform: Platform,
+    private navController: NavController,
     injector: Injector
   ) {
     super( "Drivers.Details", injector );
@@ -120,5 +122,12 @@ export class DriversDetailsPage extends DetailsPage {
         toastOptions.message = this.CONSTANTS.bannerStatusChangeFailure;
         this.wexAppSnackbarController.createQueued(toastOptions).present();
       });
+  }
+
+  public viewTransactions() {
+    this.navController.push(TransactionsPage, {
+      selectedList: TransactionListType.Date,
+      filter: [PostedTransactionSearchFilterBy.Driver, this.driver.details.promptId]
+    });
   }
 }
