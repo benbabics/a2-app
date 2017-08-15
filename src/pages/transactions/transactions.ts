@@ -321,11 +321,7 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
     return this.selectedListView.listLabels;
   }
 
-<<<<<<< HEAD
-  public set listLabels(labels) { labels; }
-=======
   public set listLabels(listLabels) { listLabels; }
->>>>>>> master
 
   public goToDetailPage(item: TransactionListModelType) {
     return this.selectedListView.goToDetailPage(item);
