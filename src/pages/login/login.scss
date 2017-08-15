@@ -63,14 +63,25 @@ page-login {
       }
     }
 
+    #loading-indicator, form {
+      background-color: #eee;
+    }
+
+    #loading-indicator {
+      @include flexbox();
+      @include align-items(center);
+      @include justify-content(center);
+      height: 20rem;
+    }
+    
     form {
       @include flexbox();
       @include flex-direction(column);
       @include justify-content(space-between);
 
-      height: 95%;
       padding: 8px 16px;
-      background-color: #eee;
+
+      height: 95%;
       margin-bottom: -8px;
 
       ion-list {

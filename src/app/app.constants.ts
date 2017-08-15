@@ -433,6 +433,27 @@ export namespace ConstantsInfo {
         }
       },
 
+      //# Version Check !Supported Modal
+      VERSION_CHECK: {
+        APP_STORES: {
+          android: "com.wex.fleetsmarthub",
+          ios: "id1051414868?ls=1&mt=8"
+        },
+        TITLE: "Update Available",
+        BUTTONS: {
+          update: "Update",
+          notNow: "Not Now"
+        },
+        UNSUPPORTED: {
+          instructionalText1: "A new version of Fleet SmartHub is available.",
+          instructionalText2: "Please Update to continue using Fleet SmartHub.",
+        },
+        DEPRECATED: {
+          instructionalText1: "A new version of Fleet SmartHub is available.",
+          instructionalText2: "Please Update.",
+        }
+      },
+
       //# Contact Us Page
       CONTACT_US: {
         title          : "Contact Us",
