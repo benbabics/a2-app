@@ -228,7 +228,7 @@ class TransactionsPageFilteredListView extends TransactionsPageDateView {
   templateUrl: "transactions.html"
 })
 export class TransactionsPage extends StaticListPage<TransactionListModelType, TransactionListModelTypeDetails> {
-  @Value("STORAGE.KEYS.TRANSACTION_SECTION") private readonly TRANSACTION_SECTION_KEY: string;
+  @Value("STORAGE.KEYS.LAST_TRANSACTION_VIEW") private readonly LAST_TRANSACTION_VIEW_KEY: string;
 
   private static readonly ListViews: Map<TransactionListType, AbstractTransactionsPageListViewConstructor> = (() => {
     let listView = new Map();
@@ -248,7 +248,7 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
     super("Transactions", injector);
 
     this.filter = this.navParams.get(TransactionsParams.Filter);
-    this.selectList(navParams.get(TransactionsParams.SelectedList) || TransactionListType.CardNumber);
+    this.selectList(navParams.get(TransactionsParams.SelectedList) || TransactionListType.Date);
   }
 
   private selectList(listType: TransactionListType) {
@@ -328,7 +328,7 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
   }
 
   public onSelectList(selection: SegmentButton) {
-    this.localStorageService.set(this.TRANSACTION_SECTION_KEY, selection.value);
+    this.localStorageService.set(this.LAST_TRANSACTION_VIEW_KEY, selection.value);
     this.selectList(selection.value as TransactionListType);
   }
 
@@ -339,7 +339,7 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
   }
 
   public ionViewDidEnter() {
-    let transactionListType = this.localStorageService.get(this.TRANSACTION_SECTION_KEY) as TransactionListType;
+    let transactionListType = this.localStorageService.get(this.LAST_TRANSACTION_VIEW_KEY) as TransactionListType;
     if (!_.isNil(transactionListType)) {
       this.selectList(transactionListType);
     }
