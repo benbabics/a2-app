@@ -1,9 +1,11 @@
-<ion-searchbar *ngIf="page.isSearchEnabled"
-                debounce="0"
-                [placeholder]="page.searchLabel"
-                [(ngModel)]="page.searchFilter"
-                (ionInput)="page.updateList()">
-</ion-searchbar>
+<ion-toolbar  id="static-list-toolbar"
+              *ngIf="page.isSearchEnabled">
+  <ion-searchbar  debounce="0"
+                  [placeholder]="page.searchLabel"
+                  [(ngModel)]="page.searchFilter"
+                  (ionInput)="page.updateList()">
+  </ion-searchbar>
+</ion-toolbar>
 
 <wex-list-header [fields]="page.listLabels">
 </wex-list-header>
