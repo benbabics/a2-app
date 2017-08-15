@@ -240,6 +240,7 @@
                     else if (!_.has(vm.config.serverErrors, errorMessageCode)) {
                         //use less specific error code if it is not a trackable error
                         errorMessageCode = "DEFAULT";
+                        errorMessageCode += useFingerprintAuth ? "_BIOMETRIC" : "_MANUAL";
                     }
 
                     if (!_.includes(IGNORED_USER_AUTH_ERRORS, loginError.reason)) {

@@ -56,7 +56,8 @@
                     "successfulLoginBiometric": ["Login", "LoginSuccessfulBiometric"],
                     "inactiveStatus"        : ["Login", "InactiveStatus"],
                     "accountNotReadyStatus" : ["Login", "AccountNotReadyStatus"],
-                    "wrongCredentialsStatus": ["Login", "WrongCredentialsStatus"],
+                    "wrongCredentialsStatusBiometric": ["Login", "WrongCredentialsStatus", "Biometric"],
+                    "wrongCredentialsStatusManual"   : ["Login", "WrongCredentialsStatus", "Manual"],
                     "lockedPasswordStatus"  : ["Login", "LockedPasswordStatus"],
                     "passwordChangedStatus" : ["Login", "PasswordChangedStatus"],
                     "connectionErrorStatus" : ["Login", "ConnectionErrorStatus"]
@@ -66,7 +67,8 @@
                     "USER_MUST_SETUP_SECURITY_QUESTIONS": "inactiveStatus",
                     "USER_NOT_ACTIVE"                   : "inactiveStatus",
                     "AUTHORIZATION_FAILED"              : "accountNotReadyStatus",
-                    "DEFAULT"                           : "wrongCredentialsStatus",
+                    "DEFAULT_BIOMETRIC"                 : "wrongCredentialsStatusBiometric",
+                    "DEFAULT_MANUAL"                    : "wrongCredentialsStatusManual",
                     "USER_LOCKED"                       : "lockedPasswordStatus",
                     "PASSWORD_CHANGED"                  : "passwordChangedStatus",
                     "CONNECTION_ERROR"                  : "connectionErrorStatus"
@@ -111,7 +113,8 @@
             "submitButton": "Log In",
             "serverErrors": {
                 "AUTHORIZATION_FAILED"              : "We're sorry but you are not able to manage your account via the mobile application at this time. Please use Fleet Manager Online, our full feature site.",
-                "DEFAULT"                           : "Invalid login information. Please check your username and password or go online to set up or recover your username and password.",
+                "DEFAULT_BIOMETRIC"                 : "Invalid login information. Please check your username and password or go online to set up or recover your username and password.",
+                "DEFAULT_MANUAL"                    : "Invalid login information. Please check your username and password or go online to set up or recover your username and password.",
                 "PASSWORD_CHANGED"                  : "Invalid login information. Please re-enter your username and password.",
                 "PASSWORD_EXPIRED"                  : "Invalid login information. Go online to set up or recover your username and password.",
                 "CONNECTION_ERROR"                  : "Login failed. Please try again later.",
