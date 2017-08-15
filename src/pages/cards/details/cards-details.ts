@@ -59,7 +59,7 @@ export class CardsDetailsPage extends DetailsPage {
     this.reissued = this.navParams.get(CardsDetailsNavParams.Reissued);
   }
 
-  private reissuedSnackbar(reissued: Boolean) {
+  private reissuedSnackbar(reissued: boolean) {
     if (reissued) {
       this.wexAppSnackbarController.createQueued({
         message: this.CONSTANTS.reissueMessage,

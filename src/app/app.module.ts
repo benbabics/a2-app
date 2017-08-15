@@ -37,6 +37,7 @@ import { StatusBar } from "@ionic-native/status-bar";
 import { SplashScreen } from "@ionic-native/splash-screen";
 import { Keyboard } from "@ionic-native/keyboard";
 import { GoogleAnalytics } from "@ionic-native/google-analytics";
+import { Market } from "@ionic-native/market";
 import {
   SecureHttp,
   SessionManager,
@@ -80,6 +81,8 @@ import { AngularWexValidatorsModule } from "@angular-wex/validators";
 import { AddPaymentConfirmationPage } from "../pages/payments/add/confirmation/add-payment-confirmation";
 import { AddPaymentSummaryPage } from "../pages/payments/add/summary/add-payment-summary";
 import { Network } from "@ionic-native/network";
+import { WexAppVersionCheck } from '../providers/wex-app-version-check';
+import { VersionCheck } from '../pages/login/version-check/version-check';
 import { AppSymbols } from "./app.symbols";
 import { NgIdleModule } from "@ng-idle/core";
 
@@ -94,6 +97,7 @@ export function APP_INITIALIZER_FACTORY() {
     MyApp,
     LoginPage,
     FingerprintAuthenticationTermsPage,
+    VersionCheck,
     LandingPage,
     UserEnrollmentFlow,
     CardsPage,
@@ -158,6 +162,7 @@ export function APP_INITIALIZER_FACTORY() {
     MyApp,
     LoginPage,
     FingerprintAuthenticationTermsPage,
+    VersionCheck,
     LandingPage,
     UserEnrollmentFlow,
     CardsPage,
@@ -194,6 +199,7 @@ export function APP_INITIALIZER_FACTORY() {
     InAppBrowser,
     Keyboard,
     Network,
+    Market,
     //# app providers
     //----------------------
     { // Force service instatiation
@@ -235,6 +241,7 @@ export function APP_INITIALIZER_FACTORY() {
       useClass: WexGoogleAnalyticsEvents
     },
     WexAlertController,
+    WexAppVersionCheck,
     WexAppBackButtonController,
     UserIdle
   ]
