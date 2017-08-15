@@ -2,7 +2,7 @@ import { WexNavBar, WexAppSnackbarController } from "../../components";
 import { Session } from "../../models";
 import * as _ from "lodash";
 import { Component, ViewChild, ElementRef, Injector } from "@angular/core";
-import { NavParams, Platform, Content, NavController } from "ionic-angular";
+import { NavParams, Platform, Content, NavController, ModalController } from 'ionic-angular';
 import { Page } from "../page";
 import {
   SessionManager,
@@ -16,6 +16,8 @@ import { Keyboard } from "@ionic-native/keyboard";
 import { Response } from "@angular/http";
 import { UserCredentials } from "@angular-wex/models";
 import { FingerprintVerificationError } from '../../providers/fingerprint/native-fingerprint-service';
+import { WexAppVersionCheck } from '../../providers/wex-app-version-check';
+import { VersionCheck } from './version-check/version-check';
 
 export type LoginPageNavParams = keyof {
   fromLogOut,
@@ -25,6 +27,11 @@ export type LoginPageNavParams = keyof {
 export namespace LoginPageNavParams {
   export const fromLogOut: LoginPageNavParams = "fromLogOut";
   export const fromTimeout: LoginPageNavParams = "fromTimeout";
+}
+
+export namespace LoginError {
+  export const PASSWORD_CHANGED = "PASSWORD_CHANGED";
+  export const UNAUTHORIZED = "unauthorized";
 }
 
 declare const cordova: any;
@@ -49,6 +56,7 @@ export class LoginPage extends Page {
   public rememberMe: boolean = false;
   public timedOut: boolean = false;
   public usernameIsFocused: boolean = false;
+  public versionCheckComplete: boolean = false;
   public user: UserCredentials = { username: "", password: "" };
 
   constructor(
@@ -61,6 +69,8 @@ export class LoginPage extends Page {
     private dialogs: Dialogs,
     private keyboard: Keyboard,
     private appSnackbarController: WexAppSnackbarController,
+    private wexAppVersionCheck: WexAppVersionCheck,
+    private modalController: ModalController,
     injector: Injector
   ) {
     super("Login", injector);
@@ -165,6 +175,14 @@ export class LoginPage extends Page {
           let fingerprintVerificationError: FingerprintVerificationError = error instanceof Response ? error.json().error : error;
           console.error(fingerprintVerificationError);
 
+           if (this.fingerprintProfileAvailable && errorCode === LoginError.UNAUTHORIZED) {
+            errorCode = LoginError.PASSWORD_CHANGED;
+
+            let id = this.user.username.toLowerCase();
+            this.fingerprint.clearProfile(id);
+            this.fingerprintProfileAvailable = false;
+          }
+
           if (!fingerprintVerificationError.userCanceled) {
             this.appSnackbarController.createQueued({
               message: this.getLoginErrorDisplayText(errorCode),
@@ -210,7 +228,23 @@ export class LoginPage extends Page {
       });
   }
 
-  ionViewDidEnter() {
+  private unlockForm() {
+    this.versionCheckComplete = true;
+  }
+
+  private presentVersionModal() {
+    this.wexAppVersionCheck.status
+      .subscribe(status => {
+        let versionCheckModal = this.modalController.create(VersionCheck, { status });
+        versionCheckModal.onDidDismiss(() => this.completeLoading());
+        versionCheckModal.present();
+      });
+  }
+
+  private completeLoading() {
+
+    this.unlockForm();
+
     this.keyboard.disableScroll(true);
 
     window.addEventListener("native.keyboardshow", this._onKeyboardOpen);
@@ -240,6 +274,17 @@ export class LoginPage extends Page {
           this.clearFingerprintProfile(this.user.username);
 
           this.showUserSettingsPopup().finally(() => this.doFingerprintAuthCheck());
+        }
+      });
+  }
+
+  ionViewDidEnter() {
+    this.wexAppVersionCheck.isSupported
+      .subscribe(isSupported => {
+        if (isSupported) {
+          this.completeLoading();
+        } else {
+          this.presentVersionModal();
         }
       });
   }

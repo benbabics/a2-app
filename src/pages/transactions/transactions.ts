@@ -204,7 +204,7 @@ class TransactionsPageFilteredListView extends TransactionsPageDateView {
 
     if (doRequest) {
       return this.requestor.request(this.transactionsPage.session, {
-        filterType: this.filterType,
+        filterBy: this.filterType,
         filterValue: this.filterValue
       }).map(response => response.items);
     }
@@ -288,6 +288,8 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
     return this.selectedListView.greekingData;
   }
 
+  public set greekingData(data) { data; }
+
   public get hasMoreItems(): boolean {
     return this.selectedListView.hasMoreItems();
   }
@@ -312,6 +314,8 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
   public get listLabels(): string[] {
     return this.selectedListView.listLabels;
   }
+
+  public set listLabels(listLabels) { listLabels; }
 
   public goToDetailPage(item: TransactionListModelType) {
     return this.selectedListView.goToDetailPage(item);

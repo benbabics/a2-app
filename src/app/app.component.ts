@@ -1,5 +1,4 @@
 import { Component, Inject, Injector } from "@angular/core";
-import { StatusBar } from "@ionic-native/status-bar";
 import { SplashScreen } from "@ionic-native/splash-screen";
 
 import { WexNavBar } from "../components";
@@ -8,6 +7,7 @@ import { AppSymbols } from "./app.symbols";
 import { WexPlatform } from "../providers";
 
 import "chart.js";
+import { StatusBar } from '@ionic-native/status-bar';
 
 @Component({
   templateUrl: "app.html"
@@ -21,7 +21,7 @@ export class MyApp {
 
   constructor(
     splashScreen: SplashScreen,
-    private statusBar: StatusBar,
+    statusBar: StatusBar,
     sessionManager: SessionManager,
     private platform: WexPlatform,
     @Inject(AppSymbols.RootPage) public rootPage: any,
@@ -44,8 +44,6 @@ export class MyApp {
   }
 
   private onSessionChange(session) {
-    this.statusBar.overlaysWebView(!session);
-
     if (session && this.platform.isDevMode) {
       this.rootPage = WexNavBar;
     }
