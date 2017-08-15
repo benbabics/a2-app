@@ -48,7 +48,7 @@
     <ion-card-header>{{ CONSTANTS.actions }}</ion-card-header>
 
     <ion-list id="action-list" padding>
-      <button ion-button icon-left block>
+      <button ion-button icon-left block (click)="viewTransactions()">
         <ion-icon class="fa fa-exchange"></ion-icon>
         {{ CONSTANTS.viewTransactions }}
       </button>
