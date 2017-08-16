@@ -694,6 +694,10 @@ export namespace ConstantsInfo {
           ],
           greekedElementCount: 15
         },
+        LABELS: {
+          today: "Today",
+          yesterday: "Yesterday"
+        },
         title: "Transactions",
 
         //# Transaction Details page
