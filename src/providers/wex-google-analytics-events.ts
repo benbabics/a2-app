@@ -1,6 +1,6 @@
-import { GoogleAnalytics } from '@ionic-native/google-analytics';
-import { Value } from '../decorators/value';
-import { Injectable } from '@angular/core';
+import { GoogleAnalytics } from "@ionic-native/google-analytics";
+import { Value } from "../decorators/value";
+import { Injectable } from "@angular/core";
 
 @Injectable()
 export class WexGoogleAnalyticsEvents extends GoogleAnalytics {

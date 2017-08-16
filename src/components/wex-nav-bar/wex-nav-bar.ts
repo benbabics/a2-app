@@ -1,7 +1,7 @@
-import { NavBarController } from './../../providers/nav-bar-controller';
+import { NavBarController } from "./../../providers/nav-bar-controller";
 import { Component } from "@angular/core";
 import { CardsPage } from "../../pages/cards/cards";
-import { DriversPage } from '../../pages/drivers/drivers';
+import { DriversPage } from "../../pages/drivers/drivers";
 import { LandingPage } from "../../pages/landing/landing";
 import { PaymentsPage } from "../../pages/payments/payments";
 import { TransactionsPage } from "../../pages/transactions/transactions";

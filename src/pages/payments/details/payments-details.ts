@@ -1,7 +1,7 @@
-import { NavParams } from 'ionic-angular';
-import { Component, Injector } from '@angular/core';
+import { NavParams } from "ionic-angular";
+import { Component, Injector } from "@angular/core";
 import { DetailsPage } from "../../details-page";
-import { Payment } from '@angular-wex/models';
+import { Payment } from "@angular-wex/models";
 
 export type PaymentsDetailsNavParams = keyof {
   payment

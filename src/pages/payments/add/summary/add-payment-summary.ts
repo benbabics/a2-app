@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable } from "rxjs";
 import * as moment from "moment";
 import { Component, Injector } from "@angular/core";
 import {

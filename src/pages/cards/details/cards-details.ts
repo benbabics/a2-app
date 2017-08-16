@@ -1,14 +1,14 @@
-import { WexAlertController } from './../../../components/wex-alert-controller/wex-alert-controller';
-import { CardProvider, PostedTransactionSearchFilterBy } from '@angular-wex/api-providers';
+import { WexAlertController } from "./../../../components/wex-alert-controller/wex-alert-controller";
+import { CardProvider, PostedTransactionSearchFilterBy } from "@angular-wex/api-providers";
 import { CardsReissuePage } from "./../reissue/cards-reissue";
 import { Component, Injector } from "@angular/core";
-import { NavParams, App, ActionSheetController, Events, ToastOptions, Platform, NavController } from 'ionic-angular';
+import { NavParams, App, ActionSheetController, Events, ToastOptions, Platform, NavController } from "ionic-angular";
 import { ActionSheetOptions, ActionSheetButton } from "ionic-angular/components/action-sheet/action-sheet-options";
 import { DetailsPage } from "../../details-page";
 import { Card, CardStatus } from "@angular-wex/models";
 import { WexAppSnackbarController } from "../../../components";
 import * as _ from "lodash";
-import { TransactionsPage, TransactionListType } from '../../transactions/transactions';
+import { TransactionsPage, TransactionListType } from "../../transactions/transactions";
 
 export type CardsDetailsNavParams = keyof {
   card,
@@ -66,7 +66,7 @@ export class CardsDetailsPage extends DetailsPage {
       this.wexAppSnackbarController.createQueued({
         message: this.CONSTANTS.reissueMessage,
         duration: this.CONSTANTS.reissueMessageDuration,
-        position: 'top',
+        position: "top",
       }).present();
     }
   }
@@ -141,7 +141,7 @@ export class CardsDetailsPage extends DetailsPage {
     let toastOptions: ToastOptions = {
       message: null,
       duration: this.CONSTANTS.reissueMessageDuration,
-      position: 'top',
+      position: "top",
     };
 
     this.cardProvider.updateStatus(accountId, cardId, newStatus).subscribe(

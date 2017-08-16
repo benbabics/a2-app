@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { SessionManager, Fingerprint } from "../../../providers";
 import { App, ViewController, Platform } from "ionic-angular";
 import { ContactUsPage } from "../../contact-us/contact-us";
-import { SettingsPage } from '../../settings/settings';
+import { SettingsPage } from "../../settings/settings";
 import { TermsOfUsePage } from "../../terms-of-use/terms-of-use";
 import { PrivacyPolicyPage } from "../../privacy-policy/privacy-policy";
 

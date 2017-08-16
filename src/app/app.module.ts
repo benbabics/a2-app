@@ -1,4 +1,4 @@
-import { WexAlertController } from './../components/wex-alert-controller/wex-alert-controller';
+import { WexAlertController } from "./../components/wex-alert-controller/wex-alert-controller";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { Dialogs } from "@ionic-native/dialogs";
@@ -13,10 +13,10 @@ import { LoginPage } from "../pages/login/login";
 import { FingerprintAuthenticationTermsPage } from "../pages/login/fingerprint-auth-terms/fingerprint-auth-terms";
 import { LandingPage } from "../pages/landing/landing";
 import { CardsPage } from "../pages/cards/cards";
-import { SettingsPage } from '../pages/settings/settings';
+import { SettingsPage } from "../pages/settings/settings";
 import { CardsDetailsPage } from "./../pages/cards/details/cards-details";
-import { DriversPage } from './../pages/drivers/drivers';
-import { DriversDetailsPage } from './../pages/drivers/details/drivers-details';
+import { DriversPage } from "./../pages/drivers/drivers";
+import { DriversDetailsPage } from "./../pages/drivers/details/drivers-details";
 import { UserEnrollmentFlow } from "../pages/login/user-enrollment-flow/user-enrollment-flow";
 import {
   ActionIndicator,
@@ -58,14 +58,14 @@ import {
 } from "../providers";
 import { WexCurrency, WexDate, WexDateTime, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
-import { PaymentsDetailsPage } from '../pages/payments/details/payments-details';
+import { PaymentsDetailsPage } from "../pages/payments/details/payments-details";
 import { LocalStorageModule } from "angular-2-local-storage";
 import { CardsReissuePage } from "../pages/cards/reissue/cards-reissue";
 import { TermsOfUsePage } from "../pages/terms-of-use/terms-of-use";
 import { PrivacyPolicyPage } from "../pages/privacy-policy/privacy-policy";
 import { AppVersion } from "@ionic-native/app-version";
 import { TransactionsPage } from "../pages/transactions/transactions";
-import { TransactionDetailsPage } from '../pages/transactions/details/transaction-details';
+import { TransactionDetailsPage } from "../pages/transactions/details/transaction-details";
 import { ApiProviders } from "@angular-wex/api-providers";
 import { GetCurrentEnvironmentConstants } from "./app.constants";
 import { ContactUsPage } from "../pages/contact-us/contact-us";
@@ -81,8 +81,8 @@ import { AngularWexValidatorsModule } from "@angular-wex/validators";
 import { AddPaymentConfirmationPage } from "../pages/payments/add/confirmation/add-payment-confirmation";
 import { AddPaymentSummaryPage } from "../pages/payments/add/summary/add-payment-summary";
 import { Network } from "@ionic-native/network";
-import { WexAppVersionCheck } from '../providers/wex-app-version-check';
-import { VersionCheck } from '../pages/login/version-check/version-check';
+import { WexAppVersionCheck } from "../providers/wex-app-version-check";
+import { VersionCheck } from "../pages/login/version-check/version-check";
 import { AppSymbols } from "./app.symbols";
 import { NgIdleModule } from "@ng-idle/core";
 

@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 import { AppVersion } from "@ionic-native/app-version";
 import { Observable } from "rxjs";
-import { Value } from '../decorators/value';
+import { Value } from "../decorators/value";
 import { VersionStatus } from "@angular-wex/models";
-import { WexPlatform } from './platform';
+import { WexPlatform } from "./platform";
 import { VersionCheckProvider } from "@angular-wex/api-providers";
 
 export namespace RequestPlatform {

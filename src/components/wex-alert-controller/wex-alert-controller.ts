@@ -1,6 +1,6 @@
-import { AlertController } from 'ionic-angular';
-import { Injectable } from '@angular/core';
-import { Value } from '../../decorators/value';
+import { AlertController } from "ionic-angular";
+import { Injectable } from "@angular/core";
+import { Value } from "../../decorators/value";
 
 @Injectable()
 export class WexAlertController {

@@ -1,12 +1,14 @@
 import { Platform } from "ionic-angular";
 import { Injectable } from "@angular/core";
 import { AppConstants } from "../app/app.constants";
+import { Value } from "../decorators/value";
 
 const Constants = AppConstants();
 
 @Injectable()
 export class WexPlatform extends Platform {
 
+  @Value("IONIC_APP_ID") private IONIC_APP_ID: string;
   private static readonly DEV_MODE_REGEX: RegExp = /[?&]dev/;
   private static readonly MOCK_REGEX: RegExp = /^http(s?):\/\//;
 
@@ -49,7 +51,6 @@ export class WexPlatform extends Platform {
   }
 
   public get isIonicWebView(): boolean {
-    const APP_ID = "7a49ff3d";
-    return window.location.href.indexOf('com.ionic.viewapp') > -1 || window.location.href.indexOf(APP_ID) > -1;
+    return window.location.href.indexOf("com.ionic.viewapp") > -1 || window.location.href.indexOf(this.IONIC_APP_ID) > -1;
   }
 }

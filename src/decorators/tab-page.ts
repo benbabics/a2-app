@@ -1,7 +1,7 @@
 import { WexAppBackButtonController } from "./../providers";
-import { NavBarController } from './../providers/nav-bar-controller';
-import { MyApp } from './../app/app.component';
-import { LandingPage } from '../pages/landing/landing';
+import { NavBarController } from "./../providers/nav-bar-controller";
+import { MyApp } from "./../app/app.component";
+import { LandingPage } from "../pages/landing/landing";
 
 type GenericConstructor = { new (...args: any[]): any };
 const ionViewDidEnter = "ionViewDidEnter", ionViewWillLeave = "ionViewWillLeave";

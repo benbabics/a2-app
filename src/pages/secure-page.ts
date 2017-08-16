@@ -1,5 +1,5 @@
-import { Injector } from '@angular/core';
-import { SessionManager } from './../providers/session-manager';
+import { Injector } from "@angular/core";
+import { SessionManager } from "./../providers/session-manager";
 import { Page } from "./page";
 import { Session } from "../models";
 
