@@ -12,6 +12,7 @@ import { TransactionProvider, PostedTransactionSearchFilterBy } from "@angular-w
 import { TabPage } from "../../decorators/tab-page";
 import { Value } from "../../decorators/value";
 import { LocalStorageService } from "angular-2-local-storage/dist";
+import { NameUtils } from "../../utils/name-utils";
 
 export type TransactionListModelType = Card | Driver | Transaction;
 export type TransactionListModelTypeDetails = Card.Details | Driver.Details | Transaction.Details;
@@ -325,6 +326,10 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
 
   public goToDetailPage(item: TransactionListModelType) {
     return this.selectedListView.goToDetailPage(item);
+  }
+
+  public listDisplayName(item: Driver): string {
+    return NameUtils.DelimitedPrintableName(", ", item.details.lastName, item.details.firstName);
   }
 
   public onSelectList(selection: SegmentButton) {

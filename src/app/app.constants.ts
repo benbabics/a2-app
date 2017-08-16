@@ -2,10 +2,13 @@ import * as _ from "lodash";
 import { ConstantsConfig } from "@angular-wex/api-providers";
 import { Environment } from "../environments/environment";
 
+const INT_MAX_32 = 2 ** 31 - 1;
+
 export namespace ConstantsInfo {
 
   export const Common = {
     ENV: Environment,
+    INT_MAX_32,
     LOCALE: "en-US",
     IONIC_APP_ID: "7a49ff3d",
     //# Storage
@@ -70,7 +73,7 @@ export namespace ConstantsInfo {
       defaultDialogMessage: "Scan your fingerprint below to enter your account"
     },
     INFINITE_LIST: {
-      DEFAULT_SEARCH_PERIOD: [2 ** 32 - 1, "y"],
+      DEFAULT_SEARCH_PERIOD: [INT_MAX_32, "y"],
       DEFAULT_PAGE_SIZE: 100
     },
     //# App Navigation

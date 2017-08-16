@@ -10,6 +10,7 @@ import { DetailsPage } from "../../details-page";
 import { ActionSheetOptions } from "ionic-angular/components/action-sheet/action-sheet-options";
 import { WexAlertController } from "../../../components/wex-alert-controller/wex-alert-controller";
 import { TransactionsPage, TransactionListType } from "../../transactions/transactions";
+import { NameUtils } from "../../../utils/name-utils";
 
 interface DriverStatusDetails {
   id: DriverStatus;
@@ -59,6 +60,10 @@ export class DriversDetailsPage extends DetailsPage {
   public changeStatus() {
     let actions = this.CONSTANTS.statusOptions as DriverStatusDetails[];
     this.actionSheetController.create(this.buildActionSheet(actions)).present();
+  }
+
+  public get fullName(): string {
+    return NameUtils.PrintableName(this.driver.details.firstName, this.driver.details.lastName);
   }
 
   private buildActionSheet(actions: DriverStatusDetails[]): ActionSheetOptions {

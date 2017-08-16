@@ -9,7 +9,7 @@
     <ion-card-header>{{ CONSTANTS.details }}</ion-card-header>
 
     <div id="controls" *ngIf="!driver.details.shared">
-      <h1 class="driver-name" id="driver-name">{{ driver.details.firstName.toLocaleLowerCase() }} {{ driver.details.lastName.toLocaleLowerCase() }}</h1>
+      <h1 id="driver-name"> {{ fullName }} </h1>
 
       <button ion-button icon-left round large id="driver-status" [color]="statusColor + '-dark'" (click)="changeStatus()">
         <action-indicator [when]="isChangingStatus">
