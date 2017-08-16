@@ -339,13 +339,13 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
 
   public ionViewCanEnter(): Promise<any> {
     return super.ionViewCanEnter().then(() => {
-      let transactionListType = TransactionListType.Date;
+      let transactionListType: TransactionListType;
 
       if (!this.filter) {
-        transactionListType = this.localStorageService.get(this.LAST_TRANSACTION_VIEW_KEY) as TransactionListType;
+        transactionListType = this.localStorageService.get(this.LAST_TRANSACTION_VIEW_KEY);
       }
 
-      this.selectList(transactionListType);
+      this.selectList(transactionListType || TransactionListType.Date);
     });
   }
 }
