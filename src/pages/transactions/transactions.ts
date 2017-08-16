@@ -258,10 +258,10 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
     let $moment: moment.Moment = moment(date).subtract(offsetDays);
 
     if (offsetDays === 0) {
-      return "Today";
+      return this.CONSTANTS.LABELS.today;
     }
     else if (offsetDays === 1) {
-      return "Yesterday";
+      return this.CONSTANTS.LABELS.yesterday;
     }
     else if (offsetDays < 30) {
       return $moment.format("MM/DD/YYYY");
@@ -275,10 +275,10 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
   }
 
   private calculateDateByLabelGroup(labelGroup: string): Date {
-    if (labelGroup === "Today") {
+    if (labelGroup === this.CONSTANTS.LABELS.today) {
       return new Date();
     }
-    else if (labelGroup === "Yesterday") {
+    else if (labelGroup === this.CONSTANTS.LABELS.yesterday) {
       return moment().subtract(1, "days").toDate();
     }
     else if (/^\d{2}\/\d{2}\/\d{4,}$/.test(labelGroup)) {
