@@ -342,7 +342,7 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
       let transactionListType: TransactionListType;
 
       if (!this.filter) {
-        transactionListType = this.localStorageService.get(this.LAST_TRANSACTION_VIEW_KEY);
+        transactionListType = this.localStorageService.get<TransactionListType>(this.LAST_TRANSACTION_VIEW_KEY);
       }
 
       this.selectList(transactionListType || TransactionListType.Date);
