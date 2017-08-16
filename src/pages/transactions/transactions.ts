@@ -248,7 +248,6 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
     super("Transactions", injector);
 
     this.filter = this.navParams.get(TransactionsParams.Filter);
-    this.selectList(navParams.get(TransactionsParams.SelectedList) || TransactionListType.Date);
   }
 
   private selectList(listType: TransactionListType) {
@@ -338,10 +337,15 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
       .then(() => event.complete());
   }
 
-  public ionViewDidEnter() {
-    let transactionListType = this.localStorageService.get(this.LAST_TRANSACTION_VIEW_KEY) as TransactionListType;
-    if (!_.isNil(transactionListType)) {
+  public ionViewCanEnter(): Promise<any> {
+    return super.ionViewCanEnter().then(() => {
+      let transactionListType = TransactionListType.Date;
+
+      if (!this.filter) {
+        transactionListType = this.localStorageService.get(this.LAST_TRANSACTION_VIEW_KEY) as TransactionListType;
+      }
+
       this.selectList(transactionListType);
-    }
+    });
   }
 }
