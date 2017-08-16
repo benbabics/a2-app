@@ -2,7 +2,7 @@ import { WexNavBar, WexAppSnackbarController } from "../../components";
 import { Session } from "../../models";
 import * as _ from "lodash";
 import { Component, ViewChild, ElementRef, Injector } from "@angular/core";
-import { NavParams, Platform, Content, NavController, ModalController } from 'ionic-angular';
+import { NavParams, Platform, Content, NavController, ModalController } from "ionic-angular";
 import { Page } from "../page";
 import {
   SessionManager,
@@ -15,9 +15,9 @@ import { Dialogs } from "@ionic-native/dialogs";
 import { Keyboard } from "@ionic-native/keyboard";
 import { Response } from "@angular/http";
 import { UserCredentials } from "@angular-wex/models";
-import { FingerprintVerificationError } from '../../providers/fingerprint/native-fingerprint-service';
-import { WexAppVersionCheck } from '../../providers/wex-app-version-check';
-import { VersionCheck } from './version-check/version-check';
+import { FingerprintVerificationError } from "../../providers/fingerprint/native-fingerprint-service";
+import { WexAppVersionCheck } from "../../providers/wex-app-version-check";
+import { VersionCheck } from "./version-check/version-check";
 
 export type LoginPageNavParams = keyof {
   fromLogOut,

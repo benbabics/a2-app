@@ -1,15 +1,15 @@
-import { WexAppSnackbarController } from './../../../components/wex-app-snackbar-controller/wex-app-snackbar-controller';
-import { ActionSheetButton } from 'ionic-angular/components/action-sheet/action-sheet-options';
-import { ActionSheetController, Events, ToastOptions, Platform, NavController } from 'ionic-angular';
+import { WexAppSnackbarController } from "./../../../components/wex-app-snackbar-controller/wex-app-snackbar-controller";
+import { ActionSheetButton } from "ionic-angular/components/action-sheet/action-sheet-options";
+import { ActionSheetController, Events, ToastOptions, Platform, NavController } from "ionic-angular";
 import * as _ from "lodash";
-import { Component, Injector } from '@angular/core';
-import { NavParams } from 'ionic-angular';
-import { Driver, DriverStatus, OnlineApplication } from '@angular-wex/models';
-import { DriverProvider, PostedTransactionSearchFilterBy } from '@angular-wex/api-providers';
+import { Component, Injector } from "@angular/core";
+import { NavParams } from "ionic-angular";
+import { Driver, DriverStatus, OnlineApplication } from "@angular-wex/models";
+import { DriverProvider, PostedTransactionSearchFilterBy } from "@angular-wex/api-providers";
 import { DetailsPage } from "../../details-page";
-import { ActionSheetOptions } from 'ionic-angular/components/action-sheet/action-sheet-options';
-import { WexAlertController } from '../../../components/wex-alert-controller/wex-alert-controller';
-import { TransactionsPage, TransactionListType } from '../../transactions/transactions';
+import { ActionSheetOptions } from "ionic-angular/components/action-sheet/action-sheet-options";
+import { WexAlertController } from "../../../components/wex-alert-controller/wex-alert-controller";
+import { TransactionsPage, TransactionListType } from "../../transactions/transactions";
 
 interface DriverStatusDetails {
   id: DriverStatus;
@@ -106,7 +106,7 @@ export class DriversDetailsPage extends DetailsPage {
     let toastOptions: ToastOptions = {
       message: null,
       duration: this.CONSTANTS.statusUpdateMessageDuration,
-      position: 'top',
+      position: "top",
     };
 
     this.driverProvider.updateStatus(accountId, driverId, newStatus, promptId).subscribe(

@@ -1,9 +1,9 @@
-import { Component, Injector } from '@angular/core';
-import { Page } from '../../page';
-import { NavParams, ViewController } from 'ionic-angular';
-import { VersionStatus } from '@angular-wex/models';
-import { WexPlatform } from '../../../providers/platform';
-import { Market } from '@ionic-native/market';
+import { Component, Injector } from "@angular/core";
+import { Page } from "../../page";
+import { NavParams, ViewController } from "ionic-angular";
+import { VersionStatus } from "@angular-wex/models";
+import { WexPlatform } from "../../../providers/platform";
+import { Market } from "@ionic-native/market";
 
 @Component({
   selector: "version-check",

@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { Observable } from 'rxjs';
+import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 import { Session } from "../models";
 import { SessionInfoRequestors } from "./session-info-requestor";

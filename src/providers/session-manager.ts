@@ -1,4 +1,4 @@
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { Fingerprint, FingerprintProfile } from "./fingerprint";
 import * as _ from "lodash";
 import { Injectable, Inject } from "@angular/core";

@@ -35,8 +35,9 @@
       "check-whitespace"
     ],
     "quotemark": [
-      false,
-      "double"
+      true,
+      "double",
+      "avoid-escape"
     ],
     "semicolon": [
       true,

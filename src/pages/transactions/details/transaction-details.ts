@@ -1,5 +1,5 @@
-import { Component, Injector } from '@angular/core';
-import { NavParams } from 'ionic-angular';
+import { Component, Injector } from "@angular/core";
+import { NavParams } from "ionic-angular";
 import { DetailsPage } from "../../details-page";
 import { Transaction } from "@angular-wex/models";
 

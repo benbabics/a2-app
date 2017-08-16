@@ -7,6 +7,7 @@ export namespace ConstantsInfo {
   export const Common = {
     ENV: Environment,
     LOCALE: "en-US",
+    IONIC_APP_ID: "7a49ff3d",
     //# Storage
     STORAGE: {
       ID: "FLEET_MANAGER-",

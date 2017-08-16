@@ -1,5 +1,5 @@
-import { Platform, App } from 'ionic-angular';
-import { Injectable } from '@angular/core';
+import { Platform, App } from "ionic-angular";
+import { Injectable } from "@angular/core";
 
 @Injectable()
 export class WexAppBackButtonController {

@@ -1,14 +1,14 @@
-import { WexAppSnackbarController } from './../../components/wex-app-snackbar-controller/wex-app-snackbar-controller';
+import { WexAppSnackbarController } from "./../../components/wex-app-snackbar-controller/wex-app-snackbar-controller";
 import * as _ from "lodash";
 import { NavBarController } from "../../providers";
 import { Component, Injector } from "@angular/core";
-import { NavController, NavParams, PopoverController, Platform, ToastOptions } from 'ionic-angular';
+import { NavController, NavParams, PopoverController, Platform, ToastOptions } from "ionic-angular";
 import { InvoiceSummary, CompanyStub } from "@angular-wex/models";
 import { Session } from "../../models";
 import { SecurePage } from "../secure-page";
 import { OptionsPopoverPage } from "./options-popover/options-popover";
 import { BrandProvider } from "@angular-wex/api-providers";
-import { WexAppBackButtonController } from '../../providers/wex-app-back-button-controller';
+import { WexAppBackButtonController } from "../../providers/wex-app-back-button-controller";
 
 interface ChartDisplayConfig {
   [list: string]: any[];

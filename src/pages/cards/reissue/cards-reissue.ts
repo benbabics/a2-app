@@ -14,7 +14,7 @@ import { Session } from "../../../models";
 import { SecurePage } from "../../secure-page";
 import { Dialogs } from "@ionic-native/dialogs";
 import { Value } from "../../../decorators/value";
-import { CardProvider, CardUpdateType } from '@angular-wex/api-providers';
+import { CardProvider, CardUpdateType } from "@angular-wex/api-providers";
 
 @Component({
   selector: "page-cards-reissue",

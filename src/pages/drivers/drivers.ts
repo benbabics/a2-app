@@ -1,11 +1,11 @@
-import { NavController, NavParams, Events } from 'ionic-angular';
-import { Observable } from 'rxjs/Observable';
-import { Component, Injector } from '@angular/core';
+import { NavController, NavParams, Events } from "ionic-angular";
+import { Observable } from "rxjs/Observable";
+import { Component, Injector } from "@angular/core";
 import { Driver, DriverStatus } from "@angular-wex/models";
-import { DriversDetailsPage } from './details/drivers-details';
+import { DriversDetailsPage } from "./details/drivers-details";
 import { StaticListPage, FetchOptions, GroupedList } from "../static-list-page";
 import { Session } from "../../models";
-import { TabPage } from '../../decorators/tab-page';
+import { TabPage } from "../../decorators/tab-page";
 
 @TabPage()
 @Component({

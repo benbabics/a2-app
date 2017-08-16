@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable } from "rxjs";
 import * as _ from "lodash";
 import { Component, Injector } from "@angular/core";
 import { NavController, NavParams, SegmentButton } from "ionic-angular";
@@ -6,12 +6,12 @@ import { StaticListPage } from "../static-list-page";
 import { Session, TransactionList, DynamicList } from "../../models";
 import { WexGreeking } from "../../components";
 import { SessionCache, PostedTransactionRequestor, DynamicSessionListInfoRequestor } from "../../providers";
-import { TransactionDetailsPage } from './details/transaction-details';
+import { TransactionDetailsPage } from "./details/transaction-details";
 import { Transaction, Driver, Card, Model } from "@angular-wex/models";
 import { TransactionProvider, PostedTransactionSearchFilterBy } from "@angular-wex/api-providers";
-import { TabPage } from '../../decorators/tab-page';
-import { Value } from '../../decorators/value';
-import { LocalStorageService } from 'angular-2-local-storage/dist';
+import { TabPage } from "../../decorators/tab-page";
+import { Value } from "../../decorators/value";
+import { LocalStorageService } from "angular-2-local-storage/dist";
 
 export type TransactionListModelType = Card | Driver | Transaction;
 export type TransactionListModelTypeDetails = Card.Details | Driver.Details | Transaction.Details;

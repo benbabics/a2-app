@@ -1,5 +1,5 @@
-import { GoogleAnalytics } from '@ionic-native/google-analytics';
-import { OnInit, Injector } from '@angular/core';
+import { GoogleAnalytics } from "@ionic-native/google-analytics";
+import { OnInit, Injector } from "@angular/core";
 import * as _ from "lodash";
 import { AppConstants } from "../app/app.constants";
 

@@ -1,14 +1,14 @@
 import * as _ from "lodash";
 import { Observable } from "rxjs";
-import { Component, Injector } from '@angular/core';
+import { Component, Injector } from "@angular/core";
 import { NavParams, NavController, ModalController, Modal } from "ionic-angular";
 import { StaticListPage, GroupedList, FetchOptions } from "../static-list-page";
 import { Payment, PaymentStatus, MakePaymentAvailability } from "@angular-wex/models";
-import { PaymentsDetailsPage } from './details/payments-details';
+import { PaymentsDetailsPage } from "./details/payments-details";
 import { Session } from "../../models";
 import { AddPaymentPage } from "./add/add-payment";
 import { Dialogs } from "@ionic-native/dialogs";
-import { TabPage } from '../../decorators/tab-page';
+import { TabPage } from "../../decorators/tab-page";
 
 @TabPage()
 @Component({
