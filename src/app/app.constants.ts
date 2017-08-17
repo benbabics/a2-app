@@ -11,6 +11,8 @@ export namespace ConstantsInfo {
     INT_MAX_32,
     LOCALE: "en-US",
     IONIC_APP_ID: "7a49ff3d",
+    // Version number gets replaced after WexAppVersionCheck replaces it, which is required for the app to start.
+    VERSION_NUMBER: "MOCK",
     //# Storage
     STORAGE: {
       ID: "FLEET_MANAGER-",

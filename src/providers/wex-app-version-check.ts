@@ -5,6 +5,7 @@ import { Value } from "../decorators/value";
 import { VersionStatus } from "@angular-wex/models";
 import { WexPlatform } from "./platform";
 import { VersionCheckProvider } from "@angular-wex/api-providers";
+import { AppConstants } from "../app/app.constants";
 
 export namespace RequestPlatform {
     export const Android = "ANDROID";
@@ -45,8 +46,10 @@ export class WexAppVersionCheck {
         if (this.wexPlatform.isMock) {
             return Observable.of(VersionStatus.Supported);
         } else {
-            return Observable.fromPromise(this.appVersion.getVersionNumber())
+            return Observable.fromPromise(this.wexPlatform.ready())
+                .flatMap(() => Observable.fromPromise(this.appVersion.getVersionNumber()))
                 .flatMap((versionNumber: string) => {
+                    AppConstants().VERSION_NUMBER = versionNumber;
                     this._versionNumber = versionNumber;
                     return this.getStatus(this.versionNumber, this.clientId, this.platformName);
                 });

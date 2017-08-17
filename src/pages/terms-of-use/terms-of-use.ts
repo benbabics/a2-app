@@ -1,6 +1,6 @@
-import { AppVersion } from "@ionic-native/app-version";
 import { Component, Injector } from "@angular/core";
 import { Page } from "../page";
+import { Value } from "../../decorators/value";
 
 @Component({
   selector: "page-terms-of-use",
@@ -8,16 +8,12 @@ import { Page } from "../page";
 })
 export class TermsOfUsePage extends Page {
 
-  private closing: string;
-
-  constructor(private appVersion: AppVersion, injector: Injector) {
-    super("Terms of Use", injector);
+  @Value("VERSION_NUMBER") private versionNumber: string;
+  public get closing(): string{
+    return this.CONSTANTS.closing.replace("$VERSION_NUMBER$", this.versionNumber);
   }
 
-  ionViewDidLoad() {
-    this.appVersion.getVersionNumber()
-      .then((versionNumber: string) => {
-        this.closing = this.CONSTANTS.closing.replace("$VERSION_NUMBER$", versionNumber);
-      });
+  constructor(injector: Injector) {
+    super("Terms of Use", injector);
   }
 }
