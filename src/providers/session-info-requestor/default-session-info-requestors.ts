@@ -20,9 +20,11 @@ import {
 } from "../../models";
 import { SessionInfoRequestors, SessionInfoRequestorDetails } from "./session-info-requestor";
 import { DynamicSessionListInfoRequestor } from "./dynamic-session-list-info-requestor";
+import { Value } from "../../decorators/value";
 
 @Injectable()
 export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
+  @Value("INT_MAX_32") private INT_MAX_32: number;
 
   private readonly tokenRequestor: SessionInfoRequestorDetails = {
     requestor: () => Observable.of(SessionCache.cachedValues.token) //Fetched independently
@@ -51,7 +53,7 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
 
   private readonly cardsRequestor: SessionInfoRequestorDetails = {
     requiredFields: [Session.Field.User],
-    requestor: (session: Session) => this.cardProvider.search(session.user.billingCompany.details.accountId)
+    requestor: (session: Session) => this.cardProvider.search(session.user.billingCompany.details.accountId, { pageSize: this.INT_MAX_32 })
   };
 
   private readonly paymentsRequestor: SessionInfoRequestorDetails = {
@@ -61,7 +63,7 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
 
   private readonly driversRequestor: SessionInfoRequestorDetails = {
     requiredFields: [Session.Field.User],
-    requestor: (session: Session) => this.driverProvider.search(session.user.company.details.accountId)
+    requestor: (session: Session) => this.driverProvider.search(session.user.company.details.accountId, { pageSize: this.INT_MAX_32 })
   };
 
   private readonly postedTransactionsInfoRequestor: SessionInfoRequestorDetails = new PostedTransactionRequestor(this.transactionProvider);
