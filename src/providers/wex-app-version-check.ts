@@ -45,7 +45,8 @@ export class WexAppVersionCheck {
         if (this.wexPlatform.isMock) {
             return Observable.of(VersionStatus.Supported);
         } else {
-            return Observable.fromPromise(this.appVersion.getVersionNumber())
+            return Observable.fromPromise(this.wexPlatform.ready())
+                .flatMap(() => Observable.fromPromise(this.appVersion.getVersionNumber()))
                 .flatMap((versionNumber: string) => {
                     this._versionNumber = versionNumber;
                     return this.getStatus(this.versionNumber, this.clientId, this.platformName);
