@@ -1,22 +1,18 @@
-import { AppVersion } from "@ionic-native/app-version";
 import { Component, Injector } from "@angular/core";
 import { Page } from "../page";
+import { Value } from "../../decorators/value";
 
 @Component({
   selector: "page-contact-us",
   templateUrl: "contact-us.html"
 })
 export class ContactUsPage extends Page {
-  private sendEmailLink: string;
-
-  constructor(private appVersion: AppVersion, injector: Injector) {
-    super("Contact Us", injector);
+  @Value("VERSION_NUMBER") private VERSION_NUMBER: string;
+  public get sendEmailLink(): string {
+    return this.CONSTANTS.sendEmailLink + this.VERSION_NUMBER;
   }
 
-  ionViewDidLoad() {
-    this.appVersion.getVersionNumber()
-      .then((versionNumber: string) => {
-        this.sendEmailLink = this.CONSTANTS.sendEmailLink + versionNumber;
-      });
+  constructor(injector: Injector) {
+    super("Contact Us", injector);
   }
 }

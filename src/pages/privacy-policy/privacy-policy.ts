@@ -1,7 +1,7 @@
-import { AppVersion } from "@ionic-native/app-version";
 import { Component, Injector } from "@angular/core";
 import { Page } from "../page";
 import { InAppBrowser } from "@ionic-native/in-app-browser";
+import { Value } from "../../decorators/value";
 
 @Component({
   selector: "page-privacy-policy",
@@ -10,24 +10,18 @@ import { InAppBrowser } from "@ionic-native/in-app-browser";
 export class PrivacyPolicyPage extends Page {
   private sectionVisibility: boolean[];
 
-  private closing: string;
-  private versionNumber: string;
+  @Value("VERSION_NUMBER") private versionNumber: string;
+  public get closing(): string {
+    return this.CONSTANTS.closing.replace("$VERSION_NUMBER$", this.versionNumber);
+  }
 
-  constructor(private appVersion: AppVersion, private inAppBrowser: InAppBrowser, injector: Injector) {
+  constructor(private inAppBrowser: InAppBrowser, injector: Injector) {
     super("Privacy Policy", injector);
     this.sectionVisibility = new Array<boolean>(14);
   }
 
   public openUrl(url: string): void {
     this.inAppBrowser.create(url);
-  }
-
-  ionViewDidLoad(): void {
-    this.appVersion.getVersionNumber()
-      .then((versionNumber: string) => {
-        this.versionNumber = versionNumber;
-        this.closing = this.CONSTANTS.closing.replace("$VERSION_NUMBER$", versionNumber);
-      });
   }
 
   public sectionIsVisible(sectionNumber: number): boolean {
