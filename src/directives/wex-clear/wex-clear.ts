@@ -1,4 +1,5 @@
 import { Directive, HostListener, ElementRef, Renderer2 } from "@angular/core";
+import * as _ from "lodash";
 
 @Directive({
   selector: "[wexClear]"
@@ -8,12 +9,12 @@ export class WexClear {
   private readonly CLEAR_OFFSET = 30;
   private buttonVisible: boolean = false;
 
-  private get element() {
+  private get element(): any {
     return this.elementRef.nativeElement;
   }
 
-  private get input() {
-    return this.element.localName.includes("ion") ? this.element.children[0] : this.element;
+  private get input(): any {
+    return _.first(this.element.children);
   }
 
   private get inputIsEmpty(): boolean {
@@ -27,7 +28,8 @@ export class WexClear {
   }
 
   @HostListener("keyup")
-  public onKeyup() {
+  @HostListener("keydown")
+  public onKeyAction() {
     if (this.inputIsEmpty) {
       this.hideButton();
     } else {
@@ -37,7 +39,7 @@ export class WexClear {
 
   @HostListener("click", ["$event"])
   public onClick(event: MouseEvent) {
-    if (this.isOnButton(event)) {
+    if (this.isOnButton(event) && this.buttonVisible) {
       this.input.value = "";
       this.hideButton();
     }
@@ -53,16 +55,6 @@ export class WexClear {
   @HostListener("blur")
   public onBlur() {
     this.hideButton();
-  }
-
-  @HostListener("mousemove", ["$event"])
-  public onMousemove(event: MouseEvent) {
-    console.log(this.isOnButton(event));
-    if (this.isOnButton(event) && this.buttonVisible) {
-      this.renderer.addClass(this.input, "cursor-pointer");
-    } else {
-      this.renderer.removeClass(this.input, "cursor-pointer");
-    }
   }
 
   private isOnButton(event: MouseEvent): boolean {
