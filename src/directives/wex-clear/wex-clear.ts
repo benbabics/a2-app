@@ -4,7 +4,7 @@ import { Directive, HostListener, ElementRef, Renderer2 } from "@angular/core";
   selector: "[wexClear]"
 })
 export class WexClear {
-  private static readonly ACCEPTABLE_ELEMENTS = "ion-input";
+  private static readonly ACCEPTABLE_ELEMENT = "ion-input";
   private readonly CLEAR_OFFSET = 30;
   private buttonVisible: boolean = false;
 
@@ -21,8 +21,8 @@ export class WexClear {
   }
 
   public constructor(private renderer: Renderer2, private elementRef: ElementRef) {
-    if (!WexClear.ACCEPTABLE_ELEMENTS === this.element.localName) {
-      throw new Error(`wexClear can only be an attribute of <${WexClear.ACCEPTABLE_ELEMENTS}>`);
+    if (!WexClear.ACCEPTABLE_ELEMENT === this.element.localName) {
+      throw new Error(`wexClear can only be an attribute of <${WexClear.ACCEPTABLE_ELEMENT}>`);
     }
   }
 
