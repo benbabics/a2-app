@@ -73,7 +73,8 @@ import {
   WexIfPlatformDirective,
   WexIfPlatformAndroidDirective,
   WexIfPlatformIosDirective,
-  WexKeyboardAware
+  WexKeyboardAware,
+  WexClear
 } from "../directives";
 import { InAppBrowser } from "@ionic-native/in-app-browser";
 import { AddPaymentPage } from "../pages/payments/add/add-payment";
@@ -137,7 +138,8 @@ export function APP_INITIALIZER_FACTORY() {
     WexIfPlatformIosDirective,
     ContactUsPage,
     WexInvoiceDisplay,
-    WexKeyboardAware
+    WexKeyboardAware,
+    WexClear
   ],
   imports: [
     //# Angular
