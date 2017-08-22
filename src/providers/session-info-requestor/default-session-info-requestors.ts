@@ -66,7 +66,7 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
     requestor: (session: Session) => this.driverProvider.search(session.user.company.details.accountId, { pageSize: this.INT_MAX_32 })
   };
 
-  private readonly postedTransactionsInfoRequestor: SessionInfoRequestorDetails = new PostedTransactionRequestor(this.transactionProvider);
+  private readonly postedTransactionsInfoRequestor: SessionInfoRequestorDetails = new SessionPostedTransactionRequestor(this.transactionProvider);
 
   private readonly postedTransactionsRequestor: SessionInfoRequestorDetails = {
     requiredFields: [Session.Field.PostedTransactionsInfo],
@@ -127,11 +127,26 @@ export class PostedTransactionRequestor extends DynamicSessionListInfoRequestor<
 
   protected readonly listMergeId: keyof Transaction.Details = "transactionId";
 
-  constructor(private transactionProvider: TransactionProvider, public dynamicList: TransactionList = SessionCache.cachedValues.postedTransactionsInfo) {
+  constructor(private transactionProvider: TransactionProvider, public dynamicList: TransactionList) {
     super(Transaction, [Session.Field.User]);
   }
 
   protected search(session: Session, params: any): Observable<ListResponse<Transaction>> {
      return this.transactionProvider.searchPosted(session.user.billingCompany.details.accountId, params);
+  }
+}
+
+export class SessionPostedTransactionRequestor extends PostedTransactionRequestor {
+
+  constructor(transactionProvider: TransactionProvider) {
+    super(transactionProvider, undefined);
+  }
+
+  public get dynamicList(): TransactionList {
+    return SessionCache.cachedValues.postedTransactionsInfo;
+  }
+
+  public set dynamicList(dynamicList: TransactionList) {
+    SessionCache.cachedValues.postedTransactionsInfo = dynamicList;
   }
 }

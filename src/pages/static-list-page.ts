@@ -45,7 +45,7 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   public searchFilter: string = "";
 
   // Set this to add header dividers and enable grouped list mode
-  public dividerLabels?: string[] = null;
+  public dividerLabels?: string[];
   // Labels for the list header
   public listLabels?: string[] = _.get<string[]>(this.CONSTANTS, "listLabels");
   // Search field label

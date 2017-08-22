@@ -1,8 +1,9 @@
 import { Observable } from "rxjs";
 import * as _ from "lodash";
+import * as moment from "moment";
 import { Component, Injector } from "@angular/core";
 import { NavController, NavParams, SegmentButton } from "ionic-angular";
-import { StaticListPage } from "../static-list-page";
+import { StaticListPage, GroupedList } from "../static-list-page";
 import { Session, TransactionList, DynamicList } from "../../models";
 import { WexGreeking } from "../../components";
 import { SessionCache, PostedTransactionRequestor, DynamicSessionListInfoRequestor } from "../../providers";
@@ -248,8 +249,53 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
   constructor(private localStorageService: LocalStorageService, public navCtrl: NavController, public navParams: NavParams, public injector: Injector) {
     super("Transactions", injector);
 
+    this.listGroupDisplayOrder = [];
     this.filter = this.navParams.get(TransactionsParams.Filter);
   }
+
+  private calculateLabelGroupByDate(date: Date): string {
+    let $moment: moment.Moment = moment(date).startOf("day");
+    let offsetDays: number = moment().startOf("day").diff(date, "days");
+
+    $moment = $moment.subtract(offsetDays);
+
+    if (offsetDays === 0) {
+      return this.CONSTANTS.LABELS.today;
+    }
+    else if (offsetDays === 1) {
+      return this.CONSTANTS.LABELS.yesterday;
+    }
+    else if (offsetDays < 30) {
+      return $moment.format("MM/DD/YYYY");
+    }
+    else if (offsetDays < 360) {
+      return $moment.format("MMMM YYYY");
+    }
+    else {
+      return $moment.format("YYYY");
+    }
+  }
+
+  private calculateDateByLabelGroup(labelGroup: string): Date {
+    if (labelGroup === this.CONSTANTS.LABELS.today) {
+      return moment().startOf("day").toDate();
+    }
+    else if (labelGroup === this.CONSTANTS.LABELS.yesterday) {
+      return moment().startOf("day").subtract(1, "days").toDate();
+    }
+    else if (/^\d{2}\/\d{2}\/\d{4,}$/.test(labelGroup)) {
+      return moment(labelGroup, "MM/DD/YYYY").toDate();
+    }
+    else if (/^\D+ \d{4,}$/.test(labelGroup)) {
+      return moment(labelGroup, "MMMM YYYY").toDate();
+    }
+    else if (/^\d{4,}$/.test(labelGroup)) {
+      return moment(labelGroup, "YYYY").toDate();
+    }
+
+    return null;
+  }
+
 
   private selectList(listType: TransactionListType) {
     if (this.selectedListView && this.selectedListView.type === listType) {
@@ -278,8 +324,33 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
     return this.selectedListView.fetch(options);
   }
 
+  protected groupItems(transactions: Transaction[]): GroupedList<Transaction> {
+    // Group the transactions by date
+    let groupedList = transactions.reduce<GroupedList<Transaction>>((groupedList, transaction) => {
+      // Get the correct group for this transaction
+      let group = this.calculateLabelGroupByDate(transaction.postDate);
+      // Get the list for this group
+      let transactionList = groupedList[group] = groupedList[group] || [];
+      // Add the transaction to the list
+      transactionList.push(transaction);
+
+      return groupedList;
+    }, {});
+
+    // Calculate the list group display order
+    this.listGroupDisplayOrder = _.keys(groupedList).sort((groupA, groupB) => {
+      return moment(this.calculateDateByLabelGroup(groupA)).isAfter(this.calculateDateByLabelGroup(groupB)) ? -1 : 1;
+    });
+
+    return groupedList;
+  }
+
   protected sortItems(items: TransactionListModelType[]): TransactionListModelType[] {
     return this.selectedListView.sortItems(items);
+  }
+
+  public get dividerLabels(): string[] {
+    return this.isGrouped ? this.listGroupDisplayOrder : undefined;
   }
 
   public get filterBy(): PostedTransactionSearchFilterBy {
@@ -310,6 +381,10 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
 
   public get isDriverView(): boolean {
     return this.selectedListView.type === TransactionListType.DriverName;
+  }
+
+  public get isGrouped(): boolean {
+    return this.isDateView;
   }
 
   public get isListSelectionLocked(): boolean {
