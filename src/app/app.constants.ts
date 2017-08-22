@@ -337,7 +337,8 @@ export namespace ConstantsInfo {
         },
         "sessionTimeOut": "Your session has timed out due to 15 minutes of inactivity. Please login to access your account.",
         "enrollment": {
-          "label": "Enroll Now"
+          "label1": "Don't have an account?",
+          "label2": "Enroll Now"
         }
       },
 
