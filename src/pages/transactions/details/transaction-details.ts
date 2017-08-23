@@ -1,7 +1,7 @@
 import { Component, Injector } from "@angular/core";
 import { NavParams } from "ionic-angular";
 import { DetailsPage } from "../../details-page";
-import { Transaction } from "@angular-wex/models";
+import { PostedTransaction } from "@angular-wex/models";
 import { NameUtils } from "../../../utils/name-utils";
 
 @Component({
@@ -9,14 +9,14 @@ import { NameUtils } from "../../../utils/name-utils";
   templateUrl: "transaction-details.html"
 })
 export class TransactionDetailsPage extends DetailsPage {
-  public transaction: Transaction;
+  public transaction: PostedTransaction;
 
   constructor(
     injector: Injector,
     public navParams: NavParams
   ) {
     super( "Transactions.Details", injector );
-    this.transaction = this.navParams.get( "item" );
+    this.transaction = this.navParams.get("item");
   }
 
   public get driverFirstName(): string {

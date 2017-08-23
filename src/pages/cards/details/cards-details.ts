@@ -1,5 +1,5 @@
 import { WexAlertController } from "./../../../components/wex-alert-controller/wex-alert-controller";
-import { CardProvider, PostedTransactionSearchFilterBy } from "@angular-wex/api-providers";
+import { CardProvider, TransactionSearchFilterBy } from "@angular-wex/api-providers";
 import { CardsReissuePage } from "./../reissue/cards-reissue";
 import { Component, Injector } from "@angular/core";
 import { NavParams, App, ActionSheetController, Events, ToastOptions, Platform, NavController } from "ionic-angular";
@@ -189,7 +189,7 @@ export class CardsDetailsPage extends DetailsPage {
   public viewTransactions() {
     this.navController.push(TransactionsPage, {
       selectedList: TransactionListType.Date,
-      filter: [PostedTransactionSearchFilterBy.Card, this.card.details.cardId]
+      filter: [TransactionSearchFilterBy.Card, this.card.details.cardId]
     });
   }
 }

@@ -5,17 +5,27 @@ import {
   CardProvider,
   AccountProvider,
   UserProvider,
-  InvoiceProvider
+  InvoiceProvider,
+  PendingTransactionSearchOptions
 } from "@angular-wex/api-providers";
 import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 import { SessionCache } from "../session-cache";
 import {
-  Transaction,
-  ListResponse
+  PostedTransaction,
+  ListResponse,
+  PendingTransaction,
+  User,
+  Company,
+  Card,
+  Payment,
+  Driver,
+  MakePaymentAvailability,
+  InvoiceSummary,
+  BankAccount
 } from "@angular-wex/models";
 import {
-  TransactionList,
+  PostedTransactionList,
   Session
 } from "../../models";
 import { SessionInfoRequestors, SessionInfoRequestorDetails } from "./session-info-requestor";
@@ -27,20 +37,20 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
   @Value("INT_MAX_32") private INT_MAX_32: number;
 
   private readonly tokenRequestor: SessionInfoRequestorDetails = {
-    requestor: () => Observable.of(SessionCache.cachedValues.token) //Fetched independently
+    requestor: (): Observable<string> => Observable.of(SessionCache.cachedValues.token) //Fetched independently
   };
 
   private readonly clientSecretRequestor: SessionInfoRequestorDetails = {
-    requestor: () => Observable.of(SessionCache.cachedValues.clientSecret)
+    requestor: (): Observable<string> => Observable.of(SessionCache.cachedValues.clientSecret)
   };
 
   private readonly userRequestor: SessionInfoRequestorDetails = {
-    requestor: () => this.userProvider.current()
+    requestor: (): Observable<User> => this.userProvider.current()
   };
 
   private readonly billingCompanyRequestor: SessionInfoRequestorDetails = {
     requiredFields: [Session.Field.User],
-    requestor: (session: Session) => Observable.if(() => !!session.user.billingCompany,
+    requestor: (session: Session): Observable<Company | {}> => Observable.if(() => !!session.user.billingCompany,
       this.accountProvider.get(session.user.billingCompany.details.accountId),
       Observable.empty()
     )
@@ -48,22 +58,38 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
 
   private readonly userCompanyRequestor: SessionInfoRequestorDetails = {
     requiredFields: [Session.Field.User],
-    requestor: (session: Session) => this.accountProvider.get(session.user.company.details.accountId)
+    requestor: (session: Session): Observable<Company> => this.accountProvider.get(session.user.company.details.accountId)
   };
 
   private readonly cardsRequestor: SessionInfoRequestorDetails = {
     requiredFields: [Session.Field.User],
-    requestor: (session: Session) => this.cardProvider.search(session.user.billingCompany.details.accountId, { pageSize: this.INT_MAX_32 })
+    requestor: (session: Session): Observable<Card[]> => this.cardProvider.search(session.user.billingCompany.details.accountId, { pageSize: this.INT_MAX_32 })
   };
 
   private readonly paymentsRequestor: SessionInfoRequestorDetails = {
     requiredFields: [Session.Field.User],
-    requestor: (session: Session) => this.paymentProvider.search(session.user.billingCompany.details.accountId, { pageSize: 999, pageNumber: 0 })
+    requestor: (session: Session): Observable<Payment[]> => this.paymentProvider.search(session.user.billingCompany.details.accountId, { pageSize: 999, pageNumber: 0 })
   };
 
   private readonly driversRequestor: SessionInfoRequestorDetails = {
     requiredFields: [Session.Field.User],
-    requestor: (session: Session) => this.driverProvider.search(session.user.company.details.accountId, { pageSize: this.INT_MAX_32 })
+    requestor: (session: Session): Observable<Driver[]> => this.driverProvider.search(session.user.company.details.accountId, { pageSize: this.INT_MAX_32 })
+  };
+
+  private readonly pendingTransactionsRequestor: SessionInfoRequestorDetails = {
+    requiredFields: [Session.Field.User],
+    requestor: (session: Session, params: PendingTransactionSearchOptions): Observable<ListResponse<PendingTransaction>> => {
+      if (session.user.isClassic) {
+        // Pending transactions aren't available in Classic.
+        return Observable.of({
+          values: [],
+          totalResultCount: 0
+        });
+      }
+      else {
+        return this.transactionProvider.searchPending(session.user.billingCompany.details.accountId, params);
+      }
+    }
   };
 
   private readonly postedTransactionsInfoRequestor: SessionInfoRequestorDetails = new SessionPostedTransactionRequestor(this.transactionProvider);
@@ -71,22 +97,25 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
   private readonly postedTransactionsRequestor: SessionInfoRequestorDetails = {
     requiredFields: [Session.Field.PostedTransactionsInfo],
     dependentRequestor: true,
-    requestor: (session: Session) => Observable.of(session.postedTransactionsInfo.items)
+    requestor: (session: Session): Observable<ListResponse<PostedTransaction>> => Observable.of({
+      values: session.postedTransactionsInfo.items,
+      totalResultCount: session.postedTransactionsInfo.details.totalResults
+    })
   };
 
   private readonly makePaymentAvailabilityRequestor: SessionInfoRequestorDetails = {
     requiredFields: [Session.Field.User],
-    requestor: (session: Session) => this.paymentProvider.getMakePaymentAvailability(session.user.company.details.accountId)
+    requestor: (session: Session): Observable<MakePaymentAvailability> => this.paymentProvider.getMakePaymentAvailability(session.user.company.details.accountId)
   };
 
   private readonly invoiceSummaryRequestor: SessionInfoRequestorDetails = {
     requiredFields: [Session.Field.User],
-    requestor: (session: Session) => this.invoiceProvider.current(session.user.billingCompany.details.accountId)
+    requestor: (session: Session): Observable<InvoiceSummary> => this.invoiceProvider.current(session.user.billingCompany.details.accountId)
   };
 
   private readonly bankAccountsRequestor: SessionInfoRequestorDetails = {
     requiredFields: [Session.Field.User],
-    requestor: (session: Session) => this.paymentProvider.getActiveBanks(session.user.billingCompany.details.accountId)
+    requestor: (session: Session): Observable<BankAccount[]> => this.paymentProvider.getActiveBanks(session.user.billingCompany.details.accountId)
   };
 
   constructor(
@@ -112,7 +141,7 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
     this._requestors[Session.Field.Cards] = this.cardsRequestor;
     this._requestors[Session.Field.Payments] = this.paymentsRequestor;
     this._requestors[Session.Field.Drivers] = this.driversRequestor;
-    //this._requestors[Session.Field.PendingTransactionsInfo] = this.pendingTransactionsRequestor;
+    this._requestors[Session.Field.PendingTransactions] = this.pendingTransactionsRequestor;
     this._requestors[Session.Field.PostedTransactionsInfo] = this.postedTransactionsInfoRequestor;
     this._requestors[Session.Field.PostedTransactions] = this.postedTransactionsRequestor;
     this._requestors[Session.Field.MakePaymentAvailability] = this.makePaymentAvailabilityRequestor;
@@ -123,15 +152,15 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
 
 //# Dynamic List Info Requestors
 
-export class PostedTransactionRequestor extends DynamicSessionListInfoRequestor<Transaction, Transaction.Details> {
+export class PostedTransactionRequestor extends DynamicSessionListInfoRequestor<PostedTransaction, PostedTransaction.Details> {
 
-  protected readonly listMergeId: keyof Transaction.Details = "transactionId";
+  protected readonly listMergeId: keyof PostedTransaction.Details = "transactionId";
 
-  constructor(private transactionProvider: TransactionProvider, public dynamicList: TransactionList) {
-    super(Transaction, [Session.Field.User]);
+  constructor(private transactionProvider: TransactionProvider, public dynamicList: PostedTransactionList) {
+    super(PostedTransaction, [Session.Field.User]);
   }
 
-  protected search(session: Session, params: any): Observable<ListResponse<Transaction>> {
+  protected search(session: Session, params: any): Observable<ListResponse<PostedTransaction>> {
      return this.transactionProvider.searchPosted(session.user.billingCompany.details.accountId, params);
   }
 }
