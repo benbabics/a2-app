@@ -33,6 +33,7 @@ page-login {
     background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('../assets/pages/login/background-street.jpg') no-repeat;
     background-position-x: center;
     background-size: cover;
+    background-size: 250%;
 
     @at-root .md .has-banner & {
       padding-top: $scroll-offset-md !important;
@@ -45,7 +46,7 @@ page-login {
     #title-heading-bar {
       @include flex-grow(1);
 
-      background: no-repeat center top url("../assets/pages/login/logo.png");
+      background: no-repeat center bottom url("../assets/pages/login/logo.png");
       background-size: contain;
 
       width: 70%;
@@ -198,7 +199,7 @@ page-login {
 
       width: 100%;
       height: 0;
-      min-height: 52%;
+      min-height: 25%;
       transition: height .2s ease-in-out;
     }
   }
