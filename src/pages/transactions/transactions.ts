@@ -366,9 +366,9 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
     return this.selectedListView.fetch(options);
   }
 
-  protected groupItems(transactions: Transaction[]): GroupedList<Transaction> {
+  protected groupItems(transactions: PostedTransaction[]): GroupedList<PostedTransaction> {
     // Group the transactions by date
-    let groupedList = transactions.reduce<GroupedList<Transaction>>((groupedList, transaction) => {
+    let groupedList = transactions.reduce<GroupedList<PostedTransaction>>((groupedList, transaction) => {
       // Get the correct group for this transaction
       let group = this.calculateLabelGroupByDate(transaction.postDate);
       // Get the list for this group

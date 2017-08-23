@@ -171,11 +171,11 @@ export class SessionPostedTransactionRequestor extends PostedTransactionRequesto
     super(transactionProvider, undefined);
   }
 
-  public get dynamicList(): TransactionList {
+  public get dynamicList(): PostedTransactionList {
     return SessionCache.cachedValues.postedTransactionsInfo;
   }
 
-  public set dynamicList(dynamicList: TransactionList) {
+  public set dynamicList(dynamicList: PostedTransactionList) {
     SessionCache.cachedValues.postedTransactionsInfo = dynamicList;
   }
 }
