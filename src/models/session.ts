@@ -4,14 +4,15 @@ import {
   Card,
   Payment,
   Driver,
-  Transaction,
+  PostedTransaction,
   MakePaymentAvailability,
   InvoiceSummary,
-  BankAccount
+  BankAccount,
+  PendingTransaction
 } from "@angular-wex/models";
 import { DynamicList } from "./dynamic-list";
 
-export type TransactionList = DynamicList<Transaction, Transaction.Details>;
+export type PostedTransactionList = DynamicList<PostedTransaction, PostedTransaction.Details>;
 
 export type Session = Partial<{
     user: User;
@@ -22,10 +23,9 @@ export type Session = Partial<{
     cards: Card[];
     payments: Payment[];
     drivers: Driver[];
-    pendingTransactions: Transaction[];
-    postedTransactions: Transaction[];
-    pendingTransactionsInfo: TransactionList;
-    postedTransactionsInfo: TransactionList;
+    pendingTransactions: PendingTransaction[];
+    postedTransactions: PostedTransaction[];
+    postedTransactionsInfo: PostedTransactionList;
     makePaymentAvailability: MakePaymentAvailability;
     invoiceSummary: InvoiceSummary;
     bankAccounts: BankAccount[];
@@ -44,7 +44,6 @@ export namespace Session {
       export const Payments: Field = "payments";
       export const PendingTransactions: Field = "pendingTransactions";
       export const PostedTransactions: Field = "postedTransactions";
-      export const PendingTransactionsInfo: Field = "pendingTransactionsInfo";
       export const PostedTransactionsInfo: Field = "postedTransactionsInfo";
       export const Token: Field = "token";
       export const ClientSecret: Field = "clientSecret";
@@ -61,7 +60,7 @@ export namespace Session {
         InvoiceSummary,
         MakePaymentAvailability,
         Payments,
-        //PendingTransactions,
+        PendingTransactions,
         PostedTransactions,
         PostedTransactionsInfo,
         UserCompany,
