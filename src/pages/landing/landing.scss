@@ -212,3 +212,29 @@ page-landing {
     opacity: 1;
   }
 }
+
+p-progressBar.wex-payment-bar {
+  width: 100%;
+  
+  .ui-widget-content, .ui-progressbar .ui-progressbar-value {
+    border: none;
+    border-radius: 3px;
+  }
+
+  .ui-widget-content {
+    background: #efeff4;
+    border-radius: 3px;
+  }
+
+  &.green .ui-progressbar .ui-progressbar-value {
+    background: #00cc7a;
+  }
+
+  &.yellow .ui-progressbar .ui-progressbar-value {
+    background: #ffbf3b;
+  }
+
+  &.red .ui-progressbar .ui-progressbar-value {
+    background: #ff3b30;
+  }
+}

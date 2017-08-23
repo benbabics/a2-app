@@ -45,6 +45,26 @@ export class LandingPage extends SecurePage {
     return this.CONSTANTS.welcome + _.capitalize(this.session.user.details.firstName.toLocaleLowerCase());
   }
 
+  public get paymentPercent(): number {
+    return this.invoiceSummary.details.currentBalance / this.invoiceSummary.details.availableCredit * 100;
+  }
+
+  public get progressBarColor(): string {
+    let value = this.paymentPercent;
+
+    if (value >= 0 && value < 50) {
+      return "green";
+    } else if (value >= 50 && value < 75) {
+      return "yellow";
+    } else {
+      return "red";
+    }
+  }
+
+  public get progressBarStyles(): string {
+    return `${this.progressBarColor} wex-payment-bar`;
+  }
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,

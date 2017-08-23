@@ -1,4 +1,5 @@
 import { WexAlertController } from "./../components/wex-alert-controller/wex-alert-controller";
+import { ProgressBarModule } from "primeng/primeng";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { Dialogs } from "@ionic-native/dialogs";
@@ -157,7 +158,8 @@ export function APP_INITIALIZER_FACTORY() {
     //----------------------
     ChartsModule,
     LocalStorageModule.withConfig({ storageType: "localStorage" }),
-    NgIdleModule.forRoot()
+    NgIdleModule.forRoot(),
+    ProgressBarModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

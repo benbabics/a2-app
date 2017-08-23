@@ -51,29 +51,21 @@
         <div *ngIf="invoiceSummary">
           <ion-item text-wrap>
             <div class="chart-wrapper">
-              <div class="labels">
+              <!-- <div class="labels">
                 <div class="label" *ngFor="let chart of chartDisplay.left" [ngStyle]="{ 'color': chart.color.backgroundColor }">
                   <div class="text-amount" [innerHtml]="chart.data | wexCurrency:true"></div>
                   <div class="text-title">{{ chart.label }}</div>
                 </div>
               </div>
 
-              <div class="chart">
-                <canvas baseChart
-                        chartType="doughnut"
-                        [options]="chart.options"
-                        [data]="chart.data"
-                        [colors]="chart.colors"
-                        [labels]="chart.labels">
-                </canvas>
-              </div>
 
               <div class="labels">
                 <div class="label" *ngFor="let chart of chartDisplay.right" [ngStyle]="{ 'color': chart.color.backgroundColor }">
                   <div class="text-amount" [innerHtml]="chart.data | wexCurrency:true"></div>
                   <div class="text-title">{{ chart.label }}</div>
                 </div>
-              </div>
+              </div> -->
+              <p-progressBar [value]="paymentPercent" [showValue]="false" [class]="progressBarStyles"></p-progressBar>
             </div>
           </ion-item>
           <ion-list>
