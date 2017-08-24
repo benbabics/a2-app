@@ -244,28 +244,6 @@ export namespace ConstantsInfo {
           "duration": 3000,
           "message": "Press again to exit."
         },
-        CHART: {
-          OPTIONS: {
-            animation: { easing: "easeOutBounce" },
-            elements: {
-              arc: { borderWidth: 1 }
-            },
-            cutoutPercentage: 70,
-            responsive: false,
-            legend: { display: false },
-            tooltips: { enabled: false }
-          },
-          COLORS: {
-            availableCredit: "#3eb049",
-            availableCreditNegative: "#ff0000",
-            billedAmount: "#324e5d",
-            unbilledAmount: "#34b39d",
-            pendingAmount: "#efcc57"
-          },
-          CONSTANTS: {
-            "negativeCreditData": 1 //forces chart to render negative/zero credit data as a solid/filled graph
-          }
-        },
         "welcome": "Welcome, ",
         "title": "Fleet SmartHub",
         "availableCredit": "Available",

@@ -41,16 +41,16 @@ page-landing {
 
   #account-overview {
 
+    #balance-current, ion-list, .graph-data {
+      animation:         linksFade 2s 1 forwards;
+      -webkit-animation: linksFade 2s 1 forwards;
+    }
+
     action-indicator [loading="true"] {
       @include flexbox();
       @include align-items(center);
       @include justify-content(center);
       min-height: 15vh;
-    }
-
-    ion-list {
-      animation:         linksFade 2s 1 forwards;
-      -webkit-animation: linksFade 2s 1 forwards;
     }
 
     #balance-current {
@@ -139,6 +139,8 @@ page-landing {
 
 p-progressBar.wex-payment-bar {
   width: 100%;
+  animation:         chartSlideFade 2s 1 forwards;
+  -webkit-animation: chartSlideFade 2s 1 forwards;
   
   .ui-widget-content, .ui-progressbar .ui-progressbar-value {
     border: none;
