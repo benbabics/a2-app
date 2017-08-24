@@ -46,7 +46,15 @@ export class LandingPage extends SecurePage {
   }
 
   public get paymentPercent(): number {
-    return this.invoiceSummary.details.currentBalance / this.invoiceSummary.details.availableCredit * 100;
+    return this.invoiceSummary.details.currentBalance / this.invoiceSummary.details.creditLimit * 100;
+  }
+
+  public get remainingBalance(): number {
+    return Math.floor(this.invoiceSummary.details.creditLimit - this.invoiceSummary.details.currentBalance);
+  }
+
+  public get creditLimit(): number {
+    return Math.floor(this.invoiceSummary.details.creditLimit);
   }
 
   public get progressBarColor(): string {

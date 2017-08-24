@@ -53,114 +53,38 @@ page-landing {
       -webkit-animation: linksFade 2s 1 forwards;
     }
 
-    .chart-wrapper {
-      @include flexbox();
-      @include flex-direction(row);
-      width: 100%;
-
-      .labels,
-      .chart {
-        @include flex(1);
+    #balance-current {
+      .title-string {
+        font-weight: 500;
+        font-size: $h4-font-size;
       }
 
-      .labels {
-        @include flexbox();
-        @include flex-direction(column);
-        @include justify-content(center);
-        text-align: left;
-
-        .label {
-          position: relative;
-          padding: 15px 25px;
-          opacity: 0;
-          animation:         chartSlideFade 2s 1 forwards;
-          -webkit-animation: chartSlideFade 2s 1 forwards;
-
-          &:nth-of-type(2) {
-            animation-delay:         .75s;
-            -webkit-animation-delay: .75s;
-          }
-
-          &:nth-of-type(3) {
-            animation-delay:         1.5s;
-            -webkit-animation-delay: 1.5s;
-          }
-
-          .text-amount,
-          .text-title {
-            line-height: normal;
-          }
-
-          .text-amount {
-            color: color($colors, dark-gray);
-          }
-
-          .text-title {
-            color: color($colors, gray);
-          }
-
-          &:before {
-            position: absolute;
-            display: block;
-            top:  calc(50% - 5px);
-            left: 10px;
-            width:  10px;
-            height: 10px;
-            font-size: 10px;
-            font-family: 'FontAwesome';
-            content: "\f111";
-          }
-        }
-
-        &:first-of-type {
-          @include order(1);
-          text-align: right;
-
-          .label:before {
-            left: auto;
-            right: 10px;
-          }
-        }
-
-        &:last-of-type {
-          @include order(3);
-        }
-
-        &:first-of-type,
-        &:last-of-type {
-          padding: 15px 0;
-        }
-
-        &:first-of-type .label {
-          padding-right: 25px;
-          padding-left: 0;
-        }
-
-        &:last-of-type .label {
-          padding-left: 25px;
-          padding-right: 0;
-        }
-      }
-
-      .chart {
-        canvas {
-          width: 100% !important;
-          height: 100% !important;
-        }
-
-        @include order(2);
-        text-align: center;
-        display: block;
-        width: 33%;
+      .item-currency {
+        font-size: 36px;
+        font-weight: 500;
       }
     }
 
-    #balance-current {
-      font-weight: bold;
-      font-size: $h6-font-size;
+    .graph-data {
+      font-size: 12px;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
 
-      .item-currency {
-        font-size: $h4-font-size;
+      .faint, &.faint {
+        font-weight: 500;
+        color: #9b99a9;
+      }
+
+      &#graph-top {
+        @include flexbox();
+        @include justify-content(space-between);
+        padding-bottom: .5rem;
+      }
+
+      &#graph-bottom {
+        @include flexbox();
+        @include justify-content(flex-end);
+        padding-top: .5rem;
       }
     }
 

@@ -49,33 +49,25 @@
 
       <action-indicator large [when]="!invoiceSummary">
         <div *ngIf="invoiceSummary">
+          <ion-item id="balance-current">
+            <div class="title-string">{{ CONSTANTS.currentBalance }}</div>
+            <div class="item-currency" [innerHtml]="invoiceSummary.details.currentBalance | wexCurrency"></div>
+          </ion-item>
           <ion-item text-wrap>
-            <div class="chart-wrapper">
-              <!-- <div class="labels">
-                <div class="label" *ngFor="let chart of chartDisplay.left" [ngStyle]="{ 'color': chart.color.backgroundColor }">
-                  <div class="text-amount" [innerHtml]="chart.data | wexCurrency:true"></div>
-                  <div class="text-title">{{ chart.label }}</div>
-                </div>
+            <div>
+              <div id="graph-top" class="graph-data">
+                <span class="graph-top-string faint">{{ CONSTANTS.credit }}</span>
+                <span class="graph-top-value">{{ CONSTANTS.remaining }} {{ remainingBalance | wexCurrency:true }}</span>
               </div>
-
-
-              <div class="labels">
-                <div class="label" *ngFor="let chart of chartDisplay.right" [ngStyle]="{ 'color': chart.color.backgroundColor }">
-                  <div class="text-amount" [innerHtml]="chart.data | wexCurrency:true"></div>
-                  <div class="text-title">{{ chart.label }}</div>
-                </div>
-              </div> -->
               <p-progressBar [value]="paymentPercent" [showValue]="false" [class]="progressBarStyles"></p-progressBar>
+              <div id="graph-bottom" class="graph-data faint">{{ creditLimit | wexCurrency:true }} {{ CONSTANTS.limit }}</div>
             </div>
           </ion-item>
           <ion-list>
-            <ion-item id="balance-current">
-              {{ CONSTANTS.currentBalance }}
-              <span item-right class="item-currency" [innerHtml]="invoiceSummary.details.currentBalance | wexCurrency:true"></span>
-            </ion-item>
+
             <ion-item id="balance-statement">
               {{ CONSTANTS.statementBalance }}
-              <span item-right class="item-currency" [innerHtml]="invoiceSummary.details.statementBalance | wexCurrency:true"></span>
+              <span item-right class="item-currency" [innerHtml]="invoiceSummary.details.statementBalance | wexCurrency"></span>
             </ion-item>
             <ion-item id="due-date">
               {{ CONSTANTS.paymentDueDate }}
@@ -87,7 +79,7 @@
     </ion-card>
   </section>
 
- <!--  <ion-card>
+  <!--  <ion-card>
     <ion-list>
       <!--wex-analytics-track-event="vm.config.ANALYTICS.events.makePaymentLink"--
       <ion-item (click)="goToMakePayment()">

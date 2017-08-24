@@ -275,7 +275,10 @@ export namespace ConstantsInfo {
         "pendingAmount": "Pending",
         "currentBalance": "Current Balance",
         "statementBalance": "Statement Balance",
-        "scheduledPayments": "Scheduled"
+        "scheduledPayments": "Scheduled",
+        "credit": "Credit",
+        "remaining": "Remaining",
+        "limit": "Limit"
       },
 
       //# Login page
