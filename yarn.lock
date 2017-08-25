@@ -2,13 +2,13 @@
 # yarn lockfile v1
 
 
-"@angular-wex/api-providers@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#aba78e4da3e":
-  version "1.3.1"
-  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#aba78e4da3e"
+"@angular-wex/api-providers@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#39dea45":
+  version "1.3.9-alpha.2"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#39dea45"
 
-"@angular-wex/mocks@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-mocks.git#b30796baed3":
-  version "1.0.1"
-  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-mocks.git#b30796baed3"
+"@angular-wex/mocks@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-mocks.git#8390751b387":
+  version "1.1.0"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-mocks.git#8390751b387"
 
 "@angular-wex/models@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-models.git#6b1ff93d06a":
   version "1.4.0"
