@@ -30,7 +30,8 @@ import {
   WexAppSnackbarController,
   WexStaticListPageHeader,
   WexStaticListPageContent,
-  WexInvoiceDisplay
+  WexInvoiceDisplay,
+  ResizableSvg
 } from "../components";
 
 import { StatusBar } from "@ionic-native/status-bar";
@@ -139,7 +140,8 @@ export function APP_INITIALIZER_FACTORY() {
     ContactUsPage,
     WexInvoiceDisplay,
     WexKeyboardAware,
-    WexClear
+    WexClear,
+    ResizableSvg
   ],
   imports: [
     //# Angular

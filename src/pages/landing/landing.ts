@@ -1,5 +1,4 @@
 import { WexAppSnackbarController } from "./../../components/wex-app-snackbar-controller/wex-app-snackbar-controller";
-import * as _ from "lodash";
 import { NavBarController } from "../../providers";
 import { Component, Injector } from "@angular/core";
 import { NavController, NavParams, PopoverController, Platform, ToastOptions } from "ionic-angular";
@@ -9,6 +8,7 @@ import { SecurePage } from "../secure-page";
 import { OptionsPopoverPage } from "./options-popover/options-popover";
 import { BrandProvider } from "@angular-wex/api-providers";
 import { WexAppBackButtonController } from "../../providers/wex-app-back-button-controller";
+import { NameUtils } from "../../utils/name-utils";
 
 @Component({
   selector: "page-landing",
@@ -26,12 +26,13 @@ export class LandingPage extends SecurePage {
   public scheduledPaymentsCount = 0;
   public brandLogoData: string;
 
-  public get userCardGreeting(): string {
-    return this.CONSTANTS.welcome + _.capitalize(this.session.user.details.firstName.toLocaleLowerCase());
+  public get companyName(): string {
+    return NameUtils.PrintableName(this.billingCompany.details.name);
   }
 
   public get paymentPercent(): number {
-    return this.invoiceSummary.details.currentBalance / this.invoiceSummary.details.creditLimit * 100;
+    let value = this.invoiceSummary.details.currentBalance / this.invoiceSummary.details.creditLimit * 100;
+    return value <= 100 ? value : 100;
   }
 
   public get remainingBalance(): number {

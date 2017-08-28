@@ -1,64 +1,107 @@
 page-landing {
-
-  section {
-    margin-bottom: 10px;
+  
+  @mixin faint {
+    font-weight: 400;
+    color: #9b99a9;
   }
 
-  sup {
-    top: -.2em;
-    margin-left: 1px;
+  .faint {
+    @include faint;
+  }
+  
+  &.ion-page > ion-content {
+      background: color($colors, white);
   }
 
-  #company-details {
+  .list-ios, .list-md {
+  & > .item-block {
+      &:first-child {
+        border-top: none;
+      }
 
-    #company-details-content {
-      @include flexbox();
-      @include flex-direction(row);
-      @include align-items(flex-start);
-      @include justify-content(center);
-    }
-
-    #brand-logo {
-      width: 50%;
-
-      ion-label {
-        width: 100%;
-
-        @at-root .ios & {
-          //fix for Safari cutting off right-hand edge of image
-          margin-right: -8px;
-        }
+      &:last-child {
+        border-bottom: none;
       }
     }
-
-    #company-name {
-      @include flex-grow(1);
-      font-weight: bold;
-      font-size: $h6-font-size;
-      color: color($colors, dark-gray);
-    }
   }
 
-  #account-overview {
+  .page-list > ion-item ion-label {
 
-    #balance-current, ion-list, .graph-data {
-      animation:         linksFade 2s 1 forwards;
-      -webkit-animation: linksFade 2s 1 forwards;
-    }
-
-    action-indicator [loading="true"] {
+    & > action-indicator [loading="true"] {
       @include flexbox();
       @include align-items(center);
       @include justify-content(center);
       min-height: 15vh;
     }
 
-    #balance-current {
-      .title-string {
-        font-weight: 500;
-        font-size: $h4-font-size;
-      }
+    @at-root .ios & {
+      padding: 2rem .8rem;
+    }
 
+    @at-root .md & {
+      padding: .6rem 0rem;
+    }
+
+    .summary-list ion-label {
+      padding: inherit;
+    }
+
+    ion-item {
+      border-bottom: 0.55px solid #c8c7cc;
+      [item-left] {
+        @include faint;
+      }
+      [item-right] {
+        font-weight: bold;
+      }
+    }
+
+    .section-heading {
+      font-weight: 500;
+      font-size: $h4-font-size;
+      padding-bottom: 1rem;
+    }
+  }
+  
+
+  ion-navbar ion-icon {
+    color: black;
+    opacity: 0.54;
+  }
+
+  #brand-logo {
+    width:100%;
+    height: 6rem;
+    align-self: center;
+  }
+
+  #account-identification ion-label {
+    @include flexbox();
+    @include justify-content(space-between);
+    @include align-items(center);
+    
+    #company-name {
+      font-size: $h5-font-size;
+      font-weight: 500;
+    }
+
+    #account-number {
+      margin-top: .5rem;
+      letter-spacing: .07rem;
+      font-size: 1.4rem;
+    }
+
+  }
+
+  #account-overview {
+    #balance-current, ion-list, .graph-data {
+      animation:         linksFade 2s 1 forwards;
+      -webkit-animation: linksFade 2s 1 forwards;
+    }
+
+    #balance-current {
+      padding-bottom: 2rem;
+      
       .item-currency {
         font-size: 36px;
         font-weight: 500;
@@ -69,11 +112,6 @@ page-landing {
       font-size: 12px;
       letter-spacing: 0.7px;
       text-transform: uppercase;
-
-      .faint, &.faint {
-        font-weight: 500;
-        color: #9b99a9;
-      }
 
       &#graph-top {
         @include flexbox();
@@ -86,11 +124,6 @@ page-landing {
         @include justify-content(flex-end);
         padding-top: .5rem;
       }
-    }
-
-    .item-currency {
-      color: color($colors, dark-gray);
-      font-size: $h6-font-size;
     }
   }
 }

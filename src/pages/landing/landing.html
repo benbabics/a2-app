@@ -5,7 +5,7 @@
 
     <ion-buttons end>
       <button ion-button icon-only (click)="onShowOptions($event)">
-        <ion-icon name="more"></ion-icon>
+        <ion-icon name="md-settings"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -19,66 +19,58 @@
                       text="{{ CONSTANTS.platformName }} {{ CONSTANTS.registerSuccessBanner }} {{session.user.details.username | wexTruncateString}}">
 </wex-notification-bar> -->
 
-<ion-content padding>
+<ion-content>
 
   <!-- Display Notifications Prompt -->
   <!-- <enable-notifications-prompt wex-feature-flag="PUSH_NOTIFICATIONS"></enable-notifications-prompt> -->
 
-  <section id="company-details">
-    <ion-card>
-      <ion-item-divider>
-        {{ userCardGreeting }}
-      </ion-item-divider>
-      <ion-card-content id="company-details-content">
-        <ion-item id="company-details" text-wrap>
-          <p id="company-name">{{ billingCompany.details.name }}</p>
-          <p id="account-number">{{ session.user.displayAccountNumber }}</p>
-        </ion-item>
-        <ion-item id="brand-logo" *ngIf="brandLogoData">
-          <div id="brand-data" [innerHTML]="brandLogoData | wexSvg"></div>
-        </ion-item>
-      </ion-card-content>
-    </ion-card>
-  </section>
+  <ion-list class="page-list">
+    <ion-item id="account-identification">
+      <div>
+        <div id="company-name">{{ companyName }}</div>
+        <div id="account-number" class="faint">{{ session.user.displayAccountNumber }}</div>
+      </div>
+      <resizable-svg id="brand-logo" [imageData]="brandLogoData"></resizable-svg>
+    </ion-item>
 
-  <section id="account-overview">
-    <ion-card>
-      <ion-item-divider>
-        Account Overview
-      </ion-item-divider>
-
-      <action-indicator large [when]="!invoiceSummary">
-        <div *ngIf="invoiceSummary">
-          <ion-item id="balance-current">
-            <div class="title-string">{{ CONSTANTS.currentBalance }}</div>
-            <div class="item-currency" [innerHtml]="invoiceSummary.details.currentBalance | wexCurrency"></div>
-          </ion-item>
-          <ion-item text-wrap>
-            <div>
-              <div id="graph-top" class="graph-data">
-                <span class="graph-top-string faint">{{ CONSTANTS.credit }}</span>
-                <span class="graph-top-value">{{ CONSTANTS.remaining }} {{ remainingBalance | wexCurrency:true }}</span>
-              </div>
-              <p-progressBar [value]="paymentPercent" [showValue]="false" [class]="progressBarStyles"></p-progressBar>
-              <div id="graph-bottom" class="graph-data faint">{{ creditLimit | wexCurrency:true }} {{ CONSTANTS.limit }}</div>
-            </div>
-          </ion-item>
-          <ion-list>
-
-            <ion-item id="balance-statement">
-              {{ CONSTANTS.statementBalance }}
-              <span item-right class="item-currency" [innerHtml]="invoiceSummary.details.statementBalance | wexCurrency"></span>
-            </ion-item>
-            <ion-item id="due-date">
-              {{ CONSTANTS.paymentDueDate }}
-              <span item-right class="item-currency">{{ invoiceSummary.details.paymentDueDate | wexDate:true }}</span>
-            </ion-item>
-          </ion-list>
+    <ion-item id="account-overview">
+      <action-indicator [when]="!invoiceSummary"></action-indicator>
+      <div *ngIf="invoiceSummary">
+        <div id="balance-current">
+          <div class="section-heading">{{ CONSTANTS.currentBalance }}</div>
+          <div class="item-currency" [innerHtml]="invoiceSummary.details.currentBalance | wexCurrency"></div>
         </div>
-      </action-indicator>
-    </ion-card>
-  </section>
-
+        <div>
+          <div id="graph-top" class="graph-data">
+            <span class="graph-top-string faint">{{ CONSTANTS.credit }}</span>
+            <span class="graph-top-value"> {{ remainingBalance | wexCurrency:true }} {{ CONSTANTS.remaining }} </span>
+          </div>
+          <p-progressBar [value]="paymentPercent" [showValue]="false" [class]="progressBarStyles"></p-progressBar>
+          <div id="graph-bottom" class="graph-data faint">{{ creditLimit | wexCurrency:true }} {{ CONSTANTS.limit }}</div>
+        </div>
+      </div>
+    </ion-item>
+    <ion-item>
+      <action-indicator [when]="!invoiceSummary"></action-indicator>
+      <div *ngIf="invoiceSummary">
+        <div class="section-heading"> {{ CONSTANTS.summary }} </div>
+        <ion-list class="summary-list">
+          <ion-item *ngIf="invoiceSummary.details.pendingAmount !== 0">
+            <span item-left>{{ CONSTANTS.pending }}</span>
+            <span item-right>{{ invoiceSummary.details.pendingAmount | wexCurrency }}</span>
+          </ion-item>
+          <ion-item>
+            <span item-left>{{ CONSTANTS.minimumPayment }}</span>
+            <span item-right>{{ invoiceSummary.details.minimumPaymentDue | wexCurrency }}</span>
+          </ion-item>
+          <ion-item>
+            <span item-left>{{ CONSTANTS.paymentDueDate }}</span>
+            <span item-right>{{ invoiceSummary.details.paymentDueDate | wexDate:true:'MMMM Do, YYYY' }}</span>
+          </ion-item>
+        </ion-list>
+      </div>
+    </ion-item>
+  </ion-list>
   <!--  <ion-card>
     <ion-list>
       <!--wex-analytics-track-event="vm.config.ANALYTICS.events.makePaymentLink"--
@@ -92,5 +84,4 @@
       </ion-item>
     </ion-list>
   </ion-card> -->
-
 </ion-content>
