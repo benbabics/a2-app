@@ -78,16 +78,13 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
 
   private readonly pendingTransactionsRequestor: SessionInfoRequestorDetails = {
     requiredFields: [Session.Field.User],
-    requestor: (session: Session, params: PendingTransactionSearchOptions): Observable<ListResponse<PendingTransaction>> => {
+    requestor: (session: Session, params: PendingTransactionSearchOptions): Observable<PendingTransaction[]> => {
       if (session.user.isClassic) {
         // Pending transactions aren't available in Classic.
-        return Observable.of({
-          values: [],
-          totalResultCount: 0
-        });
+        return Observable.of([]);
       }
       else {
-        return this.transactionProvider.searchPending(session.user.billingCompany.details.accountId, params);
+        return this.transactionProvider.searchPending(session.user.billingCompany.details.accountId, params).map(response => response.values);
       }
     }
   };
@@ -97,10 +94,7 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
   private readonly postedTransactionsRequestor: SessionInfoRequestorDetails = {
     requiredFields: [Session.Field.PostedTransactionsInfo],
     dependentRequestor: true,
-    requestor: (session: Session): Observable<ListResponse<PostedTransaction>> => Observable.of({
-      values: session.postedTransactionsInfo.items,
-      totalResultCount: session.postedTransactionsInfo.details.totalResults
-    })
+    requestor: (session: Session): Observable<PostedTransaction[]> => Observable.of(session.postedTransactionsInfo.items)
   };
 
   private readonly makePaymentAvailabilityRequestor: SessionInfoRequestorDetails = {

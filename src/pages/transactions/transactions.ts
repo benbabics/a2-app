@@ -96,9 +96,9 @@ class TransactionsPageDateView extends TransactionsPageListView<BaseTransactionT
       this.fetchPending(options),
       this.fetchPosted(options)
     ]).map((...values: any[]): BaseTransactionT[] => {
-      let transactions: [ListResponse<BaseTransactionT>, ListResponse<BaseTransactionT>] = values[0];
-      let pendingTransactions = _.first(transactions).values || [];
-      let postedTransactions = _.last(transactions).values || [];
+      let transactions: [BaseTransactionT[], BaseTransactionT[]] = values[0];
+      let pendingTransactions = _.first(transactions) || [];
+      let postedTransactions = _.last(transactions) || [];
       // Concat the pending and posted transactions together
       return pendingTransactions.concat(postedTransactions);
     });
