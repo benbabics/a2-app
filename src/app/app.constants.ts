@@ -695,6 +695,7 @@ export namespace ConstantsInfo {
           greekedElementCount: 15
         },
         LABELS: {
+          pending: "Pending",
           today: "Today",
           yesterday: "Yesterday"
         },

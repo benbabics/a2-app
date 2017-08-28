@@ -322,7 +322,10 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
   }
 
   private calculateDateByLabelGroup(labelGroup: string): Date {
-    if (labelGroup === this.CONSTANTS.LABELS.today) {
+    if (labelGroup === this.CONSTANTS.LABELS.pending) {
+      return moment().endOf("day").toDate();
+    }
+    else if (labelGroup === this.CONSTANTS.LABELS.today) {
       return moment().startOf("day").toDate();
     }
     else if (labelGroup === this.CONSTANTS.LABELS.yesterday) {
@@ -369,13 +372,20 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
     return this.selectedListView.fetch(options);
   }
 
-  protected groupItems(transactions: PostedTransaction[]): GroupedList<PostedTransaction> {
-    // Group the transactions by date
-    let groupedList = transactions.reduce<GroupedList<PostedTransaction>>((groupedList, transaction) => {
-      // Get the correct group for this transaction
-      let group = this.calculateLabelGroupByDate(transaction.postDate);
+  protected groupItems(transactions: BaseTransactionT[]): GroupedList<BaseTransactionT> {
+    let group: string;
+    let groupedList = transactions.reduce<GroupedList<BaseTransactionT>>((groupedList, transaction) => {
+      // Group transactions
+      if (transaction instanceof PendingTransaction) {
+        group = this.CONSTANTS.LABELS.pending;
+      }
+      else {
+        group = this.calculateLabelGroupByDate(transaction.effectiveDate);
+      }
+
       // Get the list for this group
       let transactionList = groupedList[group] = groupedList[group] || [];
+
       // Add the transaction to the list
       transactionList.push(transaction);
 
@@ -443,8 +453,23 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
 
   public set listLabels(listLabels) { listLabels; }
 
+  public getTransactionAmount(transaction: BaseTransactionT): number {
+    if (transaction instanceof PendingTransaction) {
+      return transaction.details.authorizationAmount;
+    }
+    else if (transaction instanceof PostedTransaction) {
+      return transaction.details.netCost;
+    }
+
+    return 0;
+  }
+
   public goToDetailPage(item: TransactionListModelType) {
     return this.selectedListView.goToDetailPage(item);
+  }
+
+  public isItemActive(item: TransactionListModelType): boolean {
+    return !(item instanceof PendingTransaction);
   }
 
   public listDisplayName(item: Driver): string {

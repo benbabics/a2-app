@@ -4,7 +4,7 @@ import { Observable } from "rxjs";
 import { Value } from "../decorators/value";
 import { VersionStatus } from "@angular-wex/models";
 import { WexPlatform } from "./platform";
-import { VersionCheckProvider } from "@angular-wex/api-providers";
+import { VersionStatusProvider } from "@angular-wex/api-providers";
 import { AppConstants } from "../app/app.constants";
 
 export namespace RequestPlatform {
@@ -37,7 +37,7 @@ export class WexAppVersionCheck {
     constructor(
         private appVersion: AppVersion,
         private wexPlatform: WexPlatform,
-        private versionCheckProvider: VersionCheckProvider
+        private versionStatusProvider: VersionStatusProvider
     ) {
         this._status = this.checkVersionStatus();
     }
@@ -57,7 +57,7 @@ export class WexAppVersionCheck {
     }
 
     private getStatus(versionNumber: string, clientId: string, platform: string): Observable<VersionStatus> {
-        return this.versionCheckProvider
+        return this.versionStatusProvider
             .checkVersion({ versionNumber, clientId, platform })
             .map(statusResponse => statusResponse.status)
             .publishReplay().refCount();
