@@ -69,12 +69,6 @@ page-landing {
     opacity: 0.54;
   }
 
-  #brand-logo {
-    width:100%;
-    height: 6rem;
-    align-self: center;
-  }
-
   #account-identification ion-label {
     @include flexbox();
     @include justify-content(space-between);
@@ -89,6 +83,12 @@ page-landing {
       margin-top: .5rem;
       letter-spacing: .07rem;
       font-size: 1.4rem;
+    }
+
+    #brand-logo {
+      width:100%;
+      height: 7rem;
+      padding-left: 1.5rem;
     }
 
   }
