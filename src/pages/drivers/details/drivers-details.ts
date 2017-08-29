@@ -5,7 +5,7 @@ import * as _ from "lodash";
 import { Component, Injector } from "@angular/core";
 import { NavParams } from "ionic-angular";
 import { Driver, DriverStatus, OnlineApplication } from "@angular-wex/models";
-import { DriverProvider, PostedTransactionSearchFilterBy } from "@angular-wex/api-providers";
+import { DriverProvider, TransactionSearchFilterBy } from "@angular-wex/api-providers";
 import { DetailsPage } from "../../details-page";
 import { ActionSheetOptions } from "ionic-angular/components/action-sheet/action-sheet-options";
 import { WexAlertController } from "../../../components/wex-alert-controller/wex-alert-controller";
@@ -132,7 +132,7 @@ export class DriversDetailsPage extends DetailsPage {
   public viewTransactions() {
     this.navController.push(TransactionsPage, {
       selectedList: TransactionListType.Date,
-      filter: [PostedTransactionSearchFilterBy.Driver, this.driver.details.promptId]
+      filter: [TransactionSearchFilterBy.Driver, this.driver.details.promptId]
     });
   }
 }

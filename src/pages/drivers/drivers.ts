@@ -15,7 +15,7 @@ import { NameUtils } from "../../utils/name-utils";
 })
 export class DriversPage extends StaticListPage<Driver, Driver.Details> {
 
-  private static readonly DRIVER_STATUSES: DriverStatus[] = [DriverStatus.ACTIVE, DriverStatus.SUSPENDED, DriverStatus.TERMINATED];
+  private static readonly DRIVER_STATUSES: DriverStatus[] = [DriverStatus.ACTIVE, DriverStatus.TERMINATED];
   private static readonly SEARCH_FILTER_FIELDS: Driver.Field[] = [
     "firstName",
     "lastName",

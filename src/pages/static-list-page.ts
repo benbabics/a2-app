@@ -207,6 +207,10 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
     }, 0) : _.size(this._displayedItems);
   }
 
+  public isItemActive(item: T): boolean {
+    return !!item;
+  }
+
   public onRefresh(refresher) {
     this.fetchResults({
       forceRequest: true,
