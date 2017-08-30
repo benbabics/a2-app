@@ -1,2 +1,4 @@
-export const Environment: string = "local";
-export const IsMockBackend: boolean = false;
+export const Environment = {
+    Name: "local",
+    IsMockBackend: false
+};

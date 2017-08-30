@@ -871,7 +871,7 @@ ConstantsInfo.Env.set("production-wex", {
 export type AppConstants = ConstantsInfo.CommonConstants & ConstantsInfo.EnvironmentConstants;
 
 export function GetCurrentEnvironmentConstants(): ConstantsInfo.EnvironmentConstants {
-  return ConstantsInfo.Env.get(Environment);
+  return ConstantsInfo.Env.get(Environment.Name);
 }
 
 export function AppConstants(): AppConstants {
