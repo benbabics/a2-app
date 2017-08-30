@@ -120,6 +120,7 @@ class TransactionsPageDateView extends TransactionsPageListView<BaseTransactionT
 
   protected fetchPending(options?: StaticListPage.FetchOptions): Observable<PendingTransaction[]> {
     // Only re-fetch the pending transactions if we're clearing the cache as there is only a single page of pending transactions
+    options = _.clone(options);
     options.forceRequest = options.forceRequest && options.clearItems;
 
     return this.transactionsPage.sessionManager.cache.getSessionDetail(Session.Field.PendingTransactions, options);
