@@ -1,2 +1,4 @@
-export const Environment: string = "stage-aws";
-export const IsMockBackend: boolean = false;
+export const Environment = {
+    Name: "stage-aws",
+    IsMockBackend: false
+};

@@ -1,2 +1,4 @@
-export const Environment: string = "dit";
-export const IsMockBackend: boolean = false;
+export const Environment = {
+    Name: "dit",
+    IsMockBackend: false
+};

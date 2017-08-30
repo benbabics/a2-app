@@ -86,7 +86,7 @@ import { WexAppVersionCheck } from "../providers/wex-app-version-check";
 import { VersionCheck } from "../pages/login/version-check/version-check";
 import { AppSymbols } from "./app.symbols";
 import { NgIdleModule } from "@ng-idle/core";
-import { IsMockBackend } from "../environments/environment";
+import { Environment } from "../environments/environment";
 import { MockBackend } from "@angular/http/testing";
 import { MockHttp } from "@angular-wex/mocks";
 import { ModelGeneratorsModule } from "@angular-wex/models/mocks";
@@ -94,6 +94,15 @@ import { MockResponsesModule } from "@angular-wex/api-providers/mocks";
 
 export function APP_INITIALIZER_FACTORY() {
   return function () { };
+}
+
+export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, networkStatus: NetworkStatus, requestOptions: RequestOptions) {
+  if (Environment.IsMockBackend === true) {
+    return new MockHttp(mockBackend, requestOptions);
+  }
+  else {
+    return new SecureHttp(xhrBackend, requestOptions, networkStatus);
+  }
 }
 
 @NgModule({
@@ -239,15 +248,11 @@ export function APP_INITIALIZER_FACTORY() {
       provide: GoogleAnalytics,
       useClass: WexGoogleAnalyticsEvents
     },
-    (IsMockBackend ? {
+    {
       provide: Http,
-      useClass: MockHttp,
-      deps: [MockBackend, RequestOptions]
-    } : {
-      provide: Http,
-      useClass: SecureHttp,
-      deps: [XHRBackend, RequestOptions, NetworkStatus]
-    }),
+      useFactory: HTTP_FACTORY,
+      deps: [XHRBackend, MockBackend, NetworkStatus, RequestOptions]
+    },
     SessionManager,
     NavBarController,
     SecureStorage,
