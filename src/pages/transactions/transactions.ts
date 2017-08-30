@@ -131,7 +131,7 @@ class TransactionsPageDateView extends TransactionsPageListView<BaseTransactionT
       SessionCache.cachedValues.postedTransactionsInfo.details.currentPage = 0;
     }
 
-    return this.transactionsPage.sessionManager.cache.getSessionDetail(Session.Field.PostedTransactions, options).delay(5000);
+    return this.transactionsPage.sessionManager.cache.getSessionDetail(Session.Field.PostedTransactions, options);
   }
 }
 
