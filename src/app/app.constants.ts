@@ -183,6 +183,29 @@ export namespace ConstantsInfo {
         }
       },
 
+      //# Options Page
+      OPTIONS: {
+        title: "Options",
+        settings: "Settings",
+        support: "Support",
+        legal: "Legal",
+        fingerprintOptionAndroid: "Fingerprint login",
+        fingerprintOptionIOS: "Touch ID®",
+        contactUs: "Contact us",
+        termsOfUse: "Terms of Use",
+        privacyPolicy: "Privacy Policy",
+        logOut: "Log out",
+        FINGERPRINT_SETTINGS: {
+          fingerprintAuthName: {
+            android: "fingerprint authentication",
+            ios: "Touch ID®"
+          },
+          fingerprintAuthTextLabel: "Use",
+          destroyFingerprintProfileConfirmMessage: "Are you sure you want to turn off <%= fingerprintAuthName %> for your Username <%= username %>?",
+          createFingerprintProfileMessage: "<%= _.capitalize(fingerprintAuthName) %> is now setup for your Username <%= username %>.",
+          createFingerprintProfileDuration: 5000, // ms
+        }
+      },
       //# Drivers page
       DRIVERS: {
         listLabels: ["Name", "Driver ID"],
@@ -626,19 +649,6 @@ export namespace ConstantsInfo {
         sectionFifteen: {
           content: "© COPYRIGHT 2016 | WEX, Inc. ALL RIGHTS RESERVED."
         }
-      },
-
-      //# Settings page
-      SETTINGS: {
-        title: "Settings",
-        fingerprintAuthName: {
-          android: "fingerprint authentication",
-          ios: "Touch ID®"
-        },
-        fingerprintAuthTextLabel: "Use",
-        destroyFingerprintProfileConfirmMessage: "Are you sure you want to turn off <%= fingerprintAuthName %> for your Username <%= username %>?",
-        createFingerprintProfileMessage: "<%= _.capitalize(fingerprintAuthName) %> is now setup for your Username <%= username %>.",
-        createFingerprintProfileDuration: 5000, // ms
       },
 
       //# Transactions page

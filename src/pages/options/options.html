@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ CONSTANTS.title }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+    <ion-list-header *ngIf="fingerprintAuthAvailable">
+      {{ CONSTANTS.settings }}
+    </ion-list-header>
+    <ion-item *ngIf="fingerprintAuthAvailable">
+      <ion-label>{{ fingerprintAuthSwitchLabel }}</ion-label>
+      <ion-toggle [color]="switchColor" 
+                  name="enableFingerprintAuthToggle" 
+                  [(ngModel)]="enableFingerprintAuthToggle"></ion-toggle>
+    </ion-item>
+    <ion-list-header>
+      {{ CONSTANTS.support }}
+    </ion-list-header>
+    <button (click)="goToPage(pages.ContactUsPage)" ion-item>
+      <ion-label>{{ CONSTANTS.contactUs }}</ion-label>
+      <ion-icon item-right ios="ios-arrow-forward"></ion-icon>
+    </button>
+    <ion-list-header>
+      {{ CONSTANTS.legal }}
+    </ion-list-header>
+    <button (click)="goToPage(pages.TermsOfUsePage)" ion-item>
+      <ion-label>{{ CONSTANTS.termsOfUse }}</ion-label>
+      <ion-icon item-right ios="ios-arrow-forward"></ion-icon>
+    </button>
+    <button (click)="goToPage(pages.PrivacyPolicyPage)" ion-item>
+        <ion-label>{{ CONSTANTS.privacyPolicy }}</ion-label>
+        <ion-icon item-right ios="ios-arrow-forward"></ion-icon>
+    </button>
+    <ion-list-header *ngIf="platform.isIos"></ion-list-header>
+    <button (click)="logout()" ion-item>
+      <ion-label>{{ CONSTANTS.logOut }}</ion-label>
+      <ion-icon item-right ios="ios-arrow-forward"></ion-icon>
+    </button>
+  </ion-list>
+
+</ion-content>

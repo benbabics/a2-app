@@ -1,34 +1,35 @@
 import * as _ from "lodash";
-import { Platform } from "ionic-angular";
 import { Fingerprint } from "../../providers/";
 import { Session } from "../../models/";
 import { Value } from "../../decorators/value";
-import { Component, ChangeDetectorRef, Injector } from "@angular/core";
+import { ChangeDetectorRef, Injector } from "@angular/core";
 import { Dialogs } from "@ionic-native/dialogs";
 import { SecurePage } from "../secure-page";
 import { WexAppSnackbarController } from "../../components";
+import { AppConstants } from "../../app/app.constants";
+import { WexPlatform } from "../../providers/platform";
 
-@Component({
-  selector: "page-settings",
-  templateUrl: "settings.html"
-})
-export class SettingsPage extends SecurePage {
+export abstract class FingerprintController extends SecurePage {
 
   @Value("BUTTONS") private readonly BUTTONS: any;
+  FINGERPRINT_CONSTANTS = AppConstants().PAGES.OPTIONS.FINGERPRINT_SETTINGS;
 
   public fingerprintAuthAvailable: boolean = false;
   public fingerprintProfileAvailable: boolean = false;
-  public platformFingerprintLabel: string = this.resolvePlatformConstant(this.CONSTANTS.fingerprintAuthName);
+  public platformFingerprintLabel: string = this.resolvePlatformConstant(this.FINGERPRINT_CONSTANTS.fingerprintAuthName);
+  protected fingerprint: Fingerprint;
+  private dialogs: Dialogs;
+  private cdRef: ChangeDetectorRef;
+  private wexAppSnackbarController: WexAppSnackbarController;
+  public platform: WexPlatform;
 
-  constructor(
-    private fingerprint: Fingerprint,
-    private platform: Platform,
-    private dialogs: Dialogs,
-    private cdRef: ChangeDetectorRef,
-    private wexAppSnackbarController: WexAppSnackbarController,
-    injector: Injector
-  ) {
-    super("Settings", injector, [Session.Field.User, Session.Field.ClientSecret]);
+  constructor(pageName: string, injector: Injector) {
+    super(pageName, injector, [Session.Field.User, Session.Field.ClientSecret]);
+    this.fingerprint = injector.get(Fingerprint);
+    this.dialogs = injector.get(Dialogs);
+    this.cdRef = injector.get(ChangeDetectorRef);
+    this.wexAppSnackbarController = injector.get(WexAppSnackbarController);
+    this.platform = injector.get(WexPlatform);
   }
 
   public get enableFingerprintAuthToggle(): boolean {
@@ -55,11 +56,12 @@ export class SettingsPage extends SecurePage {
   }
 
   ionViewWillEnter() {
-    // enable fingerprint login if there is an existing fingerprint profile for this user
-    this.platform.ready()
-      .then(() => this.fingerprint.hasProfile(this.session.user.details.username.toLowerCase()))
-      .then(() => this.fingerprintProfileAvailable = true)
-      .catch(() => { });
+    if (!this.platform.isMock) {
+      this.platform.ready()
+        .then(() => this.fingerprint.hasProfile(this.session.user.details.username.toLowerCase()))
+        .then(() => this.fingerprintProfileAvailable = true)
+        .catch(() => { });
+    }
   }
 
 
@@ -97,21 +99,21 @@ export class SettingsPage extends SecurePage {
 
 
   private displayProfileCreatedMessage(username: string): void {
-    let fingerprintProfileCreatedMessage = _.template(this.CONSTANTS.createFingerprintProfileMessage)({
+    let fingerprintProfileCreatedMessage = _.template(this.FINGERPRINT_CONSTANTS.createFingerprintProfileMessage)({
       username,
       fingerprintAuthName: this.platformFingerprintLabel
     });
 
     this.wexAppSnackbarController.createQueued({
       message: fingerprintProfileCreatedMessage,
-      duration: this.CONSTANTS.createFingerprintProfileDuration,
+      duration: this.FINGERPRINT_CONSTANTS.createFingerprintProfileDuration,
       position: "top",
     }).present();
   }
 
 
   private displayDestroyProfileDialog(username: string): Promise<boolean> {
-    let message = _.template(this.CONSTANTS.destroyFingerprintProfileConfirmMessage)({
+    let message = _.template(this.FINGERPRINT_CONSTANTS.destroyFingerprintProfileConfirmMessage)({
       username,
       fingerprintAuthName: this.platformFingerprintLabel
     });

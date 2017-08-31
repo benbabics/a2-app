@@ -3,17 +3,16 @@ import { ProgressBarModule } from "primeng/primeng";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { Dialogs } from "@ionic-native/dialogs";
-import { OptionsPopoverPage } from "./../pages/landing/options-popover/options-popover";
 import { WexCardNumberPipe } from "./../pipes/wex-card-number";
 import { Http, XHRBackend, RequestOptions, HttpModule } from "@angular/http";
 import { NgModule, ErrorHandler, APP_INITIALIZER } from "@angular/core";
 import { IonicApp, IonicModule, IonicErrorHandler } from "ionic-angular";
 import { MyApp } from "./app.component";
 import { LoginPage } from "../pages/login/login";
+import { OptionsPage } from "../pages/options/options";
 import { FingerprintAuthenticationTermsPage } from "../pages/login/fingerprint-auth-terms/fingerprint-auth-terms";
 import { LandingPage } from "../pages/landing/landing";
 import { CardsPage } from "../pages/cards/cards";
-import { SettingsPage } from "../pages/settings/settings";
 import { CardsDetailsPage } from "./../pages/cards/details/cards-details";
 import { DriversPage } from "./../pages/drivers/drivers";
 import { DriversDetailsPage } from "./../pages/drivers/details/drivers-details";
@@ -92,6 +91,15 @@ export function APP_INITIALIZER_FACTORY() {
   return function () { };
 }
 
+const options = {
+  platforms: {
+    ios: {
+      backButtonText: "",
+      backButtonIcon: "md-arrow-back"
+    }
+  }
+};
+
 @NgModule({
   declarations: [
     //# app delcarations
@@ -109,7 +117,6 @@ export function APP_INITIALIZER_FACTORY() {
     DriversDetailsPage,
     PaymentsPage,
     PaymentsDetailsPage,
-    SettingsPage,
     TermsOfUsePage,
     PrivacyPolicyPage,
     TransactionsPage,
@@ -130,7 +137,7 @@ export function APP_INITIALIZER_FACTORY() {
     WexGreeking,
     WexDetailsView,
     WexCardNumberPipe,
-    OptionsPopoverPage,
+    OptionsPage,
     WexInfoCard,
     WexSvgPipe,
     WexTrustedHtmlPipe,
@@ -150,7 +157,7 @@ export function APP_INITIALIZER_FACTORY() {
     HttpModule,
     //# ionic
     //----------------------
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, options),
     //# WEX
     //----------------------
     ApiProviders.withConstants(GetCurrentEnvironmentConstants),
@@ -176,9 +183,8 @@ export function APP_INITIALIZER_FACTORY() {
     DriversDetailsPage,
     PaymentsPage,
     PaymentsDetailsPage,
-    SettingsPage,
+    OptionsPage,
     WexNavBar,
-    OptionsPopoverPage,
     TermsOfUsePage,
     TransactionsPage,
     TransactionDetailsPage,
