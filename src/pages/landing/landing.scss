@@ -9,8 +9,10 @@ page-landing {
     @include faint;
   }
   
-  &.ion-page > ion-content {
+  @at-root .md &, .ios & {
+    &.ion-page > ion-content {
       background: color($colors, white);
+    }
   }
 
   .list-ios, .list-md {
