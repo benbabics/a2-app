@@ -86,6 +86,11 @@ import { WexAppVersionCheck } from "../providers/wex-app-version-check";
 import { VersionCheck } from "../pages/login/version-check/version-check";
 import { AppSymbols } from "./app.symbols";
 import { NgIdleModule, Idle } from "@ng-idle/core";
+import { Environment } from "../environments/environment";
+import { MockBackend } from "@angular/http/testing";
+import { MockHttp } from "@angular-wex/mocks";
+import { ModelGeneratorsModule } from "@angular-wex/models/mocks";
+import { MockResponsesModule } from "@angular-wex/api-providers/mocks";
 
 export function APP_INITIALIZER_FACTORY() {
   return function () { };
@@ -99,6 +104,15 @@ const options = {
     }
   }
 };
+
+export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, networkStatus: NetworkStatus, requestOptions: RequestOptions) {
+  if (Environment.IsMockBackend === true) {
+    return new MockHttp(mockBackend, requestOptions);
+  }
+  else {
+    return new SecureHttp(xhrBackend, requestOptions, networkStatus);
+  }
+}
 
 @NgModule({
   declarations: [
@@ -162,6 +176,8 @@ const options = {
     //----------------------
     ApiProviders.withConstants(GetCurrentEnvironmentConstants),
     AngularWexValidatorsModule,
+    ModelGeneratorsModule,
+    MockResponsesModule,
     //# third party dependencies
     //----------------------
     LocalStorageModule.withConfig({ storageType: "localStorage" }),
@@ -197,9 +213,15 @@ const options = {
     PrivacyPolicyPage
   ],
   providers: [
+    //# angular
+    //----------------------
+    MockBackend,
     //# ionic
     //----------------------
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    {
+      provide: ErrorHandler,
+      useClass: IonicErrorHandler
+    },
     //# ionic-native
     //----------------------
     Dialogs,
@@ -223,17 +245,21 @@ const options = {
       useValue: LoginPage
     },
     {
-      provide: Http,
-      useClass: SecureHttp,
-      deps: [XHRBackend, RequestOptions, NetworkStatus]
-    },
-    {
       provide: SessionInfoRequestors,
       useClass: DefaultSessionInfoRequestors
     },
     {
       provide: GoogleAnalytics,
       useClass: WexGoogleAnalyticsEvents
+    },
+    {
+      provide: GoogleAnalytics,
+      useClass: WexGoogleAnalyticsEvents
+    },
+    {
+      provide: Http,
+      useFactory: HTTP_FACTORY,
+      deps: [XHRBackend, MockBackend, NetworkStatus, RequestOptions]
     },
     SessionManager,
     NavBarController,
@@ -246,10 +272,6 @@ const options = {
     WexAppSnackbarController,
     SessionCache,
     NetworkStatus,
-    {
-      provide: GoogleAnalytics,
-      useClass: WexGoogleAnalyticsEvents
-    },
     WexAlertController,
     WexAppVersionCheck,
     WexAppBackButtonController,

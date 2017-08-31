@@ -37,7 +37,7 @@
           <div text-wrap>{{ item.details.productDescription }}</div>
         </span>
 
-        <span class="transaction-amount">{{ item.details.netCost | wexCurrency }}</span>
+        <span class="transaction-amount">{{ getTransactionAmount(item) | wexCurrency }}</span>
       </div>
 
       <div *ngIf="isDriverView" class="content driver-content">

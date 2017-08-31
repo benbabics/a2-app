@@ -51,7 +51,7 @@ export class WexList {
   }
 
   public get isGrouped(): boolean {
-    return !!this.dividers && !this.isGreekingVisible;
+    return !!this.dividers;
   }
 
   public get itemsRendered(): any[] {

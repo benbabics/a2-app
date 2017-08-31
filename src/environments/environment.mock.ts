@@ -1,4 +1,4 @@
 export const Environment = {
     Name: "local",
-    IsMockBackend: false
+    IsMockBackend: true
 };

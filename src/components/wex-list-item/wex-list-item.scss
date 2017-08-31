@@ -27,7 +27,7 @@ wex-list-item {
     color: color($colors, primary);
   }
 
-  &:not([active]) {
+  &:not([data-active]), &[data-active=false] {
 
     .wex-list-arrow {
       display: none;
