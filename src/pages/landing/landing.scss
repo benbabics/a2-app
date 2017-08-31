@@ -53,6 +53,10 @@ page-landing {
       }
       [item-right] {
         font-weight: bold;
+        margin: 8px 0 8px 8px;
+      }
+      .item-inner {
+        padding-right: 0 !important;
       }
     }
 
