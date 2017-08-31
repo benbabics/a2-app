@@ -85,7 +85,7 @@ import { Network } from "@ionic-native/network";
 import { WexAppVersionCheck } from "../providers/wex-app-version-check";
 import { VersionCheck } from "../pages/login/version-check/version-check";
 import { AppSymbols } from "./app.symbols";
-import { NgIdleModule } from "@ng-idle/core";
+import { NgIdleModule, Idle } from "@ng-idle/core";
 
 export function APP_INITIALIZER_FACTORY() {
   return function () { };
@@ -253,7 +253,11 @@ const options = {
     WexAlertController,
     WexAppVersionCheck,
     WexAppBackButtonController,
-    UserIdle
+    {
+      provide: UserIdle,
+      useClass: UserIdle,
+      deps: [Idle, SessionManager]
+    }
   ]
 })
 export class AppModule {}
