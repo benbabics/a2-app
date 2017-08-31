@@ -1,5 +1,4 @@
 import { WexAppSnackbarController } from "./../../components/wex-app-snackbar-controller/wex-app-snackbar-controller";
-import * as _ from "lodash";
 import { NavBarController } from "../../providers";
 import { Component, Injector } from "@angular/core";
 import { NavController, NavParams, PopoverController, Platform, ToastOptions } from "ionic-angular";
@@ -9,17 +8,7 @@ import { SecurePage } from "../secure-page";
 import { OptionsPopoverPage } from "./options-popover/options-popover";
 import { BrandProvider } from "@angular-wex/api-providers";
 import { WexAppBackButtonController } from "../../providers/wex-app-back-button-controller";
-
-interface ChartDisplayConfig {
-  [list: string]: any[];
-}
-
-interface ChartConfig {
-  options: object;
-  labels: string[];
-  colors: object[];
-  data: any[];
-}
+import { NameUtils } from "../../utils/name-utils";
 
 @Component({
   selector: "page-landing",
@@ -34,15 +23,40 @@ export class LandingPage extends SecurePage {
   ]; //72 hours
   private isCurrentView: boolean;
 
-  public readonly chartColors = this.CONSTANTS.CHART.COLORS;
-
   public scheduledPaymentsCount = 0;
-  public chartDisplay: ChartDisplayConfig;
-  public chart: ChartConfig;
   public brandLogoData: string;
 
-  public get userCardGreeting(): string {
-    return this.CONSTANTS.welcome + _.capitalize(this.session.user.details.firstName.toLocaleLowerCase());
+  public get companyName(): string {
+    return NameUtils.PrintableName(this.billingCompany.details.name);
+  }
+
+  public get paymentPercent(): number {
+    let value = this.invoiceSummary.details.currentBalance / this.invoiceSummary.details.creditLimit * 100;
+    return value <= 100 ? value : 100;
+  }
+
+  public get remainingBalance(): number {
+    return Math.floor(this.invoiceSummary.details.creditLimit - this.invoiceSummary.details.currentBalance);
+  }
+
+  public get creditLimit(): number {
+    return Math.floor(this.invoiceSummary.details.creditLimit);
+  }
+
+  public get progressBarColor(): string {
+    let value = this.paymentPercent;
+
+    if (value >= 0 && value < 50) {
+      return "green";
+    } else if (value >= 50 && value < 75) {
+      return "yellow";
+    } else {
+      return "red";
+    }
+  }
+
+  public get progressBarStyles(): string {
+    return `${this.progressBarColor} wex-payment-bar`;
   }
 
   constructor(
@@ -72,57 +86,6 @@ export class LandingPage extends SecurePage {
     queued.present();
   }
 
-  private createChartDisplayConfiguration(): ChartDisplayConfig {
-    let datasets: ChartDisplayConfig = { collection: [], left: [], right: [] },
-      dataIds: InvoiceSummary.Field[] = ["pendingAmount", "unbilledAmount", "availableCredit", "billedAmount"],
-      requiredDataIds: InvoiceSummary.Field[] = ["availableCredit"];
-
-    dataIds.forEach((id: string) => {
-      if (this.invoiceSummary.details[id] > 0 || _.includes(requiredDataIds, id)) {
-        datasets.collection.push({
-          id: id,
-          label: this.CONSTANTS[id],
-          color: { backgroundColor: this.chartColors[id] },
-          data: this.invoiceSummary.details[id]
-        });
-      }
-    });
-
-    datasets.right = _.clone(datasets.collection);
-    datasets.left = datasets.right.splice(0, Math.ceil(datasets.right.length / 2));
-
-    return datasets;
-  }
-
-  private createChartConfiguration(): ChartConfig {
-    let availableCreditData: any = _.find(this.chartDisplay.collection, { id: "availableCredit" });
-
-    if (!this.invoiceSummary.isAnyCreditAvailable) {
-      return {
-        options: this.CONSTANTS.CHART.OPTIONS,
-        labels: [availableCreditData.label],
-        colors: [{ backgroundColor: this.chartColors.availableCreditNegative }],
-        data: [this.CONSTANTS.CHART.CONSTANTS.negativeCreditData]
-      };
-    }
-
-    if (this.invoiceSummary.isAllCreditAvailable) {
-      return {
-        options: this.CONSTANTS.CHART.OPTIONS,
-        labels: [availableCreditData.label],
-        colors: [availableCreditData.color],
-        data: [availableCreditData.data]
-      };
-    }
-
-    return {
-      options: this.CONSTANTS.CHART.OPTIONS,
-      labels: _.map<any, string>(this.chartDisplay.collection, "label"),
-      colors: _.map<any, object>(this.chartDisplay.collection, "color"),
-      data: _.map<any, any>(this.chartDisplay.collection, "data")
-    };
-  }
-
   public get billingCompany(): CompanyStub {
     return this.session.user.billingCompany;
   }
@@ -141,9 +104,6 @@ export class LandingPage extends SecurePage {
 
         // Update the payment tab badge with the scheduled count
         this.navBarController.paymentsBadgeText = scheduledCount > 0 ? String(scheduledCount) : "";
-
-        this.chartDisplay = this.createChartDisplayConfiguration();
-        this.chart = this.createChartConfiguration();
 
         this.brandProvider.logo(this.session.user.details.brand)
           .subscribe((brandLogoData: string) => this.brandLogoData = brandLogoData);

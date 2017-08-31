@@ -10,3 +10,4 @@ export * from "./wex-list-item/wex-list-item";
 export * from "./wex-nav-bar/wex-nav-bar";
 export * from "./wex-static-list-page-content/wex-static-list-page-content";
 export * from "./wex-static-list-page-header/wex-static-list-page-header";
+export * from "./resizable-svg/resizable-svg";

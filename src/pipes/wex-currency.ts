@@ -13,7 +13,7 @@ export class WexCurrency {
 
   private currencyPipe: CurrencyPipe = new CurrencyPipe(WexCurrency.LOCALE);
 
-  public transform(value) {
-    return this.currencyPipe.transform(value, WexCurrency.CONSTANTS.FORMAT, true);
+  public transform(value, hideDecimal?: boolean) {
+    return this.currencyPipe.transform(value, WexCurrency.CONSTANTS.FORMAT, true, hideDecimal ? "1.0-0" : undefined);
   }
 }

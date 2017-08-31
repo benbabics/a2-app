@@ -6,7 +6,6 @@ import { SessionManager } from "./../providers/session-manager";
 import { AppSymbols } from "./app.symbols";
 import { WexPlatform } from "../providers";
 
-import "chart.js";
 import { StatusBar } from "@ionic-native/status-bar";
 
 @Component({

@@ -10,16 +10,18 @@ export class WexDate {
 
   @Value("DATETIME") private static readonly CONSTANTS: any;
 
-  public transform(value: string, ignoreOffset: boolean) {
+  public transform(value: string, ignoreOffset: boolean, format?: string) {
 
     if (!value) {
       return "Unknown";
     }
 
+    format = format ? format : WexDate.CONSTANTS.DATE_FORMAT;
+
     if (ignoreOffset) {
-      return moment.parseZone(value).format(WexDate.CONSTANTS.DATE_FORMAT);
+      return moment.parseZone(value).format(format);
     }
 
-    return moment(value).format(WexDate.CONSTANTS.DATE_FORMAT);
+    return moment(value).format(format);
   }
 }

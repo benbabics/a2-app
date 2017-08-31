@@ -1,4 +1,5 @@
 import { WexAlertController } from "./../components/wex-alert-controller/wex-alert-controller";
+import { ProgressBarModule } from "primeng/primeng";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { Dialogs } from "@ionic-native/dialogs";
@@ -7,7 +8,6 @@ import { WexCardNumberPipe } from "./../pipes/wex-card-number";
 import { Http, XHRBackend, RequestOptions, HttpModule } from "@angular/http";
 import { NgModule, ErrorHandler, APP_INITIALIZER } from "@angular/core";
 import { IonicApp, IonicModule, IonicErrorHandler } from "ionic-angular";
-import { ChartsModule } from "ng2-charts/ng2-charts";
 import { MyApp } from "./app.component";
 import { LoginPage } from "../pages/login/login";
 import { FingerprintAuthenticationTermsPage } from "../pages/login/fingerprint-auth-terms/fingerprint-auth-terms";
@@ -30,7 +30,8 @@ import {
   WexAppSnackbarController,
   WexStaticListPageHeader,
   WexStaticListPageContent,
-  WexInvoiceDisplay
+  WexInvoiceDisplay,
+  ResizableSvg
 } from "../components";
 
 import { StatusBar } from "@ionic-native/status-bar";
@@ -153,7 +154,8 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     ContactUsPage,
     WexInvoiceDisplay,
     WexKeyboardAware,
-    WexClear
+    WexClear,
+    ResizableSvg
   ],
   imports: [
     //# Angular
@@ -171,9 +173,9 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     MockResponsesModule,
     //# third party dependencies
     //----------------------
-    ChartsModule,
     LocalStorageModule.withConfig({ storageType: "localStorage" }),
-    NgIdleModule.forRoot()
+    NgIdleModule.forRoot(),
+    ProgressBarModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
