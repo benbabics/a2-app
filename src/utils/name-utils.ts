@@ -14,4 +14,8 @@ export namespace NameUtils {
         .join(" "))
       .join(delimiter);
   }
+
+  export function MaskUsername(username: string) {
+    return username.replace(/.{1,3}$/, "***").substr(0, username.length);
+  }
 }
