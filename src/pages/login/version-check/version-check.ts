@@ -38,5 +38,5 @@ import { WexAppBackButtonController } from "../../../providers/wex-app-back-butt
     this.market.open(this.CONSTANTS.APP_STORES[this.wexPlatform.os]);
   }
 
-  
+
 }
