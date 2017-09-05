@@ -51,8 +51,15 @@ export namespace ConstantsInfo {
     //# Global error notifications
     GLOBAL_NOTIFICATIONS: {
       serverConnectionError: "Could not connect to server. Please try again later.",
-      networkError         : "Lost internet connection."
-
+      networkError         : "Lost internet connection.",
+      fingerprintSuccess   : {
+        message: "<%= platformBiometric %> is now setup for your username <%= username %>",
+        duration: 3000,
+        platformBiometric: {
+          android: "Fingerprint authentication",
+          ios: "Touch ID"
+        }
+      }
     },
     //# Components
     COMPONENTS: {
