@@ -18,6 +18,7 @@ import { UserCredentials } from "@angular-wex/models";
 import { FingerprintVerificationError } from "../../providers/fingerprint/native-fingerprint-service";
 import { WexAppVersionCheck } from "../../providers/wex-app-version-check";
 import { VersionCheck } from "./version-check/version-check";
+import { NameUtils } from "../../utils/name-utils";
 
 export type LoginPageNavParams = keyof {
   fromLogOut,
@@ -85,7 +86,7 @@ export class LoginPage extends Page {
       return this.user.username;
     }
     else {
-      return this.user.username.replace(/.{1,3}$/, "***").substr(0, this.user.username.length);
+      return NameUtils.MaskUsername(this.user.username);
     }
   }
 
@@ -294,6 +295,10 @@ export class LoginPage extends Page {
 
     window.removeEventListener("native.keyboardshow", this._onKeyboardOpen);
     window.removeEventListener("native.keyboardhide", this._onKeyboardClose);
+
+    if (this.setupFingerprintAuth) {
+      this.sessionManager.presentBiomentricProfileSuccessMessage(this.user.username);
+    }
   }
 
   public onLogin(event: Event, setupFingerprintAuth?: boolean) {
