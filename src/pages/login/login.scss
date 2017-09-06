@@ -16,6 +16,10 @@ page-login {
    * Content
   **/
   .scroll-content {
+    .card-md .list-md .item-md.item-block .item-inner {
+      border-bottom: none;
+    }
+
     $statusbar-height-ios: 0;
     $max-banner-height-x: 1.65;
     $scroll-offset-md: $toolbar-md-height * $max-banner-height-x;
@@ -30,10 +34,9 @@ page-login {
 
     padding-top: $toolbar-md-height !important;
     padding-bottom: 0 !important;
-    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('../assets/pages/login/background-street.jpg') no-repeat;
+    background: url('../assets/pages/login/background-street-dark.jpg') no-repeat;
     background-position-x: center;
     background-size: cover;
-    background-size: 250%;
 
     @at-root .md .has-banner & {
       padding-top: $scroll-offset-md !important;
@@ -46,7 +49,7 @@ page-login {
     #title-heading-bar {
       @include flex-grow(1);
 
-      background: no-repeat center bottom url("../assets/pages/login/logo.png");
+      background: no-repeat center center url("../assets/pages/login/logo.png");
       background-size: contain;
 
       width: 70%;
@@ -66,7 +69,15 @@ page-login {
 
       ion-input, ion-label {
         color: white;
-        font-weight: bold;
+
+        @at-root .ios & {
+          font-weight: bold;
+        }
+      }
+
+      ion-label[floating].label {
+        opacity: .4;
+        letter-spacing: 1.1px;
       }
     }
 
@@ -112,6 +123,10 @@ page-login {
 
           &.item-block:last-child, & {
               border-bottom: 1px solid white;
+              
+              @at-root .md & {
+                border-bottom-color: rgba(255,255,255,.4);
+              }
           }
 
           &.item-block:first-child {
@@ -130,50 +145,74 @@ page-login {
 
           ion-input {
             font-weight: bold;
-            }
+          }
         }
       }
 
-      #login-controls {
-        @include flexbox();
-        @include flex-direction(row);
-        @include justify-content(space-between);
-
-        padding: 0;
-
+      #login-settings {
         ion-item {
-          width: 50%;
+          padding-left: 0px;
         }
 
         ion-label {
-          text-overflow: initial;
           overflow: initial;
-          word-wrap: initial;
-          color: color($colors, dark-gray);
+          color: #d9d9d9;
+          font-weight: normal;
         }
 
-        ion-checkbox .checkbox-icon:not(.checkbox-checked) {
-          background-color: transparent;
-        }
+        ion-checkbox {
+          @at-root .checkbox-md .checkbox-icon {
+            border-color: rgba(255, 255, 255, 0.7);
+          }
+          @at-root .checkbox-ios, .checkbox-md {
+            .checkbox-icon {
+              background-color: transparent;
+            }
+            .checkbox-checked .checkbox-inner {
+              border-color: black;
+            }
+          }
 
-        .fingerprint-indicator {
-          font-size:   34px;
-          line-height: 34px;
-          padding-left: $checkbox-size;
-          color: color($colors, login);
+          .checkbox-checked {
+            @at-root .ios & {
+              border-color: #00e5ad;
+              background-color: #00e5ad;
+            }
+            @at-root .md & {
+              border-color: #8efbdb;
+              background-color: #8efbdb;
+            }
+          }
         }
       }
 
       .actions button {
-        @include action-indicator-color(white);
-        color: #0088FF;
+        @include action-indicator-color(color($colors, primary));
+        @at-root .ios & {
+          border-radius: 3px;
+        }
+
+        @at-root .md & {
+          border-radius: 2px;
+          box-shadow: none;
+        }
+        
+        &.button-ios {
+          height: 5.5rem;
+        }
+        
+        &.button-md {
+          height: 4.5rem;
+        }
+
+        color: #088dd1;
         background-color: white;
-        border-radius: 10px;
+
         font-weight: 500;
 
         &[disabled] {
-          opacity: 1;
-          color: #CDEAFD;
+          background-color: rgba(204, 204, 204, 0.6);
+          color: rgba(255, 255, 255, 0.6);
         }
       }
     }
@@ -181,6 +220,7 @@ page-login {
     #enrollment-link {
       width: 100%;
       height: 5%;
+      margin-bottom: 2rem;
 
       button {
         font-size: 13px;

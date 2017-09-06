@@ -1,5 +1,5 @@
 <ion-content #content class="content" padding>
-  <div id="title-heading-bar"></div>
+  <div #titleHeadingBar id="title-heading-bar"></div>
 
   <div id="login-content">
     <ion-card id="card-form">
@@ -39,15 +39,15 @@
           </ion-item>
         </ion-list>
 
-        <ion-item-group>
+        <ion-item-group id="login-settings">
           <ion-item>
-            <ion-label text-wrap [innerHtml]="CONSTANTS.rememberMe.label" ></ion-label>
-            <ion-toggle name="rememberMeToggle" [(ngModel)]="rememberMeToggle" [disabled]="setupFingerprintAuth"></ion-toggle>
+            <ion-label item-left>{{ CONSTANTS.rememberMe.label }}</ion-label>
+            <ion-checkbox item-right name="rememberMeToggle" [(ngModel)]="rememberMeToggle" [disabled]="setupFingerprintAuth"></ion-checkbox>
           </ion-item>
 
           <ion-item *ngIf="fingerprintAuthAvailable && !fingerprintProfileAvailable">
-            <ion-label text-wrap [innerHtml]="fingerprintDisabledLabel"></ion-label>
-            <ion-toggle item-right name="setupFingerprintAuthToggle" [(ngModel)]="setupFingerprintAuthToggle"></ion-toggle>
+            <ion-label item-left [innerHtml]="fingerprintDisabledLabel"></ion-label>
+            <ion-checkbox item-right name="setupFingerprintAuthToggle" [(ngModel)]="setupFingerprintAuthToggle"></ion-checkbox>
           </ion-item>
 
           <ion-item *ngIf="fingerprintProfileAvailable" (click)="onLogin($event, true)">
@@ -65,11 +65,11 @@
         <span id="loading-indicator"><ion-spinner class="action-spinner"></ion-spinner></span>
       </div>
     </ion-card>
-
-    <div *ngIf="versionCheckComplete" id="enrollment-link" class="padding align_center">
-      <user-enrollment-flow [text1]="CONSTANTS.enrollment.label1" [text2]="CONSTANTS.enrollment.label2"></user-enrollment-flow>
-    </div>
   </div>
 
   <div #keyboardSpacer id="keyboard-spacer"></div>
+
+  <div *ngIf="versionCheckComplete" id="enrollment-link" class="padding align_center">
+    <user-enrollment-flow [text1]="CONSTANTS.enrollment.label1" [text2]="CONSTANTS.enrollment.label2"></user-enrollment-flow>
+  </div>
 </ion-content>
