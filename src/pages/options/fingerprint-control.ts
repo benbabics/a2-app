@@ -8,15 +8,21 @@ import { SecurePage } from "../secure-page";
 import { WexAppSnackbarController } from "../../components";
 import { AppConstants } from "../../app/app.constants";
 import { WexPlatform } from "../../providers/platform";
+import { NameUtils } from "../../utils/name-utils";
 
 export abstract class FingerprintController extends SecurePage {
 
   @Value("BUTTONS") private readonly BUTTONS: any;
   FINGERPRINT_CONSTANTS = AppConstants().PAGES.OPTIONS.FINGERPRINT_SETTINGS;
+  @Value("PLATFORM_BIOMETRIC")
+  protected readonly PLATFORM_BIOMETRIC_TITLES: { android: string, ios: string };
+
 
   public fingerprintAuthAvailable: boolean = false;
   public fingerprintProfileAvailable: boolean = false;
-  public platformFingerprintLabel: string = this.resolvePlatformConstant(this.FINGERPRINT_CONSTANTS.fingerprintAuthName);
+  public get platformFingerprintLabel(): string {
+    return this.platform.isIos ? this.PLATFORM_BIOMETRIC_TITLES.ios : this.PLATFORM_BIOMETRIC_TITLES.android.toLocaleLowerCase();
+  }
   protected fingerprint: Fingerprint;
   private dialogs: Dialogs;
   private cdRef: ChangeDetectorRef;
@@ -75,7 +81,7 @@ export abstract class FingerprintController extends SecurePage {
           this.fingerprint.verify({ id, secret })
             .then(() => {
               resolve();
-              this.displayProfileCreatedMessage(id);
+              this.sessionManager.presentBiomentricProfileSuccessMessage();
             })
             .catch(() => reject());
         }
@@ -98,23 +104,9 @@ export abstract class FingerprintController extends SecurePage {
   }
 
 
-  private displayProfileCreatedMessage(username: string): void {
-    let fingerprintProfileCreatedMessage = _.template(this.FINGERPRINT_CONSTANTS.createFingerprintProfileMessage)({
-      username,
-      fingerprintAuthName: this.platformFingerprintLabel
-    });
-
-    this.wexAppSnackbarController.createQueued({
-      message: fingerprintProfileCreatedMessage,
-      duration: this.FINGERPRINT_CONSTANTS.createFingerprintProfileDuration,
-      position: "top",
-    }).present();
-  }
-
-
   private displayDestroyProfileDialog(username: string): Promise<boolean> {
     let message = _.template(this.FINGERPRINT_CONSTANTS.destroyFingerprintProfileConfirmMessage)({
-      username,
+      username: NameUtils.MaskUsername(username.toLocaleUpperCase()),
       fingerprintAuthName: this.platformFingerprintLabel
     });
 

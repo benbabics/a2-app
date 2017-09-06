@@ -295,10 +295,6 @@ export class LoginPage extends Page {
 
     window.removeEventListener("native.keyboardshow", this._onKeyboardOpen);
     window.removeEventListener("native.keyboardhide", this._onKeyboardClose);
-
-    if (this.setupFingerprintAuth) {
-      this.sessionManager.presentBiomentricProfileSuccessMessage(this.user.username);
-    }
   }
 
   public onLogin(event: Event, setupFingerprintAuth?: boolean) {

@@ -10,6 +10,8 @@ import { WexAppBackButtonController } from "../../providers/wex-app-back-button-
 import { NameUtils } from "../../utils/name-utils";
 import { OptionsPage } from "../options/options";
 import { WexPlatform } from "../../providers/platform";
+import { LocalStorageService } from "angular-2-local-storage/dist";
+import { Fingerprint } from "../../providers/fingerprint/fingerprint";
 
 @Component({
   selector: "page-landing",
@@ -69,7 +71,9 @@ export class LandingPage extends SecurePage {
     private wexAppSnackbarController: WexAppSnackbarController,
     private appController: App,
     public injector: Injector,
-    private wexAppBackButtonController: WexAppBackButtonController
+    private wexAppBackButtonController: WexAppBackButtonController,
+    private fingerprint: Fingerprint,
+    private localStorageService: LocalStorageService
   ) {
     super("Landing", injector);
   }
@@ -114,6 +118,14 @@ export class LandingPage extends SecurePage {
   ionViewDidEnter() {
     this.isCurrentView = true;
     this.registerBackButton();
+
+    this.fingerprint.hasProfile(this.session.user.details.username)
+      .then((hasProfile: boolean) => {
+        if (hasProfile && !this.localStorageService.get(Fingerprint.hasShownFingerprintSetupMessageKey)) {
+          this.sessionManager.presentBiomentricProfileSuccessMessage();
+          this.localStorageService.set(Fingerprint.hasShownFingerprintSetupMessageKey, true);
+        }
+      });
   }
 
   ionViewWillLeave() {

@@ -10,13 +10,15 @@ import {
 } from "./native-fingerprint-service";
 import { AndroidFingerprintService } from "./android-fingerprint-service";
 import { IosFingerprintService } from "./ios-fingerprint-service";
+import { LocalStorageService } from "angular-2-local-storage/dist";
 
 @Injectable()
 export class Fingerprint {
+  public static readonly hasShownFingerprintSetupMessageKey = "hasShownFingerprintSetupMessage";
 
   private _nativeService: INativeFingerprintService;
 
-  constructor(platform: WexPlatform, injector: Injector) {
+  constructor(private localStorageService: LocalStorageService, platform: WexPlatform, injector: Injector) {
     platform.ready().then(() => {
       let nativeServiceType;
 
@@ -58,10 +60,14 @@ export class Fingerprint {
   }
 
   public hasProfile(id: string): Promise<any> {
-    return this.isAvailable.then(() => this.nativeService.hasProfile(id));
+    return this.isAvailable.then(() => this.nativeService.hasProfile(id.toLowerCase().trim()));
   }
 
   public verify(options: IFingerprintVerificationOptions): Promise<FingerprintProfile|FingerprintVerificationError> {
+    if (!!options.secret) {
+      this.localStorageService.set(Fingerprint.hasShownFingerprintSetupMessageKey, false);
+    }
+    options.id = options.id.toLowerCase().trim();
     return this.isAvailable.then(() => this.nativeService.verify(options));
   }
 }

@@ -15,6 +15,8 @@ import { AppSymbols } from "../app/app.symbols";
 import { WexPlatform } from "./platform";
 import { WexAppSnackbarController } from "../components/wex-app-snackbar-controller/wex-app-snackbar-controller";
 import { NameUtils } from "../utils/name-utils";
+import { User } from "@angular-wex/models";
+import { Session } from "../models/session";
 
 export enum SessionAuthenticationMethod {
   Secret,
@@ -37,7 +39,7 @@ export class SessionManager {
   @Value("STORAGE.KEYS.AUTH_TOKEN") private readonly AUTH_TOKEN_KEY: string;
   @Value("GLOBAL_NOTIFICATIONS.fingerprintSuccess.message")
   private readonly FINGERPRINT_SUCCESS: string;
-  @Value("GLOBAL_NOTIFICATIONS.fingerprintSuccess.platformBiometric")
+  @Value("PLATFORM_BIOMETRIC")
   private readonly PLATFORM_BIOMETRIC_TITLES: { android: string, ios: string };
   @Value("GLOBAL_NOTIFICATIONS.fingerprintSuccess.duration")
   private readonly FINGERPRINT_SUCCESS_DURATION: number;
@@ -105,17 +107,17 @@ export class SessionManager {
     .flatMap(() => this.promptFingerprintTerms());
   }
 
-  public presentBiomentricProfileSuccessMessage(username: string) {
-    username = NameUtils.MaskUsername(username).toUpperCase();
-    let platformBiometric = this.platform.isIos ? this.PLATFORM_BIOMETRIC_TITLES.ios : this.PLATFORM_BIOMETRIC_TITLES.android;
-    let message = _.template(this.FINGERPRINT_SUCCESS)({
-      platformBiometric,
-      username
+  public presentBiomentricProfileSuccessMessage() {
+    this.sessionCache.getSessionDetail(Session.Field.User).subscribe((user: User) => {
+      let message = _.template(this.FINGERPRINT_SUCCESS)({
+        platformBiometric: this.platform.isIos ? this.PLATFORM_BIOMETRIC_TITLES.ios : this.PLATFORM_BIOMETRIC_TITLES.android,
+        username: NameUtils.MaskUsername(user.details.username).toUpperCase()
+      });
+      this.wexAppSnackbarController.create({
+        message,
+        duration: this.FINGERPRINT_SUCCESS_DURATION
+      }).present();
     });
-    this.wexAppSnackbarController.create({
-      message,
-      duration: this.FINGERPRINT_SUCCESS_DURATION
-    }).present();
   }
 
   public promptFingerprintTerms(): Observable<boolean> {

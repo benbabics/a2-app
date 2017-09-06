@@ -48,17 +48,17 @@ export namespace ConstantsInfo {
         }
       },
     },
+    PLATFORM_BIOMETRIC: {
+      android: "Fingerprint authentication",
+      ios: "Touch ID"
+    },
     //# Global error notifications
     GLOBAL_NOTIFICATIONS: {
       serverConnectionError: "Could not connect to server. Please try again later.",
       networkError         : "Lost internet connection.",
       fingerprintSuccess   : {
         message: "<%= platformBiometric %> is now setup for your username <%= username %>",
-        duration: 3000,
-        platformBiometric: {
-          android: "Fingerprint authentication",
-          ios: "Touch ID"
-        }
+        duration: 5000
       }
     },
     //# Components
@@ -203,14 +203,8 @@ export namespace ConstantsInfo {
         privacyPolicy: "Privacy Policy",
         logOut: "Log out",
         FINGERPRINT_SETTINGS: {
-          fingerprintAuthName: {
-            android: "fingerprint authentication",
-            ios: "Touch ID®"
-          },
           fingerprintAuthTextLabel: "Use",
-          destroyFingerprintProfileConfirmMessage: "Are you sure you want to turn off <%= fingerprintAuthName %> for your Username <%= username %>?",
-          createFingerprintProfileMessage: "<%= _.capitalize(fingerprintAuthName) %> is now setup for your Username <%= username %>.",
-          createFingerprintProfileDuration: 5000, // ms
+          destroyFingerprintProfileConfirmMessage: "Are you sure you want to turn off <%= fingerprintAuthName %> for your username <%= username %>?"
         }
       },
       //# Drivers page
