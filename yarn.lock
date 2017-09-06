@@ -2,17 +2,21 @@
 # yarn lockfile v1
 
 
-"@angular-wex/api-providers@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#7c6ba6f2f77":
-  version "1.2.11"
-  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#7c6ba6f2f77"
+"@angular-wex/api-providers@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#d883b857721":
+  version "1.3.11"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#d883b857721"
 
-"@angular-wex/mocks@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-mocks.git#b30796baed3":
-  version "1.0.1"
-  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-mocks.git#b30796baed3"
+"@angular-wex/api-providers@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#db6e1bb":
+  version "1.3.11"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-api-providers.git#db6e1bb"
 
-"@angular-wex/models@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-models.git#bea9c631eff":
-  version "1.3.9"
-  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-models.git#bea9c631eff"
+"@angular-wex/mocks@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-mocks.git#f0744f5e49a":
+  version "1.2.1"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-mocks.git#f0744f5e49a"
+
+"@angular-wex/models@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-models.git#23a6a7f955f":
+  version "1.4.4"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-models.git#23a6a7f955f"
 
 "@angular-wex/validators@git+http://bitbucket.int.wrightexpress.com/scm/~mthompson/angular-wex-validators.git#5cae222933a":
   version "1.1.7"
@@ -64,6 +68,10 @@
   dependencies:
     parse5 "^3.0.1"
     xhr2 "^0.1.4"
+
+"@angular/router@4.1.3":
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/@angular/router/-/router-4.1.3.tgz#ddafd46ae7ccc8b1f74904ffb45f394e44625216"
 
 "@angular/tsc-wrapped@4.1.0":
   version "4.1.0"
@@ -3850,6 +3858,10 @@ prelude-ls@~1.1.2:
 preserve@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
+
+primeng@^4.1.3:
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/primeng/-/primeng-4.1.3.tgz#7d165a3e0cf5925df1af0b1f9e2d02d1eda22850"
 
 private@^0.1.6, private@~0.1.5:
   version "0.1.7"

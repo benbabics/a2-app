@@ -1,172 +1,133 @@
 page-landing {
-
-  section {
-    margin-bottom: 10px;
+  
+  @mixin faint {
+    font-weight: 400;
+    color: #9b99a9;
   }
 
-  sup {
-    top: -.2em;
-    margin-left: 1px;
+  .faint {
+    @include faint;
+  }
+  
+  &.ion-page > ion-content {
+      background: color($colors, white);
   }
 
-  #company-details {
+  .list-ios, .list-md {
+  & > .item-block {
+      &:first-child {
+        border-top: none;
+      }
 
-    #company-details-content {
-      @include flexbox();
-      @include flex-direction(row);
-      @include align-items(flex-start);
-      @include justify-content(center);
-    }
-
-    #brand-logo {
-      width: 50%;
-
-      ion-label {
-        width: 100%;
-
-        @at-root .ios & {
-          //fix for Safari cutting off right-hand edge of image
-          margin-right: -8px;
-        }
+      &:last-child {
+        border-bottom: none;
       }
     }
-
-    #company-name {
-      @include flex-grow(1);
-      font-weight: bold;
-      font-size: $h6-font-size;
-      color: color($colors, dark-gray);
-    }
   }
 
-  #account-overview {
+  .page-list > ion-item ion-label {
 
-    action-indicator [loading="true"] {
+    & > action-indicator [loading="true"] {
       @include flexbox();
       @include align-items(center);
       @include justify-content(center);
       min-height: 15vh;
     }
 
-    ion-list {
+    @at-root .ios & {
+      padding: 2rem .8rem;
+    }
+
+    @at-root .md & {
+      padding: .6rem 0rem;
+    }
+
+    .summary-list ion-label {
+      padding: inherit;
+    }
+
+    ion-item {
+      border-bottom: 0.55px solid #c8c7cc;
+      [item-left] {
+        @include faint;
+      }
+      [item-right] {
+        font-weight: bold;
+        margin: 8px 0 8px 8px;
+      }
+      .item-inner {
+        padding-right: 0 !important;
+      }
+    }
+
+    .section-heading {
+      font-weight: 500;
+      font-size: $h4-font-size;
+      padding-bottom: 1rem;
+    }
+  }
+  
+
+  ion-navbar ion-icon {
+    color: black;
+    opacity: 0.54;
+  }
+
+  #account-identification ion-label {
+    @include flexbox();
+    @include justify-content(space-between);
+    @include align-items(center);
+    
+    #company-name {
+      font-size: $h5-font-size;
+      font-weight: 500;
+    }
+
+    #account-number {
+      margin-top: .5rem;
+      letter-spacing: .07rem;
+      font-size: 1.4rem;
+    }
+
+    #brand-logo {
+      width:100%;
+      height: 7rem;
+      padding-left: 1.5rem;
+    }
+
+  }
+
+  #account-overview {
+    #balance-current, ion-list, .graph-data {
       animation:         linksFade 2s 1 forwards;
       -webkit-animation: linksFade 2s 1 forwards;
     }
 
-    .chart-wrapper {
-      @include flexbox();
-      @include flex-direction(row);
-      width: 100%;
-
-      .labels,
-      .chart {
-        @include flex(1);
-      }
-
-      .labels {
-        @include flexbox();
-        @include flex-direction(column);
-        @include justify-content(center);
-        text-align: left;
-
-        .label {
-          position: relative;
-          padding: 15px 25px;
-          opacity: 0;
-          animation:         chartSlideFade 2s 1 forwards;
-          -webkit-animation: chartSlideFade 2s 1 forwards;
-
-          &:nth-of-type(2) {
-            animation-delay:         .75s;
-            -webkit-animation-delay: .75s;
-          }
-
-          &:nth-of-type(3) {
-            animation-delay:         1.5s;
-            -webkit-animation-delay: 1.5s;
-          }
-
-          .text-amount,
-          .text-title {
-            line-height: normal;
-          }
-
-          .text-amount {
-            color: color($colors, dark-gray);
-          }
-
-          .text-title {
-            color: color($colors, gray);
-          }
-
-          &:before {
-            position: absolute;
-            display: block;
-            top:  calc(50% - 5px);
-            left: 10px;
-            width:  10px;
-            height: 10px;
-            font-size: 10px;
-            font-family: 'FontAwesome';
-            content: "\f111";
-          }
-        }
-
-        &:first-of-type {
-          @include order(1);
-          text-align: right;
-
-          .label:before {
-            left: auto;
-            right: 10px;
-          }
-        }
-
-        &:last-of-type {
-          @include order(3);
-        }
-
-        &:first-of-type,
-        &:last-of-type {
-          padding: 15px 0;
-        }
-
-        &:first-of-type .label {
-          padding-right: 25px;
-          padding-left: 0;
-        }
-
-        &:last-of-type .label {
-          padding-left: 25px;
-          padding-right: 0;
-        }
-      }
-
-      .chart {
-        canvas {
-          width: 100% !important;
-          height: 100% !important;
-        }
-
-        @include order(2);
-        text-align: center;
-        display: block;
-        width: 33%;
-      }
-    }
-
     #balance-current {
-      font-weight: bold;
-      font-size: $h6-font-size;
-
+      padding-bottom: 2rem;
+      
       .item-currency {
-        font-size: $h4-font-size;
+        font-size: 36px;
+        font-weight: 500;
       }
     }
 
-    .item-currency {
-      color: color($colors, dark-gray);
-      font-size: $h6-font-size;
+    .graph-data {
+      font-size: 12px;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+
+      &#graph-top {
+        @include flexbox();
+        @include justify-content(space-between);
+        padding-bottom: .5rem;
+      }
+
+      &#graph-bottom {
+        @include flexbox();
+        @include justify-content(flex-end);
+        padding-top: .5rem;
+      }
     }
   }
 }
@@ -210,5 +171,33 @@ page-landing {
   }
   100% {
     opacity: 1;
+  }
+}
+
+p-progressBar.wex-payment-bar {
+  width: 100%;
+  animation:         chartSlideFade 2s 1 forwards;
+  -webkit-animation: chartSlideFade 2s 1 forwards;
+  
+  .ui-widget-content, .ui-progressbar .ui-progressbar-value {
+    border: none;
+    border-radius: 3px;
+  }
+
+  .ui-widget-content {
+    background: #efeff4;
+    border-radius: 3px;
+  }
+
+  &.green .ui-progressbar .ui-progressbar-value {
+    background: #00cc7a;
+  }
+
+  &.yellow .ui-progressbar .ui-progressbar-value {
+    background: #ffbf3b;
+  }
+
+  &.red .ui-progressbar .ui-progressbar-value {
+    background: #ff3b30;
   }
 }

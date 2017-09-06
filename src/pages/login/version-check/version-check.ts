@@ -4,6 +4,7 @@ import { NavParams, ViewController } from "ionic-angular";
 import { VersionStatus } from "@angular-wex/models";
 import { WexPlatform } from "../../../providers/platform";
 import { Market } from "@ionic-native/market";
+import { WexAppBackButtonController } from "../../../providers/wex-app-back-button-controller";
 
 @Component({
   selector: "version-check",
@@ -14,11 +15,15 @@ import { Market } from "@ionic-native/market";
   constructor(private viewController: ViewController,
     private wexPlatform: WexPlatform,
     private market: Market,
+    private wexAppBackButtonController: WexAppBackButtonController,
     navParams: NavParams,
     injector: Injector
   ) {
     super("Version Check", injector);
     this.status = navParams.get("status") as VersionStatus;
+    if (this.status === VersionStatus.Unsupported) {
+      this.wexAppBackButtonController.registerAction(() => { });
+    }
   }
 
   public get canSkipUpdate() {

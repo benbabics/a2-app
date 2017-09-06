@@ -4,19 +4,20 @@ import * as moment from "moment";
 import { Component, Injector } from "@angular/core";
 import { NavController, NavParams, SegmentButton } from "ionic-angular";
 import { StaticListPage, GroupedList } from "../static-list-page";
-import { Session, TransactionList, DynamicList } from "../../models";
+import { Session, PostedTransactionList, DynamicList } from "../../models";
 import { WexGreeking } from "../../components";
-import { SessionCache, PostedTransactionRequestor, DynamicSessionListInfoRequestor } from "../../providers";
+import { SessionCache, PostedTransactionRequestor, DynamicSessionListInfoRequestor, SessionInfoRequestors } from "../../providers";
 import { TransactionDetailsPage } from "./details/transaction-details";
-import { Transaction, Driver, Card, Model } from "@angular-wex/models";
-import { TransactionProvider, PostedTransactionSearchFilterBy } from "@angular-wex/api-providers";
+import { BaseTransaction, PostedTransaction, Driver, Card, Model, PendingTransaction, ListResponse } from "@angular-wex/models";
+import { TransactionProvider, TransactionSearchFilterBy } from "@angular-wex/api-providers";
 import { TabPage } from "../../decorators/tab-page";
 import { Value } from "../../decorators/value";
 import { LocalStorageService } from "angular-2-local-storage/dist";
 import { NameUtils } from "../../utils/name-utils";
 
-export type TransactionListModelType = Card | Driver | Transaction;
-export type TransactionListModelTypeDetails = Card.Details | Driver.Details | Transaction.Details;
+export type BaseTransactionT = BaseTransaction<BaseTransaction.Details>;
+export type TransactionListModelType = Card | Driver | BaseTransactionT;
+export type TransactionListModelTypeDetails = Card.Details | Driver.Details | BaseTransaction.Details;
 
 export type TransactionListType = keyof {
   Date,
@@ -30,7 +31,7 @@ export namespace TransactionListType {
   export const CardNumber: TransactionListType = "CardNumber";
 }
 
-export type TransactionListFilter = [PostedTransactionSearchFilterBy, any];
+export type TransactionListFilter = [TransactionSearchFilterBy, any];
 
 export interface TransactionsParams {
   selectedList?: TransactionListType;
@@ -76,7 +77,7 @@ abstract class TransactionsPageListView<T extends Model<DetailsT>, DetailsT> {
 
 //# TransactionsPageDateView
 // --------------------------------------------------
-class TransactionsPageDateView extends TransactionsPageListView<Transaction, Transaction.Details> {
+class TransactionsPageDateView extends TransactionsPageListView<BaseTransactionT, BaseTransaction.Details> {
 
   constructor(protected transactionsPage: TransactionsPage) {
     super(TransactionListType.Date);
@@ -90,24 +91,47 @@ class TransactionsPageDateView extends TransactionsPageListView<Transaction, Tra
     return this.transactionsPage.CONSTANTS.DATE.listLabels;
   }
 
-  public fetch(options?: StaticListPage.FetchOptions): Observable<Transaction[]> {
-    if (options.clearItems && options.forceRequest && !!SessionCache.cachedValues.postedTransactionsInfo) {
-      SessionCache.cachedValues.postedTransactionsInfo.details.currentPage = 0;
-    }
-
-    return this.transactionsPage.sessionManager.cache.getSessionDetail(Session.Field.PostedTransactions, options);
+  public fetch(options?: StaticListPage.FetchOptions): Observable<BaseTransactionT[]> {
+    return Observable.forkJoin([
+      this.fetchPending(options),
+      this.fetchPosted(options)
+    ]).map((...values: any[]): BaseTransactionT[] => {
+      let transactions: [BaseTransactionT[], BaseTransactionT[]] = values[0];
+      let pendingTransactions = _.first(transactions) || [];
+      let postedTransactions = _.last(transactions) || [];
+      // Concat the pending and posted transactions together
+      return pendingTransactions.concat(postedTransactions);
+    });
   }
 
-  public goToDetailPage(item: Transaction): Promise<any> {
-    return this.transactionsPage.navCtrl.push(TransactionDetailsPage, { item });
+  public goToDetailPage(item: BaseTransactionT): Promise<any> {
+    if (item instanceof PostedTransaction) {
+      return this.transactionsPage.navCtrl.push(TransactionDetailsPage, { item });
+    }
   }
 
   public hasMoreItems(): boolean {
     return this.transactionsPage.items.length < _.get(SessionCache.cachedValues, "postedTransactionsInfo.details.totalResults", 0);
   }
 
-  public sortItems(objects: Transaction[]): Transaction[] {
-    return StaticListPage.defaultItemSort<Transaction, Transaction.Details>(objects, "transactionDate", "desc");
+  public sortItems(objects: BaseTransactionT[]): BaseTransactionT[] {
+    return StaticListPage.sortList<BaseTransactionT>(objects, "effectiveDate", "desc");
+  }
+
+  protected fetchPending(options?: StaticListPage.FetchOptions): Observable<PendingTransaction[]> {
+    // Only re-fetch the pending transactions if we're clearing the cache as there is only a single page of pending transactions
+    options = _.clone(options);
+    options.forceRequest = options.forceRequest && options.clearItems;
+
+    return this.transactionsPage.sessionManager.cache.getSessionDetail(Session.Field.PendingTransactions, options);
+  }
+
+  protected fetchPosted(options?: StaticListPage.FetchOptions): Observable<PostedTransaction[]> {
+    if (options.clearItems && options.forceRequest && !!SessionCache.cachedValues.postedTransactionsInfo) {
+      SessionCache.cachedValues.postedTransactionsInfo.details.currentPage = 0;
+    }
+
+    return this.transactionsPage.sessionManager.cache.getSessionDetail(Session.Field.PostedTransactions, options);
   }
 }
 
@@ -134,7 +158,7 @@ class TransactionsPageDriverView extends TransactionsPageListView<Driver, Driver
   public goToDetailPage(item: Driver): Promise<any> {
     return this.transactionsPage.navCtrl.push(TransactionsPage, {
       selectedList: TransactionListType.Date,
-      filter: [PostedTransactionSearchFilterBy.Driver, item.details.promptId]
+      filter: [TransactionSearchFilterBy.Driver, item.details.promptId]
     });
   }
 
@@ -166,7 +190,7 @@ class TransactionsPageCardView extends TransactionsPageListView<Card, Card.Detai
   public goToDetailPage(item: Card): Promise<any> {
     return this.transactionsPage.navCtrl.push(TransactionsPage, {
       selectedList: TransactionListType.Date,
-      filter: [PostedTransactionSearchFilterBy.Card, item.details.cardId]
+      filter: [TransactionSearchFilterBy.Card, item.details.cardId]
     });
   }
 
@@ -180,45 +204,67 @@ class TransactionsPageCardView extends TransactionsPageListView<Card, Card.Detai
 class TransactionsPageFilteredListView extends TransactionsPageDateView {
 
   private readonly transactionProvider: TransactionProvider;
-  private transactions: TransactionList;
-  private requestor: DynamicSessionListInfoRequestor<Transaction, Transaction.Details>;
+  private readonly requestors: SessionInfoRequestors;
+  private pendingTransactions: PendingTransaction[];
+  private postedTransactions: PostedTransactionList;
+  private postedRequestor: DynamicSessionListInfoRequestor<PostedTransaction, PostedTransaction.Details>;
 
-  constructor(protected transactionsPage: TransactionsPage, private filterType: PostedTransactionSearchFilterBy, private filterValue: string) {
+  constructor(protected transactionsPage: TransactionsPage, private filterType: TransactionSearchFilterBy, private filterValue: string) {
     super(transactionsPage);
 
     this.transactionProvider = this.transactionsPage.injector.get(TransactionProvider);
-    this.transactions = DynamicList.create(Transaction);
-    this.requestor = new PostedTransactionRequestor(this.transactionProvider, this.transactions);
+    this.requestors = this.transactionsPage.injector.get(SessionInfoRequestors);
+    this.pendingTransactions = [];
+    this.postedTransactions = DynamicList.create(PostedTransaction);
+    this.postedRequestor = new PostedTransactionRequestor(this.transactionProvider, this.postedTransactions);
   }
 
-  public get fetchedItems(): Transaction[] {
-    return this.transactions.items;
+  public hasMoreItems(): boolean {
+    return _.isNil(this.totalResultsPosted) || _.isNil(this.fetchedPostedItems) || this.fetchedPostedItems.length < this.totalResultsPosted;
   }
 
-  public get totalResults(): number {
-    return this.transactions.details.totalResults;
-  }
-
-  public fetch(options?: StaticListPage.FetchOptions): Observable<Transaction[]> {
-    let doRequest = options.clearCache || options.forceRequest || !this.transactions.items;
+  protected fetchPosted(options?: StaticListPage.FetchOptions): Observable<PostedTransaction[]> {
+    let doRequest = options.clearCache || options.forceRequest || !this.postedTransactions.items;
 
     if (options.clearCache) {
-      this.transactions.clear();
+      this.postedTransactions.clear();
     }
 
     if (doRequest) {
-      return this.requestor.request(this.transactionsPage.session, {
+      return this.postedRequestor.request(this.transactionsPage.session, {
         filterBy: this.filterType,
         filterValue: this.filterValue
       }).map(response => response.items);
     }
     else {
-      return Observable.of(this.transactions.items);
+      return Observable.of(this.postedTransactions.items);
     }
   }
 
-  public hasMoreItems(): boolean {
-    return _.isNil(this.totalResults) || _.isNil(this.fetchedItems) || (this.fetchedItems.length < this.totalResults);
+  protected fetchPending(options?: StaticListPage.FetchOptions): Observable<PendingTransaction[]> {
+    let doRequest = options.clearCache || options.forceRequest || !this.pendingTransactions;
+
+    if (options.clearCache) {
+      this.pendingTransactions = [];
+    }
+
+    if (doRequest) {
+      return this.requestors.getRequestor(Session.Field.PendingTransactions).requestor(this.transactionsPage.session, {
+        filterBy: this.filterType,
+        filterValue: this.filterValue
+      }).map((response: ListResponse<PendingTransaction>) => this.pendingTransactions = response.values);
+    }
+    else {
+      return Observable.of(this.pendingTransactions);
+    }
+  }
+
+  private get fetchedPostedItems(): PostedTransaction[] {
+    return this.postedTransactions.items;
+  }
+
+  private get totalResultsPosted(): number {
+    return this.postedTransactions.details.totalResults;
   }
 }
 
@@ -277,7 +323,10 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
   }
 
   private calculateDateByLabelGroup(labelGroup: string): Date {
-    if (labelGroup === this.CONSTANTS.LABELS.today) {
+    if (labelGroup === this.CONSTANTS.LABELS.pending) {
+      return moment().endOf("day").toDate();
+    }
+    else if (labelGroup === this.CONSTANTS.LABELS.today) {
       return moment().startOf("day").toDate();
     }
     else if (labelGroup === this.CONSTANTS.LABELS.yesterday) {
@@ -317,20 +366,27 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
     }
 
     // Re-render the list
-    this.fetchResults().subscribe();
+    this.fetchResults().subscribe(null, err => console.error(err));
   }
 
   protected fetch(options?: StaticListPage.FetchOptions): Observable<any[]> {
     return this.selectedListView.fetch(options);
   }
 
-  protected groupItems(transactions: Transaction[]): GroupedList<Transaction> {
-    // Group the transactions by date
-    let groupedList = transactions.reduce<GroupedList<Transaction>>((groupedList, transaction) => {
-      // Get the correct group for this transaction
-      let group = this.calculateLabelGroupByDate(transaction.postDate);
+  protected groupItems(transactions: BaseTransactionT[]): GroupedList<BaseTransactionT> {
+    let group: string;
+    let groupedList = transactions.reduce<GroupedList<BaseTransactionT>>((groupedList, transaction) => {
+      // Group transactions
+      if (transaction instanceof PendingTransaction) {
+        group = this.CONSTANTS.LABELS.pending;
+      }
+      else {
+        group = this.calculateLabelGroupByDate(transaction.effectiveDate);
+      }
+
       // Get the list for this group
       let transactionList = groupedList[group] = groupedList[group] || [];
+
       // Add the transaction to the list
       transactionList.push(transaction);
 
@@ -353,7 +409,7 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
     return this.isGrouped ? this.listGroupDisplayOrder : undefined;
   }
 
-  public get filterBy(): PostedTransactionSearchFilterBy {
+  public get filterBy(): TransactionSearchFilterBy {
     return this.filter ? this.filter[0] : undefined;
   }
 
@@ -398,8 +454,23 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
 
   public set listLabels(listLabels) { listLabels; }
 
+  public getTransactionAmount(transaction: BaseTransactionT): number {
+    if (transaction instanceof PendingTransaction) {
+      return transaction.details.authorizationAmount;
+    }
+    else if (transaction instanceof PostedTransaction) {
+      return transaction.details.netCost;
+    }
+
+    return 0;
+  }
+
   public goToDetailPage(item: TransactionListModelType) {
     return this.selectedListView.goToDetailPage(item);
+  }
+
+  public isItemActive(item: TransactionListModelType): boolean {
+    return !(item instanceof PendingTransaction);
   }
 
   public listDisplayName(item: Driver): string {

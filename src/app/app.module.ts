@@ -1,4 +1,5 @@
 import { WexAlertController } from "./../components/wex-alert-controller/wex-alert-controller";
+import { ProgressBarModule } from "primeng/primeng";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { Dialogs } from "@ionic-native/dialogs";
@@ -7,7 +8,6 @@ import { WexCardNumberPipe } from "./../pipes/wex-card-number";
 import { Http, XHRBackend, RequestOptions, HttpModule } from "@angular/http";
 import { NgModule, ErrorHandler, APP_INITIALIZER } from "@angular/core";
 import { IonicApp, IonicModule, IonicErrorHandler } from "ionic-angular";
-import { ChartsModule } from "ng2-charts/ng2-charts";
 import { MyApp } from "./app.component";
 import { LoginPage } from "../pages/login/login";
 import { FingerprintAuthenticationTermsPage } from "../pages/login/fingerprint-auth-terms/fingerprint-auth-terms";
@@ -30,7 +30,8 @@ import {
   WexAppSnackbarController,
   WexStaticListPageHeader,
   WexStaticListPageContent,
-  WexInvoiceDisplay
+  WexInvoiceDisplay,
+  ResizableSvg
 } from "../components";
 
 import { StatusBar } from "@ionic-native/status-bar";
@@ -86,9 +87,23 @@ import { WexAppVersionCheck } from "../providers/wex-app-version-check";
 import { VersionCheck } from "../pages/login/version-check/version-check";
 import { AppSymbols } from "./app.symbols";
 import { NgIdleModule } from "@ng-idle/core";
+import { Environment } from "../environments/environment";
+import { MockBackend } from "@angular/http/testing";
+import { MockHttp } from "@angular-wex/mocks";
+import { ModelGeneratorsModule } from "@angular-wex/models/mocks";
+import { MockResponsesModule } from "@angular-wex/api-providers/mocks";
 
 export function APP_INITIALIZER_FACTORY() {
   return function () { };
+}
+
+export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, networkStatus: NetworkStatus, requestOptions: RequestOptions) {
+  if (Environment.IsMockBackend === true) {
+    return new MockHttp(mockBackend, requestOptions);
+  }
+  else {
+    return new SecureHttp(xhrBackend, requestOptions, networkStatus);
+  }
 }
 
 @NgModule({
@@ -139,7 +154,8 @@ export function APP_INITIALIZER_FACTORY() {
     ContactUsPage,
     WexInvoiceDisplay,
     WexKeyboardAware,
-    WexClear
+    WexClear,
+    ResizableSvg
   ],
   imports: [
     //# Angular
@@ -153,11 +169,13 @@ export function APP_INITIALIZER_FACTORY() {
     //----------------------
     ApiProviders.withConstants(GetCurrentEnvironmentConstants),
     AngularWexValidatorsModule,
+    ModelGeneratorsModule,
+    MockResponsesModule,
     //# third party dependencies
     //----------------------
-    ChartsModule,
     LocalStorageModule.withConfig({ storageType: "localStorage" }),
-    NgIdleModule.forRoot()
+    NgIdleModule.forRoot(),
+    ProgressBarModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -189,9 +207,15 @@ export function APP_INITIALIZER_FACTORY() {
     PrivacyPolicyPage
   ],
   providers: [
+    //# angular
+    //----------------------
+    MockBackend,
     //# ionic
     //----------------------
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    {
+      provide: ErrorHandler,
+      useClass: IonicErrorHandler
+    },
     //# ionic-native
     //----------------------
     Dialogs,
@@ -215,17 +239,21 @@ export function APP_INITIALIZER_FACTORY() {
       useValue: LoginPage
     },
     {
-      provide: Http,
-      useClass: SecureHttp,
-      deps: [XHRBackend, RequestOptions, NetworkStatus]
-    },
-    {
       provide: SessionInfoRequestors,
       useClass: DefaultSessionInfoRequestors
     },
     {
       provide: GoogleAnalytics,
       useClass: WexGoogleAnalyticsEvents
+    },
+    {
+      provide: GoogleAnalytics,
+      useClass: WexGoogleAnalyticsEvents
+    },
+    {
+      provide: Http,
+      useFactory: HTTP_FACTORY,
+      deps: [XHRBackend, MockBackend, NetworkStatus, RequestOptions]
     },
     SessionManager,
     NavBarController,
@@ -238,10 +266,6 @@ export function APP_INITIALIZER_FACTORY() {
     WexAppSnackbarController,
     SessionCache,
     NetworkStatus,
-    {
-      provide: GoogleAnalytics,
-      useClass: WexGoogleAnalyticsEvents
-    },
     WexAlertController,
     WexAppVersionCheck,
     WexAppBackButtonController,

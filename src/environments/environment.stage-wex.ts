@@ -1,1 +1,4 @@
-export const Environment: string = "stage-wex";
+export const Environment = {
+    Name: "stage-wex",
+    IsMockBackend: false
+};

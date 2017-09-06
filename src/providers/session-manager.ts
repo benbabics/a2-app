@@ -13,6 +13,8 @@ import { FingerprintAuthenticationTermsPage } from "../pages/login/fingerprint-a
 import { ModalController, App } from "ionic-angular";
 import { AppSymbols } from "../app/app.symbols";
 import { WexPlatform } from "./platform";
+import { WexAppSnackbarController } from "../components/wex-app-snackbar-controller/wex-app-snackbar-controller";
+import { NameUtils } from "../utils/name-utils";
 
 export enum SessionAuthenticationMethod {
   Secret,
@@ -33,6 +35,12 @@ export namespace SessionOptions {
 export class SessionManager {
 
   @Value("STORAGE.KEYS.AUTH_TOKEN") private readonly AUTH_TOKEN_KEY: string;
+  @Value("GLOBAL_NOTIFICATIONS.fingerprintSuccess.message")
+  private readonly FINGERPRINT_SUCCESS: string;
+  @Value("GLOBAL_NOTIFICATIONS.fingerprintSuccess.platformBiometric")
+  private readonly PLATFORM_BIOMETRIC_TITLES: { android: string, ios: string };
+  @Value("GLOBAL_NOTIFICATIONS.fingerprintSuccess.duration")
+  private readonly FINGERPRINT_SUCCESS_DURATION: number;
 
   private _sessionStateObserver = new BehaviorSubject(null);
 
@@ -44,7 +52,8 @@ export class SessionManager {
     private localStorageService: LocalStorageService,
     private modalController: ModalController,
     private app: App,
-    private platform: WexPlatform
+    private platform: WexPlatform,
+    private wexAppSnackbarController: WexAppSnackbarController
   ) { }
 
   public static get hasSession(): boolean {
@@ -71,7 +80,7 @@ export class SessionManager {
           .flatMap((shouldVerify: boolean) => {
             if (shouldVerify) {
               return Observable.fromPromise(this.fingerprint.verify(options))
-              .map((fingerprintProfile: FingerprintProfile): string => fingerprintProfile.secret);
+                .map((fingerprintProfile: FingerprintProfile): string => fingerprintProfile.secret);
             } else {
               return Observable.of(userCredentials.password);
           }});
@@ -94,6 +103,19 @@ export class SessionManager {
   private registerFingerprintAuthentication(userCredentials: UserCredentials): Observable<any> {
   return this.authenticate(userCredentials, SessionAuthenticationMethod.Secret)
     .flatMap(() => this.promptFingerprintTerms());
+  }
+
+  public presentBiomentricProfileSuccessMessage(username: string) {
+    username = NameUtils.MaskUsername(username).toUpperCase();
+    let platformBiometric = this.platform.isIos ? this.PLATFORM_BIOMETRIC_TITLES.ios : this.PLATFORM_BIOMETRIC_TITLES.android;
+    let message = _.template(this.FINGERPRINT_SUCCESS)({
+      platformBiometric,
+      username
+    });
+    this.wexAppSnackbarController.create({
+      message,
+      duration: this.FINGERPRINT_SUCCESS_DURATION
+    }).present();
   }
 
   public promptFingerprintTerms(): Observable<boolean> {

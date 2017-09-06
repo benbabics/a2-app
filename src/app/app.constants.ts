@@ -51,8 +51,15 @@ export namespace ConstantsInfo {
     //# Global error notifications
     GLOBAL_NOTIFICATIONS: {
       serverConnectionError: "Could not connect to server. Please try again later.",
-      networkError         : "Lost internet connection."
-
+      networkError         : "Lost internet connection.",
+      fingerprintSuccess   : {
+        message: "<%= platformBiometric %> is now setup for your username <%= username %>",
+        duration: 3000,
+        platformBiometric: {
+          android: "Fingerprint authentication",
+          ios: "Touch ID"
+        }
+      }
     },
     //# Components
     COMPONENTS: {
@@ -244,38 +251,16 @@ export namespace ConstantsInfo {
           "duration": 3000,
           "message": "Press again to exit."
         },
-        CHART: {
-          OPTIONS: {
-            animation: { easing: "easeOutBounce" },
-            elements: {
-              arc: { borderWidth: 1 }
-            },
-            cutoutPercentage: 70,
-            responsive: false,
-            legend: { display: false },
-            tooltips: { enabled: false }
-          },
-          COLORS: {
-            availableCredit: "#3eb049",
-            availableCreditNegative: "#ff0000",
-            billedAmount: "#324e5d",
-            unbilledAmount: "#34b39d",
-            pendingAmount: "#efcc57"
-          },
-          CONSTANTS: {
-            "negativeCreditData": 1 //forces chart to render negative/zero credit data as a solid/filled graph
-          }
-        },
-        "welcome": "Welcome, ",
-        "title": "Fleet SmartHub",
-        "availableCredit": "Available",
-        "billedAmount": "Billed",
-        "unbilledAmount": "Unbilled",
+        "title": "Home",
+        "summary": "Summary",
+        "pending": "Pending",
+        "minimumPayment": "Min Payment Due",
         "paymentDueDate": "Due Date",
         "pendingAmount": "Pending",
         "currentBalance": "Current Balance",
-        "statementBalance": "Statement Balance",
-        "scheduledPayments": "Scheduled"
+        "credit": "Credit",
+        "remaining": "Remaining",
+        "limit": "Limit"
       },
 
       //# Login page
@@ -696,6 +681,7 @@ export namespace ConstantsInfo {
           greekedElementCount: 15
         },
         LABELS: {
+          pending: "Pending",
           today: "Today",
           yesterday: "Yesterday"
         },
@@ -871,7 +857,7 @@ ConstantsInfo.Env.set("production-wex", {
 export type AppConstants = ConstantsInfo.CommonConstants & ConstantsInfo.EnvironmentConstants;
 
 export function GetCurrentEnvironmentConstants(): ConstantsInfo.EnvironmentConstants {
-  return ConstantsInfo.Env.get(Environment);
+  return ConstantsInfo.Env.get(Environment.Name);
 }
 
 export function AppConstants(): AppConstants {
