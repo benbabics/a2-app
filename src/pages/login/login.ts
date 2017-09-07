@@ -95,16 +95,9 @@ export class LoginPage extends Page {
     this.user.username = username;
   }
 
-  public get rememberMeToggle(): boolean {
-    return this.rememberMe;
-  }
-
-  public set rememberMeToggle(rememberMe: boolean) {
-    if (!rememberMe && this.fingerprintProfileAvailable) {
+  public rememberMeToggle() {
+    if (!this.rememberMe && this.fingerprintProfileAvailable) {
       this.verifyFingerprintRemoval();
-    }
-    else {
-      this.rememberMe = rememberMe;
     }
   }
 
@@ -321,6 +314,8 @@ export class LoginPage extends Page {
           if (result === 1) {
             this.clearFingerprintProfile(this.user.username);
             this.clearForm();
+          } else {
+            this.rememberMe = true;
           }
         });
     }
