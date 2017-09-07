@@ -10,5 +10,13 @@
       "packageType": "app-store",
       "codeSignIdentity": "iPhone Developer"
     }
+  },
+  "android": {
+    "release": {
+      "keystore": "wex-release-key.keystore",
+      "storePassword": "M@g1cHat",
+      "alias": "wex-rel",
+      "password" : "L0ngTr@il"
+    }
   }
 }
