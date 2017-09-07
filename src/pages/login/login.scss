@@ -102,8 +102,6 @@ page-login {
       @include flex-direction(column);
       @include justify-content(space-between);
 
-      padding: 8px 16px;
-
       height: 95%;
       margin-bottom: -8px;
 
@@ -146,6 +144,17 @@ page-login {
           ion-input {
             font-weight: bold;
           }
+        }
+      }
+
+      #password-field {
+        ion-icon {
+          align-self: flex-end;
+          margin: 0px 0px 2px 5px;
+          background-color: transparent;
+          box-shadow: none;
+          font-size: 2.8rem;
+          padding: 0px;
         }
       }
 

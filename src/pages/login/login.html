@@ -22,10 +22,10 @@
                   floating
                   [maxlength]="CONSTANTS.userName.maxLength"></ion-input>
           </ion-item>
-
-          <ion-item>
-            <ion-label floating> {{ CONSTANTS.password.label }} </ion-label>
-            <ion-input [(ngModel)]="user.password"
+          
+          <ion-item id="password-field">
+              <ion-label floating> {{ CONSTANTS.password.label }} </ion-label>
+              <ion-input [(ngModel)]="user.password"
                   name="password"
                   type="password"
                   required
@@ -36,6 +36,13 @@
                   wexClear
                   floating
                   [maxlength]="CONSTANTS.password.maxLength"></ion-input>
+              <ion-icon ion-button
+                  *ngIf="fingerprintProfileAvailable" 
+                  color="white" 
+                  (click)="onLogin($event, true)" 
+                  item-right 
+                  class="fingerprint-indicator" 
+                  name="finger-print"></ion-icon>
           </ion-item>
         </ion-list>
 
@@ -48,10 +55,6 @@
           <ion-item *ngIf="fingerprintAuthAvailable && !fingerprintProfileAvailable">
             <ion-label item-left [innerHtml]="fingerprintDisabledLabel"></ion-label>
             <ion-checkbox item-right name="setupFingerprintAuthToggle" [(ngModel)]="setupFingerprintAuthToggle"></ion-checkbox>
-          </ion-item>
-
-          <ion-item *ngIf="fingerprintProfileAvailable" (click)="onLogin($event, true)">
-            <ion-icon item-right class="fingerprint-indicator" name="finger-print"></ion-icon>
           </ion-item>
         </ion-item-group>
 
