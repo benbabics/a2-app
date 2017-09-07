@@ -35,7 +35,7 @@ $colors: (
   danger-dark:   #a25050,
   light:         #424242,
   dark:          #222,
-
+  
   white:       #fff,
   black:       #000,
   dark-gray:     #444,
@@ -45,6 +45,8 @@ $colors: (
   wex-red:       #e51937,
 
   login:         #3a97b5,
+  ion-toggle-ios:#4cd964,
+  eggshell:      #eff2f4
 );
 
 
@@ -83,6 +85,12 @@ $item-md-detail-push-show: false;
 // Any style overrides to the default theme should go in this file.
 
 @import "theme";
+
+.ios {
+  .ion-page ion-content {
+    background: color($colors, eggshell);
+  }
+}
 
 
 // Ionicons

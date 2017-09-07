@@ -1,14 +1,17 @@
 import { WexAppSnackbarController } from "./../../components/wex-app-snackbar-controller/wex-app-snackbar-controller";
 import { NavBarController } from "../../providers";
 import { Component, Injector } from "@angular/core";
-import { NavController, NavParams, PopoverController, Platform, ToastOptions } from "ionic-angular";
+import { NavController, NavParams, ToastOptions, App } from "ionic-angular";
 import { InvoiceSummary, CompanyStub } from "@angular-wex/models";
 import { Session } from "../../models";
 import { SecurePage } from "../secure-page";
-import { OptionsPopoverPage } from "./options-popover/options-popover";
 import { BrandProvider } from "@angular-wex/api-providers";
 import { WexAppBackButtonController } from "../../providers/wex-app-back-button-controller";
 import { NameUtils } from "../../utils/name-utils";
+import { OptionsPage } from "../options/options";
+import { WexPlatform } from "../../providers/platform";
+import { LocalStorageService } from "angular-2-local-storage/dist";
+import { Fingerprint } from "../../providers/fingerprint/fingerprint";
 
 @Component({
   selector: "page-landing",
@@ -62,13 +65,15 @@ export class LandingPage extends SecurePage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private popoverCtrl: PopoverController,
     private brandProvider: BrandProvider,
     private navBarController: NavBarController,
-    private platform: Platform,
+    private platform: WexPlatform,
     private wexAppSnackbarController: WexAppSnackbarController,
+    private appController: App,
     public injector: Injector,
-    private wexAppBackButtonController: WexAppBackButtonController
+    private wexAppBackButtonController: WexAppBackButtonController,
+    private fingerprint: Fingerprint,
+    private localStorageService: LocalStorageService
   ) {
     super("Landing", injector);
   }
@@ -113,6 +118,14 @@ export class LandingPage extends SecurePage {
   ionViewDidEnter() {
     this.isCurrentView = true;
     this.registerBackButton();
+
+    this.fingerprint.hasProfile(this.session.user.details.username)
+      .then((hasProfile: boolean) => {
+        if (hasProfile && !this.localStorageService.get(Fingerprint.hasShownFingerprintSetupMessageKey)) {
+          this.sessionManager.presentBiomentricProfileSuccessMessage();
+          this.localStorageService.set(Fingerprint.hasShownFingerprintSetupMessageKey, true);
+        }
+      }).catch(() => {});
   }
 
   ionViewWillLeave() {
@@ -120,9 +133,11 @@ export class LandingPage extends SecurePage {
     this.wexAppBackButtonController.deregisterAction();
   }
 
-  public onShowOptions($event) {
-    let popover = this.popoverCtrl.create(OptionsPopoverPage);
-
-    popover.present({ ev: $event });
+  public onShowOptions() {
+    if (this.platform.isIos) {
+      this.navCtrl.push(OptionsPage);
+    } else {
+      this.appController.getRootNav().push(OptionsPage);
+    }
   }
 }

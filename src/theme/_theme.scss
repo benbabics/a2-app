@@ -111,6 +111,20 @@ ion-header ion-searchbar.searchbar-md {
   background: #ddd;
 }
 
+
+//# iOS Nav Overrides
+// --------------------------------------------------
+.ios {
+  .bar-button-default-ios, .bar-button-default.bar-button-ios-default, .bar-button-clear-ios-default {
+    color: rgba(0,0,0,.6);
+  }
+
+  .back-button-icon-ios {
+    font-size: 2.4rem;
+    padding: .5rem;
+  }
+}
+
 //# Items
 // --------------------------------------------------
 
