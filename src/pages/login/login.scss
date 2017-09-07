@@ -96,6 +96,9 @@ page-login {
       @include flexbox();
       @include align-items(center);
       @include justify-content(center);
+      ion-spinner.action-spinner * {
+        stroke: white;
+      }
       height: 20rem;
     }
     
@@ -151,7 +154,7 @@ page-login {
 
       #password-field {
         ion-icon {
-          align-self: flex-end;
+          @include align-self(flex-end);
           margin: 0px 0px 2px 5px;
           background-color: transparent;
           box-shadow: none;
