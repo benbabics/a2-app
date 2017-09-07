@@ -310,7 +310,7 @@ export namespace ConstantsInfo {
         "submitButton": "Log In",
         "serverErrors": {
           "AUTHORIZATION_FAILED": "We're sorry but you are not able to manage your account via the mobile application at this time. Please use Fleet Manager Online, our full feature site.",
-          "DEFAULT": "Invalid login information. Please check your username and password or go online to set up or recover your username and password.",
+          "DEFAULT": "Invalid login information. Go online to set up or recover your username and password.",
           "PASSWORD_CHANGED": "Invalid login information. Please re-enter your username and password.",
           "PASSWORD_EXPIRED": "Invalid login information. Go online to set up or recover your username and password.",
           "CONNECTION_ERROR": "Login failed. Please try again later.",
