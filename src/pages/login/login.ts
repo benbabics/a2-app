@@ -95,6 +95,8 @@ export class LoginPage extends Page {
     this.user.username = username;
   }
 
+  // Originally used get/set ngModel on this method and this.rememberMe
+  // However, blocked set would not keep view accurate to model
   public rememberMeToggle() {
     if (!this.rememberMe && this.fingerprintProfileAvailable) {
       this.verifyFingerprintRemoval();
