@@ -14,15 +14,10 @@ export abstract class FingerprintController extends SecurePage {
 
   @Value("BUTTONS") private readonly BUTTONS: any;
   FINGERPRINT_CONSTANTS = AppConstants().PAGES.OPTIONS.FINGERPRINT_SETTINGS;
-  @Value("PLATFORM_BIOMETRIC")
-  protected readonly PLATFORM_BIOMETRIC_TITLES: { android: string, ios: string };
 
 
   public fingerprintAuthAvailable: boolean = false;
   public fingerprintProfileAvailable: boolean = false;
-  public get platformFingerprintLabel(): string {
-    return this.platform.isIos ? this.PLATFORM_BIOMETRIC_TITLES.ios : this.PLATFORM_BIOMETRIC_TITLES.android.toLocaleLowerCase();
-  }
   protected fingerprint: Fingerprint;
   private dialogs: Dialogs;
   private cdRef: ChangeDetectorRef;
@@ -107,7 +102,7 @@ export abstract class FingerprintController extends SecurePage {
   private displayDestroyProfileDialog(username: string): Promise<boolean> {
     let message = _.template(this.FINGERPRINT_CONSTANTS.destroyFingerprintProfileConfirmMessage)({
       username: NameUtils.MaskUsername(username.toLocaleUpperCase()),
-      fingerprintAuthName: this.platformFingerprintLabel
+      fingerprintAuthName: this.platform.biometricTitle(true)
     });
 
     return this.dialogs.confirm(message, "", [this.BUTTONS.YES, this.BUTTONS.NO])
