@@ -16,8 +16,10 @@ page-login {
    * Content
   **/
   .scroll-content {
-    .card-md .list-md .item-md.item-block .item-inner {
-      border-bottom: none;
+    .card-md .list-md .item-md, .card-ios .list-ios .item-ios{
+      &.item-block .item-inner {
+        border-bottom: none;
+      }
     }
 
     $statusbar-height-ios: 0;
@@ -69,10 +71,10 @@ page-login {
 
       ion-input, ion-label {
         color: white;
+      }
 
-        @at-root .ios & {
-          font-weight: bold;
-        }
+      @at-root .ios & .item-label-floating ion-label {
+        font-weight: bold;
       }
 
       ion-label[floating].label {
