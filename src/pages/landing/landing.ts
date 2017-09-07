@@ -125,7 +125,7 @@ export class LandingPage extends SecurePage {
           this.sessionManager.presentBiomentricProfileSuccessMessage();
           this.localStorageService.set(Fingerprint.hasShownFingerprintSetupMessageKey, true);
         }
-      });
+      }).catch(() => {});
   }
 
   ionViewWillLeave() {
