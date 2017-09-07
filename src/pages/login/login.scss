@@ -34,7 +34,7 @@ page-login {
 
     padding-top: $toolbar-md-height !important;
     padding-bottom: 0 !important;
-    background: url('../assets/pages/login/background-street-dark.jpg') no-repeat;
+    background: no-repeat bottom url(../assets/pages/login/background-street-dark.jpg);
     background-position-x: center;
     background-size: cover;
 
