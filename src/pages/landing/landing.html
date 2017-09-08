@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{ CONSTANTS.title }}</ion-title>
+    <ion-title>{{ APP_TITLE }}</ion-title>
 
     <ion-buttons end>
       <button ion-button icon-only (click)="onShowOptions($event)">
@@ -45,7 +45,7 @@
             <span class="graph-top-string faint">{{ CONSTANTS.credit }}</span>
             <span class="graph-top-value"> {{ remainingBalance | wexCurrency:true }} {{ CONSTANTS.remaining }} </span>
           </div>
-          <p-progressBar [value]="paymentPercent" [showValue]="false" [class]="progressBarStyles"></p-progressBar>
+          <p-progressBar [value]="currentPaymentPercent" [showValue]="false" [class]="progressBarStyles"></p-progressBar>
           <div id="graph-bottom" class="graph-data faint">{{ creditLimit | wexCurrency:true }} {{ CONSTANTS.limit }}</div>
         </div>
       </div>
@@ -55,7 +55,7 @@
       <div *ngIf="invoiceSummary">
         <div class="section-heading"> {{ CONSTANTS.summary }} </div>
         <ion-list class="summary-list">
-          <ion-item *ngIf="invoiceSummary.details.pendingAmount !== 0">
+          <ion-item *ngIf="!session.user.isClassic">
             <span item-left>{{ CONSTANTS.pending }}</span>
             <span item-right>{{ invoiceSummary.details.pendingAmount | wexCurrency }}</span>
           </ion-item>

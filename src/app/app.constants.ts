@@ -13,6 +13,7 @@ export namespace ConstantsInfo {
     IONIC_APP_ID: "7a49ff3d",
     // Version number gets replaced after WexAppVersionCheck replaces it, which is required for the app to start.
     VERSION_NUMBER: "MOCK",
+    APP_TITLE: "Fleet SmartHub",
     //# Storage
     STORAGE: {
       ID: "FLEET_MANAGER-",
@@ -282,7 +283,6 @@ export namespace ConstantsInfo {
 
       //# Login page
       LOGIN: {
-        "title": "Fleet SmartHub",
         "userName": {
           "label": "Username",
           "maxLength": 30
