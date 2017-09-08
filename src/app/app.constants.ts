@@ -268,6 +268,7 @@ export namespace ConstantsInfo {
           "duration": 3000,
           "message": "Press again to exit."
         },
+        "appTitle": "Fleet SmartHub",
         "title": "Home",
         "summary": "Summary",
         "pending": "Pending",

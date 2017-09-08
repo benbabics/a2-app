@@ -28,6 +28,7 @@ export class LandingPage extends SecurePage {
 
   public scheduledPaymentsCount = 0;
   public brandLogoData: string;
+  public currentPaymentPercent: number = 0;
 
   public get companyName(): string {
     return NameUtils.PrintableName(this.billingCompany.details.name);
@@ -49,9 +50,9 @@ export class LandingPage extends SecurePage {
   public get progressBarColor(): string {
     let value = this.paymentPercent;
 
-    if (value >= 0 && value < 50) {
+    if (value <= 50) {
       return "green";
-    } else if (value >= 50 && value < 75) {
+    } else if (value <= 75) {
       return "yellow";
     } else {
       return "red";
@@ -104,6 +105,9 @@ export class LandingPage extends SecurePage {
     this.sessionManager.cache.getSessionDetails(this.REQUIRED_SESSION_FIELDS)
       .subscribe((session: Session) => {
         this.session = session;
+
+        // Change in currentPaymentPercent forces credit-bar to slide smoothly.
+        setTimeout(() => this.currentPaymentPercent = this.paymentPercent, 100);
 
         let scheduledCount = this.session.payments.filter(payment => payment.isScheduled).length;
 
