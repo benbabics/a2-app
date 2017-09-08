@@ -44,6 +44,7 @@ declare const cordova: any;
 export class LoginPage extends Page {
   @ViewChild("content") content: Content;
   @ViewChild("keyboardSpacer") keyboardSpacer: ElementRef;
+  @ViewChild("titleHeadingBar") titleHeadingBar: ElementRef;
 
   @Value("STORAGE.KEYS.USERNAME") private readonly USERNAME_KEY: string;
 
@@ -94,16 +95,11 @@ export class LoginPage extends Page {
     this.user.username = username;
   }
 
-  public get rememberMeToggle(): boolean {
-    return this.rememberMe;
-  }
-
-  public set rememberMeToggle(rememberMe: boolean) {
-    if (!rememberMe && this.fingerprintProfileAvailable) {
+  // Originally used get/set ngModel on this method and this.rememberMe
+  // However, blocked set would not keep view accurate to model
+  public rememberMeToggle() {
+    if (!this.rememberMe && this.fingerprintProfileAvailable) {
       this.verifyFingerprintRemoval();
-    }
-    else {
-      this.rememberMe = rememberMe;
     }
   }
 
@@ -148,11 +144,13 @@ export class LoginPage extends Page {
     //see http://ionicframework.com/docs/api/page/keyboard/
     this.content.getNativeElement().classList.add("keyboard-open");
     this.keyboardSpacer.nativeElement.style.height = `${event.keyboardHeight}px`;
+    this.titleHeadingBar.nativeElement.style.display = "none";
   }
 
   private onKeyboardClose() {
     this.content.getNativeElement().classList.remove("keyboard-open");
     this.keyboardSpacer.nativeElement.style.height = "0px";
+    this.titleHeadingBar.nativeElement.style.display = "block";
   }
 
   private login(setupFingerprintAuth?: boolean) {
@@ -314,6 +312,8 @@ export class LoginPage extends Page {
           if (result === 1) {
             this.clearFingerprintProfile(this.user.username);
             this.clearForm();
+          } else {
+            this.rememberMe = true;
           }
         });
     }
