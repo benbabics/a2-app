@@ -19,7 +19,7 @@ export class Fingerprint {
   private _nativeService: INativeFingerprintService;
 
   constructor(private localStorageService: LocalStorageService, platform: WexPlatform, injector: Injector) {
-    platform.ready().then(() => {
+    platform.ready(() => {
       let nativeServiceType;
 
       if (platform.isAndroid) {
