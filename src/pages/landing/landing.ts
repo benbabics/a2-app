@@ -12,6 +12,7 @@ import { OptionsPage } from "../options/options";
 import { WexPlatform } from "../../providers/platform";
 import { LocalStorageService } from "angular-2-local-storage/dist";
 import { Fingerprint } from "../../providers/fingerprint/fingerprint";
+import { Value } from "../../decorators/value";
 
 @Component({
   selector: "page-landing",
@@ -26,6 +27,7 @@ export class LandingPage extends SecurePage {
   ]; //72 hours
   private isCurrentView: boolean;
 
+  @Value("APP_TITLE") APP_TITLE: string;
   public scheduledPaymentsCount = 0;
   public brandLogoData: string;
   public currentPaymentPercent: number = 0;
@@ -107,6 +109,7 @@ export class LandingPage extends SecurePage {
         this.session = session;
 
         // Change in currentPaymentPercent forces credit-bar to slide smoothly.
+        this.currentPaymentPercent = 0;
         setTimeout(() => this.currentPaymentPercent = this.paymentPercent, 100);
 
         let scheduledCount = this.session.payments.filter(payment => payment.isScheduled).length;
