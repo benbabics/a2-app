@@ -59,7 +59,7 @@ export class WexPlatform extends Platform {
     if (this.isIos) {
       return this.PLATFORM_BIOMETRIC.ios;
     } else {
-      return lowercaseAndroid ? this.PLATFORM_BIOMETRIC.android.toLocaleLowerCase() : this.PLATFORM_BIOMETRIC.ios;
+      return lowercaseAndroid ? this.PLATFORM_BIOMETRIC.android.toLocaleLowerCase() : this.PLATFORM_BIOMETRIC.android;
     }
   }
 }
