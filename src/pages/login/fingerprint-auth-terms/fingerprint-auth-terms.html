@@ -7,14 +7,12 @@
 <ion-content padding class="fingerprint-terms-modal">
     <div class="terms" [innerHtml]="terms"></div>
 
-    <ion-footer>
-        <ion-row>
-            <ion-col>
-                <button block (click)="response(true)" ion-button>{{ CONSTANTS.options.scopeVars.CONFIG.BUTTONS.ACCEPT }}</button>
-            </ion-col>
-            <ion-col>
-                <button block (click)="response(false)" ion-button outline>{{ CONSTANTS.options.scopeVars.CONFIG.BUTTONS.DECLINE }}</button>
-            </ion-col>
-        </ion-row>
+    <ion-footer padding>
+        <button (click)="response(false)" [color]="!platform.isIos ? 'white' : ''    " ion-button [outline]="platform.isIos">
+            <span>{{ CONSTANTS.options.scopeVars.CONFIG.BUTTONS.DECLINE }}</span>
+        </button>
+        <button class="button-gradient" (click)="response(true)" ion-button>
+            <span>{{ CONSTANTS.options.scopeVars.CONFIG.BUTTONS.ACCEPT }}</span>
+        </button>
     </ion-footer>
 </ion-content>

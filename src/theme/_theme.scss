@@ -77,6 +77,10 @@ ion-list .item-ios {
   border-bottom: 1px solid $list-border-color;
 }
 
+// Makes button-gradient class available to whole app
+.ios .button-ios.button-gradient {
+  background-image: linear-gradient(to right, #21b3fe, #007cbb);
+}
 
 
 
@@ -139,4 +143,9 @@ ion-list .item-md {
 .card-md .list-md .item-md.item-block .item-inner {
   // Show dividers on ion-list items that are inside ion-cards
   border-bottom: 1px solid $list-border-color;
+}
+
+// Hide border on Android footers
+.md .footer-md::before {
+  background: none;
 }
