@@ -283,64 +283,74 @@ export namespace ConstantsInfo {
 
       //# Login page
       LOGIN: {
-        "userName": {
-          "label": "Username",
-          "maxLength": 30
+        ANALYTICS: {
+          EVENTS: {
+            errorInactive: ["Login", "InactiveStatus"],
+            errorAccountNotReady: ["Login", "AccountNotReadyStatus"],
+            errorWrongCredentials: ["Login", "WrongCredentialsStatus"],
+            errorPasswordLocked: ["Login", "LockedPasswordStatus"],
+            loginManual: ["Login", "LoginSuccessfulManual"],
+            loginBiometric: ["Login", "LoginSuccessfulBiometric"],
+          }
         },
-        "password": {
-          "label": "Password",
-          "maxLength": 30
+        userName: {
+          label: "Username",
+          maxLength: 30
         },
-        "rememberMe": {
-          "label": "Remember Username"
+        password: {
+          label: "Password",
+          maxLength: 30
         },
-        "touchId": {
-          "disabled": {
-            "label": {
-              "android": "Set Up Fingerprint",
-              "ios": "Set Up Touch ID"
+        rememberMe: {
+          label: "Remember Username"
+        },
+        touchId: {
+          disabled: {
+            label: {
+              android: "Set Up Fingerprint",
+              ios: "Set Up Touch ID"
             }
           },
-          "settingsPrompt": {
-            "title": "",
-            "message": {
-              "android": "Fingerprint authentication must be enabled on your device to use this feature.",
-              "ios": "Touch ID\u00AE must be enabled on your device to use this feature."
+          settingsPrompt: {
+            title: "",
+            message: {
+              android: "Fingerprint authentication must be enabled on your device to use this feature.",
+              ios: "Touch ID\u00AE must be enabled on your device to use this feature."
             },
-            "buttons": {
-              "cancel": "Cancel",
-              "settings": "Settings"
+            buttons: {
+              cancel: "Cancel",
+              settings: "Settings"
             }
           },
-          "warningPrompt": {
-            "title": "",
-            "message": {
-              "android": "Your fingerprint authentication will be disabled.",
-              "ios": "Your Touch ID\u00AE will be disabled.",
+          warningPrompt: {
+            title: "",
+            message: {
+              android: "Your fingerprint authentication will be disabled.",
+              ios: "Your Touch ID\u00AE will be disabled.",
             },
-            "buttons": {
-              "cancel": "Cancel",
-              "ok": "OK"
+            buttons: {
+              cancel: "Cancel",
+              ok: "OK"
             }
           }
         },
-        "submitButton": "Log In",
-        "serverErrors": {
-          "AUTHORIZATION_FAILED": "We're sorry but you are not able to manage your account via the mobile application at this time. Please use Fleet Manager Online, our full feature site.",
-          "DEFAULT": "Invalid login information. Go online to set up or recover your username and password.",
-          "PASSWORD_CHANGED": "Invalid login information. Please re-enter your username and password.",
-          "PASSWORD_EXPIRED": "Invalid login information. Go online to set up or recover your username and password.",
-          "CONNECTION_ERROR": "Login failed. Please try again later.",
-          "TOKEN_EXPIRED": "Your session has expired. Please login again.",
-          "USER_LOCKED": "You have exceeded the number of allowable login attempts. You will need to access your online account to retrieve your username and password.",
-          "USER_MUST_ACCEPT_TERMS": "Invalid login information. Go online to set up or recover your username and password.",
-          "USER_MUST_SETUP_SECURITY_QUESTIONS": "Invalid login information. Go online to set up or recover your username and password.",
-          "USER_NOT_ACTIVE": "Invalid login information. Go online to set up or recover your username and password."
+        submitButton: "Log In",
+        serverErrors: {
+          AUTHORIZATION_FAILED: "We're sorry but you are not able to manage your account via the mobile application at this time. Please use Fleet Manager Online, our full feature site.",
+          DEFAULT: "Invalid login information. Go online to set up or recover your username and password.",
+          PASSWORD_CHANGED: "Invalid login information. Please re-enter your username and password.",
+          PASSWORD_EXPIRED: "Invalid login information. Go online to set up or recover your username and password.",
+          CONNECTION_ERROR: "Login failed. Please try again later.",
+          TOKEN_EXPIRED: "Your session has expired. Please login again.",
+          USER_LOCKED: "You have exceeded the number of allowable login attempts. You will need to access your online account to retrieve your username and password.",
+          USER_MUST_ACCEPT_TERMS: "Invalid login information. Go online to set up or recover your username and password.",
+          USER_MUST_SETUP_SECURITY_QUESTIONS: "Invalid login information. Go online to set up or recover your username and password.",
+          USER_NOT_ACTIVE: "Invalid login information. Go online to set up or recover your username and password."
         },
-        "sessionTimeOut": "Your session has timed out due to 15 minutes of inactivity. Please login to access your account.",
-        "enrollment": {
-          "label1": "Don't have an account?",
-          "label2": "Enroll Now"
+        sessionTimeOut: "Your session has timed out due to 15 minutes of inactivity. Please login to access your account.",
+        enrollment: {
+          label1: "Don't have an account?",
+          label2: "Enroll Now"
         }
       },
 
