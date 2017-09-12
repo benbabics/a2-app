@@ -1,8 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="80" id="com.wex.fleetsmarthub" ios-CFBundleVersion="80" version="5.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="894" id="com.wex.fleetsmarthub" ios-CFBundleVersion="894" version="5.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Fleet SmartHub</name>
     <description>Manage your fleet accounts directly from your phone.</description>
     <author email="MobileDevelopment@wexinc.com" href="http://www.wexinc.com">WEX Mobile Development Team</author>
+    <hook src="scripts/update-cordova-deps.js" type="before_build" />
+    <hook src="scripts/update-cordova-deps.js" type="before_run" />
     <hook src="scripts/set-android-windowSoftInputMode.js" type="before_prepare" />
     <hook src="scripts/set-global-constants.js" type="after_prepare" />
     <content src="index.html" />

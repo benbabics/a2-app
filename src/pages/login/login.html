@@ -1,11 +1,12 @@
 <ion-content #content class="content" padding>
-  <div id="title-heading-bar"></div>
+  <div #titleHeadingBar id="title-heading-bar"></div>
 
   <div id="login-content">
     <ion-card id="card-form">
       <form novalidate *ngIf="versionCheckComplete" #form="ngForm" (ngSubmit)="onLogin($event, setupFingerprintAuth)">
         <ion-list id="input-list">
           <ion-item (click)="verifyFingerprintRemoval()">
+            <ion-label floating> {{ CONSTANTS.userName.label }} </ion-label>
             <ion-input [(ngModel)]="maskableUsername"
                   (blur)="usernameIsFocused = false"
                   (focus)="usernameIsFocused = true"
@@ -17,13 +18,14 @@
                   autocorrect="off"
                   autocapitalize="off"
                   spellcheck="false"
-                  [placeholder]="CONSTANTS.userName.label"
                   wexClear
+                  floating
                   [maxlength]="CONSTANTS.userName.maxLength"></ion-input>
           </ion-item>
-
-          <ion-item>
-            <ion-input [(ngModel)]="user.password"
+          
+          <ion-item id="password-field">
+              <ion-label floating> {{ CONSTANTS.password.label }} </ion-label>
+              <ion-input [(ngModel)]="user.password"
                   name="password"
                   type="password"
                   required
@@ -31,25 +33,28 @@
                   autocorrect="off"
                   autocapitalize="off"
                   spellcheck="false"
-                  [placeholder]="CONSTANTS.password.label"
                   wexClear
+                  floating
                   [maxlength]="CONSTANTS.password.maxLength"></ion-input>
+              <ion-icon ion-button
+                  *ngIf="fingerprintProfileAvailable && user.password.length === 0" 
+                  color="white" 
+                  (click)="onLogin($event, true)" 
+                  item-right 
+                  class="fingerprint-indicator" 
+                  name="finger-print"></ion-icon>
           </ion-item>
         </ion-list>
 
-        <ion-item-group id="login-controls">
+        <ion-item-group id="login-settings">
           <ion-item>
-            <ion-label text-wrap item-left [innerHtml]="CONSTANTS.rememberMe.label" ></ion-label>
-            <ion-checkbox name="rememberMeToggle" [(ngModel)]="rememberMeToggle" [disabled]="setupFingerprintAuth"></ion-checkbox>
+            <ion-label item-left>{{ CONSTANTS.rememberMe.label }}</ion-label>
+            <ion-checkbox item-right name="rememberMeToggle" [(ngModel)]="rememberMe" (click)="rememberMeToggle()" [disabled]="setupFingerprintAuth"></ion-checkbox>
           </ion-item>
 
           <ion-item *ngIf="fingerprintAuthAvailable && !fingerprintProfileAvailable">
-            <ion-label text-wrap [innerHtml]="fingerprintDisabledLabel"></ion-label>
+            <ion-label item-left [innerHtml]="fingerprintDisabledLabel"></ion-label>
             <ion-checkbox item-right name="setupFingerprintAuthToggle" [(ngModel)]="setupFingerprintAuthToggle"></ion-checkbox>
-          </ion-item>
-
-          <ion-item *ngIf="fingerprintProfileAvailable" (click)="onLogin($event, true)">
-            <ion-icon item-right class="fingerprint-indicator" name="finger-print"></ion-icon>
           </ion-item>
         </ion-item-group>
 
@@ -63,11 +68,11 @@
         <span id="loading-indicator"><ion-spinner class="action-spinner"></ion-spinner></span>
       </div>
     </ion-card>
-
-    <div *ngIf="versionCheckComplete" id="enrollment-link" class="padding align_center">
-      <user-enrollment-flow [text]="CONSTANTS.enrollment.label"></user-enrollment-flow>
-    </div>
   </div>
 
   <div #keyboardSpacer id="keyboard-spacer"></div>
+
+  <div *ngIf="versionCheckComplete" id="enrollment-link" class="padding align_center">
+    <user-enrollment-flow [text1]="CONSTANTS.enrollment.label1" [text2]="CONSTANTS.enrollment.label2"></user-enrollment-flow>
+  </div>
 </ion-content>

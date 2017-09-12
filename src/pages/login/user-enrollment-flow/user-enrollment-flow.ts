@@ -12,11 +12,12 @@ import { Value } from "../../../decorators/value";
   templateUrl: "user-enrollment-flow.html"
 })
 export class UserEnrollmentFlow extends Page {
-  @Input() text: string;
+  @Input() text1: string;
+  @Input() text2: string;
   @Value("APIS.ONLINE_ENROLLMENT.BASE_URL")private ENROLLMENT_URL;
   private ENROLLMENT_PING = this.ENROLLMENT_URL + "ping";
 
-  private isLoading: boolean = false;
+  public isLoading: boolean = false;
 
   constructor(
               private inAppBrowser: InAppBrowser,

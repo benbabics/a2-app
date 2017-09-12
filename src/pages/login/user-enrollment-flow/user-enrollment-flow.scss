@@ -1,0 +1,7 @@
+user-enrollment-flow {
+  button action-indicator span {
+    text-transform: none;
+  }
+
+  @include action-indicator-color(white);
+}

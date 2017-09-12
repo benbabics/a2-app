@@ -11,7 +11,7 @@
       {{ CONSTANTS.settings }}
     </ion-list-header>
     <ion-item *ngIf="fingerprintAuthAvailable">
-      <ion-label>{{ fingerprintAuthSwitchLabel }}</ion-label>
+      <ion-label>{{ platform.biometricTitle() }}</ion-label>
       <ion-toggle [color]="switchColor"
                   name="enableFingerprintAuthToggle"
                   [(ngModel)]="enableFingerprintAuthToggle"></ion-toggle>

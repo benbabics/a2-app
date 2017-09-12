@@ -39,8 +39,6 @@ export class SessionManager {
   @Value("STORAGE.KEYS.AUTH_TOKEN") private readonly AUTH_TOKEN_KEY: string;
   @Value("GLOBAL_NOTIFICATIONS.fingerprintSuccess.message")
   private readonly FINGERPRINT_SUCCESS: string;
-  @Value("PLATFORM_BIOMETRIC")
-  private readonly PLATFORM_BIOMETRIC_TITLES: { android: string, ios: string };
   @Value("GLOBAL_NOTIFICATIONS.fingerprintSuccess.duration")
   private readonly FINGERPRINT_SUCCESS_DURATION: number;
 
@@ -110,7 +108,7 @@ export class SessionManager {
   public presentBiomentricProfileSuccessMessage() {
     this.sessionCache.getSessionDetail(Session.Field.User).subscribe((user: User) => {
       let message = _.template(this.FINGERPRINT_SUCCESS)({
-        platformBiometric: this.platform.isIos ? this.PLATFORM_BIOMETRIC_TITLES.ios : this.PLATFORM_BIOMETRIC_TITLES.android,
+        platformBiometric: this.platform.biometricTitle(),
         username: NameUtils.MaskUsername(user.details.username).toUpperCase()
       });
       this.wexAppSnackbarController.create({
