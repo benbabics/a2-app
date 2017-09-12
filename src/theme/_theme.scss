@@ -61,6 +61,29 @@ ion-icon.icon-ios.tab-button-icon[aria-label*="fa"] {
   @extend .fa-exchange;
 }
 
+//# Buttons
+// --------------------------------------------------
+
+.button-default {
+  // generic button
+  &.button-default.button-full {
+    height: 3.5em;
+    font-size: 1.6rem;
+  }
+
+  // android button
+  &.button-default-md.button-full-md {
+    .button-inner { font-weight: 500; }
+  }
+
+  // ios button
+  &.button-default-ios.button-full-ios {
+    border-radius: 3px;
+    background-image: linear-gradient(to right, #21b3fe, #007cbb);
+    .button-inner { font-weight: 600; }
+  }
+}
+
 //# Items
 // --------------------------------------------------
 
@@ -69,6 +92,52 @@ ion-list .item-ios {
 
   & > .item-inner {
     padding-left: 16px;
+  }
+}
+
+ion-item-group {
+  // .list-header collapsabled
+  ion-list-header.list-header-collapsed:not(.list-header-ios) {
+    min-height: 0;
+    ion-label { margin: 0; }
+  }
+
+  ion-list-header.list-header-md {
+    padding-top: 1.5rem;
+  }
+  .item-md + .list-header-md {
+    margin-top: 1.5rem;
+  }
+
+  // .list-header borders
+  .item-ios.list-header-ios {
+    &:not(:first-of-type) {
+      border-top: 0.55px solid #bcbbc1;
+    }
+  }
+
+  .item:not(.list-header) {
+    // borders
+    .item-inner {
+      border-bottom: none;
+    }
+
+    +.item-ios:not(.list-header-ios) .item-inner {
+      border-top: 0.55px solid #bcbbc1;
+    }
+
+    &.item-ios:last-of-type {
+      border-bottom: 0.55px solid #bcbbc1;
+    }
+
+    // icons
+    ion-icon[ios="ios-arrow-forward"] {
+      font-size: 2.2rem;
+
+      &::before {
+        vertical-align: middle;
+      }
+    }
   }
 }
 
@@ -104,11 +173,22 @@ ion-icon.icon-md.tab-button-icon[aria-label*="fa"] {
   @extend .fa-exchange;
 }
 
-//# Searchbar
+//# Header
 // --------------------------------------------------
 
-ion-header ion-searchbar.searchbar-md {
-  background: #ddd;
+ion-header {
+  // Searchbar
+  ion-searchbar.searchbar-md {
+    background: #ddd;
+  }
+
+  &.header-ios {
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.08);
+
+    .toolbar-background-ios {
+      border-bottom-color: #d9d8d8;
+    }
+  }
 }
 
 

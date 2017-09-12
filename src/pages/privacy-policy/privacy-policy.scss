@@ -1,7 +1,5 @@
 page-privacy-policy {
-  &.ion-page > ion-content {
-    background: color($colors, white);
-  }
+  @include page-background-white();
 }
 
 .page-privacy {
