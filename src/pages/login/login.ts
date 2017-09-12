@@ -47,6 +47,14 @@ export class LoginPage extends Page {
   private _onKeyboardOpen = event => this.onKeyboardOpen(event);
   private _onKeyboardClose = () => this.onKeyboardClose();
 
+  // Only server errors explicitly listed in this map will be tracked in analytics.
+  private loginErrorAnalyticsEventMap: { [serverError: string]: string } = {
+    USER_NOT_ACTIVE: "errorInactive",
+    AUTHORIZATION_FAILED: "errorAccountNotReady",
+    USER_LOCKED: "errorPasswordLocked",
+    DEFAULT: "errorWrongCredentials"
+  };
+
   public fingerprintAuthAvailable: boolean = false;
   public fingerprintProfileAvailable: boolean = false;
   public isLoggingIn: boolean = false;
@@ -162,6 +170,13 @@ export class LoginPage extends Page {
         .subscribe(() => {
           this.rememberUsername(this.rememberMe, this.user.username);
 
+          if (useFingerprintAuth) {
+            this.trackAnalyticsEvent("loginBiometric");
+          }
+          else {
+            this.trackAnalyticsEvent("loginManual");
+          }
+
           //Transition to the main app
           this.navCtrl.setRoot(WexNavBar, { }, { animate: true, direction: "forward" });
         }, (error: Response) => {
@@ -184,6 +199,13 @@ export class LoginPage extends Page {
               cssClass: "red",
               showCloseButton: true
             }).present();
+          }
+
+          // Check to see if this error maps to a trackable analytics error
+          let analyticsEvent = this.loginErrorAnalyticsEventMap[errorCode];
+
+          if (analyticsEvent) {
+            this.trackAnalyticsEvent(analyticsEvent);
           }
         });
     }
