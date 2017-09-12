@@ -182,12 +182,8 @@ ion-header {
     background: #ddd;
   }
 
-  &.header-ios {
-    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.08);
-
-    .toolbar-background-ios {
-      border-bottom-color: #d9d8d8;
-    }
+  &.header-ios .toolbar-background-ios {
+    border-bottom-color: #d9d8d8;
   }
 }
 
