@@ -167,7 +167,7 @@ export class LoginPage extends Page {
           this.rememberUsername(this.rememberMe, this.user.username);
 
           //Transition to the main app
-          this.navCtrl.setRoot(WexNavBar);
+          this.navCtrl.setRoot(WexNavBar, { }, { animate: true, direction: "forward" });
         }, (error: Response) => {
           let errorCode: string = error instanceof Response ? error.json().error_description : error;
 
