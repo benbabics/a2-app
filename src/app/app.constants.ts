@@ -739,7 +739,7 @@ export namespace ConstantsInfo {
 
 ConstantsInfo.Env.set("local", {
   GOOGLE_ANALYTICS: {
-    TRACKING_ID: ""
+    TRACKING_ID: "UA-71223382-6"
   },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
@@ -752,7 +752,7 @@ ConstantsInfo.Env.set("local", {
       BASE_URL: "http://127.0.0.1:20080"
     },
     GATEKEEPER: {
-      BASE_URL: "https://uat.account.wexmobile.com/configurationAPI"
+      BASE_URL: "http://127.0.0.1:29080"
     },
     KEYMASTER: {
       BASE_URL: "http://127.0.0.1:26080"
@@ -766,7 +766,7 @@ ConstantsInfo.Env.set("local", {
 
 ConstantsInfo.Env.set("dit", {
   GOOGLE_ANALYTICS: {
-    TRACKING_ID: ""
+    TRACKING_ID: "UA-71223382-6"
   },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
@@ -776,13 +776,13 @@ ConstantsInfo.Env.set("dit", {
   },
   APIS: {
     AMREST: {
-      BASE_URL: "http://pwm-wex-178.wrightexpress.com:20080"
+      BASE_URL: "https://uat.account.wexmobile.com/maintenance"
     },
     GATEKEEPER: {
-      BASE_URL: "http://pwm-wex-178.wrightexpress.com:29080"
+      BASE_URL: "http://gatekeeper-dit.us-east-1.elasticbeanstalk.com/"
     },
     KEYMASTER: {
-      BASE_URL: "http://pwm-wex-178.wrightexpress.com:26080"
+      BASE_URL: "http://keymaster-dit.us-east-1.elasticbeanstalk.com/"
     },
     ONLINE_ENROLLMENT: {
       BASE_URL: "http://dit-wex.wexinc.com:12080/enrollment/"
@@ -792,7 +792,7 @@ ConstantsInfo.Env.set("dit", {
 
 ConstantsInfo.Env.set("stage-wex", {
   GOOGLE_ANALYTICS: {
-    TRACKING_ID: "UA-71223382-1"
+    TRACKING_ID: "UA-71223382-10"
   },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
@@ -818,7 +818,7 @@ ConstantsInfo.Env.set("stage-wex", {
 
 ConstantsInfo.Env.set("stage-aws", {
   GOOGLE_ANALYTICS: {
-    TRACKING_ID: "UA-71223382-1"
+    TRACKING_ID: "UA-71223382-10"
   },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
@@ -844,7 +844,7 @@ ConstantsInfo.Env.set("stage-aws", {
 
 ConstantsInfo.Env.set("production-wex", {
   GOOGLE_ANALYTICS: {
-    TRACKING_ID: ""
+    TRACKING_ID: "UA-4082503-35"
   },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
