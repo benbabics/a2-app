@@ -54,7 +54,10 @@ import {
   NetworkStatus,
   WexGoogleAnalyticsEvents,
   WexAppBackButtonController,
-  UserIdle
+  UserIdle,
+  AuthenticationManager,
+  UiNotificationsController,
+  WexNavigationController
 } from "../providers";
 import { WexCurrency, WexDate, WexDateTime, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
@@ -85,7 +88,7 @@ import { Network } from "@ionic-native/network";
 import { WexAppVersionCheck } from "../providers/wex-app-version-check";
 import { VersionCheck } from "../pages/login/version-check/version-check";
 import { AppSymbols } from "./app.symbols";
-import { NgIdleModule, Idle } from "@ng-idle/core";
+import { NgIdleModule } from "@ng-idle/core";
 import { Environment } from "../environments/environment";
 import { MockBackend } from "@angular/http/testing";
 import { MockHttp } from "@angular-wex/mocks";
@@ -253,15 +256,14 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
       useClass: WexGoogleAnalyticsEvents
     },
     {
-      provide: GoogleAnalytics,
-      useClass: WexGoogleAnalyticsEvents
-    },
-    {
       provide: Http,
       useFactory: HTTP_FACTORY,
       deps: [XHRBackend, MockBackend, NetworkStatus, RequestOptions]
     },
     SessionManager,
+    AuthenticationManager,
+    UiNotificationsController,
+    WexNavigationController,
     NavBarController,
     SecureStorage,
     WexPlatform,
@@ -277,8 +279,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     WexAppBackButtonController,
     {
       provide: UserIdle,
-      useClass: UserIdle,
-      deps: [Idle, SessionManager]
+      useClass: UserIdle
     }
   ]
 })

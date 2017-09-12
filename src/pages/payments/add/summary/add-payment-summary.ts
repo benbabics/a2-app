@@ -73,7 +73,7 @@ export class AddPaymentSummaryPage extends SecurePage {
       .finally(() => this.isLoading = false)
       .subscribe((payment) => {
         // Update the cache
-        this.sessionManager.cache.requestSessionDetail(Session.Field.Payments);
+        this.sessionCache.requestSessionDetail(Session.Field.Payments);
 
         this.navCtrl.setRoot(AddPaymentConfirmationPage, { payment });
       }, (error) => {

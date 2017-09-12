@@ -4,6 +4,7 @@ import { TermsOfUsePage } from "../terms-of-use/terms-of-use";
 import { PrivacyPolicyPage } from "../privacy-policy/privacy-policy";
 import { NavController } from "ionic-angular";
 import { FingerprintController } from "./fingerprint-control";
+import { WexNavigationController } from "../../providers";
 
 @Component({
   selector: "options-page",
@@ -14,7 +15,8 @@ export class OptionsPage extends FingerprintController {
   public fingerprintAuthAvailable: boolean = false;
 
   constructor(injector: Injector,
-    private navController: NavController
+    private navController: NavController,
+    private wexNavigationController: WexNavigationController
   ) {
     super("Options", injector);
   }
@@ -28,7 +30,7 @@ export class OptionsPage extends FingerprintController {
   }
 
   public logout() {
-    this.sessionManager.logout({ "fromLogOut": true });
+    this.wexNavigationController.logout({ "fromLogOut": true });
   }
 
   public ionViewWillEnter(): void {
