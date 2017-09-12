@@ -56,18 +56,22 @@ export class Fingerprint {
   }
 
   public clearProfile(id: string): Promise<any> {
-    return this.isAvailable.then(() => this.nativeService.clearProfile(id));
+    return this.isAvailable.then(() => this.nativeService.clearProfile(this.getId(id)));
   }
 
   public hasProfile(id: string): Promise<any> {
-    return this.isAvailable.then(() => this.nativeService.hasProfile(id.toLowerCase().trim()));
+    return this.isAvailable.then(() => this.nativeService.hasProfile(this.getId(id)));
   }
 
   public verify(options: IFingerprintVerificationOptions): Promise<FingerprintProfile|FingerprintVerificationError> {
     if (!!options.secret) {
       this.localStorageService.set(Fingerprint.hasShownFingerprintSetupMessageKey, false);
     }
-    options.id = options.id.toLowerCase().trim();
+    options.id = this.getId(options.id);
     return this.isAvailable.then(() => this.nativeService.verify(options));
+  }
+
+  private getId(username: string) {
+    return username.toLowerCase().trim();
   }
 }

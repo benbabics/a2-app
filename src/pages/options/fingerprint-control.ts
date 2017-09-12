@@ -32,6 +32,7 @@ export abstract class FingerprintController extends SecurePage {
     this.cdRef = injector.get(ChangeDetectorRef);
     this.wexAppSnackbarController = injector.get(WexAppSnackbarController);
     this.platform = injector.get(WexPlatform);
+    this.uiNotificationsController = injector.get(UiNotificationsController);
   }
 
   public get enableFingerprintAuthToggle(): boolean {
@@ -60,7 +61,7 @@ export abstract class FingerprintController extends SecurePage {
   ionViewWillEnter() {
     if (!this.platform.isMock) {
       this.platform.ready()
-        .then(() => this.fingerprint.hasProfile(this.session.user.details.username.toLowerCase()))
+        .then(() => this.fingerprint.hasProfile(this.session.user.details.username))
         .then(() => this.fingerprintProfileAvailable = true)
         .catch(() => { });
     }
@@ -73,7 +74,7 @@ export abstract class FingerprintController extends SecurePage {
       .toPromise()
       .then((hasAccepted) => {
         if (hasAccepted) {
-          let id = this.session.user.details.username.toLowerCase();
+          let id = this.session.user.details.username;
           let secret = this.session.clientSecret;
 
           return this.fingerprint.verify({ id, secret })
@@ -84,7 +85,7 @@ export abstract class FingerprintController extends SecurePage {
 
 
   private destroyFingerprintProfile(): Promise<boolean> {
-    let id = this.session.user.details.username.toLowerCase();
+    let id = this.session.user.details.username;
 
     return this.displayDestroyProfileDialog(id).then((shouldClear: boolean) => {
       if (shouldClear) { this.fingerprint.clearProfile(id); }

@@ -131,7 +131,7 @@ export class LoginPage extends Page {
     return this.platform.ready()
       .then(() => this.fingerprint.isAvailable)
       .then(() => this.fingerprintAuthAvailable = true)
-      .then(() => this.fingerprint.hasProfile(this.user.username.toLowerCase()))
+      .then(() => this.fingerprint.hasProfile(this.user.username))
       .then(() => this.fingerprintProfileAvailable = true);
   }
 
