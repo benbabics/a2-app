@@ -123,7 +123,7 @@ class TransactionsPageDateView extends TransactionsPageListView<BaseTransactionT
     options = _.clone(options);
     options.forceRequest = options.forceRequest && options.clearItems;
 
-    return this.transactionsPage.sessionManager.cache.getSessionDetail(Session.Field.PendingTransactions, options);
+    return this.transactionsPage.sessionCache.getSessionDetail(Session.Field.PendingTransactions, options);
   }
 
   protected fetchPosted(options?: StaticListPage.FetchOptions): Observable<PostedTransaction[]> {
@@ -131,7 +131,7 @@ class TransactionsPageDateView extends TransactionsPageListView<BaseTransactionT
       SessionCache.cachedValues.postedTransactionsInfo.details.currentPage = 0;
     }
 
-    return this.transactionsPage.sessionManager.cache.getSessionDetail(Session.Field.PostedTransactions, options);
+    return this.transactionsPage.sessionCache.getSessionDetail(Session.Field.PostedTransactions, options);
   }
 }
 
@@ -152,7 +152,7 @@ class TransactionsPageDriverView extends TransactionsPageListView<Driver, Driver
   }
 
   public fetch(options?: StaticListPage.FetchOptions): Observable<Driver[]> {
-    return this.transactionsPage.sessionManager.cache.getSessionDetail(Session.Field.Drivers, options);
+    return this.transactionsPage.sessionCache.getSessionDetail(Session.Field.Drivers, options);
   }
 
   public goToDetailPage(item: Driver): Promise<any> {
@@ -184,7 +184,7 @@ class TransactionsPageCardView extends TransactionsPageListView<Card, Card.Detai
   }
 
   public fetch(options?: StaticListPage.FetchOptions): Observable<Card[]> {
-    return this.transactionsPage.sessionManager.cache.getSessionDetail(Session.Field.Cards, options);
+    return this.transactionsPage.sessionCache.getSessionDetail(Session.Field.Cards, options);
   }
 
   public goToDetailPage(item: Card): Promise<any> {
@@ -291,6 +291,7 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
   public readonly filter: TransactionListFilter;
   public selectedListView: AbstractTransactionsPageListView;
   public session: Session;
+  public sessionCache: SessionCache;
 
   constructor(private localStorageService: LocalStorageService, public navCtrl: NavController, public navParams: NavParams, public injector: Injector) {
     super("Transactions", injector);

@@ -36,7 +36,7 @@ export class CardsPage extends StaticListPage<Card, Card.Details> {
   }
 
   protected fetch(options?: FetchOptions): Observable<Card[]> {
-    return this.sessionManager.cache.getSessionDetail(Session.Field.Cards, options);
+    return this.sessionCache.getSessionDetail(Session.Field.Cards, options);
   }
 
   protected groupItems(cards: Card[]): GroupedList<Card> {
