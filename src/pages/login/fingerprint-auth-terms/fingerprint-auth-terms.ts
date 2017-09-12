@@ -11,7 +11,7 @@ export class FingerprintAuthenticationTermsPage extends Page {
   public terms: string;
 
   constructor(
-    private platform: WexPlatform,
+    public platform: WexPlatform,
     private viewControl: ViewController,
     injector: Injector
   ) {
