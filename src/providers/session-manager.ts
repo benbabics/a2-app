@@ -1,59 +1,29 @@
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
-import { Fingerprint, FingerprintProfile } from "./fingerprint";
 import * as _ from "lodash";
-import { Injectable, Inject } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { UserCredentials } from "@angular-wex/models";
-import { AuthProvider } from "@angular-wex/api-providers";
 import { Observable } from "rxjs/Observable";
-import { Subscriber } from "rxjs/Subscriber";
 import { SessionCache } from "./session-cache";
-import { LocalStorageService } from "angular-2-local-storage/dist";
-import { Value } from "../decorators/value";
-import { FingerprintAuthenticationTermsPage } from "../pages/login/fingerprint-auth-terms/fingerprint-auth-terms";
-import { ModalController, App } from "ionic-angular";
-import { AppSymbols } from "../app/app.symbols";
-import { WexPlatform } from "./platform";
-import { WexAppSnackbarController } from "../components/wex-app-snackbar-controller/wex-app-snackbar-controller";
-import { NameUtils } from "../utils/name-utils";
-import { User } from "@angular-wex/models";
-import { Session } from "../models/session";
-
-export enum SessionAuthenticationMethod {
-  Secret,
-  Fingerprint
-}
+import { AuthenticationMethod, AuthenticationManager } from "./authentication-manager";
 
 export interface SessionOptions {
-  authenticationMethod?: SessionAuthenticationMethod;
+  authenticationMethod?: AuthenticationMethod;
 }
 
 export namespace SessionOptions {
   export const Defaults: SessionOptions = {
-    authenticationMethod: SessionAuthenticationMethod.Secret
+    authenticationMethod: AuthenticationMethod.Secret
   };
 }
 
 @Injectable()
 export class SessionManager {
 
-  @Value("STORAGE.KEYS.AUTH_TOKEN") private readonly AUTH_TOKEN_KEY: string;
-  @Value("GLOBAL_NOTIFICATIONS.fingerprintSuccess.message")
-  private readonly FINGERPRINT_SUCCESS: string;
-  @Value("GLOBAL_NOTIFICATIONS.fingerprintSuccess.duration")
-  private readonly FINGERPRINT_SUCCESS_DURATION: number;
-
   private _sessionStateObserver = new BehaviorSubject(null);
 
   constructor(
-    @Inject(AppSymbols.RootPage) private rootPage: any,
-    private authProvider: AuthProvider,
-    private fingerprint: Fingerprint,
     private sessionCache: SessionCache,
-    private localStorageService: LocalStorageService,
-    private modalController: ModalController,
-    private app: App,
-    private platform: WexPlatform,
-    private wexAppSnackbarController: WexAppSnackbarController
+    private authenticationManager: AuthenticationManager
   ) { }
 
   public static get hasSession(): boolean {
@@ -64,77 +34,12 @@ export class SessionManager {
     return this._sessionStateObserver;
   }
 
-  private authenticate(userCredentials: UserCredentials, authenticationMethod: SessionAuthenticationMethod): Observable<string> {
-    let secret: Observable<string>;
-    switch (authenticationMethod) {
-      // Fingerprint
-      case SessionAuthenticationMethod.Fingerprint: {
-        let options: any = { id: userCredentials.username };
-        let isRegistering: boolean = !!userCredentials.password;
-
-        if (isRegistering) {
-          options.secret = userCredentials.password;
-        }
-        // Prompt fingerprint terms after auth for registering
-        secret = Observable.if(() => isRegistering, this.registerFingerprintAuthentication(userCredentials), Observable.of(true))
-          .flatMap((shouldVerify: boolean) => {
-            if (shouldVerify) {
-              return Observable.fromPromise(this.fingerprint.verify(options))
-                .map((fingerprintProfile: FingerprintProfile): string => fingerprintProfile.secret);
-            } else {
-              return Observable.of(userCredentials.password);
-          }});
-
-        break;
-      }
-      // Secret
-      case SessionAuthenticationMethod.Secret:
-      default: {
-        secret = Observable.of(userCredentials.password);
-        break;
-      }
-    }
-    // Request a token with the provided username and secret
-    return secret
-    .map((secret: string) => SessionCache.cachedValues.clientSecret = secret)
-    .flatMap((secret: string) => this.authProvider.requestToken({ username: userCredentials.username, password: secret }));
-  }
-
-  private registerFingerprintAuthentication(userCredentials: UserCredentials): Observable<any> {
-  return this.authenticate(userCredentials, SessionAuthenticationMethod.Secret)
-    .flatMap(() => this.promptFingerprintTerms());
-  }
-
-  public presentBiomentricProfileSuccessMessage() {
-    this.sessionCache.getSessionDetail(Session.Field.User).subscribe((user: User) => {
-      let message = _.template(this.FINGERPRINT_SUCCESS)({
-        platformBiometric: this.platform.biometricTitle(),
-        username: NameUtils.MaskUsername(user.details.username).toUpperCase()
-      });
-      this.wexAppSnackbarController.create({
-        message,
-        duration: this.FINGERPRINT_SUCCESS_DURATION
-      }).present();
-    });
-  }
-
-  public promptFingerprintTerms(): Observable<boolean> {
-    let modal = this.modalController.create(FingerprintAuthenticationTermsPage);
-    modal.present();
-    return new Observable<boolean>((observer: Subscriber<boolean>) => {
-      modal.onDidDismiss((accepted: boolean) => {
-        observer.next(accepted);
-        observer.complete();
-     });
-    });
-  }
-
   public get cache(): SessionCache {
     return this.sessionCache;
   }
 
-  public restore() {
-    SessionCache.cachedValues.token = this.authToken;
+  public restoreFromDevAuthToken() {
+    SessionCache.cachedValues.token = this.authenticationManager.devAuthToken;
   }
 
   public initSession(userCredentials: UserCredentials, options?: SessionOptions): Observable<string> {
@@ -145,10 +50,10 @@ export class SessionManager {
     }
 
     // Request a new token
-    return this.authenticate(userCredentials, options.authenticationMethod)
+    return this.authenticationManager.authenticate(userCredentials, options.authenticationMethod)
       .map((token: string) => {
         SessionCache.cachedValues.token = token;
-        this.authToken = token;
+        this.authenticationManager.devAuthToken = token;
 
         this._sessionStateObserver.next(true);
 
@@ -161,34 +66,8 @@ export class SessionManager {
 
   public invalidateSession() {
     this.sessionCache.clear();
-    this.clearAuthToken();
+    this.authenticationManager.clearDevAuthToken();
 
     this._sessionStateObserver.next(false);
-  }
-
-  public logout(params?: any) {
-    this.app.getRootNav().setRoot(this.rootPage, params, { animate: true, direction: "back" })
-      .then(() => this.invalidateSession());
-  }
-
-
-  private set authToken(token: string) {
-    if (this.platform.isDevMode) {
-      this.localStorageService.set(this.AUTH_TOKEN_KEY, token);
-    }
-  }
-
-  private get authToken(): string {
-    if (this.platform.isDevMode) {
-      return this.localStorageService.get(this.AUTH_TOKEN_KEY) as string;
-    }
-
-    return "";
-  }
-
-  private clearAuthToken(): void {
-    if (this.platform.isDevMode) {
-      this.localStorageService.remove(this.AUTH_TOKEN_KEY);
-    }
   }
 }

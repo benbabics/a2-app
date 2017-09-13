@@ -54,7 +54,10 @@ import {
   NetworkStatus,
   WexGoogleAnalyticsEvents,
   WexAppBackButtonController,
-  UserIdle
+  UserIdle,
+  AuthenticationManager,
+  UiNotificationsController,
+  WexNavigationController
 } from "../providers";
 import { WexCurrency, WexDate, WexDateTime, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
@@ -250,11 +253,8 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     },
     {
       provide: GoogleAnalytics,
-      useClass: WexGoogleAnalyticsEvents
-    },
-    {
-      provide: GoogleAnalytics,
-      useClass: WexGoogleAnalyticsEvents
+      useClass: WexGoogleAnalyticsEvents,
+      deps: []
     },
     {
       provide: Http,
@@ -262,6 +262,9 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
       deps: [XHRBackend, MockBackend, NetworkStatus, RequestOptions]
     },
     SessionManager,
+    AuthenticationManager,
+    UiNotificationsController,
+    WexNavigationController,
     NavBarController,
     SecureStorage,
     WexPlatform,
@@ -278,7 +281,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     {
       provide: UserIdle,
       useClass: UserIdle,
-      deps: [Idle, SessionManager]
+      deps: [SessionManager, Idle, WexNavigationController]
     }
   ]
 })

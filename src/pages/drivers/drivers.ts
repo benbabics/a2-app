@@ -37,7 +37,7 @@ export class DriversPage extends StaticListPage<Driver, Driver.Details> {
   }
 
   protected fetch(options?: FetchOptions): Observable<Driver[]> {
-    return this.sessionManager.cache.getSessionDetail(Session.Field.Drivers, options);
+    return this.sessionCache.getSessionDetail(Session.Field.Drivers, options);
   }
 
   protected groupItems(drivers: Driver[]): GroupedList<Driver> {

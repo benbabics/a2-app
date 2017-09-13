@@ -4,11 +4,7 @@ import * as _ from "lodash";
 import { Component, ViewChild, ElementRef, Injector } from "@angular/core";
 import { NavParams, Content, NavController, ModalController } from "ionic-angular";
 import { Page } from "../page";
-import {
-  SessionManager,
-  SessionAuthenticationMethod,
-  Fingerprint
-} from "../../providers";
+import { SessionManager, Fingerprint, AuthenticationMethod } from "../../providers";
 import { LocalStorageService } from "angular-2-local-storage/dist";
 import { Value } from "../../decorators/value";
 import { Dialogs } from "@ionic-native/dialogs";
@@ -135,7 +131,7 @@ export class LoginPage extends Page {
     //enable fingerprint login if there is an existing fingerprint profile for this user
     return this.platform.ready(() => this.fingerprint.isAvailable
       .then(() => this.fingerprintAuthAvailable = true)
-      .then(() => this.fingerprint.hasProfile(this.user.username.toLowerCase()))
+      .then(() => this.fingerprint.hasProfile(this.user.username))
       .then(() => this.fingerprintProfileAvailable = true));
   }
 
@@ -153,9 +149,9 @@ export class LoginPage extends Page {
     this.titleHeadingBar.nativeElement.style.display = "block";
   }
 
-  private login(setupFingerprintAuth?: boolean) {
+  private login(useFingerprintAuth?: boolean) {
     if (!this.isLoggingIn) {
-      let authenticationMethod = setupFingerprintAuth ? SessionAuthenticationMethod.Fingerprint : SessionAuthenticationMethod.Secret;
+      let authenticationMethod = useFingerprintAuth ? AuthenticationMethod.Fingerprint : AuthenticationMethod.Secret;
 
       this.isLoggingIn = true;
       this.user.username = this.user.username.toLowerCase().trim();
@@ -295,8 +291,8 @@ export class LoginPage extends Page {
     window.removeEventListener("native.keyboardhide", this._onKeyboardClose);
   }
 
-  public onLogin(event: Event, setupFingerprintAuth?: boolean) {
-    this.login(setupFingerprintAuth);
+  public onLogin(event: Event, useFingerprintAuth?: boolean) {
+    this.login(useFingerprintAuth);
 
     event.preventDefault();
   }
