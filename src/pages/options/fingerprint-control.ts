@@ -59,12 +59,9 @@ export abstract class FingerprintController extends SecurePage {
   }
 
   ionViewWillEnter() {
-    if (!this.platform.isMock) {
-      this.platform.ready()
-        .then(() => this.fingerprint.hasProfile(this.session.user.details.username))
+      this.platform.ready(() => this.fingerprint.hasProfile(this.session.user.details.username)
         .then(() => this.fingerprintProfileAvailable = true)
-        .catch(() => { });
-    }
+        .catch(() => { }));
   }
 
 
