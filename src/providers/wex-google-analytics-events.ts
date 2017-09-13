@@ -1,6 +1,6 @@
 import { GoogleAnalytics } from "@ionic-native/google-analytics";
 import { Value } from "../decorators/value";
-import { Injectable, Inject, forwardRef } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { SessionManager } from "./session-manager";
 import { Session } from "../models";
 import { User } from "@angular-wex/models";
@@ -12,7 +12,7 @@ export class WexGoogleAnalyticsEvents extends GoogleAnalytics {
   private TRACKING_ID: string;
   private readonly USER_ID_DIMENSION: number = 1;
 
-  constructor(@Inject(forwardRef(() => SessionManager)) sessionManager: SessionManager) {
+  constructor(sessionManager: SessionManager) {
     super();
 
     if (!this.hasTrackingId) {

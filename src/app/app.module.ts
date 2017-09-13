@@ -254,7 +254,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     {
       provide: GoogleAnalytics,
       useClass: WexGoogleAnalyticsEvents,
-      deps: []
+      deps: [SessionManager]
     },
     {
       provide: Http,
