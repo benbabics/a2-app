@@ -15,15 +15,18 @@ export namespace RequestPlatform {
 
 @Injectable()
 export class WexAppVersionCheck {
+
   @Value("AUTH.client_id") clientId: string;
   private _status: Observable<VersionStatus>;
-  public get status() {
+
+  public get status(): Observable<VersionStatus> {
     return this._status;
   }
-  private _versionNumber;
-  public get versionNumber() {
-    return this._versionNumber;
+
+  public get versionNumber(): string {
+    return AppConstants().VERSION_NUMBER;
   }
+
   private get platformName(): string {
     if (this.wexPlatform.isAndroid) {
       return RequestPlatform.Android;
@@ -46,13 +49,9 @@ export class WexAppVersionCheck {
     if (this.wexPlatform.isMock) {
       return Observable.of(VersionStatus.Supported);
     } else {
-      return Observable.fromPromise(this.wexPlatform
-        .ready(() => Observable.fromPromise(this.appVersion.getVersionNumber())
-            .flatMap((versionNumber: string) => {
-              AppConstants().VERSION_NUMBER = versionNumber;
-              this._versionNumber = versionNumber;
-              return this.getStatus(this.versionNumber, this.clientId, this.platformName);
-      }).toPromise()));
+      return Observable.fromPromise(this.wexPlatform.ready(() => this.appVersion.getVersionNumber()))
+        .map((versionNumber: string) => AppConstants().VERSION_NUMBER = versionNumber)
+        .flatMap((versionNumber: string) => this.getStatus(versionNumber, this.clientId, this.platformName));
     }
   }
 
