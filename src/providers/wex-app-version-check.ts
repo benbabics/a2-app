@@ -52,7 +52,7 @@ export class WexAppVersionCheck {
               AppConstants().VERSION_NUMBER = versionNumber;
               this._versionNumber = versionNumber;
               return this.getStatus(this.versionNumber, this.clientId, this.platformName);
-      })));
+      }).toPromise()));
     }
   }
 

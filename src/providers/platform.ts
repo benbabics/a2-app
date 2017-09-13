@@ -64,7 +64,7 @@ export class WexPlatform extends Platform {
     }
   }
 
-  public ready (successCallback?: () => any): Promise<any> {
+  public ready (successCallback?: () => void | PromiseLike<any>): Promise<any> {
     if (!this.isMock) {
       return super.ready().then(successCallback || _.noop);
     } else {
