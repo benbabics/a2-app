@@ -28,7 +28,7 @@ export class SecureStorage {
 
   constructor(platform: WexPlatform) {
     this.available = new Promise((resolve, reject) => {
-        platform.ready().then(() => {
+        platform.ready(() => {
           if (_.has(window, "cordova.plugins.SecureStorage")) {
             this.secureStorage = new cordova.plugins.SecureStorage(resolve, reject, SecureStorage.STORAGE_ID);
           }
