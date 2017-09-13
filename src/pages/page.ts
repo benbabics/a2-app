@@ -29,8 +29,4 @@ export abstract class Page implements OnInit {
   private get pageConstants(): any {
     return _.get(Constants, `PAGES.${this.pageName.toUpperCase().replace(/\s/g, "_")}`);
   }
-
-  public resolvePlatformConstant(constant: any): string {
-    return _.get(constant, Constants.PLATFORM.CURRENT, null);
-  }
 }

@@ -11,7 +11,7 @@ export type PlatformSpecificConstant = { android: string, ios: string };
 export class WexPlatform extends Platform {
 
   @Value("IONIC_APP_ID") private IONIC_APP_ID: string;
-  @Value("PLATFORM_BIOMETRIC") private PLATFORM_BIOMETRIC: { android: string, ios: string };
+  @Value("PLATFORM_BIOMETRIC") private PLATFORM_BIOMETRIC: PlatformSpecificConstant;
   private static readonly DEV_MODE_REGEX: RegExp = /[?&]dev/;
   private static readonly MOCK_REGEX: RegExp = /^http(s?):\/\//;
 

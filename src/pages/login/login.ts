@@ -2,7 +2,7 @@ import { WexNavBar, WexAppSnackbarController } from "../../components";
 import { Session } from "../../models";
 import * as _ from "lodash";
 import { Component, ViewChild, ElementRef, Injector } from "@angular/core";
-import { NavParams, Platform, Content, NavController, ModalController } from "ionic-angular";
+import { NavParams, Content, NavController, ModalController } from "ionic-angular";
 import { Page } from "../page";
 import {
   SessionManager,
@@ -19,6 +19,7 @@ import { FingerprintVerificationError } from "../../providers/fingerprint/native
 import { WexAppVersionCheck } from "../../providers/wex-app-version-check";
 import { VersionCheck } from "./version-check/version-check";
 import { NameUtils } from "../../utils/name-utils";
+import { WexPlatform } from "../../providers/platform";
 
 export type LoginPageNavParams = keyof {
   fromLogOut,
@@ -64,7 +65,7 @@ export class LoginPage extends Page {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private platform: Platform,
+    private platform: WexPlatform,
     private sessionManager: SessionManager,
     private fingerprint: Fingerprint,
     private localStorageService: LocalStorageService,
@@ -79,7 +80,7 @@ export class LoginPage extends Page {
   }
 
   public get fingerprintDisabledLabel(): string {
-    return this.resolvePlatformConstant(this.CONSTANTS.touchId.disabled.label);
+    return this.platform.constant(this.CONSTANTS.touchId.disabled.label);
   }
 
   public get maskableUsername(): string {
@@ -208,7 +209,7 @@ export class LoginPage extends Page {
 
   private showUserSettingsPopup(): Promise<any> {
     return this.dialogs.confirm(
-      this.resolvePlatformConstant(this.CONSTANTS.touchId.settingsPrompt.message),
+      this.platform.constant(this.CONSTANTS.touchId.settingsPrompt.message),
       this.CONSTANTS.touchId.settingsPrompt.title, [
         this.CONSTANTS.touchId.settingsPrompt.buttons.settings,
         this.CONSTANTS.touchId.settingsPrompt.buttons.cancel
@@ -304,7 +305,7 @@ export class LoginPage extends Page {
   public verifyFingerprintRemoval(): Promise<void> {
     if (this.fingerprintProfileAvailable) {
       return this.dialogs.confirm(
-        this.resolvePlatformConstant(this.CONSTANTS.touchId.warningPrompt.message),
+        this.platform.constant(this.CONSTANTS.touchId.warningPrompt.message),
         this.CONSTANTS.touchId.warningPrompt.title, [
           this.CONSTANTS.touchId.warningPrompt.buttons.ok,
           this.CONSTANTS.touchId.warningPrompt.buttons.cancel
