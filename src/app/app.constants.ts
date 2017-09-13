@@ -23,11 +23,20 @@ export namespace ConstantsInfo {
         LAST_TRANSACTION_VIEW: "LAST_TRANSACTION_VIEW"
       }
     },
-    //# OAuth
+    //# Authentication
     AUTH: {
+      BIOMETRIC: {
+        FINGERPRINT: {
+          PLATFORM_NAME: {
+            android: "Fingerprint authentication",
+            ios: "Touch ID"
+          },
+          defaultDialogMessage: "Scan your fingerprint below to enter your account"
+        }
+      },
       client_id: "mobileAccountManagement",
       grant_type: "password",
-      scope: "app_info accounts user:account_management auth_profiles brand_assets cards contact drivers payments:billpay transactions:posted transactions:pending notifications:get notifications:update notifications:delete notifications:unread n:reg accept_touch_id",
+      scope: "app_info accounts user:account_management auth_profiles brand_assets cards contact drivers payments:billpay transactions:posted transactions:pending notifications:get notifications:update notifications:delete notifications:unread n:reg accept_touch_id"
     },
     //# Buttons
     BUTTONS: {
@@ -48,10 +57,6 @@ export namespace ConstantsInfo {
           "UNKNOWN": "Unknown"
         }
       },
-    },
-    PLATFORM_BIOMETRIC: {
-      android: "Fingerprint authentication",
-      ios: "Touch ID"
     },
     //# Global error notifications
     GLOBAL_NOTIFICATIONS: {
@@ -77,10 +82,6 @@ export namespace ConstantsInfo {
       DATE_FORMAT: "MM/DD/YYYY",
       DATE_TIME_FORMAT: "MM/DD/YYYY hh:mm:ss A",
       LOCALE: "en-US"
-    },
-    //# Fingerprint Authentication
-    FINGERPRINT: {
-      defaultDialogMessage: "Scan your fingerprint below to enter your account"
     },
     INFINITE_LIST: {
       DEFAULT_SEARCH_PERIOD: [INT_MAX_32, "y"],
@@ -283,64 +284,74 @@ export namespace ConstantsInfo {
 
       //# Login page
       LOGIN: {
-        "userName": {
-          "label": "Username",
-          "maxLength": 30
+        ANALYTICS: {
+          EVENTS: {
+            errorInactive: ["Login", "InactiveStatus"],
+            errorAccountNotReady: ["Login", "AccountNotReadyStatus"],
+            errorWrongCredentials: ["Login", "WrongCredentialsStatus"],
+            errorPasswordLocked: ["Login", "LockedPasswordStatus"],
+            loginManual: ["Login", "LoginSuccessfulManual"],
+            loginBiometric: ["Login", "LoginSuccessfulBiometric"],
+          }
         },
-        "password": {
-          "label": "Password",
-          "maxLength": 30
+        userName: {
+          label: "Username",
+          maxLength: 30
         },
-        "rememberMe": {
-          "label": "Remember Username"
+        password: {
+          label: "Password",
+          maxLength: 30
         },
-        "touchId": {
-          "disabled": {
-            "label": {
-              "android": "Set Up Fingerprint",
-              "ios": "Set Up Touch ID"
+        rememberMe: {
+          label: "Remember Username"
+        },
+        touchId: {
+          disabled: {
+            label: {
+              android: "Set Up Fingerprint",
+              ios: "Set Up Touch ID"
             }
           },
-          "settingsPrompt": {
-            "title": "",
-            "message": {
-              "android": "Fingerprint authentication must be enabled on your device to use this feature.",
-              "ios": "Touch ID\u00AE must be enabled on your device to use this feature."
+          settingsPrompt: {
+            title: "",
+            message: {
+              android: "Fingerprint authentication must be enabled on your device to use this feature.",
+              ios: "Touch ID\u00AE must be enabled on your device to use this feature."
             },
-            "buttons": {
-              "cancel": "Cancel",
-              "settings": "Settings"
+            buttons: {
+              cancel: "Cancel",
+              settings: "Settings"
             }
           },
-          "warningPrompt": {
-            "title": "",
-            "message": {
-              "android": "Your fingerprint authentication will be disabled.",
-              "ios": "Your Touch ID\u00AE will be disabled.",
+          warningPrompt: {
+            title: "",
+            message: {
+              android: "Your fingerprint authentication will be disabled.",
+              ios: "Your Touch ID\u00AE will be disabled.",
             },
-            "buttons": {
-              "cancel": "Cancel",
-              "ok": "OK"
+            buttons: {
+              cancel: "Cancel",
+              ok: "OK"
             }
           }
         },
-        "submitButton": "Log In",
-        "serverErrors": {
-          "AUTHORIZATION_FAILED": "We're sorry but you are not able to manage your account via the mobile application at this time. Please use Fleet Manager Online, our full feature site.",
-          "DEFAULT": "Invalid login information. Go online to set up or recover your username and password.",
-          "PASSWORD_CHANGED": "Invalid login information. Please re-enter your username and password.",
-          "PASSWORD_EXPIRED": "Invalid login information. Go online to set up or recover your username and password.",
-          "CONNECTION_ERROR": "Login failed. Please try again later.",
-          "TOKEN_EXPIRED": "Your session has expired. Please login again.",
-          "USER_LOCKED": "You have exceeded the number of allowable login attempts. You will need to access your online account to retrieve your username and password.",
-          "USER_MUST_ACCEPT_TERMS": "Invalid login information. Go online to set up or recover your username and password.",
-          "USER_MUST_SETUP_SECURITY_QUESTIONS": "Invalid login information. Go online to set up or recover your username and password.",
-          "USER_NOT_ACTIVE": "Invalid login information. Go online to set up or recover your username and password."
+        submitButton: "Log In",
+        serverErrors: {
+          AUTHORIZATION_FAILED: "We're sorry but you are not able to manage your account via the mobile application at this time. Please use Fleet Manager Online, our full feature site.",
+          DEFAULT: "Invalid login information. Go online to set up or recover your username and password.",
+          PASSWORD_CHANGED: "Invalid login information. Please re-enter your username and password.",
+          PASSWORD_EXPIRED: "Invalid login information. Go online to set up or recover your username and password.",
+          CONNECTION_ERROR: "Login failed. Please try again later.",
+          TOKEN_EXPIRED: "Your session has expired. Please login again.",
+          USER_LOCKED: "You have exceeded the number of allowable login attempts. You will need to access your online account to retrieve your username and password.",
+          USER_MUST_ACCEPT_TERMS: "Invalid login information. Go online to set up or recover your username and password.",
+          USER_MUST_SETUP_SECURITY_QUESTIONS: "Invalid login information. Go online to set up or recover your username and password.",
+          USER_NOT_ACTIVE: "Invalid login information. Go online to set up or recover your username and password."
         },
-        "sessionTimeOut": "Your session has timed out due to 15 minutes of inactivity. Please login to access your account.",
-        "enrollment": {
-          "label1": "Don't have an account?",
-          "label2": "Enroll Now"
+        sessionTimeOut: "Your session has timed out due to 15 minutes of inactivity. Please login to access your account.",
+        enrollment: {
+          label1: "Don't have an account?",
+          label2: "Enroll Now"
         }
       },
 
@@ -474,6 +485,12 @@ export namespace ConstantsInfo {
 
       //# Fingerprint Auth Terms Page
       FINGERPRINT_AUTH_TERMS: {
+        ANALYTICS: {
+          EVENTS: {
+            acceptTerms: ["SetUpBiometrics", "AcceptTerms"],
+            declineTerms: ["SetUpBiometrics", "DeclineTerms"]
+          }
+        },
         options: {
           backdropClickToClose: false,
           scopeVars: {
@@ -729,7 +746,7 @@ export namespace ConstantsInfo {
 
 ConstantsInfo.Env.set("local", {
   GOOGLE_ANALYTICS: {
-    TRACKING_ID: ""
+    TRACKING_ID: "UA-71223382-6"
   },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
@@ -742,7 +759,7 @@ ConstantsInfo.Env.set("local", {
       BASE_URL: "http://127.0.0.1:20080"
     },
     GATEKEEPER: {
-      BASE_URL: "https://uat.account.wexmobile.com/configurationAPI"
+      BASE_URL: "http://127.0.0.1:29080"
     },
     KEYMASTER: {
       BASE_URL: "http://127.0.0.1:26080"
@@ -756,7 +773,7 @@ ConstantsInfo.Env.set("local", {
 
 ConstantsInfo.Env.set("dit", {
   GOOGLE_ANALYTICS: {
-    TRACKING_ID: ""
+    TRACKING_ID: "UA-71223382-6"
   },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
@@ -766,13 +783,13 @@ ConstantsInfo.Env.set("dit", {
   },
   APIS: {
     AMREST: {
-      BASE_URL: "http://pwm-wex-178.wrightexpress.com:20080"
+      BASE_URL: "https://uat.account.wexmobile.com/maintenance"
     },
     GATEKEEPER: {
-      BASE_URL: "http://pwm-wex-178.wrightexpress.com:29080"
+      BASE_URL: "http://gatekeeper-dit.us-east-1.elasticbeanstalk.com/"
     },
     KEYMASTER: {
-      BASE_URL: "http://pwm-wex-178.wrightexpress.com:26080"
+      BASE_URL: "http://keymaster-dit.us-east-1.elasticbeanstalk.com/"
     },
     ONLINE_ENROLLMENT: {
       BASE_URL: "http://dit-wex.wexinc.com:12080/enrollment/"
@@ -782,7 +799,7 @@ ConstantsInfo.Env.set("dit", {
 
 ConstantsInfo.Env.set("stage-wex", {
   GOOGLE_ANALYTICS: {
-    TRACKING_ID: "UA-71223382-1"
+    TRACKING_ID: "UA-71223382-10"
   },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
@@ -808,7 +825,7 @@ ConstantsInfo.Env.set("stage-wex", {
 
 ConstantsInfo.Env.set("stage-aws", {
   GOOGLE_ANALYTICS: {
-    TRACKING_ID: "UA-71223382-1"
+    TRACKING_ID: "UA-71223382-10"
   },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",
@@ -834,7 +851,7 @@ ConstantsInfo.Env.set("stage-aws", {
 
 ConstantsInfo.Env.set("production-wex", {
   GOOGLE_ANALYTICS: {
-    TRACKING_ID: ""
+    TRACKING_ID: "UA-4082503-35"
   },
   AUTH: {
     client_secret: "-fr?fR)<UP!zD4c<JvtqL28j-3U_Q*mj-XASft<&",

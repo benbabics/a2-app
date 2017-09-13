@@ -240,7 +240,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     { // Force service instatiation
       provide: APP_INITIALIZER,
       useFactory: APP_INITIALIZER_FACTORY,
-      deps: [UserIdle],
+      deps: [UserIdle, GoogleAnalytics],
       multi: true
     },
     {
@@ -254,7 +254,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     {
       provide: GoogleAnalytics,
       useClass: WexGoogleAnalyticsEvents,
-      deps: []
+      deps: [SessionManager]
     },
     {
       provide: Http,

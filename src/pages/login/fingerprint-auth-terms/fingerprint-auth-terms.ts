@@ -27,6 +27,8 @@ export class FingerprintAuthenticationTermsPage extends Page {
   }
 
   public response(accepted: boolean) {
+    this.trackAnalyticsEvent(accepted ? "acceptTerms" : "declineTerms");
+
     this.viewControl.dismiss(accepted);
   }
 }

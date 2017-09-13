@@ -13,7 +13,7 @@ import { NameUtils } from "../../utils/name-utils";
 export abstract class FingerprintController extends SecurePage {
 
   @Value("BUTTONS") private readonly BUTTONS: any;
-  FINGERPRINT_CONSTANTS = AppConstants().PAGES.OPTIONS.FINGERPRINT_SETTINGS;
+  private FINGERPRINT_CONSTANTS = AppConstants().PAGES.OPTIONS.FINGERPRINT_SETTINGS;
 
 
   public fingerprintAuthAvailable: boolean = false;
@@ -75,7 +75,7 @@ export abstract class FingerprintController extends SecurePage {
           let secret = this.session.clientSecret;
 
           return this.fingerprint.verify({ id, secret })
-            .then(() => this.uiNotificationsController.presentBiomentricProfileSuccessMessage());
+            .then(() => this.uiNotificationsController.presentFingerprintProfileSuccessMessage());
         }
       });
   }
@@ -94,7 +94,7 @@ export abstract class FingerprintController extends SecurePage {
   private displayDestroyProfileDialog(username: string): Promise<boolean> {
     let message = _.template(this.FINGERPRINT_CONSTANTS.destroyFingerprintProfileConfirmMessage)({
       username: NameUtils.MaskUsername(username.toLocaleUpperCase()),
-      fingerprintAuthName: this.platform.biometricTitle(true)
+      fingerprintAuthName: this.platform.fingerprintTitle(true)
     });
 
     return this.dialogs.confirm(message, "", [this.BUTTONS.YES, this.BUTTONS.NO])

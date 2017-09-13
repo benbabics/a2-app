@@ -10,7 +10,7 @@ const Constants = AppConstants();
 export class WexPlatform extends Platform {
 
   @Value("IONIC_APP_ID") private IONIC_APP_ID: string;
-  @Value("PLATFORM_BIOMETRIC") private PLATFORM_BIOMETRIC: { android: string, ios: string };
+  @Value("AUTH.BIOMETRIC.FINGERPRINT.PLATFORM_NAME") private PLATFORM_FINGERPRINT: { android: string, ios: string };
   private static readonly DEV_MODE_REGEX: RegExp = /[?&]dev/;
   private static readonly MOCK_REGEX: RegExp = /^http(s?):\/\//;
 
@@ -56,11 +56,11 @@ export class WexPlatform extends Platform {
     return window.location.href.indexOf("com.ionic.viewapp") > -1 || window.location.href.indexOf(this.IONIC_APP_ID) > -1;
   }
 
-  public biometricTitle(lowercaseAndroid?: boolean) {
+  public fingerprintTitle(lowercaseAndroid?: boolean) {
     if (this.isIos) {
-      return this.PLATFORM_BIOMETRIC.ios;
+      return this.PLATFORM_FINGERPRINT.ios;
     } else {
-      return lowercaseAndroid ? this.PLATFORM_BIOMETRIC.android.toLocaleLowerCase() : this.PLATFORM_BIOMETRIC.android;
+      return lowercaseAndroid ? this.PLATFORM_FINGERPRINT.android.toLocaleLowerCase() : this.PLATFORM_FINGERPRINT.android;
     }
   }
 
