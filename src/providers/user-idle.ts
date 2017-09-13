@@ -1,4 +1,4 @@
-import { Injectable, Inject, forwardRef } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { Idle, DEFAULT_INTERRUPTSOURCES } from "@ng-idle/core";
 import { Value } from "../decorators/value";
 import { SessionManager } from "./session-manager";
@@ -10,7 +10,7 @@ export class UserIdle {
   @Value("USER_IDLE") private readonly CONSTANTS;
 
   constructor(
-    @Inject(forwardRef(() => SessionManager)) sessionManager: SessionManager,
+    sessionManager: SessionManager,
     private idle: Idle,
     private wexNavigationController: WexNavigationController
   ) {
