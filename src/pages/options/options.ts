@@ -32,11 +32,8 @@ export class OptionsPage extends FingerprintController {
   }
 
   public ionViewWillEnter(): void {
-    if (!this.platform.isMock) {
-      this.platform.ready()
-        .then(() => this.fingerprint.isAvailable)
-        .then(() => this.fingerprintAuthAvailable = true);
-    }
+      this.platform.ready(() => this.fingerprint.isAvailable
+        .then(() => this.fingerprintAuthAvailable = true));
     super.ionViewWillEnter();
   }
 }

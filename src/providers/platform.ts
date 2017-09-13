@@ -2,6 +2,7 @@ import { Platform } from "ionic-angular";
 import { Injectable } from "@angular/core";
 import { AppConstants } from "../app/app.constants";
 import { Value } from "../decorators/value";
+import * as _ from "lodash";
 
 const Constants = AppConstants();
 
@@ -67,5 +68,13 @@ export class WexPlatform extends Platform {
 
   public constant(constant: PlatformSpecificConstant) {
     return this.isIos ? constant.ios : constant.android;
+  }
+
+  public ready (successCallback?: () => any): Promise<any> {
+    if (!this.isMock) {
+      return super.ready().then(successCallback || _.noop);
+    } else {
+      return Promise.resolve();
+    }
   }
 }

@@ -8,74 +8,74 @@ import { VersionStatusProvider } from "@angular-wex/api-providers";
 import { AppConstants } from "../app/app.constants";
 
 export namespace RequestPlatform {
-    export const Android = "ANDROID";
-    export const iOS = "IOS";
-    export const Mock = "MOCK";
+  export const Android = "ANDROID";
+  export const iOS = "IOS";
+  export const Mock = "MOCK";
 }
 
 @Injectable()
 export class WexAppVersionCheck {
-    @Value("AUTH.client_id") clientId: string;
-    private _status: Observable<VersionStatus>;
-    public get status() {
-        return this._status;
+  @Value("AUTH.client_id") clientId: string;
+  private _status: Observable<VersionStatus>;
+  public get status() {
+    return this._status;
+  }
+  private _versionNumber;
+  public get versionNumber() {
+    return this._versionNumber;
+  }
+  private get platformName(): string {
+    if (this.wexPlatform.isAndroid) {
+      return RequestPlatform.Android;
+    } else if (this.wexPlatform.isIos) {
+      return RequestPlatform.iOS;
+    } else {
+      return RequestPlatform.Mock;
     }
-    private _versionNumber;
-        public get versionNumber() {
-        return this._versionNumber;
-    }
-    private get platformName(): string {
-        if (this.wexPlatform.isAndroid) {
-            return RequestPlatform.Android;
-        } else if (this.wexPlatform.isIos) {
-            return RequestPlatform.iOS;
-        } else {
-            return RequestPlatform.Mock;
-        }
-    }
+  }
 
-    constructor(
-        private appVersion: AppVersion,
-        private wexPlatform: WexPlatform,
-        private versionStatusProvider: VersionStatusProvider
-    ) {
-        this._status = this.checkVersionStatus();
-    }
+  constructor(
+    private appVersion: AppVersion,
+    private wexPlatform: WexPlatform,
+    private versionStatusProvider: VersionStatusProvider
+  ) {
+    this._status = this.checkVersionStatus();
+  }
 
-    private checkVersionStatus(): Observable<VersionStatus> {
-        if (this.wexPlatform.isMock) {
-            return Observable.of(VersionStatus.Supported);
-        } else {
-            return Observable.fromPromise(this.wexPlatform.ready())
-                .flatMap(() => Observable.fromPromise(this.appVersion.getVersionNumber()))
-                .flatMap((versionNumber: string) => {
-                    AppConstants().VERSION_NUMBER = versionNumber;
-                    this._versionNumber = versionNumber;
-                    return this.getStatus(this.versionNumber, this.clientId, this.platformName);
-                });
-        }
+  private checkVersionStatus(): Observable<VersionStatus> {
+    if (this.wexPlatform.isMock) {
+      return Observable.of(VersionStatus.Supported);
+    } else {
+      return Observable.fromPromise(this.wexPlatform
+        .ready(() => Observable.fromPromise(this.appVersion.getVersionNumber())
+            .flatMap((versionNumber: string) => {
+              AppConstants().VERSION_NUMBER = versionNumber;
+              this._versionNumber = versionNumber;
+              return this.getStatus(this.versionNumber, this.clientId, this.platformName);
+      })));
     }
+  }
 
-    private getStatus(versionNumber: string, clientId: string, platform: string): Observable<VersionStatus> {
-        return this.versionStatusProvider
-            .checkVersion({ versionNumber, clientId, platform })
-            .map(statusResponse => statusResponse.status)
-            .publishReplay().refCount();
-    }
+  private getStatus(versionNumber: string, clientId: string, platform: string): Observable<VersionStatus> {
+    return this.versionStatusProvider
+      .checkVersion({ versionNumber, clientId, platform })
+      .map(statusResponse => statusResponse.status)
+      .publishReplay().refCount();
+  }
 
-    public get isSupported(): Observable<boolean> {
-        return this.status
-            .map(status => (status === VersionStatus.Supported));
-    }
+  public get isSupported(): Observable<boolean> {
+    return this.status
+      .map(status => (status === VersionStatus.Supported));
+  }
 
-    public get isDeprecated(): Observable<boolean> {
-        return this.status
-            .map(status => (status === VersionStatus.Deprecated));
-    }
+  public get isDeprecated(): Observable<boolean> {
+    return this.status
+      .map(status => (status === VersionStatus.Deprecated));
+  }
 
-    public get isUnsupported(): Observable<boolean> {
-        return this.status
-            .map(status => (status === VersionStatus.Unsupported));
-    }
+  public get isUnsupported(): Observable<boolean> {
+    return this.status
+      .map(status => (status === VersionStatus.Unsupported));
+  }
 
 }
