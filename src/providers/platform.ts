@@ -5,6 +5,8 @@ import { Value } from "../decorators/value";
 
 const Constants = AppConstants();
 
+export type PlatformSpecificConstant = { android: string, ios: string };
+
 @Injectable()
 export class WexPlatform extends Platform {
 
@@ -61,5 +63,9 @@ export class WexPlatform extends Platform {
     } else {
       return lowercaseAndroid ? this.PLATFORM_BIOMETRIC.android.toLocaleLowerCase() : this.PLATFORM_BIOMETRIC.android;
     }
+  }
+
+  public constant(constant: PlatformSpecificConstant) {
+    return this.isIos ? constant.ios : constant.android;
   }
 }

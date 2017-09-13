@@ -1,7 +1,6 @@
 page-contact-us {
   @include page-background-white();
-
   .button-md {
-    background-color: #1390cf;
+    border-radius: 2px;
   }
 }

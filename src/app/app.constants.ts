@@ -468,7 +468,10 @@ export namespace ConstantsInfo {
         title          : "Contact Us",
         contentHeading : "Do you have a question or comment?",
         content        : "Send us an email, including your name and the name of your business. A representative will respond as soon as possible.",
-        sendEmailButton: "Send Email",
+        sendEmailButton: {
+          android: "Send Email",
+          ios: "Send Us an Email"
+        },
         sendEmailLink  : "mailto:MobileApplications@wexinc.com?subject=Fleet SmartHub version "
       },
 

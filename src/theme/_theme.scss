@@ -79,7 +79,6 @@ ion-icon.icon-ios.tab-button-icon[aria-label*="fa"] {
   // ios button
   &.button-default-ios.button-full-ios {
     border-radius: 3px;
-    background-image: linear-gradient(to right, #21b3fe, #007cbb);
     .button-inner { font-weight: 600; }
   }
 }
@@ -95,7 +94,7 @@ ion-list .item-ios {
   }
 }
 
-ion-item-group {
+ion-item-group.ios-item-indent {
   // .list-header collapsabled
   ion-list-header.list-header-collapsed:not(.list-header-ios) {
     min-height: 0;
