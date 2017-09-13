@@ -88,7 +88,7 @@ import { Network } from "@ionic-native/network";
 import { WexAppVersionCheck } from "../providers/wex-app-version-check";
 import { VersionCheck } from "../pages/login/version-check/version-check";
 import { AppSymbols } from "./app.symbols";
-import { NgIdleModule } from "@ng-idle/core";
+import { NgIdleModule, Idle } from "@ng-idle/core";
 import { Environment } from "../environments/environment";
 import { MockBackend } from "@angular/http/testing";
 import { MockHttp } from "@angular-wex/mocks";
@@ -253,7 +253,8 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     },
     {
       provide: GoogleAnalytics,
-      useClass: WexGoogleAnalyticsEvents
+      useClass: WexGoogleAnalyticsEvents,
+      deps: []
     },
     {
       provide: Http,
@@ -279,7 +280,8 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     WexAppBackButtonController,
     {
       provide: UserIdle,
-      useClass: UserIdle
+      useClass: UserIdle,
+      deps: [SessionManager, Idle, WexNavigationController]
     }
   ]
 })

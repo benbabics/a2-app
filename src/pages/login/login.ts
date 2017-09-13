@@ -2,7 +2,7 @@ import { WexNavBar, WexAppSnackbarController } from "../../components";
 import { Session } from "../../models";
 import * as _ from "lodash";
 import { Component, ViewChild, ElementRef, Injector } from "@angular/core";
-import { NavParams, Platform, Content, NavController, ModalController } from "ionic-angular";
+import { NavParams, Content, NavController, ModalController } from "ionic-angular";
 import { Page } from "../page";
 import { SessionManager, Fingerprint, AuthenticationMethod } from "../../providers";
 import { LocalStorageService } from "angular-2-local-storage/dist";
@@ -15,6 +15,7 @@ import { FingerprintVerificationError } from "../../providers/fingerprint/native
 import { WexAppVersionCheck } from "../../providers/wex-app-version-check";
 import { VersionCheck } from "./version-check/version-check";
 import { NameUtils } from "../../utils/name-utils";
+import { WexPlatform } from "../../providers/platform";
 
 export type LoginPageNavParams = keyof {
   fromLogOut,
@@ -87,7 +88,7 @@ export class LoginPage extends Page {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private platform: Platform,
+    private platform: WexPlatform,
     private sessionManager: SessionManager,
     private fingerprint: Fingerprint,
     private localStorageService: LocalStorageService,
@@ -155,11 +156,10 @@ export class LoginPage extends Page {
 
   private doFingerprintAuthCheck() {
     //enable fingerprint login if there is an existing fingerprint profile for this user
-    return this.platform.ready()
-      .then(() => this.fingerprint.isAvailable)
+    return this.platform.ready(() => this.fingerprint.isAvailable
       .then(() => this.fingerprintAuthAvailable = true)
       .then(() => this.fingerprint.hasProfile(this.user.username))
-      .then(() => this.fingerprintProfileAvailable = true);
+      .then(() => this.fingerprintProfileAvailable = true));
   }
 
   private onKeyboardOpen(event: any) {
