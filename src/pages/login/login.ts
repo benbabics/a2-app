@@ -52,7 +52,7 @@ export class LoginPage extends Page {
     USER_NOT_ACTIVE: "errorInactive",
     AUTHORIZATION_FAILED: "errorAccountNotReady",
     USER_LOCKED: "errorPasswordLocked",
-    DEFAULT: "errorWrongCredentials"
+    UNKNOWN_CAUSE: "errorWrongCredentials"
   };
 
   public fingerprintAuthAvailable: boolean = false;
