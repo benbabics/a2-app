@@ -130,7 +130,7 @@ export class LandingPage extends SecurePage {
     this.fingerprint.hasProfile(this.session.user.details.username)
       .then((hasProfile: boolean) => {
         if (hasProfile && !this.localStorageService.get(Fingerprint.hasShownFingerprintSetupMessageKey)) {
-          this.uiNotificationsController.presentBiomentricProfileSuccessMessage();
+          this.uiNotificationsController.presentFingerprintProfileSuccessMessage();
           this.localStorageService.set(Fingerprint.hasShownFingerprintSetupMessageKey, true);
         }
       }).catch(() => {});

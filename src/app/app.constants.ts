@@ -23,11 +23,20 @@ export namespace ConstantsInfo {
         LAST_TRANSACTION_VIEW: "LAST_TRANSACTION_VIEW"
       }
     },
-    //# OAuth
+    //# Authentication
     AUTH: {
+      BIOMETRIC: {
+        FINGERPRINT: {
+          PLATFORM_NAME: {
+            android: "Fingerprint authentication",
+            ios: "Touch ID"
+          },
+          defaultDialogMessage: "Scan your fingerprint below to enter your account"
+        }
+      },
       client_id: "mobileAccountManagement",
       grant_type: "password",
-      scope: "app_info accounts user:account_management auth_profiles brand_assets cards contact drivers payments:billpay transactions:posted transactions:pending notifications:get notifications:update notifications:delete notifications:unread n:reg accept_touch_id",
+      scope: "app_info accounts user:account_management auth_profiles brand_assets cards contact drivers payments:billpay transactions:posted transactions:pending notifications:get notifications:update notifications:delete notifications:unread n:reg accept_touch_id"
     },
     //# Buttons
     BUTTONS: {
@@ -48,10 +57,6 @@ export namespace ConstantsInfo {
           "UNKNOWN": "Unknown"
         }
       },
-    },
-    PLATFORM_BIOMETRIC: {
-      android: "Fingerprint authentication",
-      ios: "Touch ID"
     },
     //# Global error notifications
     GLOBAL_NOTIFICATIONS: {
@@ -77,10 +82,6 @@ export namespace ConstantsInfo {
       DATE_FORMAT: "MM/DD/YYYY",
       DATE_TIME_FORMAT: "MM/DD/YYYY hh:mm:ss A",
       LOCALE: "en-US"
-    },
-    //# Fingerprint Authentication
-    FINGERPRINT: {
-      defaultDialogMessage: "Scan your fingerprint below to enter your account"
     },
     INFINITE_LIST: {
       DEFAULT_SEARCH_PERIOD: [INT_MAX_32, "y"],
@@ -484,6 +485,12 @@ export namespace ConstantsInfo {
 
       //# Fingerprint Auth Terms Page
       FINGERPRINT_AUTH_TERMS: {
+        ANALYTICS: {
+          EVENTS: {
+            acceptTerms: ["SetUpBiometrics", "AcceptTerms"],
+            declineTerms: ["SetUpBiometrics", "DeclineTerms"]
+          }
+        },
         options: {
           backdropClickToClose: false,
           scopeVars: {

@@ -27,10 +27,10 @@ export class UiNotificationsController {
     private wexAppSnackbarController: WexAppSnackbarController
   ) { }
 
-  public presentBiomentricProfileSuccessMessage() {
+  public presentFingerprintProfileSuccessMessage() {
     this.sessionCache.getSessionDetail(Session.Field.User).subscribe((user: User) => {
       let message = _.template(this.FINGERPRINT_SUCCESS)({
-        platformBiometric: this.platform.biometricTitle(),
+        platformBiometric: this.platform.fingerprintTitle(),
         username: NameUtils.MaskUsername(user.details.username).toUpperCase()
       });
       this.wexAppSnackbarController.create({

@@ -20,7 +20,7 @@ export interface IosFingerprintVerificationOptions extends IFingerprintVerificat
 export namespace IosFingerprintVerificationOptions {
   export const Defaults: Partial<IosFingerprintVerificationOptions> = {
     passwordFallbackMode: FingerprintPassowrdFallbackMode.Default,
-    dialogMessage: Constants.FINGERPRINT.defaultDialogMessage
+    dialogMessage: Constants.AUTH.BIOMETRIC.FINGERPRINT.defaultDialogMessage
   };
 }
 

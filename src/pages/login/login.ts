@@ -31,6 +31,25 @@ export namespace LoginError {
   export const UNAUTHORIZED = "unauthorized";
 }
 
+export type LoginAnalyticsEvent = keyof {
+  errorInactive
+  errorAccountNotReady,
+  errorWrongCredentials,
+  errorPasswordLocked,
+  loginManual,
+  loginBiometric,
+};
+
+export namespace LoginAnalyticsEvent {
+
+  export const ErrorInactive: LoginAnalyticsEvent = "errorInactive";
+  export const ErrorAccountNotReady: LoginAnalyticsEvent = "errorAccountNotReady";
+  export const ErrorWrongCredentials: LoginAnalyticsEvent = "errorWrongCredentials";
+  export const ErrorPasswordLocked: LoginAnalyticsEvent = "errorPasswordLocked";
+  export const LoginManual: LoginAnalyticsEvent = "loginManual";
+  export const LoginBiometric: LoginAnalyticsEvent = "loginBiometric";
+}
+
 declare const cordova: any;
 
 @Component({
@@ -205,7 +224,14 @@ export class LoginPage extends Page {
           let analyticsEvent = this.loginErrorAnalyticsEventMap[errorCode];
 
           if (analyticsEvent) {
-            this.trackAnalyticsEvent(analyticsEvent);
+            let additionalParams = [];
+
+            if (analyticsEvent === LoginAnalyticsEvent.ErrorWrongCredentials) {
+              // Add the appropriate label for the event
+              additionalParams.push(useFingerprintAuth ? "Biometric" : "Manual");
+            }
+
+            this.trackAnalyticsEvent(analyticsEvent, additionalParams);
           }
         });
     }
