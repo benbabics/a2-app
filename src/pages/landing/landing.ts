@@ -10,8 +10,6 @@ import { WexAppBackButtonController } from "../../providers/wex-app-back-button-
 import { NameUtils } from "../../utils/name-utils";
 import { OptionsPage } from "../options/options";
 import { WexPlatform } from "../../providers/platform";
-import { LocalStorageService } from "angular-2-local-storage/dist";
-import { Fingerprint } from "../../providers/fingerprint/fingerprint";
 import { Value } from "../../decorators/value";
 
 @Component({
@@ -75,8 +73,6 @@ export class LandingPage extends SecurePage {
     private appController: App,
     public injector: Injector,
     private wexAppBackButtonController: WexAppBackButtonController,
-    private fingerprint: Fingerprint,
-    private localStorageService: LocalStorageService,
     private uiNotificationsController: UiNotificationsController
   ) {
     super("Landing", injector);

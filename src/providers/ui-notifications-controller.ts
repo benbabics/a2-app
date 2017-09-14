@@ -32,19 +32,22 @@ export class UiNotificationsController {
   ) { }
 
   public presentFingerprintProfileSuccessMessage() {
-    this.sessionCache.getSessionDetail(Session.Field.User).subscribe((user: User) => {
-      this.fingerprint.hasProfile(user.details.username).then((hasProfile: boolean ) => {
-        if (hasProfile && !this.localStorageService.get(Fingerprint.hasShownFingerprintSetupMessageKey)) {
-        let message = _.template(this.FINGERPRINT_SUCCESS)({
-          platformBiometric: this.platform.fingerprintTitle(),
-          username: NameUtils.MaskUsername(user.details.username).toUpperCase()
+    this.platform.ready(() => {
+      this.sessionCache.getSessionDetail(Session.Field.User).subscribe((user: User) => {
+        this.fingerprint.hasProfile(user.details.username).then((hasProfile: boolean) => {
+          if (hasProfile && !this.localStorageService.get(Fingerprint.hasShownFingerprintSetupMessageKey)) {
+            let message = _.template(this.FINGERPRINT_SUCCESS)({
+              platformBiometric: this.platform.fingerprintTitle(),
+              username: NameUtils.MaskUsername(user.details.username).toUpperCase()
+            });
+            this.wexAppSnackbarController.create({
+              message,
+              duration: this.FINGERPRINT_SUCCESS_DURATION
+            }).present();
+            this.localStorageService.set(Fingerprint.hasShownFingerprintSetupMessageKey, true);
+          }
         });
-        this.wexAppSnackbarController.create({
-          message,
-          duration: this.FINGERPRINT_SUCCESS_DURATION
-        }).present();
-        this.localStorageService.set(Fingerprint.hasShownFingerprintSetupMessageKey, true);
-      }});
+      });
     });
   }
 

@@ -64,11 +64,13 @@ export class Fingerprint {
   }
 
   public verify(options: IFingerprintVerificationOptions): Promise<FingerprintProfile|FingerprintVerificationError> {
-    if (!!options.secret) {
-      this.localStorageService.set(Fingerprint.hasShownFingerprintSetupMessageKey, false);
-    }
     options.id = this.getId(options.id);
-    return this.isAvailable.then(() => this.nativeService.verify(options));
+    return this.isAvailable.then(() => this.nativeService.verify(options))
+      .finally(() => {
+      if (!!options.secret) {
+        this.localStorageService.set(Fingerprint.hasShownFingerprintSetupMessageKey, false);
+      }
+    });
   }
 
   private getId(username: string) {
