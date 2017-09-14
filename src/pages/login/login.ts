@@ -4,11 +4,7 @@ import * as _ from "lodash";
 import { Component, ViewChild, ElementRef, Injector } from "@angular/core";
 import { NavParams, Content, NavController, ModalController } from "ionic-angular";
 import { Page } from "../page";
-import {
-  SessionManager,
-  SessionAuthenticationMethod,
-  Fingerprint
-} from "../../providers";
+import { SessionManager, Fingerprint, AuthenticationMethod } from "../../providers";
 import { LocalStorageService } from "angular-2-local-storage/dist";
 import { Value } from "../../decorators/value";
 import { Dialogs } from "@ionic-native/dialogs";
@@ -36,6 +32,25 @@ export namespace LoginError {
   export const UNAUTHORIZED = "unauthorized";
 }
 
+export type LoginAnalyticsEvent = keyof {
+  errorInactive
+  errorAccountNotReady,
+  errorWrongCredentials,
+  errorPasswordLocked,
+  loginManual,
+  loginBiometric,
+};
+
+export namespace LoginAnalyticsEvent {
+
+  export const ErrorInactive: LoginAnalyticsEvent = "errorInactive";
+  export const ErrorAccountNotReady: LoginAnalyticsEvent = "errorAccountNotReady";
+  export const ErrorWrongCredentials: LoginAnalyticsEvent = "errorWrongCredentials";
+  export const ErrorPasswordLocked: LoginAnalyticsEvent = "errorPasswordLocked";
+  export const LoginManual: LoginAnalyticsEvent = "loginManual";
+  export const LoginBiometric: LoginAnalyticsEvent = "loginBiometric";
+}
+
 declare const cordova: any;
 
 @Component({
@@ -51,6 +66,14 @@ export class LoginPage extends Page {
 
   private _onKeyboardOpen = event => this.onKeyboardOpen(event);
   private _onKeyboardClose = () => this.onKeyboardClose();
+
+  // Only server errors explicitly listed in this map will be tracked in analytics.
+  private loginErrorAnalyticsEventMap: { [serverError: string]: string } = {
+    USER_NOT_ACTIVE: "errorInactive",
+    AUTHORIZATION_FAILED: "errorAccountNotReady",
+    USER_LOCKED: "errorPasswordLocked",
+    UNKNOWN_CAUSE: "errorWrongCredentials"
+  };
 
   public fingerprintAuthAvailable: boolean = false;
   public fingerprintProfileAvailable: boolean = false;
@@ -135,7 +158,7 @@ export class LoginPage extends Page {
     //enable fingerprint login if there is an existing fingerprint profile for this user
     return this.platform.ready(() => this.fingerprint.isAvailable
       .then(() => this.fingerprintAuthAvailable = true)
-      .then(() => this.fingerprint.hasProfile(this.user.username.toLowerCase()))
+      .then(() => this.fingerprint.hasProfile(this.user.username))
       .then(() => this.fingerprintProfileAvailable = true));
   }
 
@@ -153,9 +176,9 @@ export class LoginPage extends Page {
     this.titleHeadingBar.nativeElement.style.display = "block";
   }
 
-  private login(setupFingerprintAuth?: boolean) {
+  private login(useFingerprintAuth?: boolean) {
     if (!this.isLoggingIn) {
-      let authenticationMethod = setupFingerprintAuth ? SessionAuthenticationMethod.Fingerprint : SessionAuthenticationMethod.Secret;
+      let authenticationMethod = useFingerprintAuth ? AuthenticationMethod.Fingerprint : AuthenticationMethod.Secret;
 
       this.isLoggingIn = true;
       this.user.username = this.user.username.toLowerCase().trim();
@@ -165,6 +188,13 @@ export class LoginPage extends Page {
         .finally(() => this.isLoggingIn = false)
         .subscribe(() => {
           this.rememberUsername(this.rememberMe, this.user.username);
+
+          if (useFingerprintAuth) {
+            this.trackAnalyticsEvent("loginBiometric");
+          }
+          else {
+            this.trackAnalyticsEvent("loginManual");
+          }
 
           //Transition to the main app
           this.navCtrl.setRoot(WexNavBar, { }, { animate: true, direction: "forward" });
@@ -188,6 +218,20 @@ export class LoginPage extends Page {
               cssClass: "red",
               showCloseButton: true
             }).present();
+          }
+
+          // Check to see if this error maps to a trackable analytics error
+          let analyticsEvent = this.loginErrorAnalyticsEventMap[errorCode];
+
+          if (analyticsEvent) {
+            let additionalParams = [];
+
+            if (analyticsEvent === LoginAnalyticsEvent.ErrorWrongCredentials) {
+              // Add the appropriate label for the event
+              additionalParams.push(useFingerprintAuth ? "Biometric" : "Manual");
+            }
+
+            this.trackAnalyticsEvent(analyticsEvent, additionalParams);
           }
         });
     }
@@ -295,8 +339,8 @@ export class LoginPage extends Page {
     window.removeEventListener("native.keyboardhide", this._onKeyboardClose);
   }
 
-  public onLogin(event: Event, setupFingerprintAuth?: boolean) {
-    this.login(setupFingerprintAuth);
+  public onLogin(event: Event, useFingerprintAuth?: boolean) {
+    this.login(useFingerprintAuth);
 
     event.preventDefault();
   }

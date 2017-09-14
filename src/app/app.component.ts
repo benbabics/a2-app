@@ -35,7 +35,7 @@ export class MyApp {
       splashScreen.hide();
 
       if (this.platform.isDevMode) {
-        sessionManager.restore();
+        sessionManager.restoreFromDevAuthToken();
       }
     });
 

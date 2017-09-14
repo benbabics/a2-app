@@ -1,5 +1,5 @@
 import { WexAppSnackbarController } from "./../../components/wex-app-snackbar-controller/wex-app-snackbar-controller";
-import { NavBarController } from "../../providers";
+import { NavBarController, UiNotificationsController } from "../../providers";
 import { Component, Injector } from "@angular/core";
 import { NavController, NavParams, ToastOptions, App } from "ionic-angular";
 import { InvoiceSummary, CompanyStub } from "@angular-wex/models";
@@ -76,7 +76,8 @@ export class LandingPage extends SecurePage {
     public injector: Injector,
     private wexAppBackButtonController: WexAppBackButtonController,
     private fingerprint: Fingerprint,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private uiNotificationsController: UiNotificationsController
   ) {
     super("Landing", injector);
   }
@@ -104,7 +105,7 @@ export class LandingPage extends SecurePage {
 
   ionViewWillEnter() {
     //don't pre-fetch the data for this page to allow for dynamic in-page loading
-    this.sessionManager.cache.getSessionDetails(this.REQUIRED_SESSION_FIELDS)
+    this.sessionCache.getSessionDetails(this.REQUIRED_SESSION_FIELDS)
       .subscribe((session: Session) => {
         this.session = session;
 
@@ -129,7 +130,7 @@ export class LandingPage extends SecurePage {
     this.fingerprint.hasProfile(this.session.user.details.username)
       .then((hasProfile: boolean) => {
         if (hasProfile && !this.localStorageService.get(Fingerprint.hasShownFingerprintSetupMessageKey)) {
-          this.sessionManager.presentBiomentricProfileSuccessMessage();
+          this.uiNotificationsController.presentFingerprintProfileSuccessMessage();
           this.localStorageService.set(Fingerprint.hasShownFingerprintSetupMessageKey, true);
         }
       }).catch(() => {});

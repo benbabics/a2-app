@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { Fingerprint } from "../../providers/";
+import { Fingerprint, UiNotificationsController } from "../../providers/";
 import { Session } from "../../models/";
 import { Value } from "../../decorators/value";
 import { ChangeDetectorRef, Injector } from "@angular/core";
@@ -13,7 +13,7 @@ import { NameUtils } from "../../utils/name-utils";
 export abstract class FingerprintController extends SecurePage {
 
   @Value("BUTTONS") private readonly BUTTONS: any;
-  FINGERPRINT_CONSTANTS = AppConstants().PAGES.OPTIONS.FINGERPRINT_SETTINGS;
+  private FINGERPRINT_CONSTANTS = AppConstants().PAGES.OPTIONS.FINGERPRINT_SETTINGS;
 
 
   public fingerprintAuthAvailable: boolean = false;
@@ -22,6 +22,7 @@ export abstract class FingerprintController extends SecurePage {
   private dialogs: Dialogs;
   private cdRef: ChangeDetectorRef;
   private wexAppSnackbarController: WexAppSnackbarController;
+  private uiNotificationsController: UiNotificationsController;
   public platform: WexPlatform;
 
   constructor(pageName: string, injector: Injector) {
@@ -31,6 +32,7 @@ export abstract class FingerprintController extends SecurePage {
     this.cdRef = injector.get(ChangeDetectorRef);
     this.wexAppSnackbarController = injector.get(WexAppSnackbarController);
     this.platform = injector.get(WexPlatform);
+    this.uiNotificationsController = injector.get(UiNotificationsController);
   }
 
   public get enableFingerprintAuthToggle(): boolean {
@@ -57,37 +59,30 @@ export abstract class FingerprintController extends SecurePage {
   }
 
   ionViewWillEnter() {
-      this.platform.ready(() => this.fingerprint.hasProfile(this.session.user.details.username.toLowerCase())
+      this.platform.ready(() => this.fingerprint.hasProfile(this.session.user.details.username)
         .then(() => this.fingerprintProfileAvailable = true)
         .catch(() => { }));
   }
 
 
   private createFingerprintProfile(): Promise<any> {
-    let id = this.session.user.details.username.toLowerCase(),
-      secret = this.session.clientSecret;
-
-    return new Promise((resolve, reject) => {
-      this.sessionManager.promptFingerprintTerms().subscribe(hasAccepted => {
+    return this.uiNotificationsController
+      .promptFingerprintTerms()
+      .toPromise()
+      .then((hasAccepted) => {
         if (hasAccepted) {
-          this.fingerprint.verify({ id, secret })
-            .then(() => {
-              resolve();
-              this.sessionManager.presentBiomentricProfileSuccessMessage();
-            })
-            .catch(() => reject());
-        }
+          let id = this.session.user.details.username;
+          let secret = this.session.clientSecret;
 
-        else {
-          reject();
+          return this.fingerprint.verify({ id, secret })
+            .then(() => this.uiNotificationsController.presentFingerprintProfileSuccessMessage());
         }
       });
-    });
   }
 
 
   private destroyFingerprintProfile(): Promise<boolean> {
-    let id = this.session.user.details.username.toLowerCase();
+    let id = this.session.user.details.username;
 
     return this.displayDestroyProfileDialog(id).then((shouldClear: boolean) => {
       if (shouldClear) { this.fingerprint.clearProfile(id); }
@@ -99,7 +94,7 @@ export abstract class FingerprintController extends SecurePage {
   private displayDestroyProfileDialog(username: string): Promise<boolean> {
     let message = _.template(this.FINGERPRINT_CONSTANTS.destroyFingerprintProfileConfirmMessage)({
       username: NameUtils.MaskUsername(username.toLocaleUpperCase()),
-      fingerprintAuthName: this.platform.biometricTitle(true)
+      fingerprintAuthName: this.platform.fingerprintTitle(true)
     });
 
     return this.dialogs.confirm(message, "", [this.BUTTONS.YES, this.BUTTONS.NO])

@@ -2,13 +2,18 @@ import { Injectable } from "@angular/core";
 import { Idle, DEFAULT_INTERRUPTSOURCES } from "@ng-idle/core";
 import { Value } from "../decorators/value";
 import { SessionManager } from "./session-manager";
+import { WexNavigationController } from "./wex-navigation-controller";
 
 @Injectable()
 export class UserIdle {
 
   @Value("USER_IDLE") private readonly CONSTANTS;
 
-  constructor(private idle: Idle, private sessionManager: SessionManager) {
+  constructor(
+    sessionManager: SessionManager,
+    private idle: Idle,
+    private wexNavigationController: WexNavigationController
+  ) {
     this.configureTimeout();
 
     sessionManager.sessionStateObserver.subscribe(session => this.onSessionChange(session));
@@ -18,7 +23,7 @@ export class UserIdle {
     this.idle.setIdle(1);
     this.idle.setTimeout(this.CONSTANTS.TIMEOUT_DURATION);
     this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
-    this.idle.onTimeout.subscribe(() => this.sessionManager.logout({ "fromTimeout": true }));
+    this.idle.onTimeout.subscribe(() => this.wexNavigationController.logout({ "fromTimeout": true }));
   }
 
   private onSessionChange(session: boolean) {

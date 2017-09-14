@@ -23,7 +23,7 @@ export interface AndroidFingerprintVerificationOptions extends IFingerprintVerif
 export namespace AndroidFingerprintVerificationOptions {
   export const Defaults: Partial<AndroidFingerprintVerificationOptions> = {
     passwordFallbackMode: FingerprintPassowrdFallbackMode.Default,
-    dialogMessage: Constants.FINGERPRINT.defaultDialogMessage
+    dialogMessage: Constants.AUTH.BIOMETRIC.FINGERPRINT.defaultDialogMessage
   };
 }
 

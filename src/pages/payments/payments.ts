@@ -45,7 +45,7 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   private canMakePayment(): Promise<MakePaymentAvailability | undefined> {
     this.checkingMakePaymentAvailability = true;
 
-    return this.sessionManager.cache.getSessionDetail(Session.Field.MakePaymentAvailability, { forceRequest: true })
+    return this.sessionCache.getSessionDetail(Session.Field.MakePaymentAvailability, { forceRequest: true })
       .toPromise()
       .then((availability: MakePaymentAvailability) => {
         if (!availability.details.makePaymentAllowed) {
@@ -56,7 +56,7 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   }
 
   protected fetch(options?: FetchOptions): Observable<Payment[]> {
-    return this.sessionManager.cache.getSessionDetail(Session.Field.Payments, options);
+    return this.sessionCache.getSessionDetail(Session.Field.Payments, options);
   }
 
   protected groupItems(payments: Payment[]): GroupedList<Payment> {
