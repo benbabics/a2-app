@@ -29,7 +29,7 @@ export namespace LoginPageNavParams {
 
 export namespace LoginError {
   export const PASSWORD_CHANGED = "PASSWORD_CHANGED";
-  export const UNAUTHORIZED = "unauthorized";
+  export const UNKNOWN_CAUSE = "UNKNOWN_CAUSE";
 }
 
 export type LoginAnalyticsEvent = keyof {
@@ -201,38 +201,39 @@ export class LoginPage extends Page {
           this.navCtrl.setRoot(WexNavBar, { }, { animate: true, direction: "forward" });
         }, (error: Response) => {
           let errorCode: string = error instanceof Response ? error.json().error_description : error;
-
           let fingerprintVerificationError: FingerprintVerificationError = error instanceof Response ? error.json().error : error;
+
           console.error(fingerprintVerificationError);
 
-           if (this.fingerprintProfileAvailable && errorCode === LoginError.UNAUTHORIZED) {
+          /* NOTE: This is disabled until we fix the SmartHub authentication issue.
+          // Clear the user's fingerprint profile if their password changed online
+          if (this.fingerprintProfileAvailable && errorCode === LoginError.UNKNOWN_CAUSE) {
             errorCode = LoginError.PASSWORD_CHANGED;
 
-            let id = this.user.username.toLowerCase();
-            this.fingerprint.clearProfile(id);
+            this.fingerprint.clearProfile(this.user.username);
             this.fingerprintProfileAvailable = false;
-          }
+          }*/
 
-          if (!fingerprintVerificationError.userCanceled) {
+          if (!fingerprintVerificationError.userCanceled && !fingerprintVerificationError.exceededAttempts) {
             this.appSnackbarController.createQueued({
               message: this.getLoginErrorDisplayText(errorCode),
               cssClass: "red",
               showCloseButton: true
             }).present();
-          }
 
-          // Check to see if this error maps to a trackable analytics error
-          let analyticsEvent = this.loginErrorAnalyticsEventMap[errorCode];
+            // Check to see if this error maps to a trackable analytics error
+            let analyticsEvent = this.loginErrorAnalyticsEventMap[errorCode];
 
-          if (analyticsEvent) {
-            let additionalParams = [];
+            if (analyticsEvent) {
+              let additionalParams = [];
 
-            if (analyticsEvent === LoginAnalyticsEvent.ErrorWrongCredentials) {
-              // Add the appropriate label for the event
-              additionalParams.push(useFingerprintAuth ? "Biometric" : "Manual");
+              if (analyticsEvent === LoginAnalyticsEvent.ErrorWrongCredentials) {
+                // Add the appropriate label for the event
+                additionalParams.push(useFingerprintAuth ? "Biometric" : "Manual");
+              }
+
+              this.trackAnalyticsEvent(analyticsEvent, additionalParams);
             }
-
-            this.trackAnalyticsEvent(analyticsEvent, additionalParams);
           }
         });
     }
