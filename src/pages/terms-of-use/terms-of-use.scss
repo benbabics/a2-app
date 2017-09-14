@@ -1,5 +1,3 @@
 page-terms-of-use {
-  &.ion-page > ion-content {
-    background: color($colors, white);
-  }
+  @include page-background-white();
 }

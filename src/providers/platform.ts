@@ -6,11 +6,13 @@ import * as _ from "lodash";
 
 const Constants = AppConstants();
 
+export type PlatformSpecificConstant = { android: string, ios: string };
+
 @Injectable()
 export class WexPlatform extends Platform {
 
   @Value("IONIC_APP_ID") private IONIC_APP_ID: string;
-  @Value("AUTH.BIOMETRIC.FINGERPRINT.PLATFORM_NAME") private PLATFORM_FINGERPRINT: { android: string, ios: string };
+  @Value("AUTH.BIOMETRIC.FINGERPRINT.PLATFORM_NAME") private PLATFORM_FINGERPRINT: PlatformSpecificConstant;
   private static readonly DEV_MODE_REGEX: RegExp = /[?&]dev/;
   private static readonly MOCK_REGEX: RegExp = /^http(s?):\/\//;
 
@@ -62,6 +64,10 @@ export class WexPlatform extends Platform {
     } else {
       return lowercaseAndroid ? this.PLATFORM_FINGERPRINT.android.toLocaleLowerCase() : this.PLATFORM_FINGERPRINT.android;
     }
+  }
+
+  public constant(constant: PlatformSpecificConstant) {
+    return this.isIos ? constant.ios : constant.android;
   }
 
   public ready (successCallback?: () => void | PromiseLike<any>): Promise<any> {

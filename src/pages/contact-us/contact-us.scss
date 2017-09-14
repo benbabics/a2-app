@@ -1,5 +1,6 @@
 page-contact-us {
-  &.ion-page > ion-content {
-    background: color($colors, white);
+  @include page-background-white();
+  .button-md {
+    border-radius: 2px;
   }
 }

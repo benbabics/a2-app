@@ -35,7 +35,7 @@ $colors: (
   danger-dark:   #a25050,
   light:         #424242,
   dark:          #222,
-  
+
   white:       #fff,
   black:       #000,
   dark-gray:     #444,
@@ -87,6 +87,12 @@ $item-md-detail-push-show: false;
 // Any style overrides to the default theme should go in this file.
 
 @import "theme";
+
+@mixin page-background-white {
+  @at-root .app-root &.ion-page > ion-content {
+    background: color($colors, white);
+  }
+}
 
 .ios {
   .ion-page ion-content {

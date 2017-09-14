@@ -1,6 +1,7 @@
 import { Component, Injector } from "@angular/core";
 import { Page } from "../page";
 import { Value } from "../../decorators/value";
+import { WexPlatform } from "../../providers/platform";
 
 @Component({
   selector: "page-contact-us",
@@ -12,7 +13,7 @@ export class ContactUsPage extends Page {
     return this.CONSTANTS.sendEmailLink + this.VERSION_NUMBER;
   }
 
-  constructor(injector: Injector) {
+  constructor(public platform: WexPlatform, injector: Injector) {
     super("Contact Us", injector);
   }
 }

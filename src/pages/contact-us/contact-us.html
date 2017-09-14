@@ -12,9 +12,10 @@
         <p>
             {{ CONSTANTS.content }}
         </p>
+        <br>
         <p class="align_center">
-            <a ion-button full [href]="sendEmailLink">
-                <span id="sendEmail">{{ CONSTANTS.sendEmailButton }}</span>
+            <a ion-button class="button-gradient" full [href]="sendEmailLink">
+                <span id="sendEmail">{{ platform.constant(CONSTANTS.sendEmailButton) }}</span>
             </a>
         </p>
     </div>

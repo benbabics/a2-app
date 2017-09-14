@@ -103,7 +103,7 @@ export class LoginPage extends Page {
   }
 
   public get fingerprintDisabledLabel(): string {
-    return this.resolvePlatformConstant(this.CONSTANTS.touchId.disabled.label);
+    return this.platform.constant(this.CONSTANTS.touchId.disabled.label);
   }
 
   public get maskableUsername(): string {
@@ -252,7 +252,7 @@ export class LoginPage extends Page {
 
   private showUserSettingsPopup(): Promise<any> {
     return this.dialogs.confirm(
-      this.resolvePlatformConstant(this.CONSTANTS.touchId.settingsPrompt.message),
+      this.platform.constant(this.CONSTANTS.touchId.settingsPrompt.message),
       this.CONSTANTS.touchId.settingsPrompt.title, [
         this.CONSTANTS.touchId.settingsPrompt.buttons.settings,
         this.CONSTANTS.touchId.settingsPrompt.buttons.cancel
@@ -348,7 +348,7 @@ export class LoginPage extends Page {
   public verifyFingerprintRemoval(): Promise<void> {
     if (this.fingerprintProfileAvailable) {
       return this.dialogs.confirm(
-        this.resolvePlatformConstant(this.CONSTANTS.touchId.warningPrompt.message),
+        this.platform.constant(this.CONSTANTS.touchId.warningPrompt.message),
         this.CONSTANTS.touchId.warningPrompt.title, [
           this.CONSTANTS.touchId.warningPrompt.buttons.ok,
           this.CONSTANTS.touchId.warningPrompt.buttons.cancel
