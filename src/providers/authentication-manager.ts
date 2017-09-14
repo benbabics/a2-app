@@ -59,7 +59,8 @@ export class AuthenticationManager {
     // Request a token with the provided username and secret
     return secret
       .map((secret: string) => SessionCache.cachedValues.clientSecret = secret)
-      .flatMap((secret: string) => this.authProvider.requestToken({ username: userCredentials.username, password: secret }));
+      .flatMap((secret: string) => this.authProvider.requestToken({ username: userCredentials.username, password: secret }))
+      .map((token: string) => this.devAuthToken = SessionCache.cachedValues.token = token);
   }
 
   public set devAuthToken(token: string) {

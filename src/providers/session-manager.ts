@@ -52,9 +52,6 @@ export class SessionManager {
     // Request a new token
     return this.authenticationManager.authenticate(userCredentials, options.authenticationMethod)
       .map((token: string) => {
-        SessionCache.cachedValues.token = token;
-        this.authenticationManager.devAuthToken = token;
-
         this._sessionStateObserver.next(true);
 
         // Pre-fetch remaining session details in the background asynchronously

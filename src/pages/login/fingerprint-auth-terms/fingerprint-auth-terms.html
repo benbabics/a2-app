@@ -8,10 +8,10 @@
     <div class="terms" [innerHtml]="terms"></div>
 
     <ion-footer padding>
-        <button (click)="response(false)" [color]="!platform.isIos ? 'white' : ''    " ion-button [outline]="platform.isIos">
+        <button ion-button [color]="platform.isIos ? '' : 'white'" [outline]="platform.isIos" (click)="response(false)">
             <span>{{ CONSTANTS.options.scopeVars.CONFIG.BUTTONS.DECLINE }}</span>
         </button>
-        <button class="button-gradient" (click)="response(true)" ion-button>
+        <button ion-button class="button-gradient" (click)="response(true)">
             <span>{{ CONSTANTS.options.scopeVars.CONFIG.BUTTONS.ACCEPT }}</span>
         </button>
     </ion-footer>

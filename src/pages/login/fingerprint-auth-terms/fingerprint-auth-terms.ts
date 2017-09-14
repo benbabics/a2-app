@@ -2,6 +2,8 @@ import { Component, Injector } from "@angular/core";
 import { Page } from "../../page";
 import { ViewController } from "ionic-angular";
 import { WexPlatform } from "../../../providers";
+import { FingerprintLogProvider } from "@angular-wex/api-providers";
+import { Observable } from "rxjs";
 
 @Component({
   selector: "modal-fingerprint-auth-terms",
@@ -13,6 +15,7 @@ export class FingerprintAuthenticationTermsPage extends Page {
   constructor(
     public platform: WexPlatform,
     private viewControl: ViewController,
+    private fingerprintLogProvider: FingerprintLogProvider,
     injector: Injector
   ) {
     super("Fingerprint Auth Terms", injector);
@@ -27,8 +30,22 @@ export class FingerprintAuthenticationTermsPage extends Page {
   }
 
   public response(accepted: boolean) {
+    // If the call to the server fails, don't let the user setup fingerprint auth
+    this.trackResponse(accepted).subscribe(
+      null,
+      () => this.viewControl.dismiss(false),
+      () => this.viewControl.dismiss(accepted)
+    );
+  }
+
+  private trackResponse(accepted: boolean): Observable<any> {
     this.trackAnalyticsEvent(accepted ? "acceptTerms" : "declineTerms");
 
-    this.viewControl.dismiss(accepted);
+    if (accepted) {
+      return this.fingerprintLogProvider.logAcceptance();
+    }
+    else {
+      return Observable.empty();
+    }
   }
 }
