@@ -38,7 +38,7 @@
         "serve:www": "http-server www"
     },
     "dependencies": {
-        "@angular-wex/api-providers": "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-api-providers.git#e8b7f16",
+        "@angular-wex/api-providers": "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-api-providers.git#a9d2eda898c",
         "@angular-wex/mocks": "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-mocks.git#f0744f5e49a",
         "@angular-wex/models": "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-models.git#49d543791b6",
         "@angular-wex/validators": "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-validators.git#5cae222933a",
