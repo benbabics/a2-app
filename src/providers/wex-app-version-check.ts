@@ -5,7 +5,7 @@ import { Value } from "../decorators/value";
 import { VersionStatus } from "@angular-wex/models";
 import { WexPlatform } from "./platform";
 import { VersionStatusProvider } from "@angular-wex/api-providers";
-import { AppConstants } from "../app/app.constants";
+import { ConstantsInfo } from "../app/app.constants";
 
 export namespace RequestPlatform {
   export const Android = "ANDROID";
@@ -24,7 +24,7 @@ export class WexAppVersionCheck {
   }
 
   public get versionNumber(): string {
-    return AppConstants().VERSION_NUMBER;
+    return ConstantsInfo.Common.VERSION_NUMBER;
   }
 
   private get platformName(): string {
@@ -50,7 +50,7 @@ export class WexAppVersionCheck {
       return Observable.of(VersionStatus.Supported);
     } else {
       return Observable.fromPromise(this.wexPlatform.ready(() => this.appVersion.getVersionNumber()))
-        .map((versionNumber: string) => AppConstants().VERSION_NUMBER = versionNumber)
+        .map((versionNumber: string) => ConstantsInfo.Common.VERSION_NUMBER = versionNumber)
         .flatMap((versionNumber: string) => this.getStatus(versionNumber, this.clientId, this.platformName));
     }
   }
