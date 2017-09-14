@@ -126,14 +126,7 @@ export class LandingPage extends SecurePage {
   ionViewDidEnter() {
     this.isCurrentView = true;
     this.registerBackButton();
-
-    this.fingerprint.hasProfile(this.session.user.details.username)
-      .then((hasProfile: boolean) => {
-        if (hasProfile && !this.localStorageService.get(Fingerprint.hasShownFingerprintSetupMessageKey)) {
-          this.uiNotificationsController.presentFingerprintProfileSuccessMessage();
-          this.localStorageService.set(Fingerprint.hasShownFingerprintSetupMessageKey, true);
-        }
-      }).catch(() => {});
+    this.uiNotificationsController.presentFingerprintProfileSuccessMessage();
   }
 
   ionViewWillLeave() {
