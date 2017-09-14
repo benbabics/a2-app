@@ -68,12 +68,13 @@ export class LoginPage extends Page {
   private _onKeyboardClose = () => this.onKeyboardClose();
 
   // Only server errors explicitly listed in this map will be tracked in analytics.
-  private loginErrorAnalyticsEventMap: { [serverError: string]: string } = {
+  private readonly loginErrorAnalyticsEventMap: { [serverError: string]: string } = {
     USER_NOT_ACTIVE: "errorInactive",
     AUTHORIZATION_FAILED: "errorAccountNotReady",
     USER_LOCKED: "errorPasswordLocked",
     UNKNOWN_CAUSE: "errorWrongCredentials"
   };
+  private resumeSubscription: any;
 
   public fingerprintAuthAvailable: boolean = false;
   public fingerprintProfileAvailable: boolean = false;
@@ -319,6 +320,14 @@ export class LoginPage extends Page {
           this.showUserSettingsPopup().finally(() => this.doFingerprintAuthCheck());
         }
       });
+
+    // Show the fingerprint prompt on resume if fingerprint enabled
+    // NOTE: We need to set a timeout or the fingerprint plugin will get invalid finerprint errors
+    this.resumeSubscription = this.platform.resume.subscribe(() => setTimeout(() => {
+      if (this.fingerprintProfileAvailable) {
+        this.login(true);
+      }
+    }, 500));
   }
 
   ionViewDidEnter() {
@@ -337,6 +346,10 @@ export class LoginPage extends Page {
 
     window.removeEventListener("native.keyboardshow", this._onKeyboardOpen);
     window.removeEventListener("native.keyboardhide", this._onKeyboardClose);
+
+    if (this.resumeSubscription) {
+      this.resumeSubscription.unsubscribe();
+    }
   }
 
   public onLogin(event: Event, useFingerprintAuth?: boolean) {
