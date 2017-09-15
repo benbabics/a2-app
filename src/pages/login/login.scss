@@ -73,6 +73,11 @@ page-login {
         color: white;
       }
 
+      ion-input > input[disabled] {
+        color: white;
+        opacity: 1;
+      }
+
       @at-root .ios & .item-label-floating ion-label {
         font-weight: bold;
       }
