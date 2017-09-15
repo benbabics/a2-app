@@ -23,4 +23,8 @@ page-payments {
       @include action-indicator-color(color($colors, primary));
     }
   }
+  //fixes stupid extra pixel on top of page
+  .list-header-md {
+    border-top-width: 0px;
+  }
 }

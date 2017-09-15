@@ -4,6 +4,7 @@ import { Injectable } from "@angular/core";
 import { SessionManager } from "./session-manager";
 import { Session } from "../models";
 import { User } from "@angular-wex/models";
+import { PlatformReady } from "../decorators/platform-ready";
 
 @Injectable()
 export class WexGoogleAnalyticsEvents extends GoogleAnalytics {
@@ -31,6 +32,7 @@ export class WexGoogleAnalyticsEvents extends GoogleAnalytics {
     });
   }
 
+  @PlatformReady(GoogleAnalytics)
   public setUserId(userId: string): Promise<any> {
     if (this.hasTrackingId) {
       return super.setUserId(userId).then(() => super.addCustomDimension(this.USER_ID_DIMENSION, userId));
@@ -40,10 +42,13 @@ export class WexGoogleAnalyticsEvents extends GoogleAnalytics {
     }
   }
 
+  @PlatformReady(GoogleAnalytics)
   public trackView(view: string): Promise<any> {
+    console.log("Track view has been called successfully.");
     return this.hasTrackingId ? super.trackView(view) : Promise.resolve();
   }
 
+  @PlatformReady(GoogleAnalytics)
   public trackEvent(category: string, action: string, label?: string, value?: number, newSession?: boolean): Promise<any> {
     return this.hasTrackingId ? super.trackEvent(category, action, label, value, newSession) : Promise.resolve();
   }
