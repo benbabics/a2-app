@@ -216,8 +216,6 @@ export class LoginPage extends Page {
           if (!fingerprintVerificationError.userCanceled) {
             this.appSnackbarController.createQueued({
               message: this.getLoginErrorDisplayText(errorCode),
-              cssClass: "red",
-              showCloseButton: true
             }).present();
           }
 
