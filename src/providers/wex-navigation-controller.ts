@@ -13,7 +13,7 @@ export class WexNavigationController {
   ) { }
 
   public logout(params?: any) {
-    this.app.getRootNav().setRoot(this.rootPage, params, { animate: true, direction: "back" })
+    this.app.getRootNav().setRoot(this.rootPage, params, { animate: true, direction: "forward" })
       .then(() => this.sessionManager.invalidateSession());
   }
 }
