@@ -44,7 +44,6 @@ export class WexGoogleAnalyticsEvents extends GoogleAnalytics {
 
   @PlatformReady(GoogleAnalytics)
   public trackView(view: string): Promise<any> {
-    console.log("Track view has been called successfully.");
     return this.hasTrackingId ? super.trackView(view) : Promise.resolve();
   }
 
