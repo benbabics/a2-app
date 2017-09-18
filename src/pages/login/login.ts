@@ -157,10 +157,10 @@ export class LoginPage extends Page {
 
   private doFingerprintAuthCheck() {
     //enable fingerprint login if there is an existing fingerprint profile for this user
-    return this.platform.ready(() => this.fingerprint.isAvailable
+    return this.fingerprint.isAvailable
       .then(() => this.fingerprintAuthAvailable = true)
       .then(() => this.fingerprint.hasProfile(this.user.username))
-      .then(() => this.fingerprintProfileAvailable = true));
+      .then(() => this.fingerprintProfileAvailable = true);
   }
 
   private onKeyboardOpen(event: any) {

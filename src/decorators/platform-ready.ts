@@ -9,7 +9,7 @@ const platform: () => WexPlatform = () => MyApp.injector.get(WexPlatform);
   * If the provider in the ngModule is a { provide: class, use: class }, $class should be the provide class
   */
 export function PlatformReady ($class?: any) {
-  return function(target: any, key: string, descriptor: TypedPropertyDescriptor<(...args) => any>) {
+  return function(target: any, key: string, descriptor: TypedPropertyDescriptor<any>) {
         key;
         const $this = () => MyApp.injector.get($class || target.constructor);
 

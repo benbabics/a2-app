@@ -46,13 +46,10 @@ export class WexAppVersionCheck {
   }
 
   private checkVersionStatus(): Observable<VersionStatus> {
-    if (this.wexPlatform.isMock) {
-      return Observable.of(VersionStatus.Supported);
-    } else {
-      return Observable.fromPromise(this.wexPlatform.ready(() => this.appVersion.getVersionNumber()))
-        .map((versionNumber: string) => ConstantsInfo.Common.VERSION_NUMBER = versionNumber)
-        .flatMap((versionNumber: string) => this.getStatus(versionNumber, this.clientId, this.platformName));
-    }
+    return Observable.fromPromise(this.wexPlatform.ready(() => this.appVersion.getVersionNumber()))
+      .map((versionNumber: string) => ConstantsInfo.Common.VERSION_NUMBER = versionNumber)
+      .flatMap((versionNumber: string) => this.getStatus(versionNumber, this.clientId, this.platformName))
+      .catch(() => Observable.of(VersionStatus.Supported));
   }
 
   private getStatus(versionNumber: string, clientId: string, platform: string): Observable<VersionStatus> {
