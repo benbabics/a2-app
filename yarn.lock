@@ -2,25 +2,25 @@
 # yarn lockfile v1
 
 
-"@angular-wex/api-providers@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-api-providers.git#a9d2eda898c":
-  version "1.3.12"
-  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-api-providers.git#a9d2eda898c3f58dd9c9f213b73cda0fb52f8ad1"
+"@angular-wex/api-providers@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-api-providers.git#204ef8c173f":
+  version "1.3.13"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-api-providers.git#204ef8c173fee22b452d615503c0a5b2991b0c02"
 
-"@angular-wex/api-providers@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-api-providers.git#e8b7f16":
-  version "1.3.1-2.alpha-3"
-  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-api-providers.git#e8b7f16e093ace9e9221db608aa78195a36c12b8"
+"@angular-wex/mocks@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-mocks.git#b6c9280b19b":
+  version "1.2.2"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-mocks.git#b6c9280b19b620b8ecc62e4a19f6f52eb9a8bb14"
 
-"@angular-wex/mocks@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-mocks.git#f0744f5e49a":
-  version "1.2.1"
-  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-mocks.git#f0744f5e49a"
+"@angular-wex/models@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-models.git#bd95e993074":
+  version "1.4.6"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-models.git#bd95e993074c1b276432a15ce8a13c48a6196704"
 
-"@angular-wex/models@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-models.git#49d543791b6":
-  version "1.4.5"
-  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-models.git#49d543791b6"
+"@angular-wex/tslint-rules@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-tslint-rules.git#2a1e4977656":
+  version "1.0.0-alpha"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-tslint-rules.git#2a1e4977656f1f3e8d9576fc82ca8f3bf58036b3"
 
-"@angular-wex/validators@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-validators.git#5cae222933a":
-  version "1.1.7"
-  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-validators.git#5cae222933a"
+"@angular-wex/validators@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-validators.git#bc88b1fc475":
+  version "1.1.8"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-validators.git#bc88b1fc475b740f1b19abd084d329f5ec18040b"
 
 "@angular/animations@4.1.3":
   version "4.1.3"
@@ -2969,6 +2969,10 @@ json5@^0.5.0, json5@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/json5/-/json5-0.5.1.tgz#1eade7acc012034ad84e2396767ead9fa5495821"
 
+json@^9.0.6:
+  version "9.0.6"
+  resolved "https://registry.yarnpkg.com/json/-/json-9.0.6.tgz#7972c2a5a48a42678db2730c7c2c4ee6e4e24585"
+
 jsonfile@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/jsonfile/-/jsonfile-3.0.1.tgz#a5ecc6f65f53f662c4415c7675a0331d0992ec66"
@@ -4994,7 +4998,15 @@ tslib@^1.0.0, tslib@^1.7.1:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.7.1.tgz#bc8004164691923a79fe8378bbeb3da2017538ec"
 
-tslint, tslint@^5.5.0:
+tslint-eslint-rules@4.1.1, tslint-eslint-rules@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/tslint-eslint-rules/-/tslint-eslint-rules-4.1.1.tgz#7c30e7882f26bc276bff91d2384975c69daf88ba"
+  dependencies:
+    doctrine "^0.7.2"
+    tslib "^1.0.0"
+    tsutils "^1.4.0"
+
+tslint@^5.5.0, tslint@^5.6.0:
   version "5.6.0"
   resolved "https://registry.yarnpkg.com/tslint/-/tslint-5.6.0.tgz#088aa6c6026623338650b2900828ab3edf59f6cf"
   dependencies:
@@ -5008,14 +5020,6 @@ tslint, tslint@^5.5.0:
     semver "^5.3.0"
     tslib "^1.7.1"
     tsutils "^2.7.1"
-
-tslint-eslint-rules@4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/tslint-eslint-rules/-/tslint-eslint-rules-4.1.1.tgz#7c30e7882f26bc276bff91d2384975c69daf88ba"
-  dependencies:
-    doctrine "^0.7.2"
-    tslib "^1.0.0"
-    tsutils "^1.4.0"
 
 tsutils@^1.4.0:
   version "1.9.1"
