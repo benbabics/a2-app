@@ -9,10 +9,12 @@ import { WexAppSnackbarController } from "../../components";
 import { AppConstants } from "../../app/app.constants";
 import { WexPlatform } from "../../providers/platform";
 import { NameUtils } from "../../utils/name-utils";
+import { LocalStorageService } from "angular-2-local-storage/dist";
 
 export abstract class FingerprintController extends SecurePage {
 
   @Value("BUTTONS") private readonly BUTTONS: any;
+  @Value("STORAGE.KEYS.USERNAME") private readonly USERNAME_KEY: string;
   private FINGERPRINT_CONSTANTS = AppConstants().PAGES.OPTIONS.FINGERPRINT_SETTINGS;
 
 
@@ -23,6 +25,7 @@ export abstract class FingerprintController extends SecurePage {
   private cdRef: ChangeDetectorRef;
   private wexAppSnackbarController: WexAppSnackbarController;
   private uiNotificationsController: UiNotificationsController;
+  private localStorageService: LocalStorageService;
   public platform: WexPlatform;
 
   constructor(pageName: string, injector: Injector) {
@@ -33,6 +36,7 @@ export abstract class FingerprintController extends SecurePage {
     this.wexAppSnackbarController = injector.get(WexAppSnackbarController);
     this.platform = injector.get(WexPlatform);
     this.uiNotificationsController = injector.get(UiNotificationsController);
+    this.localStorageService = injector.get(LocalStorageService);
   }
 
   public get enableFingerprintAuthToggle(): boolean {
@@ -60,8 +64,7 @@ export abstract class FingerprintController extends SecurePage {
 
   ionViewWillEnter() {
       this.fingerprint.hasProfile(this.session.user.details.username)
-        .then(() => this.fingerprintProfileAvailable = true)
-        .catch(() => { });
+        .then(() => this.fingerprintProfileAvailable = true);
   }
 
 
@@ -75,8 +78,11 @@ export abstract class FingerprintController extends SecurePage {
           let secret = this.session.clientSecret;
 
           return this.fingerprint.verify({ id, secret })
-            .then(() => this.uiNotificationsController.presentFingerprintProfileSuccessMessage());
+            .then(() => this.uiNotificationsController.presentFingerprintProfileSuccessMessage())
+            .then(() => this.sessionCache.getSessionDetail(Session.Field.User).toPromise())
+            .then(() => this.localStorageService.set(this.USERNAME_KEY, id));
         }
+        return Promise.reject("Terms rejected.");
       });
   }
 
@@ -85,7 +91,10 @@ export abstract class FingerprintController extends SecurePage {
     let id = this.session.user.details.username;
 
     return this.displayDestroyProfileDialog(id).then((shouldClear: boolean) => {
-      if (shouldClear) { this.fingerprint.clearProfile(id); }
+      if (shouldClear) {
+        this.fingerprint.clearProfile(id);
+        this.localStorageService.remove(this.USERNAME_KEY);
+      }
       return !shouldClear; // inverse value as "Yes" removes profile, "No" keeps profile
     });
   }
