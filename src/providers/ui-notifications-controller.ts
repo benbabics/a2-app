@@ -11,6 +11,8 @@ import { NameUtils } from "../utils/name-utils";
 import { User } from "@angular-wex/models";
 import { Session } from "../models/session";
 import { AppSymbols } from "../app/app.symbols";
+import { LocalStorageService } from "angular-2-local-storage/dist";
+import { Fingerprint } from "./fingerprint/fingerprint";
 
 @Injectable()
 export class UiNotificationsController {
@@ -29,19 +31,28 @@ export class UiNotificationsController {
     private sessionCache: SessionCache,
     private modalController: ModalController,
     private platform: WexPlatform,
+    private localStorageService: LocalStorageService,
+    private fingerprint: Fingerprint,
     private wexAppSnackbarController: WexAppSnackbarController
   ) { }
 
   public presentFingerprintProfileSuccessMessage() {
-    this.sessionCache.getSessionDetail(Session.Field.User).subscribe((user: User) => {
-      let message = _.template(this.FINGERPRINT_SUCCESS)({
-        platformBiometric: this.platform.fingerprintTitle(),
-        username: NameUtils.MaskUsername(user.details.username).toUpperCase()
+    this.platform.ready(() => {
+      this.sessionCache.getSessionDetail(Session.Field.User).subscribe((user: User) => {
+        this.fingerprint.hasProfile(user.details.username).then((hasProfile: boolean) => {
+          if (hasProfile && !this.localStorageService.get(Fingerprint.hasShownFingerprintSetupMessageKey)) {
+            let message = _.template(this.FINGERPRINT_SUCCESS)({
+              platformBiometric: this.platform.fingerprintTitle(),
+              username: NameUtils.MaskUsername(user.details.username).toUpperCase()
+            });
+            this.wexAppSnackbarController.create({
+              message,
+              duration: this.FINGERPRINT_SUCCESS_DURATION
+            }).present();
+            this.localStorageService.set(Fingerprint.hasShownFingerprintSetupMessageKey, true);
+          }
+        });
       });
-      this.wexAppSnackbarController.create({
-        message,
-        duration: this.FINGERPRINT_SUCCESS_DURATION
-      }).present();
     });
   }
 
