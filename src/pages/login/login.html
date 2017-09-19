@@ -5,7 +5,7 @@
     <ion-card id="card-form">
       <form novalidate *ngIf="versionCheckComplete" #form="ngForm" (ngSubmit)="onLogin($event, setupFingerprintAuth)">
         <ion-list id="input-list">
-          <ion-item (tap)="verifyFingerprintRemoval()">
+          <ion-item id="username-field" (tap)="verifyFingerprintRemoval()">
             <ion-label floating> {{ CONSTANTS.userName.label }} </ion-label>
             <ion-input [(ngModel)]="maskableUsername"
                   (blur)="usernameIsFocused = false"
@@ -58,7 +58,7 @@
           </ion-item>
         </ion-item-group>
 
-        <div class="actions">
+        <div id="form-actions">
           <button ion-button block type="submit" [disabled]="!form.valid">
             <action-indicator [when]="isLoggingIn">{{ CONSTANTS.submitButton }}</action-indicator>
           </button>

@@ -204,7 +204,7 @@ page-login {
         }
       }
 
-      .actions button {
+      #form-actions button {
         @include action-indicator-color(color($colors, primary));
         @at-root .ios & {
           border-radius: 3px;

@@ -65,6 +65,10 @@ export namespace ConstantsInfo {
       fingerprintSuccess   : {
         message: "<%= platformBiometric %> is now setup for your username <%= username %>",
         duration: 5000
+      },
+      fingerprintError: {
+        message: "We were unable to set up ${fingerprintTitle} for your account at this time. Please try again later.",
+        duration: 5000
       }
     },
     //# Components
@@ -494,33 +498,27 @@ export namespace ConstantsInfo {
             declineTerms: ["SetUpBiometrics", "DeclineTerms"]
           }
         },
-        options: {
-          backdropClickToClose: false,
-          scopeVars: {
-            CONFIG: {
-              termsIos: "<p><b>Here are the Terms & Conditions for enabling Touch ID&reg; functionality with FLEET SmartHub.</b></p> \
-                           <p>To enable Touch ID&reg; for log in, you are required to save your Username on this device. <b>Once Touch ID&reg; is enabled, you understand and agree that any Touch ID&reg; fingerprint stored on this device can be used to access your accounts in FLEET SmartHub.</b></p> \
-                           <p>WEX neither controls the functionality of Touch ID&reg; nor has access to your fingerprint information.</p> \
-                           <p>There may be circumstances where Touch ID&reg; will not function as expected and we may ask you to log in using password.</p> \
-                           <p>By choosing Accept, you agree to these terms and conditions. Choose Decline to cancel set up of Touch ID&reg; for FLEET SmartHub.</p> \
-                           <p>Apple, the Apple logo, Touch ID&reg; [iPhone, iPad] are trademarks of Apple Inc., registered in the U.S. and other countries.  App Store is a service mark of Apple Inc.</p> \
-                           <p>To enable Touch ID&reg; for log in, you are required to save your Username on this device. Note that Touch ID&reg; allows multiple fingerprints to be stored on your device.</p>",
-              termsAndroid: "<p><b>Here are the Terms & Conditions for enabling fingerprint authentication with FLEET SmartHub.</b></p> \
-                               <p>To enable fingerprint authentication for log in, you are required to save your Username on this device. <b>Once fingerprint authentication is enabled, you understand and agree that any fingerprint stored on this device can be used to access your accounts in FLEET SmartHub.</b></p> \
-                               <p>WEX neither controls the functionality of fingerprint nor has access to your fingerprint information.</p> \
-                               <p>There may be circumstances where fingerprint authentication will not function as expected and we may ask you to log in using your password.</p> \
-                               <p>By choosing Accept, you agree to these terms and conditions. Choose Decline to cancel set up of fingerprint authentication for FLEET SmartHub.</p> \
-                               <p>Android is a trademark of Google Inc.</p> \
-                               <p>To enable fingerprint authentication for log in, you are required to save your Username on this device. Note that fingerprint authentication allows multiple fingerprints to be stored on your device.</p>",
-              BUTTONS: {
-                ACCEPT : "Accept",
-                DECLINE: "Decline"
-              },
-              TITLE: "Terms & Conditions"
-            }
-          }
+        BUTTONS: {
+          ACCEPT: "Accept",
+          DECLINE: "Decline"
         },
-        animation: "slide-in-down"
+        terms: {
+          ios: "<p><b>Here are the Terms & Conditions for enabling Touch ID&reg; functionality with FLEET SmartHub.</b></p> \
+                <p>To enable Touch ID&reg; for log in, you are required to save your Username on this device. <b>Once Touch ID&reg; is enabled, you understand and agree that any Touch ID&reg; fingerprint stored on this device can be used to access your accounts in FLEET SmartHub.</b></p> \
+                <p>WEX neither controls the functionality of Touch ID&reg; nor has access to your fingerprint information.</p> \
+                <p>There may be circumstances where Touch ID&reg; will not function as expected and we may ask you to log in using password.</p> \
+                <p>By choosing Accept, you agree to these terms and conditions. Choose Decline to cancel set up of Touch ID&reg; for FLEET SmartHub.</p> \
+                <p>Apple, the Apple logo, Touch ID&reg; [iPhone, iPad] are trademarks of Apple Inc., registered in the U.S. and other countries.  App Store is a service mark of Apple Inc.</p> \
+                <p>To enable Touch ID&reg; for log in, you are required to save your Username on this device. Note that Touch ID&reg; allows multiple fingerprints to be stored on your device.</p>",
+          android: "<p><b>Here are the Terms & Conditions for enabling fingerprint authentication with FLEET SmartHub.</b></p> \
+                    <p>To enable fingerprint authentication for log in, you are required to save your Username on this device. <b>Once fingerprint authentication is enabled, you understand and agree that any fingerprint stored on this device can be used to access your accounts in FLEET SmartHub.</b></p> \
+                    <p>WEX neither controls the functionality of fingerprint nor has access to your fingerprint information.</p> \
+                    <p>There may be circumstances where fingerprint authentication will not function as expected and we may ask you to log in using your password.</p> \
+                    <p>By choosing Accept, you agree to these terms and conditions. Choose Decline to cancel set up of fingerprint authentication for FLEET SmartHub.</p> \
+                    <p>Android is a trademark of Google Inc.</p> \
+                    <p>To enable fingerprint authentication for log in, you are required to save your Username on this device. Note that fingerprint authentication allows multiple fingerprints to be stored on your device.</p>"
+        },
+        title: "Terms & Conditions"
       },
 
       //# Terms of Use page
