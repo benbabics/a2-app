@@ -2,25 +2,25 @@
 # yarn lockfile v1
 
 
-"@angular-wex/api-providers@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-api-providers.git#204ef8c173f":
-  version "1.3.13"
-  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-api-providers.git#204ef8c173fee22b452d615503c0a5b2991b0c02"
+"@angular-wex/api-providers@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-api-providers.git#29a731d1876":
+  version "1.3.14"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-api-providers.git#29a731d18768f0ebc350c82c92ee670a4cab7a30"
 
-"@angular-wex/mocks@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-mocks.git#b6c9280b19b":
-  version "1.2.2"
-  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-mocks.git#b6c9280b19b620b8ecc62e4a19f6f52eb9a8bb14"
+"@angular-wex/mocks@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-mocks.git#f640ee841f4":
+  version "1.2.3"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-mocks.git#f640ee841f4560979d958e98ac7ea49a1fb3a78c"
 
-"@angular-wex/models@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-models.git#bd95e993074":
-  version "1.4.6"
-  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-models.git#bd95e993074c1b276432a15ce8a13c48a6196704"
+"@angular-wex/models@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-models.git#ed1f85fa5d1":
+  version "1.4.7"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-models.git#ed1f85fa5d1bdbcb028006db8b90e32e1bfd6a6c"
 
 "@angular-wex/tslint-rules@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-tslint-rules.git#2a1e4977656":
   version "1.0.0-alpha"
   resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-tslint-rules.git#2a1e4977656f1f3e8d9576fc82ca8f3bf58036b3"
 
-"@angular-wex/validators@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-validators.git#bc88b1fc475":
-  version "1.1.8"
-  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-validators.git#bc88b1fc475b740f1b19abd084d329f5ec18040b"
+"@angular-wex/validators@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-validators.git#ebdb6b3":
+  version "1.1.9"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-validators.git#ebdb6b3ca2c9815e26e9bc352d7d15932a6c1e99"
 
 "@angular/animations@4.1.3":
   version "4.1.3"

@@ -44,10 +44,10 @@
         "serve:www": "http-server www"
     },
     "dependencies": {
-        "@angular-wex/api-providers": "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-api-providers.git#204ef8c173f",
-        "@angular-wex/mocks": "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-mocks.git#b6c9280b19b",
-        "@angular-wex/models": "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-models.git#bd95e993074",
-        "@angular-wex/validators": "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-validators.git#bc88b1fc475",
+        "@angular-wex/api-providers": "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-api-providers.git#29a731d1876",
+        "@angular-wex/mocks": "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-mocks.git#f640ee841f4",
+        "@angular-wex/models": "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-models.git#ed1f85fa5d1",
+        "@angular-wex/validators": "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-validators.git#ebdb6b3",
         "@angular/animations": "4.1.3",
         "@angular/common": "4.1.3",
         "@angular/compiler": "4.1.3",

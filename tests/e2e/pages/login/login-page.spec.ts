@@ -3,10 +3,9 @@ import { Page } from "../page.spec";
 
 export class LoginPage extends Page<LoginPage> {
 
-    constructor() {
-        super();
-
-        browser.get("/");
+    public get loginButton(): ElementFinder {
+        return element(by.id("form-actions"))
+            .element(by.tagName("button"));
     }
 
     public get passwordField(): ElementFinder {
@@ -17,5 +16,9 @@ export class LoginPage extends Page<LoginPage> {
     public get usernameField(): ElementFinder {
         return element(by.id("username-field"))
             .element(by.tagName("input"));
+    }
+
+    public init() {
+        browser.get("/");
     }
 }

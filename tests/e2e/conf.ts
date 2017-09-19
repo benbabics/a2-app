@@ -6,6 +6,8 @@
 // then run `protractor conf.js`.
 import { Config } from "protractor";
 
+import { bootstrap } from "./main";
+
 export let config: Config = {
   framework: "jasmine",
   capabilities: {
@@ -16,5 +18,7 @@ export let config: Config = {
 
   // You could set no globals to true to avoid jQuery '$' and protractor '$'
   // collisions on the global namespace.
-  noGlobals: true
+  noGlobals: true,
+
+  beforeLaunch: bootstrap
 };
