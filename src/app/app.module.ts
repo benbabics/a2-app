@@ -248,6 +248,10 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
       useValue: LoginPage
     },
     {
+      provide: AppSymbols.FingerprintAuthenticationTermsPage,
+      useValue: FingerprintAuthenticationTermsPage
+    },
+    {
       provide: SessionInfoRequestors,
       useClass: DefaultSessionInfoRequestors
     },
@@ -260,6 +264,11 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
       provide: Http,
       useFactory: HTTP_FACTORY,
       deps: [XHRBackend, MockBackend, NetworkStatus, RequestOptions]
+    },
+    {
+      provide: UserIdle,
+      useClass: UserIdle,
+      deps: [SessionManager, Idle, WexNavigationController]
     },
     SessionManager,
     AuthenticationManager,
@@ -277,12 +286,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     NetworkStatus,
     WexAlertController,
     WexAppVersionCheck,
-    WexAppBackButtonController,
-    {
-      provide: UserIdle,
-      useClass: UserIdle,
-      deps: [SessionManager, Idle, WexNavigationController]
-    }
+    WexAppBackButtonController
   ]
 })
 export class AppModule {}
