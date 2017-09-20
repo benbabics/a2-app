@@ -23,4 +23,7 @@ page-payments {
       @include action-indicator-color(color($colors, primary));
     }
   }
+  .list-header-md {
+    border-top-width: 0px;
+  }
 }

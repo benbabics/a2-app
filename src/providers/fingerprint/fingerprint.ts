@@ -11,6 +11,7 @@ import {
 import { AndroidFingerprintService } from "./android-fingerprint-service";
 import { IosFingerprintService } from "./ios-fingerprint-service";
 import { LocalStorageService } from "angular-2-local-storage/dist";
+import { PlatformReady } from "../../decorators/platform-ready";
 
 @Injectable()
 export class Fingerprint {
@@ -47,6 +48,7 @@ export class Fingerprint {
     return this._nativeService;
   }
 
+  @PlatformReady()
   public get isAvailable(): Promise<FingerprintAvailabilityDetails> {
     if (!this._nativeService) {
       return Promise.reject("Fingerprint authentication is not available on this platform.");
@@ -55,14 +57,17 @@ export class Fingerprint {
     return this.nativeService.isAvailable();
   }
 
+  @PlatformReady()
   public clearProfile(id: string): Promise<any> {
     return this.isAvailable.then(() => this.nativeService.clearProfile(this.getId(id)));
   }
 
+  @PlatformReady()
   public hasProfile(id: string): Promise<any> {
     return this.isAvailable.then(() => this.nativeService.hasProfile(this.getId(id)));
   }
 
+  @PlatformReady()
   public verify(options: IFingerprintVerificationOptions): Promise<FingerprintProfile|FingerprintVerificationError> {
     options.id = this.getId(options.id);
     return this.isAvailable.then(() => this.nativeService.verify(options))
