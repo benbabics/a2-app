@@ -67,7 +67,7 @@ export namespace ConstantsInfo {
         duration: 5000
       },
       fingerprintError: {
-        message: "We were unable to set up ${fingerprintTitle} for your account at this time. Please try again later.",
+        message: "There was a problem setting up your ${fingerprintTitle}",
         duration: 5000
       }
     },
