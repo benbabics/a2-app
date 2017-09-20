@@ -198,6 +198,12 @@ export namespace ConstantsInfo {
 
       //# Options Page
       OPTIONS: {
+        ANALYTICS: {
+          EVENTS: {
+            disableBiometrisConfirm: ["Biometrics", "DisableBiometrics", "YesConfirm"],
+            disableBiometrisDecline: ["Biometrics", "DisableBiometrics", "NoConfirm"]
+          }
+        },
         title: "Options",
         settings: "Settings",
         support: "Support",
@@ -494,8 +500,8 @@ export namespace ConstantsInfo {
       FINGERPRINT_AUTH_TERMS: {
         ANALYTICS: {
           EVENTS: {
-            acceptTerms: ["SetUpBiometrics", "AcceptTerms"],
-            declineTerms: ["SetUpBiometrics", "DeclineTerms"]
+            acceptTerms: ["Biometrics", "AcceptTerms"],
+            declineTerms: ["Biometrics", "DeclineTerms"]
           }
         },
         BUTTONS: {

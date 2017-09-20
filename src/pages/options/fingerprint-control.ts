@@ -94,7 +94,12 @@ export abstract class FingerprintController extends SecurePage {
       if (shouldClear) {
         this.fingerprint.clearProfile(id);
         this.localStorageService.remove(this.USERNAME_KEY);
+        this.trackAnalyticsEvent("disableBiometricsConfirm");
       }
+      else {
+        this.trackAnalyticsEvent("disableBiometricsDecline");
+      }
+
       return !shouldClear; // inverse value as "Yes" removes profile, "No" keeps profile
     });
   }
