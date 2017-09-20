@@ -200,8 +200,8 @@ export namespace ConstantsInfo {
       OPTIONS: {
         ANALYTICS: {
           EVENTS: {
-            disableBiometrisConfirm: ["Biometrics", "DisableBiometrics", "YesConfirm"],
-            disableBiometrisDecline: ["Biometrics", "DisableBiometrics", "NoConfirm"]
+            disableBiometricsConfirm: ["Biometrics", "DisableBiometrics", "YesConfirm"],
+            disableBiometricsDecline: ["Biometrics", "DisableBiometrics", "NoConfirm"]
           }
         },
         title: "Options",
