@@ -40,6 +40,7 @@ export class WexClear {
   }
 
   @HostListener("click", ["$event"])
+  @HostListener("touchend", ["$event"])
   public onClick(event: MouseEvent) {
     if (this.isOnButton(event) && this.buttonVisible) {
       this.ngModelChange.emit("");
