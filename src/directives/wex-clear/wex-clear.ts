@@ -1,10 +1,12 @@
-import { Directive, HostListener, ElementRef, Renderer2 } from "@angular/core";
+import { Directive, HostListener, ElementRef, Renderer2, Output, EventEmitter } from "@angular/core";
 import * as _ from "lodash";
 
 @Directive({
   selector: "[wexClear]"
 })
 export class WexClear {
+  @Output() ngModelChange = new EventEmitter<string>();
+
   private static readonly ACCEPTABLE_ELEMENT = "ion-input";
   private readonly CLEAR_OFFSET = 30;
   private buttonVisible: boolean = false;
@@ -40,7 +42,7 @@ export class WexClear {
   @HostListener("click", ["$event"])
   public onClick(event: MouseEvent) {
     if (this.isOnButton(event) && this.buttonVisible) {
-      this.input.value = "";
+      this.ngModelChange.emit("");
       this.hideButton();
     }
   }
