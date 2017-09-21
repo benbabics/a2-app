@@ -67,7 +67,7 @@ export namespace ConstantsInfo {
         duration: 5000
       },
       fingerprintError: {
-        message: "We were unable to set up ${fingerprintTitle} for your account at this time. Please try again later.",
+        message: "There was a problem setting up your ${fingerprintTitle}",
         duration: 5000
       }
     },
@@ -198,6 +198,12 @@ export namespace ConstantsInfo {
 
       //# Options Page
       OPTIONS: {
+        ANALYTICS: {
+          EVENTS: {
+            disableBiometricsConfirm: ["Biometrics", "DisableBiometrics", "YesConfirm"],
+            disableBiometricsDecline: ["Biometrics", "DisableBiometrics", "NoConfirm"]
+          }
+        },
         title: "Options",
         settings: "Settings",
         support: "Support",
@@ -494,8 +500,8 @@ export namespace ConstantsInfo {
       FINGERPRINT_AUTH_TERMS: {
         ANALYTICS: {
           EVENTS: {
-            acceptTerms: ["SetUpBiometrics", "AcceptTerms"],
-            declineTerms: ["SetUpBiometrics", "DeclineTerms"]
+            acceptTerms: ["Biometrics", "AcceptTerms"],
+            declineTerms: ["Biometrics", "DeclineTerms"]
           }
         },
         BUTTONS: {
