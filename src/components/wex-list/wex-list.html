@@ -4,12 +4,14 @@
 
   <span *ngIf="isGrouped">
     <span *ngFor="let divider of dividers; let i = index">
-      <ion-item-divider *ngIf="getListForDivider(i)?.length" sticky [ngClass]="divider.toLowerCase()">
-        {{ divider }}
-      </ion-item-divider>
-      <span *ngFor="let item of getListForDivider(i)">
-        <ng-template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{$implicit: item}"></ng-template>
-      </span>
+      <ion-item-group>
+        <ion-item-divider *ngIf="getListForDivider(i)?.length" sticky [ngClass]="divider.toLowerCase()">
+          {{ divider }}
+        </ion-item-divider>
+        <span *ngFor="let item of getListForDivider(i)">
+          <ng-template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{$implicit: item}"></ng-template>
+        </span>
+      </ion-item-group>
     </span>
   </span>
 
