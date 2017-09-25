@@ -276,6 +276,9 @@ export namespace ConstantsInfo {
 
       //# Landing page
       LANDING: {
+        ANALYTICS: {
+          PAGE_NAME: "Home",
+        },
         BACK_TO_EXIT: {
           "duration": 3000,
           "message": "Press again to exit."
