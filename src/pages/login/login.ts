@@ -307,7 +307,7 @@ export class LoginPage extends Page {
     // Check the status of fingerprint authentication
     this.doFingerprintAuthCheck()
       .then(() => {
-        if (this.fingerprintProfileAvailable && !this.navParams.get(LoginPageNavParams.fromLogOut)) {
+        if (this.fingerprintProfileAvailable && !this.navParams.get(LoginPageNavParams.fromLogOut) && !this.navParams.get(LoginPageNavParams.fromTimeout)) {
           //show the fingerprint prompt
           this.login(true);
         }
