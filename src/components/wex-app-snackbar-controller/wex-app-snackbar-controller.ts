@@ -15,8 +15,9 @@ export class QueuedToast {
 
   constructor(public readonly toast: Toast, private controller: WexAppSnackbarController, public readonly options: QueuedToastOptions) { }
 
+  private readonly dismissOnQueue = () => this.controller.activeToast = undefined;
   private didDismissCallbacks: Array<ToastCallback> = [];
-  private willDismissCallbacks: Array<ToastCallback> = [];
+  private willDismissCallbacks: Array<ToastCallback> = [this.dismissOnQueue];
 
   public dismiss(data?: any, role?: string, navOptions?: NavOptions) {
     return this.toast.dismiss(data, role, navOptions);
@@ -41,7 +42,7 @@ export class QueuedToast {
 export class WexAppSnackbarController extends ToastController {
 
   private _queue: Promise<any> = Promise.resolve();
-  private activeToast: QueuedToast;
+  public activeToast: QueuedToast;
 
   private updateQueueChain(): Promise<any> {
     if (this.activeToast && !this.activeToast.options.important) {
