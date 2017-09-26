@@ -139,7 +139,7 @@ export namespace ConstantsInfo {
           reissueMessage: "Your card has been reissued.",
           reissueMessageDuration: 5000, //ms
           actionStatusTitle: "Select Card Status",
-          noReactivation: { 
+          noReactivation: {
             message: "Cards may not be reactivated.  Use your online portal to create a new card.",
             duration: 3000
           },
