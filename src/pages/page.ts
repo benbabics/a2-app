@@ -16,7 +16,8 @@ export abstract class Page implements OnInit {
   }
 
   ngOnInit() {
-    this.googleAnalytics.trackView(this.pageName);
+    let pageName = _.get<string>(this.CONSTANTS, "ANALYTICS.PAGE_NAME", this.pageName);
+    this.googleAnalytics.trackView(pageName);
   }
 
   private get defaultConstants(): any {
