@@ -31,7 +31,7 @@ export class WexPlatform extends Platform {
   }
 
   public get isMock(): boolean {
-    return this.os === Constants.PLATFORM.MOCK || WexPlatform.MOCK_REGEX.test(document.URL) || this.isIonicWebView;
+    return !this.isWkWebView && (this.os === Constants.PLATFORM.MOCK || WexPlatform.MOCK_REGEX.test(document.URL) || this.isIonicWebView);
   }
 
   public get isIos(): boolean {
@@ -56,6 +56,13 @@ export class WexPlatform extends Platform {
 
   public get isIonicWebView(): boolean {
     return window.location.href.indexOf("com.ionic.viewapp") > -1 || window.location.href.indexOf(this.IONIC_APP_ID) > -1;
+  }
+
+  public get isWkWebView(): boolean {
+    let isIosDevice = navigator.platform.substr(0,2) === 'iP’;
+    let lte9 = /constructor/i.test((window as any).HTMLElement);
+    let idb = !!window.indexedDB;
+    return isIosDevice && !(!idb && lte9) && window.statusbar.visible;
   }
 
   public fingerprintTitle(lowercaseAndroid?: boolean) {
