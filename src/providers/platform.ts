@@ -59,7 +59,7 @@ export class WexPlatform extends Platform {
   }
 
   public get isWkWebView(): boolean {
-    let isIosDevice = navigator.platform.substr(0,2) === 'iP’;
+    let isIosDevice = navigator.platform.substr(0,2) === "iP";
     let lte9 = /constructor/i.test((window as any).HTMLElement);
     let idb = !!window.indexedDB;
     return isIosDevice && !(!idb && lte9) && window.statusbar.visible;
