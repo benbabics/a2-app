@@ -1499,6 +1499,17 @@ copyfiles@^1.2.0:
     noms "0.0.0"
     through2 "^2.0.1"
 
+cordova-android@~6.1.2:
+  version "6.1.2"
+  resolved "https://registry.yarnpkg.com/cordova-android/-/cordova-android-6.1.2.tgz#9606739a114f0a37f49053e364c96d84fb462bf8"
+  dependencies:
+    cordova-common "^1.5.0"
+    elementtree "^0.1.6"
+    nopt "^3.0.1"
+    properties-parser "^0.2.3"
+    q "^1.4.1"
+    shelljs "^0.5.3"
+
 cordova-browser@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/cordova-browser/-/cordova-browser-4.1.0.tgz#75079065e5cd50aa6743cbd85317617053fb20c6"
@@ -1509,9 +1520,27 @@ cordova-browser@^4.1.0:
     q "^1.4.1"
     shelljs "^0.6.0"
 
-cordova-common@2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/cordova-common/-/cordova-common-2.0.2.tgz#57467976b8afd5e0bd0a13111b66a420441601cb"
+cordova-common@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/cordova-common/-/cordova-common-2.1.0.tgz#bb357ee1b9825031ed9db3c56b592efe973d1640"
+  dependencies:
+    ansi "^0.3.1"
+    bplist-parser "^0.1.0"
+    cordova-registry-mapper "^1.1.8"
+    elementtree "0.1.6"
+    glob "^5.0.13"
+    minimatch "^3.0.0"
+    osenv "^0.1.3"
+    plist "^1.2.0"
+    q "^1.4.1"
+    semver "^5.0.1"
+    shelljs "^0.5.3"
+    underscore "^1.8.3"
+    unorm "^1.3.3"
+
+cordova-common@^1.5.0:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/cordova-common/-/cordova-common-1.5.1.tgz#6770de0d6200ad6f94a1abe8939b5bd9ece139e3"
   dependencies:
     ansi "^0.3.1"
     bplist-parser "^0.1.0"
@@ -1527,12 +1556,12 @@ cordova-common@2.0.2:
     underscore "^1.8.3"
     unorm "^1.3.3"
 
-cordova-ios@^4.4.0:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/cordova-ios/-/cordova-ios-4.4.0.tgz#5cd6ef7224505db558446e4637ad97d0878c74ef"
+cordova-ios@^4.5.1:
+  version "4.5.1"
+  resolved "https://registry.yarnpkg.com/cordova-ios/-/cordova-ios-4.5.1.tgz#d17b21048c782e75190f8d05a7983c7af34cb585"
   dependencies:
-    cordova-common "2.0.2"
-    ios-sim "^5.0.12"
+    cordova-common "2.1.0"
+    ios-sim "^6.1.2"
     nopt "^3.0.6"
     plist "^1.2.0"
     q "^1.4.1"
@@ -1899,6 +1928,12 @@ ee-first@1.1.1:
 electron-to-chromium@^1.3.17:
   version "1.3.18"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.18.tgz#3dcc99da3e6b665f6abbc71c28ad51a2cd731a9c"
+
+elementtree@0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/elementtree/-/elementtree-0.1.6.tgz#2ac4c46ea30516c8c4cbdb5e3ac7418e592de20c"
+  dependencies:
+    sax "0.3.5"
 
 elementtree@^0.1.6, elementtree@^0.1.7:
   version "0.1.7"
@@ -2912,14 +2947,14 @@ ionicons@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/ionicons/-/ionicons-3.0.0.tgz#40b8daf4fd7a31150bd002160f66496e22a98c3c"
 
-ios-sim@^5.0.12:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/ios-sim/-/ios-sim-5.1.0.tgz#5d78a29e520ba0973145fb4257eb9b2a41018da6"
+ios-sim@^6.1.2:
+  version "6.1.2"
+  resolved "https://registry.yarnpkg.com/ios-sim/-/ios-sim-6.1.2.tgz#7b9df7c35abd5b9d4c014248174e8b9e5b97ecc4"
   dependencies:
     bplist-parser "^0.0.6"
     nopt "1.0.9"
     plist "^1.2.0"
-    simctl "^1.0.0"
+    simctl "^1.1.1"
 
 ip@^1.1.4, ip@^1.1.5:
   version "1.1.5"
@@ -3783,7 +3818,7 @@ nopt@1.0.9:
   dependencies:
     abbrev "1"
 
-"nopt@2 || 3", nopt@^3.0.6:
+"nopt@2 || 3", nopt@^3.0.1, nopt@^3.0.6:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/nopt/-/nopt-3.0.6.tgz#c6465dbf08abcd4db359317f79ac68a646b28ff9"
   dependencies:
@@ -4188,6 +4223,10 @@ promise.prototype.finally@^2.0.1:
     define-properties "^1.1.2"
     es-abstract "^1.6.1"
     function-bind "^1.1.0"
+
+properties-parser@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/properties-parser/-/properties-parser-0.2.3.tgz#f7591255f707abbff227c7b56b637dbb0373a10f"
 
 protractor@^5.1.2:
   version "5.1.2"
@@ -4651,6 +4690,10 @@ saucelabs@~1.3.0:
   dependencies:
     https-proxy-agent "^1.0.0"
 
+sax@0.3.5:
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/sax/-/sax-0.3.5.tgz#88fcfc1f73c0c8bbd5b7c776b6d3f3501eed073d"
+
 sax@0.6.x:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/sax/-/sax-0.6.1.tgz#563b19c7c1de892e09bfc4f2fc30e3c27f0952b9"
@@ -4842,9 +4885,9 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
 
-simctl@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/simctl/-/simctl-1.0.1.tgz#e73ce62891c952b2ae78499acdccbe3cf897a2e8"
+simctl@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/simctl/-/simctl-1.1.1.tgz#e26cc3c04e662250b4457b5b4c48cc12484f3814"
   dependencies:
     shelljs "^0.2.6"
     tail "^0.4.0"
