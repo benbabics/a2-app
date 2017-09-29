@@ -5,6 +5,7 @@ import { SessionManager } from "./session-manager";
 import { Session } from "../models";
 import { User } from "@angular-wex/models";
 import { PlatformReady } from "../decorators/platform-ready";
+import { WexPlatform } from "./platform";
 
 @Injectable()
 export class WexGoogleAnalyticsEvents extends GoogleAnalytics {
@@ -13,13 +14,13 @@ export class WexGoogleAnalyticsEvents extends GoogleAnalytics {
   private TRACKING_ID: string;
   private readonly USER_ID_DIMENSION: number = 1;
 
-  constructor(sessionManager: SessionManager) {
+  constructor(sessionManager: SessionManager, wexPlatform: WexPlatform) {
     super();
 
     if (!this.hasTrackingId) {
       console.warn("No TRACKING_ID found for Google Analytics for this session.");
     } else {
-      super.startTrackerWithId(this.TRACKING_ID);
+      wexPlatform.ready(() => super.startTrackerWithId(this.TRACKING_ID));
     }
 
     // Track the user via username when logged in

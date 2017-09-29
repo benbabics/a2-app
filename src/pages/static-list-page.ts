@@ -57,6 +57,8 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   //Enables a loading facade. This forces the greeking state of the list to be shown instead of the actual items.
   public loadingFacade?: boolean = false;
 
+  public abstract goToDetailPage(element: T);
+
   constructor(
     pageName: string,
     public injector: Injector,

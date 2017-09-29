@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnInit, OnChanges } from "@angular/core";
 import { Model } from "@angular-wex/models";
 
 type DetailsPropertyDictionary<T> = { [propertyName: string]: T };
@@ -13,7 +13,7 @@ export type ModelDetailsFieldPipeList = DetailsPropertyDictionary<PipeLike[]>;
   selector: "wex-details-view",
   templateUrl: "wex-details-view.html"
 })
-export class WexDetailsView {
+export class WexDetailsView implements OnInit, OnChanges {
 
   private static readonly VALUE_PLACEHOLDER = "--";
 
@@ -24,8 +24,18 @@ export class WexDetailsView {
   @Input() fieldPipes?: ModelDetailsFieldPipeList;
   @Input() showEmptyFields?: boolean = true;
 
-  public get resolvedPropertyPairs(): [string, any][] {
-    return this.includedFields.reduce((pairs: any[], fieldName: string) => {
+  public resolvedPropertyPairs: [string, any][];
+  
+  ngOnInit() {
+    this.updatePropertyPairs();
+  }
+
+  ngOnChanges() {
+    this.updatePropertyPairs();
+  }
+
+  private updatePropertyPairs() {
+    this.resolvedPropertyPairs = this.includedFields.reduce((pairs: any[], fieldName: string) => {
 
       let mappedFieldName = _.get<string>(this.mappedFieldNames, fieldName, fieldName);
       let fieldPipes = _.get<PipeLike[]>(this.fieldPipes, fieldName, []);
