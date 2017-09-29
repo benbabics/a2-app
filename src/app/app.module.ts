@@ -268,7 +268,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     {
       provide: UserIdle,
       useClass: UserIdle,
-      deps: [SessionManager, Idle, WexNavigationController]
+      deps: [SessionManager, Idle, WexNavigationController, WexPlatform]
     },
     SessionManager,
     AuthenticationManager,
