@@ -8,7 +8,7 @@ import { Session, PostedTransactionList, DynamicList } from "../../models";
 import { WexGreeking } from "../../components";
 import { SessionCache, PostedTransactionRequestor, DynamicSessionListInfoRequestor, SessionInfoRequestors } from "../../providers";
 import { TransactionDetailsPage } from "./details/transaction-details";
-import { BaseTransaction, PostedTransaction, Driver, Card, Model, PendingTransaction, ListResponse } from "@angular-wex/models";
+import { BaseTransaction, PostedTransaction, Driver, Card, Model, PendingTransaction } from "@angular-wex/models";
 import { TransactionProvider, TransactionSearchFilterBy } from "@angular-wex/api-providers";
 import { TabPage } from "../../decorators/tab-page";
 import { Value } from "../../decorators/value";
@@ -252,7 +252,7 @@ class TransactionsPageFilteredListView extends TransactionsPageDateView {
       return this.requestors.getRequestor(Session.Field.PendingTransactions).requestor(this.transactionsPage.session, {
         filterBy: this.filterType,
         filterValue: this.filterValue
-      }).map((response: ListResponse<PendingTransaction>) => this.pendingTransactions = response.values);
+      }).map((response: PendingTransaction[]) => this.pendingTransactions = response);
     }
     else {
       return Observable.of(this.pendingTransactions);
