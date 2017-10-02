@@ -28,7 +28,7 @@ export class UserIdle {
   ) {
     this.configureTimeout();
     this.platform.ready(() => this.platform.resume.subscribe(this.timeoutIfIdle))
-      .then(() => this.platform.pause.subscribe(() => { 
+      .then(() => this.platform.pause.subscribe(() => {
         this.durationAtPause = moment.duration(this.idle.getIdle(), "seconds");
         this.timeAtPause = moment();
       }));
