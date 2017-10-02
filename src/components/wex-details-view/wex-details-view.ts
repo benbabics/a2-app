@@ -25,7 +25,7 @@ export class WexDetailsView implements OnInit, OnChanges {
   @Input() showEmptyFields?: boolean = true;
 
   public resolvedPropertyPairs: [string, any][];
-  
+
   ngOnInit() {
     this.updatePropertyPairs();
   }
