@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Provider } from "@angular/core";
 import { Idle, DEFAULT_INTERRUPTSOURCES } from "@ng-idle/core";
 import { Value } from "../decorators/value";
 import { SessionManager } from "./session-manager";
@@ -8,6 +8,11 @@ import * as moment from "moment";
 
 @Injectable()
 export class UserIdle {
+  public static readonly PROVIDER_DEFINITION: Provider = {
+    provide: UserIdle,
+    useClass: UserIdle,
+    deps: [SessionManager, Idle, WexNavigationController, WexPlatform]
+  };
 
   @Value("USER_IDLE") private readonly CONSTANTS;
   private timeAtPause: moment.Moment;

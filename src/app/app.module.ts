@@ -5,7 +5,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { Dialogs } from "@ionic-native/dialogs";
 import { WexCardNumberPipe } from "./../pipes/wex-card-number";
 import { Http, XHRBackend, RequestOptions, HttpModule } from "@angular/http";
-import { NgModule, ErrorHandler, APP_INITIALIZER } from "@angular/core";
+import { NgModule, ErrorHandler, APP_INITIALIZER, Provider } from "@angular/core";
 import { IonicApp, IonicModule, IonicErrorHandler } from "ionic-angular";
 import { MyApp } from "./app.component";
 import { LoginPage } from "../pages/login/login";
@@ -88,7 +88,7 @@ import { Network } from "@ionic-native/network";
 import { WexAppVersionCheck } from "../providers/wex-app-version-check";
 import { VersionCheck } from "../pages/login/version-check/version-check";
 import { AppSymbols } from "./app.symbols";
-import { NgIdleModule, Idle } from "@ng-idle/core";
+import { NgIdleModule } from "@ng-idle/core";
 import { Environment } from "../environments/environment";
 import { MockBackend } from "@angular/http/testing";
 import { MockHttp } from "@angular-wex/mocks";
@@ -97,6 +97,14 @@ import { MockResponsesModule } from "@angular-wex/api-providers/mocks";
 
 export function APP_INITIALIZER_FACTORY() {
   return function () { };
+} export namespace APP_INITIALIZER_FACTORY {
+  export const PROVIDER_DEFINITION: Provider = {
+    // Force service instatiation
+    provide: APP_INITIALIZER,
+    useFactory: APP_INITIALIZER_FACTORY,
+    deps: [UserIdle, GoogleAnalytics],
+    multi: true
+  };
 }
 
 const options = {
@@ -115,6 +123,12 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
   else {
     return new SecureHttp(xhrBackend, requestOptions, networkStatus);
   }
+} export namespace HTTP_FACTORY {
+  export const PROVIDER_DEFINITION: Provider = {
+    provide: Http,
+    useFactory: HTTP_FACTORY,
+    deps: [XHRBackend, MockBackend, NetworkStatus, RequestOptions]
+  };
 }
 
 @NgModule({
@@ -237,12 +251,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     Market,
     //# app providers
     //----------------------
-    { // Force service instatiation
-      provide: APP_INITIALIZER,
-      useFactory: APP_INITIALIZER_FACTORY,
-      deps: [UserIdle, GoogleAnalytics],
-      multi: true
-    },
+    APP_INITIALIZER_FACTORY.PROVIDER_DEFINITION,
     {
       provide: AppSymbols.RootPage,
       useValue: LoginPage
@@ -255,21 +264,9 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
       provide: SessionInfoRequestors,
       useClass: DefaultSessionInfoRequestors
     },
-    {
-      provide: GoogleAnalytics,
-      useClass: WexGoogleAnalyticsEvents,
-      deps: [SessionManager, WexPlatform]
-    },
-    {
-      provide: Http,
-      useFactory: HTTP_FACTORY,
-      deps: [XHRBackend, MockBackend, NetworkStatus, RequestOptions]
-    },
-    {
-      provide: UserIdle,
-      useClass: UserIdle,
-      deps: [SessionManager, Idle, WexNavigationController, WexPlatform]
-    },
+    WexGoogleAnalyticsEvents.PROVIDER_DEFINITION,
+    HTTP_FACTORY.PROVIDER_DEFINITION,
+    UserIdle.PROVIDER_DEFINITION,
     SessionManager,
     AuthenticationManager,
     UiNotificationsController,
