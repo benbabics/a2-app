@@ -44,7 +44,7 @@ export class WexAppSnackbarController extends ToastController {
   private activeToast: QueuedToast;
 
   private updateQueueChain(): Promise<any> {
-    if (this.activeToast && !this.activeToast.options.important && !this.activeToast.options.duration) {
+    if (this.activeToast && !this.activeToast.options.important) {
       let toast = this.activeToast;
       this.activeToast = undefined;
 
