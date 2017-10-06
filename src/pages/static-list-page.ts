@@ -1,4 +1,4 @@
-import { Injector } from "@angular/core";
+import { Injector, ViewChild } from "@angular/core";
 import * as _ from "lodash";
 import { Observable } from "rxjs";
 import { ListPage, GroupedList } from "./list-page";
@@ -8,6 +8,7 @@ import { Session } from "../models";
 export { GroupedList } from "./list-page";
 import { WexGreeking } from "../components";
 import { SessionInfoOptions } from "../providers";
+import { Content } from "ionic-angular";
 
 export interface FetchOptions extends SessionInfoOptions {
   forceRequest?: boolean;
@@ -29,6 +30,7 @@ export type _FetchOptions = FetchOptions;
 type milliseconds = number;
 
 export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extends ListPage {
+  @ViewChild(Content) content: Content;
 
   // The threshold size that a list is considered large enough to automatically enable a loading facade
   private static readonly LARGE_LIST_SIZE = 75;
@@ -38,6 +40,7 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   private _items: T[] = [];
   private _displayedItems: T[] = [];
   private _displayedItemGroups: GroupedList<T> = {};
+  public scrollLocation: number = 0;
 
   // Set this to specify the order that groups should appear in grouped list mode
   protected listGroupDisplayOrder: string[] = null;
@@ -175,6 +178,14 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   ionViewWillEnter() {
     this.checkListSize();
     this.fetchResults().subscribe();
+  }
+
+  ionViewDidEnter() {
+    this.content.scrollTo(0, this.scrollLocation, 0);
+  }
+
+  ionViewWillLeave() {
+    this.scrollLocation = this.content.getScrollElement().scrollTop;
   }
 
   public get displayedItems(): T[] {
