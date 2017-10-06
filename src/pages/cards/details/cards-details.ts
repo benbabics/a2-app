@@ -64,6 +64,7 @@ export class CardsDetailsPage extends DetailsPage {
   private reissuedSnackbar(reissued: boolean) {
     if (reissued) {
       this.wexAppSnackbarController.createQueued({
+        important: true,
         message: this.CONSTANTS.reissueMessage,
         duration: this.CONSTANTS.reissueMessageDuration,
         position: "top",
