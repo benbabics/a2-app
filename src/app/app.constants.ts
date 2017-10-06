@@ -385,6 +385,19 @@ export namespace ConstantsInfo {
 
       //# Payments page
       PAYMENTS: {
+        payNowSection: {
+          minPaymentDate: "Min payment due",
+          on: "on ${ dueDate }",
+          invoiceNumber: "Invoice Number",
+          payNowButton: "Pay Now",
+          currentBalance: "Current balance",
+          pending: "Pending"
+        },
+        itemStatus: {
+          scheduled: "Scheduled",
+          completed: "Completed"
+        },
+        paymentHistoryHeader: "Payment history",
         UNAVAILABILITY_REASONS: {
           default: "We are unable to process your changes at this time.",
           shouldDisplayCurrentBalanceDueMessage: "Current Balance needs to be greater than $0.00.",

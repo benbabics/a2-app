@@ -23,13 +23,13 @@ wex-list-item {
   }
 
   //chevron icon
-  .wex-list-arrow {
-    color: color($colors, primary);
+  ion-icon {
+    opacity: .15;
   }
 
   &:not([data-active]), &[data-active=false] {
 
-    .wex-list-arrow {
+    .ion-icon {
       display: none;
     }
 

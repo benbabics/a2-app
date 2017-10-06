@@ -1,4 +1,5 @@
 import * as _ from "lodash";
+import * as moment from "moment";
 import { Observable } from "rxjs";
 import { Component, Injector } from "@angular/core";
 import { NavParams, NavController, ModalController, Modal } from "ionic-angular";
@@ -9,6 +10,7 @@ import { Session } from "../../models";
 import { AddPaymentPage } from "./add/add-payment";
 import { Dialogs } from "@ionic-native/dialogs";
 import { TabPage } from "../../decorators/tab-page";
+import { InvoiceSummary } from "@angular-wex/models";
 
 @TabPage()
 @Component({
@@ -16,15 +18,13 @@ import { TabPage } from "../../decorators/tab-page";
   templateUrl: "payments.html"
 })
 export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
-
   private static readonly PAYMENT_STATUSES: PaymentStatus[] = [PaymentStatus.SCHEDULED, PaymentStatus.COMPLETE];
-
-  protected readonly listGroupDisplayOrder: string[] = PaymentsPage.PAYMENT_STATUSES;
-  public readonly dividerLabels: string[] = PaymentsPage.PAYMENT_STATUSES.map(PaymentStatus.displayName);
-
   private makePaymentModal: Modal;
 
   public checkingMakePaymentAvailability: boolean = false;
+
+  public minPaymentDueDate: string;
+  public invoiceSummary: InvoiceSummary;
 
   constructor(
     public navCtrl: NavController,
@@ -40,6 +40,17 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
     if (this.makePaymentModal) {
       this.makePaymentModal.dismiss();
     }
+  }
+
+  ionViewCanEnter(): Promise<any> {
+    let invoiceSummary = this.sessionCache.getSessionDetail(Session.Field.InvoiceSummary);
+    invoiceSummary.subscribe((invoiceSummary) => {
+        this.minPaymentDueDate = _.template(this.CONSTANTS.payNowSection.on)({
+          dueDate: moment(invoiceSummary.paymentDueDate).format("MMMM Do, YYYY")
+        });
+        this.invoiceSummary = invoiceSummary;
+      });
+    return invoiceSummary.toPromise();
   }
 
   private canMakePayment(): Promise<MakePaymentAvailability | undefined> {
@@ -65,6 +76,10 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
 
   protected sortItems(payments: Payment[]): Payment[] {
     return StaticListPage.defaultItemSort<Payment, Payment.Details>(payments, "id", "asc");
+  }
+
+  public status(payment: Payment): string {
+    return payment.details.status === PaymentStatus.COMPLETE ? this.CONSTANTS.itemStatus.completed : this.CONSTANTS.itemStatus.scheduled
   }
 
   public goToDetailPage(payment: Payment) {
