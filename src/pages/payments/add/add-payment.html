@@ -36,8 +36,8 @@
     <button ion-item>
       <ion-label>
         <h2>{{paymentAmount}}</h2>
-        <p *ngIf="hasMinimumPaymentDue">Min. Payment Due</p>
-        <p *ngIf="!hasMinimumPaymentDue">Current Balance</p>
+        <p *ngIf="hasMinimumPaymentDue">{{ CONSTANTS.LABELS.minPaymentDue }}</p>
+        <p *ngIf="!hasMinimumPaymentDue">{{ CONSTANTS.LABELS.currentBalance }}</p>
       </ion-label>
       <ion-icon item-right ios="ios-arrow-forward"></ion-icon>
     </button>
@@ -47,8 +47,8 @@
 
     <button ion-item>
       <ion-label>
-        <h2>{{paymentDate | wexDate:true:'MMMM Do'}}</h2>
-        <p *ngIf="hasMinimumPaymentDue">Due {{paymentDueDate | wexDate:true:'MMMM Do'}}</p>
+        <h2>{{paymentDate | wexDate:true:'MMMM D'}}</h2>
+        <p *ngIf="hasMinimumPaymentDue">{{ CONSTANTS.LABELS.due }} {{paymentDueDate | wexDate:true:'MMMM D'}}</p>
       </ion-label>
       <ion-icon item-right ios="ios-arrow-forward"></ion-icon>
     </button>

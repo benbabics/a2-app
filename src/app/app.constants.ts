@@ -429,6 +429,9 @@ export namespace ConstantsInfo {
             title: "Edit Payment"
           },
           LABELS: {
+            due: "Due",
+            minPaymentDue: "Min. Payment Due",
+            currentBalance: "Current Balance",
             paymentAmount: "Payment Amount",
             paymentDate: "Payment Date",
             bankAccount: "Bank Account"
