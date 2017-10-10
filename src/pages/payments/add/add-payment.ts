@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import * as moment from "moment";
 import * as accounting from "accounting-js";
-import { Component, ViewChild, Injector } from "@angular/core";
+import { Component, Injector } from "@angular/core";
 import {
   NavParams,
   NavController,
@@ -10,7 +10,6 @@ import {
 import { SecurePage } from "../../secure-page";
 import { Session } from "../../../models";
 import { InvoiceSummary, BankAccount, Payment } from "@angular-wex/models";
-import { NgForm } from "@angular/forms";
 
 export type AddPaymentNavParams = keyof {
   payment?: Payment
@@ -28,11 +27,9 @@ export namespace AddPaymentNavParams {
 })
 export class AddPaymentPage extends SecurePage {
 
-  @ViewChild("form") flowForm: NgForm;
-
   private _paymentAmount: number;
 
-  public paymentDueDate: Date;
+  public paymentDueDate: string;
   public paymentDate: string;
   public paymentBankAccount: BankAccount;
 
@@ -96,7 +93,6 @@ export class AddPaymentPage extends SecurePage {
       this.paymentBankAccount = _.first(this.bankAccounts);
     }
 
-    this.paymentDueDate = this.invoiceSummary.paymentDueDate;
-    console.log('this.invoiceSummary', this.invoiceSummary);
+    this.paymentDueDate = this.invoiceSummary.details.paymentDueDate;
   }
 }

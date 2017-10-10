@@ -423,18 +423,21 @@ export namespace ConstantsInfo {
         //# Add Payment page
         ADD: {
           CREATE: {
-            title: "Make Payment"
+            title: "Schedule Payment"
           },
           EDIT: {
             title: "Edit Payment"
           },
           LABELS: {
+            bankAccount: "Bank Account",
+            currentBalance: "Current Balance",
             due: "Due",
             minPaymentDue: "Min. Payment Due",
-            currentBalance: "Current Balance",
             paymentAmount: "Payment Amount",
             paymentDate: "Payment Date",
-            bankAccount: "Bank Account"
+            schedulePayment: "Schedule Payment",
+            warningAmount: "Amount is less than min payment due",
+            warningPaymentDate: "Payment date is after due date"
           },
 
           //# Add Payment Confirmation page
