@@ -6,17 +6,11 @@ import {
   NavParams,
   NavController,
   ViewController,
-  TextInput,
-  DateTime,
-  Keyboard,
-  Select
 } from "ionic-angular";
 import { SecurePage } from "../../secure-page";
-import { Session, UserPayment } from "../../../models";
+import { Session } from "../../../models";
 import { InvoiceSummary, BankAccount, Payment } from "@angular-wex/models";
-import { WexValidateCurrencyParams } from "@angular-wex/validators";
 import { NgForm } from "@angular/forms";
-// import { AddPaymentSummaryPage } from "./summary/add-payment-summary";
 
 export type AddPaymentNavParams = keyof {
   payment?: Payment
@@ -27,21 +21,6 @@ export namespace AddPaymentNavParams {
 }
 
 
-export type AddPaymentFlowSectionType = keyof {
-  Amount,
-  Date,
-  BankAccount
-};
-
-export namespace AddPaymentFlowSectionType {
-  export const Amount: AddPaymentFlowSectionType = "Amount";
-  export const Date: AddPaymentFlowSectionType = "Date";
-  export const BankAccount: AddPaymentFlowSectionType = "BankAccount";
-}
-
-export type FormInputTypes = TextInput | DateTime | Select;
-
-
 //# AddPaymentPage
 @Component({
   selector: "page-add-payment",
@@ -49,25 +28,19 @@ export type FormInputTypes = TextInput | DateTime | Select;
 })
 export class AddPaymentPage extends SecurePage {
 
-  private static readonly MAX_FUTURE_DAYS = 180;
-
   @ViewChild("form") flowForm: NgForm;
-  @ViewChild("flowFormInput") flowFormInput: FormInputTypes;
 
   private _paymentAmount: number;
 
+  public paymentDueDate: Date;
   public paymentDate: string;
   public paymentBankAccount: BankAccount;
-  public readonly minPaymentDate = moment().toISOString();
-  public readonly maxPaymentDate = moment().add(AddPaymentPage.MAX_FUTURE_DAYS, "days").toISOString();
-  public readonly paymentDueDate = this.invoiceSummary.details.paymentDueDate;
 
   constructor(
     injector: Injector,
     public navCtrl: NavController,
     public navParams: NavParams,
-    private viewController: ViewController,
-    public keyboard: Keyboard
+    private viewController: ViewController
   ) {
     super("Payments.Add", injector, [
       Session.Field.InvoiceSummary,
@@ -75,30 +48,8 @@ export class AddPaymentPage extends SecurePage {
     ]);
   }
 
-  private flowComplete() /*: Promise<any>*/ {
-    let userPayment: UserPayment = {
-      date: this.paymentDate,
-      amount: this._paymentAmount,
-      bankAccount: this.paymentBankAccount
-    };
-    let existingPayment: Payment = this.navParams.get(AddPaymentNavParams.Payment);
-
-    if (existingPayment) {
-      userPayment.id = existingPayment.details.id;
-    }
-
-    /*
-    return this.activeFlowSection.onLeave()
-      .then(() => this.navCtrl.push(AddPaymentSummaryPage, { userPayment }));
-    */
-  }
-
   public get bankAccounts(): BankAccount[] {
     return this.session.bankAccounts || [];
-  }
-
-  public get hasMultipleBankAccounts(): boolean {
-    return this.bankAccounts.length > 1;
   }
 
   public get invoiceSummary(): InvoiceSummary {
@@ -121,23 +72,12 @@ export class AddPaymentPage extends SecurePage {
     this._paymentAmount = accounting.unformat(paymentAmount);
   }
 
-  public get validateCurrencyOptions(): WexValidateCurrencyParams {
-    return {
-      minimumAmount: this.invoiceSummary.details.minimumPaymentDue,
-      maximumAmount: this.invoiceSummary.details.currentBalance
-    };
-  }
-
   public get hasMinimumPaymentDue(): boolean {
     return !!this.invoiceSummary.details.minimumPaymentDue;
   }
 
   public cancel(data?: any) {
     this.viewController.dismiss(data);
-  }
-
-  public compareBankAccounts(a: BankAccount, b: BankAccount): boolean {
-    return a && b && a.details.id === b.details.id;
   }
 
   ionViewDidEnter() {
@@ -149,15 +89,14 @@ export class AddPaymentPage extends SecurePage {
       this.paymentBankAccount = existingPayment.bankAccount;
     }
     else {
-      this.paymentDate = moment().toISOString();
-      this.paymentBankAccount = _.first(this.bankAccounts);
-
       let paymentAmountDetail = this.hasMinimumPaymentDue ? "minimumPaymentDue" : "currentBalance";
       this._paymentAmount = this.invoiceSummary.details[paymentAmountDetail];
+
+      this.paymentDate = moment().toISOString();
+      this.paymentBankAccount = _.first(this.bankAccounts);
     }
 
-
-    let foo = false;
-    if (foo) this.flowComplete();
+    this.paymentDueDate = this.invoiceSummary.paymentDueDate;
+    console.log('this.invoiceSummary', this.invoiceSummary);
   }
 }
