@@ -5,18 +5,23 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <div id="pay-now-section">
+  <div id="pay-now-section-spinner" *ngIf="!invoiceSummary">
+    <ion-spinner></ion-spinner>
+  </div>
+  <div *ngIf="!!invoiceSummary" id="pay-now-section">
     <div class="min-payment"> {{ CONSTANTS.payNowSection.minPaymentDate }} <span> {{ minPaymentDueDate }} </span></div>
     <h1> {{ invoiceSummary.details.minimumPaymentDue | wexCurrency }} </h1>
-    <div class="invoice-number" *ngIf="!!invoiceSummary.details.invoiceNumber"> {{ CONSTANTS.payNowSection.invoiceNumber }} {{ invoiceSummary.details.invoiceNumber }} </div>
-    <button class="button-gradient" ion-button block> <span>{{ CONSTANTS.payNowSection.payNowButton }}</span> </button>
+    <div class="invoice-number">
+      <span *ngIf="!!invoiceSummary.details.invoiceNumber"> {{ CONSTANTS.payNowSection.invoiceNumber }} {{ invoiceSummary.details.invoiceNumber }} </span>
+    </div>
+    <button class="button-gradient" ion-button block [disabled]="checkingMakePaymentAvailability"><action-indicator [when]="checkingMakePaymentAvailability"> {{ CONSTANTS.payNowSection.payNowButton }} </action-indicator></button>
 
     <div id="current-and-pending">
       <div id="current">
         <div class="balance-type">{{ CONSTANTS.payNowSection.currentBalance }}</div>
         <div class="value">{{ invoiceSummary.details.currentBalance | wexCurrency }}</div>
       </div>
-      <div id="pending">
+      <div id="pending" *ngIf="!session.user.isClassic">
         <div class="balance-type">{{ CONSTANTS.payNowSection.pending }}</div>
         <div class="value">{{ invoiceSummary.details.pendingAmount | wexCurrency }}</div>
       </div>

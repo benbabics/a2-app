@@ -7,6 +7,13 @@ page-payments {
     background-color: white;
   }
 
+  #pay-now-section-spinner {
+    height: 45%;
+    @include flexbox();
+    @include align-items(center);
+    @include justify-content(center);
+  }
+
   #pay-now-section {
     display: block;
     margin: auto;
@@ -15,6 +22,7 @@ page-payments {
     max-width: calc(100%  - 3rem);
 
     button {
+      @include action-indicator-color(color($colors, white));
       @at-root .ios & {
         margin-top: 9%;
         margin-bottom: 7%;
@@ -26,7 +34,7 @@ page-payments {
         margin-top: 5%;
       }
     }
-    div, h1 {
+    >:not(button) div, h1 {
       font-weight: bold;
       @at-root .ios & {
         text-transform: capitalize;
@@ -144,19 +152,5 @@ page-payments {
       opacity: .4;
       font-size: 1.5rem;
     }
-  }
-
-  #button-add-payment {
-
-    @at-root .md & {
-      @include action-indicator-color(color($colors, white));
-    }
-
-    @at-root .ios & {
-      @include action-indicator-color(color($colors, primary));
-    }
-  }
-  .list-header-md {
-    border-top-width: 0px;
   }
 }

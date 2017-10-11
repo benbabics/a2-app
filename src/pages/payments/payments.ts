@@ -42,7 +42,7 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
     }
   }
 
-  ionViewCanEnter(): Promise<any> {
+  ionViewWillEnter() {
     let invoiceSummary = this.sessionCache.getSessionDetail(Session.Field.InvoiceSummary);
     invoiceSummary.subscribe((invoiceSummary) => {
         this.minPaymentDueDate = _.template(this.CONSTANTS.payNowSection.on)({
@@ -50,7 +50,7 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
         });
         this.invoiceSummary = invoiceSummary;
       });
-    return invoiceSummary.toPromise();
+      super.ionViewWillEnter();
   }
 
   private canMakePayment(): Promise<MakePaymentAvailability | undefined> {
