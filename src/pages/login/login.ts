@@ -84,7 +84,7 @@ export class LoginPage extends Page {
   public timedOut: boolean = false;
   public usernameIsFocused: boolean = false;
   public versionCheckComplete: boolean = false;
-  public user: UserCredentials = { username: "classic001", password: "Tester18" };
+  public user: UserCredentials = { username: "wolmobile", password: "Tester23" };
 
   constructor(
     public navCtrl: NavController,

@@ -87,6 +87,9 @@ page-payments {
   }
 
   ion-item-divider {
+    &[sticky] {
+      top: -1px;
+    }
     @at-root .ios & {
       text-transform: uppercase;
       color: rgba(#000, .6);

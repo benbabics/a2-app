@@ -8,9 +8,9 @@ import { Payment, PaymentStatus, MakePaymentAvailability } from "@angular-wex/mo
 import { PaymentsDetailsPage } from "./details/payments-details";
 import { Session } from "../../models";
 import { AddPaymentPage } from "./add/add-payment";
-import { Dialogs } from "@ionic-native/dialogs";
 import { TabPage } from "../../decorators/tab-page";
 import { InvoiceSummary } from "@angular-wex/models";
+import { WexAlertController } from "../../components/wex-alert-controller/wex-alert-controller";
 
 @TabPage()
 @Component({
@@ -30,7 +30,7 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
     public navCtrl: NavController,
     public navParams: NavParams,
     private modalController: ModalController,
-    private dialogs: Dialogs,
+    private alertController: WexAlertController,
     injector: Injector
   ) {
     super("Payments", injector);
@@ -100,7 +100,8 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
           let unavailabilityReason = _.reduce<any, string>(availability.details, (acc, isReason, reason) => isReason ? reason : acc, "");
           let unavailabilityReasonMessage = _.get<string>(this.CONSTANTS.UNAVAILABILITY_REASONS, unavailabilityReason, this.CONSTANTS.UNAVAILABILITY_REASONS.default);
 
-          this.dialogs.alert(unavailabilityReasonMessage);
+          console.log(unavailabilityReasonMessage);
+          this.alertController.alert(unavailabilityReasonMessage);
         });
     }
   }

@@ -14,7 +14,15 @@
     <div class="invoice-number">
       <span *ngIf="!!invoiceSummary.details.invoiceNumber"> {{ CONSTANTS.payNowSection.invoiceNumber }} {{ invoiceSummary.details.invoiceNumber }} </span>
     </div>
-    <button class="button-gradient" ion-button block [disabled]="checkingMakePaymentAvailability"><action-indicator [when]="checkingMakePaymentAvailability"> {{ CONSTANTS.payNowSection.payNowButton }} </action-indicator></button>
+    <button class="button-gradient"
+            ion-button 
+            block 
+            [disabled]="checkingMakePaymentAvailability" 
+            (click)="addPayment()">
+      <action-indicator [when]="checkingMakePaymentAvailability"> 
+          {{ CONSTANTS.payNowSection.payNowButton }} 
+      </action-indicator>
+    </button>
 
     <div id="current-and-pending">
       <div id="current">

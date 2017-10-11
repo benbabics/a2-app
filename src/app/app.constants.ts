@@ -45,7 +45,11 @@ export namespace ConstantsInfo {
       CLOSE: "Close",
       YES: "Yes",
       NO: "No",
-      DISMISS: "Dismiss"
+      DISMISS: "Dismiss",
+      ALERT_RESPONSE: {
+        android: "Dismiss",
+        ios: "OK"
+      }
     },
     //# Card
     CARD: {
