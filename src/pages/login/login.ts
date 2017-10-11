@@ -84,7 +84,7 @@ export class LoginPage extends Page {
   public timedOut: boolean = false;
   public usernameIsFocused: boolean = false;
   public versionCheckComplete: boolean = false;
-  public user: UserCredentials = { username: "wolmobile", password: "Tester23" };
+  public user: UserCredentials = { username: "", password: "" };
 
   constructor(
     public navCtrl: NavController,
@@ -329,12 +329,11 @@ export class LoginPage extends Page {
     }, 500));
   }
 
-  ionViewWillEnter() {
+  ionViewDidEnter() {
     this.wexAppVersionCheck.isSupported
       .subscribe(isSupported => {
         if (isSupported) {
           this.completeLoading();
-          this.login();
         } else {
           this.presentVersionModal();
         }
