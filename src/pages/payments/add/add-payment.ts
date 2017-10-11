@@ -19,6 +19,12 @@ export namespace AddPaymentNavParams {
   export const Payment: AddPaymentNavParams = "payment";
 }
 
+interface PaymentBuffer {
+  amount: number;
+  date: string;
+  bankAccount: BankAccount;
+};
+
 
 //# AddPaymentPage
 @Component({
@@ -27,11 +33,7 @@ export namespace AddPaymentNavParams {
 })
 export class AddPaymentPage extends SecurePage {
 
-  private _paymentAmount: number;
-
-  public paymentDueDate: string;
-  public paymentDate: string;
-  public paymentBankAccount: BankAccount;
+  private paymentBuffer: PaymentBuffer = <PaymentBuffer>{};
 
   constructor(
     injector: Injector,
@@ -58,15 +60,23 @@ export class AddPaymentPage extends SecurePage {
   }
 
   public get paymentAmount(): string {
-    if (_.isNumber(this._paymentAmount)) {
-      return accounting.format(this._paymentAmount);
+    if (_.isNumber(this.paymentBuffer.amount)) {
+      return accounting.format(this.paymentBuffer.amount);
     }
 
     return "";
   }
 
-  public set paymentAmount(paymentAmount: string) {
-    this._paymentAmount = accounting.unformat(paymentAmount);
+  public get paymentBankAccount(): BankAccount {
+    return this.paymentBuffer.bankAccount;
+  }
+
+  public get paymentDate(): string {
+    return this.paymentBuffer.date;
+  }
+
+  public get paymentDueDate(): string {
+    return this.invoiceSummary.details.paymentDueDate;
   }
 
   public get hasMinimumPaymentDue(): boolean {
@@ -81,18 +91,15 @@ export class AddPaymentPage extends SecurePage {
     let existingPayment: Payment = this.navParams.get(AddPaymentNavParams.Payment);
 
     if (existingPayment) {
-      this._paymentAmount = existingPayment.details.amount;
-      this.paymentDate = existingPayment.details.scheduledDate;
-      this.paymentBankAccount = existingPayment.bankAccount;
+      this.paymentBuffer.amount = existingPayment.details.amount;
+      this.paymentBuffer.date = existingPayment.details.scheduledDate;
+      this.paymentBuffer.bankAccount = existingPayment.bankAccount;
     }
     else {
       let paymentAmountDetail = this.hasMinimumPaymentDue ? "minimumPaymentDue" : "currentBalance";
-      this._paymentAmount = this.invoiceSummary.details[paymentAmountDetail];
-
-      this.paymentDate = moment().toISOString();
-      this.paymentBankAccount = _.first(this.bankAccounts);
+      this.paymentBuffer.amount = this.invoiceSummary.details[paymentAmountDetail];
+      this.paymentBuffer.date = moment().toISOString();
+      this.paymentBuffer.bankAccount = _.first(this.bankAccounts);
     }
-
-    this.paymentDueDate = this.invoiceSummary.details.paymentDueDate;
   }
 }
