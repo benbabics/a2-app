@@ -5,6 +5,7 @@ import { Network } from "@ionic-native/network";
 
 import { WexAppSnackbarController, QueuedToast } from "../components/wex-app-snackbar-controller/wex-app-snackbar-controller";
 import { Value } from "../decorators/value";
+import { WexPlatform } from "./platform";
 
 @Injectable()
 export class NetworkStatus {
@@ -12,9 +13,27 @@ export class NetworkStatus {
 
     @Value("GLOBAL_NOTIFICATIONS.serverConnectionError") private serverError: string;
     @Value("GLOBAL_NOTIFICATIONS.networkError") private networkError: string;
+    private networkErrorToast: QueuedToast;
 
-    constructor(private wexAppSnackbarController: WexAppSnackbarController, private network: Network) {
+    constructor(private wexAppSnackbarController: WexAppSnackbarController, private network: Network, private platform: WexPlatform) {
         this.watchConnectionErrors();
+        this.platform.ready(() =>this.onResumeSubscription());
+    }
+
+    private onResumeSubscription() {
+      this.platform.resume.subscribe(() => {
+        if (this.network.type === "none") {
+          if (!this.networkErrorToast) {
+            this.networkErrorToast = this.createErrorToast(this.networkError, false, true);
+            this.networkErrorToast.present();
+          }
+        } else {
+          if (!!this.networkErrorToast) {
+            this.networkErrorToast.dismiss();
+            this.networkErrorToast = null;
+          }
+        }
+      });
     }
 
     private createErrorToast(message: string, showCloseButton: boolean, important?: boolean): QueuedToast {
@@ -24,17 +43,17 @@ export class NetworkStatus {
     }
 
     private watchConnectionErrors() {
-      let toast: QueuedToast;
-
       this.network.onDisconnect().subscribe(() => {
-        toast = this.createErrorToast(this.networkError, false, true);
-        toast.present();
+        if (!this.networkErrorToast) {
+          this.networkErrorToast = this.createErrorToast(this.networkError, false, true);
+          this.networkErrorToast.present();
+        }
       });
 
       this.network.onConnect().subscribe(() => {
-        if (toast) {
-          toast.dismiss();
-          toast = null;
+        if (!!this.networkErrorToast) {
+          this.networkErrorToast.dismiss();
+          this.networkErrorToast = null;
         }
       });
     }
