@@ -78,8 +78,8 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
     return StaticListPage.defaultItemSort<Payment, Payment.Details>(payments, "id", "asc");
   }
 
-  public status(payment: Payment): string {
-    return payment.details.status === PaymentStatus.COMPLETE ? this.CONSTANTS.itemStatus.completed : this.CONSTANTS.itemStatus.scheduled
+  public getStatus(payment: Payment): string {
+    return payment.details.status === PaymentStatus.COMPLETE ? this.CONSTANTS.itemStatus.completed : this.CONSTANTS.itemStatus.scheduled;
   }
 
   public goToDetailPage(payment: Payment) {
@@ -100,7 +100,6 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
           let unavailabilityReason = _.reduce<any, string>(availability.details, (acc, isReason, reason) => isReason ? reason : acc, "");
           let unavailabilityReasonMessage = _.get<string>(this.CONSTANTS.UNAVAILABILITY_REASONS, unavailabilityReason, this.CONSTANTS.UNAVAILABILITY_REASONS.default);
 
-          console.log(unavailabilityReasonMessage);
           this.alertController.alert(unavailabilityReasonMessage);
         });
     }

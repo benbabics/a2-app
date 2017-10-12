@@ -1,11 +1,5 @@
-@import "../../styles/payment";
-
 page-payments {
-  background-color: white;
-
-  ion-content.has-refresher > .scroll-content {
-    background-color: white;
-  }
+  @include page-background-white;
 
   #pay-now-section-spinner {
     height: 45%;
@@ -19,7 +13,6 @@ page-payments {
     margin: auto;
     align-self: center;
     text-align: center;
-    max-width: calc(100%  - 3rem);
 
     button {
       @include action-indicator-color(color($colors, white));
@@ -29,42 +22,40 @@ page-payments {
       }
       @at-root .md & {
         height: 5rem;
-        margin: 1rem;
-        width: calc(100% - 2rem);
+        margin-bottom: 1rem;
         margin-top: 5%;
       }
     }
-    >:not(button) div, h1 {
+    >div, h1 {
       font-weight: bold;
       @at-root .ios & {
         text-transform: capitalize;
       }
-      span {
+      .no-highlight {
         text-transform: none;
         font-weight: normal;
       }
-    } h1 {
+    }
+    h1 {
       margin: .5rem 0rem;
-      letter-spacing: .8px;
+      letter-spacing: .07rem;
       font-size: 3.4rem;
-    } .invoice-number {
+    }
+    .invoice-number {
       opacity: .4;
       font-size: 1.2rem;
       font-weight: 500;
       text-transform: uppercase !important;
-      letter-spacing: .7px;
-    } .min-payment {
-      margin-top: 12.5%;
+      letter-spacing: .7rem;
+    }
+    .min-payment {
+      margin-top: 8%;
     }
 
     #current-and-pending {
       @include flexbox();
       @include justify-content(space-around);
-      @at-root .ios & {
-        margin-bottom: 6%;
-      } @at-root .md & {
-        margin-bottom: 1rem;
-      }
+
       #current, #pending {
         width: 50%;
         div {
@@ -87,12 +78,17 @@ page-payments {
   }
 
   ion-item-divider {
+    color: color($colors, light-header-text);
     &[sticky] {
       top: -1px;
     }
+
+    &.item-divider-ios, &.item-divider-md {
+      color: color($colors, light-header-text);
+    }
+
     @at-root .ios & {
       text-transform: uppercase;
-      color: rgba(#000, .6);
       letter-spacing: .08rem;
       font-weight: 500;
       font-size: 1.2rem;
@@ -106,54 +102,22 @@ page-payments {
     }
     @at-root .md & {
       font-weight: 500;
-      color: rgba(#000, .7);
-      background-color: #f4f4f4;
+      background-color: color($colors, separator-md);
       border: solid color($colors, light-border);
       border-width: 1px 0;
     }
   }
 
-  
   ion-list wex-list-item {
-    @extend %wex-list-item-payment;
-
-    .item-ios > .item-inner {
-      padding-left: 0;
-      margin-left: 16px;
-    }
-
-    .list-ios {
-      &.item-block { 
-        .item-inner {
-          border-bottom: 0px;
-        }
-      }
-    }
-
-    .item-md > .item-inner {
-      padding-left: 0px;
-      margin-left: 16px;
-    }
-
-    .label-ios {
-      margin-top: 0;
-      margin-bottom: 0;
-    } .label-md {
+    .item-md [item-left] {
       margin: 0;
     }
-
-    .item .item-inner ion-label {
-      @at-root .ios & {
-        padding: 0.5rem;
-      }
-      @at-root .md & {
-        padding: .3rem;
-      }
-    }
-
     [item-left] div:last-child {
       opacity: .4;
       font-size: 1.5rem;
+    }
+    .payment-amount {
+      text-align: right;
     }
   }
 }
