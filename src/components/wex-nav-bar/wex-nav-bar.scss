@@ -1,0 +1,14 @@
+wex-nav-bar {
+  @at-root .md & {
+    .tabs-md .tab-button[aria-selected=true] {
+      .tab-button-text, .tab-button-icon {
+        transform: none;
+        -webkit-transform: none;
+      }
+    }
+
+    ion-tabs > div > a {
+      @extend .ripple;
+    }
+  }
+}

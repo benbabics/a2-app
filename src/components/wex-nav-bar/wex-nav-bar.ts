@@ -7,6 +7,7 @@ import { PaymentsPage } from "../../pages/payments/payments";
 import { TransactionsPage } from "../../pages/transactions/transactions";
 import { Value } from "../../decorators/value";
 import { Tab } from "ionic-angular";
+import { WexPlatform } from "../../providers/platform";
 
 @Component({
   selector: "wex-nav-bar",
@@ -16,7 +17,11 @@ export class WexNavBar {
 
   @Value("NAVIGATION") public CONSTANTS: any;
 
-  constructor(private navBarController: NavBarController) { }
+  constructor(private navBarController: NavBarController, private platform: WexPlatform) { }
+
+  public get ripple() {
+    return { ripple: this.platform.isAndroid };
+  }
 
   public get CardsPage() {
     return CardsPage;
