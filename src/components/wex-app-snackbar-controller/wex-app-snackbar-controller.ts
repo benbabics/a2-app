@@ -11,9 +11,9 @@ export interface QueuedToastOptions extends ToastOptions {
 }
 
 export class QueuedToast {
-
-
-  constructor(public readonly toast: Toast, private controller: WexAppSnackbarController, public readonly options: QueuedToastOptions) { }
+  constructor(public readonly toast: Toast, private controller: WexAppSnackbarController, public readonly options: QueuedToastOptions) {
+    this.onWillDismiss(() => this.controller.activeToast = undefined);
+  }
 
   private didDismissCallbacks: Array<ToastCallback> = [];
   private willDismissCallbacks: Array<ToastCallback> = [];
@@ -41,7 +41,7 @@ export class QueuedToast {
 export class WexAppSnackbarController extends ToastController {
 
   private _queue: Promise<any> = Promise.resolve();
-  private activeToast: QueuedToast;
+  public activeToast: QueuedToast;
 
   private updateQueueChain(): Promise<any> {
     if (this.activeToast && !this.activeToast.options.important) {
