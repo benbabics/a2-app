@@ -1,4 +1,8 @@
 wex-nav-bar {
+  .tabs-md .tab-button[aria-selected=true] .tab-button-icon,
+  .tabs-md .tab-button[aria-selected=true] {
+    color: color($colors, tabs-selected);
+  }
   .ion-ios-home-outline {
     @extend .ion-ios-home;
   }
