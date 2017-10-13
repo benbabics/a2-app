@@ -23,6 +23,7 @@
 // Cleans up ripple effect for ion-tabs.
 .ripple:after {
   transform: scale(7,7);
+  transition: transform .6s, opacity .6s;
 }
 
 .ion-page ion-content {

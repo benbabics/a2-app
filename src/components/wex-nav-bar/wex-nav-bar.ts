@@ -17,11 +17,7 @@ export class WexNavBar {
 
   @Value("NAVIGATION") public CONSTANTS: any;
 
-  constructor(private navBarController: NavBarController, private platform: WexPlatform) { }
-
-  public get ripple() {
-    return { ripple: this.platform.isAndroid };
-  }
+  constructor(private navBarController: NavBarController, public platform: WexPlatform) { }
 
   public get CardsPage() {
     return CardsPage;

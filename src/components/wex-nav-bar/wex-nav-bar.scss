@@ -1,4 +1,16 @@
 wex-nav-bar {
+  .ion-ios-home-outline {
+    @extend .ion-ios-home;
+  }
+
+  .ion-ios-car-outline {
+    @extend .ion-ios-car;
+  }
+
+  .ion-ios-card-outline {
+    @extend .ion-ios-card;
+  }
+
   @at-root .md & {
     .tabs-md .tab-button[aria-selected=true] {
       .tab-button-text, .tab-button-icon {
