@@ -1,38 +1,50 @@
-<ion-header>
-  <ion-toolbar *wexIfPlatformIos>
-    <ion-title>{{ CONSTANTS.title }}</ion-title>
-    <ion-buttons end>
-      <button id="button-add-payment" ion-button icon-only [disabled]="checkingMakePaymentAvailability" (click)="addPayment()">
-        <action-indicator [when]="checkingMakePaymentAvailability">
-          <ion-icon name="add"></ion-icon>
-        </action-indicator>
-      </button>
-    </ion-buttons>
-  </ion-toolbar>
-
-  <wex-static-list-page-header [page]="this">
-  </wex-static-list-page-header>
-</ion-header>
+<ion-header></ion-header>
 
 <ion-content>
   <ion-refresher (ionRefresh)="onRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
+  <div *ngIf="!invoiceSummary" id="pay-now-section-spinner">
+    <ion-spinner></ion-spinner>
+  </div>
+  <div *ngIf="!!invoiceSummary" id="pay-now-section" padding>
+    <div class="min-payment"> {{ CONSTANTS.payNowSection.minPaymentDate }} <span class="no-highlight"> {{ minPaymentDueDate }} </span></div>
+    <h1> {{ invoiceSummary.details.minimumPaymentDue | wexCurrency }} </h1>
+    <div class="invoice-number">
+      <span *ngIf="!!invoiceSummary.details.invoiceNumber"> {{ CONSTANTS.payNowSection.invoiceNumber }} {{ invoiceSummary.details.invoiceNumber }} </span>
+    </div>
+    <button class="button-gradient"
+            ion-button 
+            block 
+            [disabled]="checkingMakePaymentAvailability" 
+            (click)="addPayment()">
+      <action-indicator [when]="checkingMakePaymentAvailability"> 
+          {{ CONSTANTS.payNowSection.payNowButton }} 
+      </action-indicator>
+    </button>
+
+    <div id="current-and-pending">
+      <div id="current">
+        <div class="balance-type">{{ CONSTANTS.payNowSection.currentBalance }}</div>
+        <div class="value">{{ invoiceSummary.details.currentBalance | wexCurrency }}</div>
+      </div>
+      <div *ngIf="!session.user.isClassic" id="pending">
+        <div class="balance-type">{{ CONSTANTS.payNowSection.pending }}</div>
+        <div class="value">{{ invoiceSummary.details.pendingAmount | wexCurrency }}</div>
+      </div>
+    </div>
+  </div>
+
+  <ion-item-divider sticky> {{ CONSTANTS.paymentHistoryHeader }} </ion-item-divider>
+
   <wex-static-list-page-content [page]="this">
     <ng-template #itemTemplate let-item>
-      <span item-left class="payment-scheduled-date">{{ item.details.scheduledDate | wexDate }}</span>
-      <span item-right class="payment-amount">{{ item.details.amount | wexCurrency }}</span>
+      <div item-left class="payment-scheduled-date">
+        <div>{{ item.details.scheduledDate | wexDate:false:"MMM Do, YYYY" }}</div>
+        <div>{{ getStatus(item) }}</div>
+      </div>
+      <div item-right class="payment-amount">{{ item.details.amount | wexCurrency }}</div>
     </ng-template>
   </wex-static-list-page-content>
 </ion-content>
-
-<ion-footer *wexIfPlatformAndroid>
-  <ion-fab bottom right style="position: fixed">
-    <button id="button-add-payment" ion-fab color="wex-red" [disabled]="checkingMakePaymentAvailability" (click)="addPayment()">
-      <action-indicator [when]="checkingMakePaymentAvailability">
-        <ion-icon name="add"></ion-icon>
-      </action-indicator>
-    </button>
-  </ion-fab>
-</ion-footer>

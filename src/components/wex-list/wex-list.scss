@@ -17,4 +17,35 @@ wex-list {
     text-align: center;
     font-weight: bold;
   }
+
+  ion-list wex-list-item {
+    .item-md, .item-ios {
+      > .item-inner {
+        padding-left: 0px;
+        margin-left: 16px;
+      }
+    }
+  
+    .label-ios, .label-md {
+      margin: 0;
+    }
+  
+    .item .item-inner {
+      @at-root .ios & {
+        border-bottom: 0.55px solid color($colors, border);
+        ion-label {
+          padding: 0.5rem;
+          padding-left: 0;
+        }
+      } @at-root .md & {
+        border-bottom: 0.55px solid color($colors, light-border);
+        ion-label {
+          @at-root .md & {
+            padding: .3rem;
+            padding-left: 0;
+          }
+        }
+      }
+    }
+  }
 }
