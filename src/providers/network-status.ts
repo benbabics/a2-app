@@ -17,7 +17,7 @@ export class NetworkStatus {
 
     constructor(private wexAppSnackbarController: WexAppSnackbarController, private network: Network, private platform: WexPlatform) {
         this.watchConnectionErrors();
-        this.platform.ready(() =>this.onResumeSubscription());
+        this.platform.ready(() => this.onResumeSubscription());
     }
 
     private onResumeSubscription() {
