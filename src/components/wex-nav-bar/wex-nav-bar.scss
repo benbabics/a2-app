@@ -1,7 +1,14 @@
 wex-nav-bar {
-  .tabs-md .tab-button[aria-selected=true] .tab-button-icon,
+  // Cleans up ripple effect for ion-tabs.
+  .ripple:after {
+    transform: scale(7,7);
+    transition: transform .6s, opacity .6s;
+  }
+
   .tabs-md .tab-button[aria-selected=true] {
-    color: color($colors, tabs-selected);
+    .tab-button-icon, & {
+      color: color($colors, tabs-selected);
+    }
   }
   .ion-ios-home-outline {
     @extend .ion-ios-home;
