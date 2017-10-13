@@ -1,0 +1,37 @@
+wex-nav-bar {
+  // Cleans up ripple effect for ion-tabs.
+  .ripple:after {
+    transform: scale(7,7);
+    transition: transform .6s, opacity .6s;
+  }
+
+  .tabs-md .tab-button[aria-selected=true] {
+    .tab-button-icon, & {
+      color: color($colors, tabs-selected);
+    }
+  }
+  .ion-ios-home-outline {
+    @extend .ion-ios-home;
+  }
+
+  .ion-ios-car-outline {
+    @extend .ion-ios-car;
+  }
+
+  .ion-ios-card-outline {
+    @extend .ion-ios-card;
+  }
+
+  @at-root .md & {
+    .tabs-md .tab-button[aria-selected=true] {
+      .tab-button-text, .tab-button-icon {
+        transform: none;
+        -webkit-transform: none;
+      }
+    }
+
+    ion-tabs > div > a {
+      @extend .ripple;
+    }
+  }
+}

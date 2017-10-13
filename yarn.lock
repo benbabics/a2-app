@@ -1735,6 +1735,10 @@ crypto-browserify@^3.11.0:
     public-encrypt "^4.0.0"
     randombytes "^2.0.0"
 
+css-ripple-effect@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/css-ripple-effect/-/css-ripple-effect-1.0.5.tgz#6963b752aaf59babbd3fea3ec0da5d44e9122efb"
+
 currently-unhandled@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/currently-unhandled/-/currently-unhandled-0.4.1.tgz#988df33feab191ef799a61369dd76c17adf957ea"
