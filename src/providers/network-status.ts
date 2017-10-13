@@ -2,6 +2,7 @@ import * as _ from "lodash";
 import { Injectable } from "@angular/core";
 import { Response } from "@angular/http";
 import { Network } from "@ionic-native/network";
+import * as ConnectionConstants from "cordova-plugin-network-information/www/Connection";
 
 import { WexAppSnackbarController, QueuedToast } from "../components/wex-app-snackbar-controller/wex-app-snackbar-controller";
 import { Value } from "../decorators/value";
@@ -22,7 +23,7 @@ export class NetworkStatus {
 
     private onResumeSubscription() {
       this.platform.resume.subscribe(() => {
-        if (this.network.type === "none") {
+        if (this.network.type === ConnectionConstants.NONE) {
           if (!this.networkErrorToast) {
             this.networkErrorToast = this.createErrorToast(this.networkError, false, true);
             this.networkErrorToast.present();
