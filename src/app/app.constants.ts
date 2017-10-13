@@ -45,7 +45,11 @@ export namespace ConstantsInfo {
       CLOSE: "Close",
       YES: "Yes",
       NO: "No",
-      DISMISS: "Dismiss"
+      DISMISS: "Dismiss",
+      ALERT_RESPONSE: {
+        android: "Dismiss",
+        ios: "OK"
+      }
     },
     //# Card
     CARD: {
@@ -385,6 +389,19 @@ export namespace ConstantsInfo {
 
       //# Payments page
       PAYMENTS: {
+        payNowSection: {
+          minPaymentDate: "Min payment due",
+          on: "on ${ dueDate }",
+          invoiceNumber: "Invoice Number",
+          payNowButton: "Pay Now",
+          currentBalance: "Current balance",
+          pending: "Pending"
+        },
+        itemStatus: {
+          scheduled: "Scheduled",
+          completed: "Completed"
+        },
+        paymentHistoryHeader: "Payment history",
         UNAVAILABILITY_REASONS: {
           default: "We are unable to process your changes at this time.",
           shouldDisplayCurrentBalanceDueMessage: "Current Balance needs to be greater than $0.00.",

@@ -1,29 +1,123 @@
-@import "../../styles/payment";
-
 page-payments {
+  @include page-background-white;
 
-  wex-list-header {
-    .field-amount {
-      text-align: right;
-      margin-right: 16px;
+  #pay-now-section-spinner {
+    height: 45%;
+    @include flexbox();
+    @include align-items(center);
+    @include justify-content(center);
+  }
+
+  #pay-now-section {
+    display: block;
+    margin: auto;
+    align-self: center;
+    text-align: center;
+
+    button {
+      @include action-indicator-color(color($colors, white));
+      @at-root .ios & {
+        margin-top: 9%;
+        margin-bottom: 7%;
+      }
+      @at-root .md & {
+        height: 5rem;
+        margin-bottom: 1rem;
+        margin-top: 5%;
+      }
+    }
+    >div, h1 {
+      font-weight: bold;
+      @at-root .ios & {
+        text-transform: capitalize;
+      }
+      .no-highlight {
+        text-transform: none;
+        font-weight: normal;
+      }
+    }
+    h1 {
+      margin: .5rem 0rem;
+      letter-spacing: .07rem;
+      font-size: 3.4rem;
+    }
+    .invoice-number {
+      opacity: .4;
+      font-size: 1.2rem;
+      font-weight: 500;
+      text-transform: uppercase !important;
+      letter-spacing: .7rem;
+    }
+    .min-payment {
+      margin-top: 8%;
+    }
+
+    #current-and-pending {
+      @include flexbox();
+      @include justify-content(space-around);
+
+      #current, #pending {
+        width: 50%;
+        div {
+          padding: .3rem;
+        }
+        .balance-type {
+          color: color($colors, primary);
+          font-weight: 500;
+        }
+        .value {
+          font-weight: normal;
+          font-size: 1.7rem;
+        }
+      }
+
+      #pending {
+        border-left: 0.55px solid color($colors, border);
+      }
     }
   }
 
-  wex-list-item {
-    @extend %wex-list-item-payment;
-  }
+  ion-item-divider {
+    color: color($colors, light-header-text);
+    &[sticky] {
+      top: -1px;
+    }
 
-  #button-add-payment {
-
-    @at-root .md & {
-      @include action-indicator-color(color($colors, white));
+    &.item-divider-ios, &.item-divider-md {
+      color: color($colors, light-header-text);
     }
 
     @at-root .ios & {
-      @include action-indicator-color(color($colors, primary));
+      text-transform: uppercase;
+      letter-spacing: .08rem;
+      font-weight: 500;
+      font-size: 1.2rem;
+
+      background-color: color($colors, eggshell);
+
+      text-align: center;
+      border-style: solid;
+      border-color: color($colors, border);
+      border-width: 0.55px 0;
+    }
+    @at-root .md & {
+      font-weight: 500;
+      background-color: color($colors, separator-md);
+      border: solid color($colors, light-border);
+      border-width: 1px 0;
     }
   }
-  .list-header-md {
-    border-top-width: 0px;
+
+  ion-list wex-list-item {
+    .item-md [item-left] {
+      margin: 0;
+    }
+    [item-left] div:last-child {
+      opacity: .4;
+      font-size: 1.5rem;
+    }
+    .payment-amount {
+      text-align: right;
+    }
   }
 }
