@@ -215,6 +215,12 @@ ion-list .item-md {
   }
 }
 
+.item .item-warning {
+  margin-top: .5rem;
+  color: color($colors, wex-warning);
+  font-weight: 500;
+}
+
 .card-md .list-md .item-md.item-block .item-inner {
   // Show dividers on ion-list items that are inside ion-cards
   border-bottom: 1px solid $list-border-color;

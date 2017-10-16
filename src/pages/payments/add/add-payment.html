@@ -17,6 +17,7 @@
 </ion-header>
 
 <ion-content>
+  <pre>{{invoiceSummary.details | json}}</pre>
   <ion-item-group class="ios-item-indent">
     <!-- Bank Account -->
     <ion-list-header>{{ CONSTANTS.LABELS.bankAccount }}</ion-list-header>
@@ -35,11 +36,12 @@
     <!-- Amount -->
     <ion-list-header>{{ CONSTANTS.LABELS.paymentAmount }}</ion-list-header>
 
-    <button ion-item>
+    <button ion-item (click)="updateAmount()">
       <ion-label>
         <h2>{{paymentAmount}}</h2>
-        <p *ngIf="hasMinimumPaymentDue">{{ CONSTANTS.LABELS.minPaymentDue }}</p>
+        <p *ngIf="hasMinimumPaymentDue">{{ CONSTANTS.LABELS.minimumPaymentDue }}</p>
         <p *ngIf="!hasMinimumPaymentDue">{{ CONSTANTS.LABELS.currentBalance }}</p>
+        <p *ngIf="false" class="item-warning">{{ CONSTANTS.LABELS.warningAmount }}</p>
       </ion-label>
       <ion-icon item-right ios="ios-arrow-forward"></ion-icon>
     </button>
@@ -51,6 +53,7 @@
       <ion-label>
         <h2>{{paymentDate | wexDate:true:'MMMM D'}}</h2>
         <p *ngIf="hasMinimumPaymentDue">{{ CONSTANTS.LABELS.due }} {{paymentDueDate | wexDate:true:'MMMM D'}}</p>
+        <p *ngIf="false" class="item-warning">{{ CONSTANTS.LABELS.warningPaymentDate }}</p>
       </ion-label>
       <ion-icon item-right ios="ios-arrow-forward"></ion-icon>
     </button>
