@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Update Amount</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <pre>{{selectedItem | json}}</pre>
+  <div *ngFor="let option of paymentOptions">
+    <pre>{{option | json}}</pre>
+  </div>
+
+  <ion-list radio-group [(ngModel)]="selectedItem">
+    <ion-item *ngFor="let option of paymentOptions">
+      <ion-label>
+        <h2>{{option.label}}</h2>
+        <p>{{option.value | wexCurrency}}</p>
+      </ion-label>
+      <ion-radio [value]="option"></ion-radio>
+    </ion-item>
+  </ion-list>
+</ion-content>

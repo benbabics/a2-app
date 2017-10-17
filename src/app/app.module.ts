@@ -57,7 +57,8 @@ import {
   UserIdle,
   AuthenticationManager,
   UiNotificationsController,
-  WexNavigationController
+  WexNavigationController,
+  PaymentService
 } from "../providers";
 import { WexCurrency, WexDate, WexDateTime, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
@@ -81,7 +82,7 @@ import {
 } from "../directives";
 import { InAppBrowser } from "@ionic-native/in-app-browser";
 import { AddPaymentPage } from "../pages/payments/add/add-payment";
-import { UpdateAmountPage } from "../pages/payments/add/update/amount/update-amount";
+import { SelectAmountPage } from "../pages/payments/add/selection/select-amount";
 import { AngularWexValidatorsModule } from "@angular-wex/validators";
 import { AddPaymentConfirmationPage } from "../pages/payments/add/confirmation/add-payment-confirmation";
 import { AddPaymentSummaryPage } from "../pages/payments/add/summary/add-payment-summary";
@@ -139,7 +140,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     PrivacyPolicyPage,
     TransactionsPage,
     AddPaymentPage,
-    UpdateAmountPage,
+    SelectAmountPage,
     AddPaymentConfirmationPage,
     AddPaymentSummaryPage,
     TransactionDetailsPage,
@@ -213,7 +214,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     PrivacyPolicyPage,
     TransactionsPage,
     AddPaymentPage,
-    UpdateAmountPage,
+    SelectAmountPage,
     AddPaymentConfirmationPage,
     AddPaymentSummaryPage,
     PrivacyPolicyPage
@@ -272,6 +273,11 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
       provide: UserIdle,
       useClass: UserIdle,
       deps: [SessionManager, Idle, WexNavigationController, WexPlatform]
+    },
+    {
+      provide: PaymentService,
+      useClass: PaymentService,
+      deps: [SessionManager, SessionCache]
     },
     SessionManager,
     AuthenticationManager,
