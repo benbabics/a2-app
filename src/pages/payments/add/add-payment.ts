@@ -7,10 +7,9 @@ import {
   ViewController,
 } from "ionic-angular";
 import { SecurePage } from "../../secure-page";
-// import { Session } from "../../../models";
-import { /*InvoiceSummary,*/ BankAccount, Payment } from "@angular-wex/models";
+import { BankAccount, Payment } from "@angular-wex/models";
 import { PaymentService, PaymentAmount } from './../../../providers/payment-service';
-import { SelectAmountPage } from "./selection/select-amount";
+import { AddPaymentSelectionPage } from "./add-payment-selection";
 
 export type AddPaymentNavParams = keyof {
   payment?: Payment
@@ -75,7 +74,7 @@ export class AddPaymentPage extends SecurePage {
       resolve();
     });
 
-    this.navCtrl.push(SelectAmountPage, { options, selectedItem, onSelection });
+    this.navCtrl.push(AddPaymentSelectionPage, { options, selectedItem, onSelection });
   }
 
   public updateBankAccount() {
@@ -87,7 +86,7 @@ export class AddPaymentPage extends SecurePage {
       resolve();
     });
 
-    this.navCtrl.push(SelectAmountPage, { options, selectedItem, onSelection });
+    this.navCtrl.push(AddPaymentSelectionPage, { options, selectedItem, onSelection });
   }
 
   private populatePayment(): void {

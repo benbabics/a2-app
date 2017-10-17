@@ -82,7 +82,7 @@ import {
 } from "../directives";
 import { InAppBrowser } from "@ionic-native/in-app-browser";
 import { AddPaymentPage } from "../pages/payments/add/add-payment";
-import { SelectAmountPage } from "../pages/payments/add/selection/select-amount";
+import { AddPaymentSelectionPage } from "../pages/payments/add/add-payment-selection";
 import { AngularWexValidatorsModule } from "@angular-wex/validators";
 import { AddPaymentConfirmationPage } from "../pages/payments/add/confirmation/add-payment-confirmation";
 import { AddPaymentSummaryPage } from "../pages/payments/add/summary/add-payment-summary";
@@ -140,7 +140,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     PrivacyPolicyPage,
     TransactionsPage,
     AddPaymentPage,
-    SelectAmountPage,
+    AddPaymentSelectionPage,
     AddPaymentConfirmationPage,
     AddPaymentSummaryPage,
     TransactionDetailsPage,
@@ -214,7 +214,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     PrivacyPolicyPage,
     TransactionsPage,
     AddPaymentPage,
-    SelectAmountPage,
+    AddPaymentSelectionPage,
     AddPaymentConfirmationPage,
     AddPaymentSummaryPage,
     PrivacyPolicyPage

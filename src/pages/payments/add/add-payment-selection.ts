@@ -1,7 +1,7 @@
 import { Component, Injector } from "@angular/core";
 import { NavParams, NavController /*, ViewController*/ } from "ionic-angular";
-import { SecurePage } from "../../../secure-page";
-import { PaymentAmount } from './../../../../providers/payment-service';
+import { SecurePage } from "../../secure-page";
+import { PaymentAmount } from './../../../providers/payment-service';
 import { BankAccount } from '@angular-wex/models';
 
 export type AddPaymentSelectionNavParams = keyof {
@@ -17,10 +17,10 @@ export namespace AddPaymentSelectionNavParams {
 }
 
 @Component({
-  selector: "page-select-amount",
-  templateUrl: "select-amount.html"
+  selector: "page-add-payment-selection",
+  templateUrl: "add-payment-selection.html"
 })
-export class SelectAmountPage extends SecurePage {
+export class AddPaymentSelectionPage extends SecurePage {
   private onSelection: Function;
   private selectedItem: PaymentAmount | BankAccount;
   private options: PaymentAmount[] | BankAccount[];
