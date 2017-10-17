@@ -433,6 +433,7 @@ export namespace ConstantsInfo {
             currentBalance: "Current Balance",
             due: "Due",
             minimumPaymentDue: "Min Payment Due",
+            otherAmount: "Other Amount",
             paymentAmount: "Payment Amount",
             paymentDate: "Payment Date",
             schedulePayment: "Schedule Payment",

@@ -1,4 +1,4 @@
-// import * as _ from "lodash";
+import * as _ from "lodash";
 import * as moment from "moment";
 import { Component, Injector } from "@angular/core";
 import {
@@ -67,10 +67,16 @@ export class AddPaymentPage extends SecurePage {
   }
 
   public updateAmount() {
-    this.navCtrl.push(SelectAmountPage, { selectedItem: this.payment.amount });
+    let selectedItem = this.payment.amount;
+    let onSelection = amount => new Promise(resolve => {
+      this.payment.amount = amount;
+      resolve();
+    });
+
+    this.navCtrl.push(SelectAmountPage, { selectedItem, onSelection });
   }
 
-  ionViewDidEnter() {
+  private populatePayment(): void {
     let existingPayment: Payment = this.navParams.get(AddPaymentNavParams.Payment);
 
     if (existingPayment) {
@@ -79,9 +85,15 @@ export class AddPaymentPage extends SecurePage {
       this.payment.bankAccount = existingPayment.bankAccount;
     }
     else {
-      this.payment.amount = this.payment.amount || this.paymentService.defaultPaymentOption;
-      this.payment.date = this.payment.date || moment().toISOString();
-      this.payment.bankAccount = this.payment.bankAccount || this.paymentService.defaultBankAccount;
+      this.payment.amount = this.paymentService.defaultPaymentOption;
+      this.payment.date = moment().toISOString();
+      this.payment.bankAccount = this.paymentService.defaultBankAccount;
+    }
+  }
+
+  ionViewDidEnter() {
+    if (_.isEmpty(this.payment)) {
+      this.populatePayment();
     }
   }
 }

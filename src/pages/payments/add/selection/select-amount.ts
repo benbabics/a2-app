@@ -1,15 +1,17 @@
 import * as _ from "lodash";
 import { Component, Injector } from "@angular/core";
-import { NavParams /*, NavController, ViewController*/ } from "ionic-angular";
+import { NavParams, NavController /*, ViewController*/ } from "ionic-angular";
 import { SecurePage } from "../../../secure-page";
 import { PaymentService, PaymentAmount } from './../../../../providers/payment-service';
 
 export type AddPaymentSelectionNavParams = keyof {
-  selectedItem: string
+  selectedItem: string,
+  onSelection: Function
 };
 
 export namespace AddPaymentSelectionNavParams {
   export const SelectedItem: AddPaymentSelectionNavParams = "selectedItem";
+  export const OnSelection: AddPaymentSelectionNavParams = "onSelection";
 }
 
 @Component({
@@ -17,11 +19,13 @@ export namespace AddPaymentSelectionNavParams {
   templateUrl: "select-amount.html"
 })
 export class SelectAmountPage extends SecurePage {
+  private onSelection: Function;
   private selectedItem: PaymentAmount;
   private paymentOptions: PaymentAmount[];
 
   constructor(
     injector: Injector,
+    public navCtrl: NavController,
     public navParams: NavParams,
     private paymentService: PaymentService
   ) {
@@ -31,5 +35,11 @@ export class SelectAmountPage extends SecurePage {
 
     let selectedItem = this.navParams.get(AddPaymentSelectionNavParams.SelectedItem);
     this.selectedItem = _.first(_.filter(this.paymentOptions, {key: selectedItem.key}));
+
+    this.onSelection = this.navParams.get(AddPaymentSelectionNavParams.OnSelection);
+  }
+
+  public handleSubmit() {
+    this.onSelection(this.selectedItem).then(() => this.navCtrl.pop());
   }
 }
