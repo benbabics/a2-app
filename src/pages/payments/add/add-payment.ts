@@ -85,7 +85,7 @@ export class AddPaymentPage extends SecurePage {
       this.payment.bankAccount = existingPayment.bankAccount;
     }
     else {
-      this.payment.amount = this.paymentService.defaultPaymentOption;
+      this.payment.amount = this.paymentService.defaultAmount;
       this.payment.date = moment().toISOString();
       this.payment.bankAccount = this.paymentService.defaultBankAccount;
     }

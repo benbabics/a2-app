@@ -54,16 +54,21 @@ export class PaymentService {
     return !!this.invoiceSummary.details.minimumPaymentDue;
   }
 
-  public get paymentOptions(): PaymentAmount[] {
+  public get amountOptions(): PaymentAmount[] {
     let payments: any = _.pick(this.invoiceSummary.details, PaymentAmountTypes.MinimumPaymentDue, PaymentAmountTypes.CurrentBalance);
-    return _.map(payments, (value: number, key: string) => {
+    let options = _.map(payments, (value: number, key: string) => {
       return <PaymentAmount>{ key, value, label: this.LABELS[key] };
     });
+
+    // push other amount option
+    options.push({ value: 0, key: "otherAmount", label: this.LABELS.otherAmount});
+
+    return options;
   }
 
-  public get defaultPaymentOption(): PaymentAmount {
+  public get defaultAmount(): PaymentAmount {
     let key = this.hasMinimumPaymentDue ? PaymentAmountTypes.MinimumPaymentDue : PaymentAmountTypes.CurrentBalance;
-    return _.first(_.filter(this.paymentOptions, { key }));
+    return _.first(_.filter(this.amountOptions, { key }));
   }
 
   public get defaultBankAccount(): BankAccount {

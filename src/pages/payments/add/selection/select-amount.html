@@ -6,7 +6,7 @@
 
 <ion-content>
   <ion-list radio-group [(ngModel)]="selectedItem">
-    <ion-item *ngFor="let option of paymentOptions">
+    <ion-item *ngFor="let option of options">
       <ion-label>
         <h2>{{option.label}}</h2>
         <p>{{option.value | wexCurrency}}</p>

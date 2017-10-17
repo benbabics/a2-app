@@ -21,7 +21,7 @@ export namespace AddPaymentSelectionNavParams {
 export class SelectAmountPage extends SecurePage {
   private onSelection: Function;
   private selectedItem: PaymentAmount;
-  private paymentOptions: PaymentAmount[];
+  private options: PaymentAmount[];
 
   constructor(
     injector: Injector,
@@ -31,10 +31,10 @@ export class SelectAmountPage extends SecurePage {
   ) {
     super("Payments.UpdateAmount", injector);
 
-    this.paymentOptions = this.paymentService.paymentOptions;
+    this.options = this.paymentService.amountOptions;
 
     let selectedItem = this.navParams.get(AddPaymentSelectionNavParams.SelectedItem);
-    this.selectedItem = _.first(_.filter(this.paymentOptions, {key: selectedItem.key}));
+    this.selectedItem = _.first(_.filter(this.options, {key: selectedItem.key}));
 
     this.onSelection = this.navParams.get(AddPaymentSelectionNavParams.OnSelection);
   }
