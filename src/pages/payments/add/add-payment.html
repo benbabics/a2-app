@@ -17,12 +17,11 @@
 </ion-header>
 
 <ion-content>
-  <!-- <pre>{{invoiceSummary.details | json}}</pre> -->
   <ion-item-group class="ios-item-indent">
     <!-- Bank Account -->
     <ion-list-header>{{ CONSTANTS.LABELS.bankAccount }}</ion-list-header>
 
-    <button ion-item *ngIf="paymentBankAccount">
+    <button ion-item *ngIf="paymentBankAccount" (click)="updateBankAccount()">
       <ion-label>
         <h2>
           {{paymentBankAccount.details.name}}

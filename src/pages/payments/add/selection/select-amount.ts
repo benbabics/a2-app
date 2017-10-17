@@ -1,15 +1,17 @@
-import * as _ from "lodash";
 import { Component, Injector } from "@angular/core";
 import { NavParams, NavController /*, ViewController*/ } from "ionic-angular";
 import { SecurePage } from "../../../secure-page";
-import { PaymentService, PaymentAmount } from './../../../../providers/payment-service';
+import { PaymentAmount } from './../../../../providers/payment-service';
+import { BankAccount } from '@angular-wex/models';
 
 export type AddPaymentSelectionNavParams = keyof {
-  selectedItem: string,
+  options: PaymentAmount[] | BankAccount[],
+  selectedItem: PaymentAmount | BankAccount,
   onSelection: Function
 };
 
 export namespace AddPaymentSelectionNavParams {
+  export const Options: AddPaymentSelectionNavParams = "options";
   export const SelectedItem: AddPaymentSelectionNavParams = "selectedItem";
   export const OnSelection: AddPaymentSelectionNavParams = "onSelection";
 }
@@ -20,22 +22,18 @@ export namespace AddPaymentSelectionNavParams {
 })
 export class SelectAmountPage extends SecurePage {
   private onSelection: Function;
-  private selectedItem: PaymentAmount;
-  private options: PaymentAmount[];
+  private selectedItem: PaymentAmount | BankAccount;
+  private options: PaymentAmount[] | BankAccount[];
 
   constructor(
     injector: Injector,
     public navCtrl: NavController,
-    public navParams: NavParams,
-    private paymentService: PaymentService
+    public navParams: NavParams
   ) {
     super("Payments.UpdateAmount", injector);
 
-    this.options = this.paymentService.amountOptions;
-
-    let selectedItem = this.navParams.get(AddPaymentSelectionNavParams.SelectedItem);
-    this.selectedItem = _.first(_.filter(this.options, {key: selectedItem.key}));
-
+    this.options = this.navParams.get(AddPaymentSelectionNavParams.Options);
+    this.selectedItem = this.navParams.get(AddPaymentSelectionNavParams.SelectedItem);
     this.onSelection = this.navParams.get(AddPaymentSelectionNavParams.OnSelection);
   }
 

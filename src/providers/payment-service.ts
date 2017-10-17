@@ -61,7 +61,8 @@ export class PaymentService {
     });
 
     // push other amount option
-    options.push({ value: 0, key: "otherAmount", label: this.LABELS.otherAmount});
+    let otherAmountOption = { value: 0, key: "otherAmount", label: this.LABELS.otherAmount };
+    options.push(<PaymentAmount>otherAmountOption);
 
     return options;
   }

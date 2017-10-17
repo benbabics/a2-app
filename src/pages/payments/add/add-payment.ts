@@ -67,13 +67,27 @@ export class AddPaymentPage extends SecurePage {
   }
 
   public updateAmount() {
-    let selectedItem = this.payment.amount;
+    let options = this.paymentService.amountOptions,
+        selectedItem = _.first(_.filter(options, {key: this.payment.amount.key}));
+
     let onSelection = amount => new Promise(resolve => {
       this.payment.amount = amount;
       resolve();
     });
 
-    this.navCtrl.push(SelectAmountPage, { selectedItem, onSelection });
+    this.navCtrl.push(SelectAmountPage, { options, selectedItem, onSelection });
+  }
+
+  public updateBankAccount() {
+    let options = this.paymentService.bankAccounts,
+        selectedItem = this.payment.bankAccount;
+
+    let onSelection = bankAccount => new Promise(resolve => {
+      this.payment.bankAccount = bankAccount;
+      resolve();
+    });
+
+    this.navCtrl.push(SelectAmountPage, { options, selectedItem, onSelection });
   }
 
   private populatePayment(): void {
