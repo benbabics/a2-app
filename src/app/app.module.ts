@@ -94,6 +94,8 @@ import { MockBackend } from "@angular/http/testing";
 import { MockHttp } from "@angular-wex/mocks";
 import { ModelGeneratorsModule } from "@angular-wex/models/mocks";
 import { MockResponsesModule } from "@angular-wex/api-providers/mocks";
+import { MbscModule } from "mbsc-calendar";
+import { Calendar } from "../components/calendar/calendar";
 
 export function APP_INITIALIZER_FACTORY() {
   return function () { };
@@ -165,7 +167,8 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     WexInvoiceDisplay,
     WexKeyboardAware,
     WexClear,
-    ResizableSvg
+    ResizableSvg,
+    Calendar
   ],
   imports: [
     //# Angular
@@ -185,7 +188,10 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     //----------------------
     LocalStorageModule.withConfig({ storageType: "localStorage" }),
     NgIdleModule.forRoot(),
-    ProgressBarModule
+    ProgressBarModule,
+    //# MobiScroll
+    //----------------------
+    MbscModule, // add the mobiscroll module
   ],
   bootstrap: [IonicApp],
   entryComponents: [

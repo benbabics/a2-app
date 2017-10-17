@@ -1,0 +1,11 @@
+.mbsc-material {
+  .mbsc-cal-btn-txt,
+  .mbsc-fr-btn,
+  .mbsc-cal-hl-now .mbsc-cal-today {
+    color: color($colors, primary);
+  }
+
+  .mbsc-cal .mbsc-cal-day-sel .mbsc-cal-day-fg, {
+    background-color: rgba(color($colors, primary), .3);
+  }
+}
