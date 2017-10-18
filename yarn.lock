@@ -3557,9 +3557,9 @@ map-obj@^1.0.0, map-obj@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/map-obj/-/map-obj-1.0.1.tgz#d933ceb9205d82bdcf4886f6742bdc2b4dea146d"
 
-mbsc-calendar@^1.0.0:
-  version "1.0.0"
-  resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/mbsc-calendar/-/mbsc-calendar-1.0.0.tgz#b84605ee2947c39bcbd5e8e8704946b7714d9d11"
+mbsc-calendar@^1.0.1:
+  version "1.0.1"
+  resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/mbsc-calendar/-/mbsc-calendar-1.0.1.tgz#22d65e5a0b5548d10224fa4534d9dc58c1848837"
 
 media-typer@0.3.0:
   version "0.3.0"
