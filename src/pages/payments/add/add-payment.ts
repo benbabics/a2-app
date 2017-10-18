@@ -9,7 +9,7 @@ import {
 import { SecurePage } from "../../secure-page";
 import { BankAccount, Payment } from "@angular-wex/models";
 import { PaymentService, PaymentAmount } from './../../../providers/payment-service';
-import { AddPaymentSelectionPage } from "./add-payment-selection";
+import { AddPaymentSelectionPage, SelectableOption } from "./add-payment-selection";
 
 export type AddPaymentNavParams = keyof {
   payment?: Payment
@@ -69,24 +69,31 @@ export class AddPaymentPage extends SecurePage {
     let options = this.paymentService.amountOptions,
         selectedItem = _.first(_.filter(options, {key: this.payment.amount.key}));
 
-    let onSelection = amount => new Promise(resolve => {
-      this.payment.amount = amount;
-      resolve();
-    });
-
-    this.navCtrl.push(AddPaymentSelectionPage, { options, selectedItem, onSelection });
+    this.navigateToSelectionPage("amount", options, selectedItem);
   }
 
   public updateBankAccount() {
     let options = this.paymentService.bankAccounts,
         selectedItem = this.payment.bankAccount;
 
-    let onSelection = bankAccount => new Promise(resolve => {
-      this.payment.bankAccount = bankAccount;
+    this.navigateToSelectionPage("bankAccount", options, selectedItem);
+  }
+
+  private navigateToSelectionPage(selectionType: string, options: SelectableOption[], selectedItem: SelectableOption) {
+    let onSelection = (selectedItem: SelectableOption) => new Promise(resolve => {
+      switch(selectionType) {
+        case "amount":
+          this.payment.amount = <PaymentAmount>selectedItem;
+          break;
+
+        case "bankAccount":
+          this.payment.bankAccount = <BankAccount>selectedItem;
+          break;
+      }
       resolve();
     });
 
-    this.navCtrl.push(AddPaymentSelectionPage, { options, selectedItem, onSelection });
+    this.navCtrl.push(AddPaymentSelectionPage, { selectionType, options, selectedItem, onSelection });
   }
 
   private populatePayment(): void {

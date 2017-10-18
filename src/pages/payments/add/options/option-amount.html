@@ -1,0 +1,15 @@
+<ion-item *ngIf="!option.editable">
+  <ion-label>
+    <h2>{{option.label}}</h2>
+    <p>{{option.value | wexCurrency}}</p>
+  </ion-label>
+  <ion-radio [value]="option"></ion-radio>
+</ion-item>
+
+<ion-item *ngIf="option.editable">
+  <ion-label>
+    <h2>{{option.value | wexCurrency}}</h2>
+    <p>{{option.label}}</p>
+  </ion-label>
+  <ion-radio [value]="option"></ion-radio>
+</ion-item>

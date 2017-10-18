@@ -20,6 +20,7 @@ export interface PaymentAmount {
   key: string;
   value: number;
   label: string;
+  editable?: boolean;
 }
 
 Injectable()
@@ -57,11 +58,11 @@ export class PaymentService {
   public get amountOptions(): PaymentAmount[] {
     let payments: any = _.pick(this.invoiceSummary.details, PaymentAmountTypes.MinimumPaymentDue, PaymentAmountTypes.CurrentBalance);
     let options = _.map(payments, (value: number, key: string) => {
-      return <PaymentAmount>{ key, value, label: this.LABELS[key] };
+      return <PaymentAmount>{ key, value, label: this.LABELS[key], editable: false };
     });
 
     // push other amount option
-    let otherAmountOption = { value: 0, key: "otherAmount", label: this.LABELS.otherAmount };
+    let otherAmountOption = { key: "otherAmount", value: 0, label: this.LABELS.otherAmount, editable: true };
     options.push(<PaymentAmount>otherAmountOption);
 
     return options;

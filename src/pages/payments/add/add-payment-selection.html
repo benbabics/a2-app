@@ -1,19 +1,19 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Update Amount</ion-title>
+    <ion-title>Selection</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-list radio-group [(ngModel)]="selectedItem">
-    <ion-item *ngFor="let option of options">
-      <ion-label>
-        <h2>{{option.label}}</h2>
-        <p>{{option.value | wexCurrency}}</p>
-      </ion-label>
-      <ion-radio [value]="option"></ion-radio>
-    </ion-item>
-  </ion-list>
+  <div [ngSwitch]="selectionType">
+    <ion-list radio-group *ngSwitchCase="'amount'" [(ngModel)]="selectedItem" [ngSwitch]="selectionType">
+      <option-amount *ngFor="let option of options" [option]="option"></option-amount>
+    </ion-list>
+
+    <ion-list radio-group *ngSwitchCase="'bankAccount'" [(ngModel)]="selectedItem" [ngSwitch]="selectionType">
+      <option-bank-account *ngFor="let option of options" [option]="option"></option-bank-account>
+    </ion-list>
+  </div>
 
   <ion-list id="action-list" padding>
     <button ion-button block (click)="handleSubmit($event)">

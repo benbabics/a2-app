@@ -4,13 +4,17 @@ import { SecurePage } from "../../secure-page";
 import { PaymentAmount } from './../../../providers/payment-service';
 import { BankAccount } from '@angular-wex/models';
 
+export type SelectableOption = PaymentAmount | BankAccount;
+
 export type AddPaymentSelectionNavParams = keyof {
-  options: PaymentAmount[] | BankAccount[],
-  selectedItem: PaymentAmount | BankAccount,
+  selectionType: String,
+  options: SelectableOption[],
+  selectedItem: SelectableOption,
   onSelection: Function
 };
 
 export namespace AddPaymentSelectionNavParams {
+  export const SelectionType: AddPaymentSelectionNavParams = "selectionType";
   export const Options: AddPaymentSelectionNavParams = "options";
   export const SelectedItem: AddPaymentSelectionNavParams = "selectedItem";
   export const OnSelection: AddPaymentSelectionNavParams = "onSelection";
@@ -21,17 +25,19 @@ export namespace AddPaymentSelectionNavParams {
   templateUrl: "add-payment-selection.html"
 })
 export class AddPaymentSelectionPage extends SecurePage {
+  private selectionType: String;
   private onSelection: Function;
-  private selectedItem: PaymentAmount | BankAccount;
-  private options: PaymentAmount[] | BankAccount[];
+  private selectedItem: SelectableOption;
+  private options: SelectableOption[];
 
   constructor(
     injector: Injector,
     public navCtrl: NavController,
     public navParams: NavParams
   ) {
-    super("Payments.UpdateAmount", injector);
+    super("Payments.Selection", injector);
 
+    this.selectionType = this.navParams.get(AddPaymentSelectionNavParams.SelectionType);
     this.options = this.navParams.get(AddPaymentSelectionNavParams.Options);
     this.selectedItem = this.navParams.get(AddPaymentSelectionNavParams.SelectedItem);
     this.onSelection = this.navParams.get(AddPaymentSelectionNavParams.OnSelection);
