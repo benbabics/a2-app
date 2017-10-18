@@ -34,7 +34,7 @@ interface PaymentBuffer {
 })
 export class AddPaymentPage extends SecurePage {
 
-  private payment: PaymentBuffer = <PaymentBuffer>{};
+  public payment: PaymentBuffer = <PaymentBuffer>{};
 
   constructor(
     injector: Injector,
@@ -68,6 +68,10 @@ export class AddPaymentPage extends SecurePage {
 
   public get displayDueDateWarning(): boolean {
     return false;
+  }
+
+  public get hasMinimumPaymentDue(): boolean {
+    return this.paymentService.hasMinimumPaymentDue;
   }
 
   public cancel(data?: any) {

@@ -25,10 +25,10 @@ export namespace AddPaymentSelectionNavParams {
   templateUrl: "add-payment-selection.html"
 })
 export class AddPaymentSelectionPage extends SecurePage {
-  private selectionType: String;
+  public selectionType: String;
   private onSelection: Function;
-  private selectedItem: SelectableOption;
-  private options: SelectableOption[];
+  public selectedItem: SelectableOption;
+  public options: SelectableOption[];
 
   constructor(
     injector: Injector,

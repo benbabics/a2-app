@@ -16,7 +16,7 @@ export class OptionAmount implements OnInit {
   @ViewChild("otherAmountInput") otherAmountInput: FormInputTypes;
 
   private _otherAmount: number;
-  private keyOtherAmount = PaymentAmountTypes.OtherAmount;
+  public keyOtherAmount = PaymentAmountTypes.OtherAmount;
 
   ngOnInit() {
     this._otherAmount = this.option.value;
