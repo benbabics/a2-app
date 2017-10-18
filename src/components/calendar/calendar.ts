@@ -1,4 +1,4 @@
-import { Component, Input, Output, ViewChild, EventEmitter, OnChanges } from "@angular/core";
+import { Component, Input, Output, ViewChild, EventEmitter } from "@angular/core";
 import { MbscCalendarOptions } from "mbsc-calendar";
 import { WexPlatform } from "../../providers/platform";
 
@@ -20,10 +20,9 @@ export namespace CalendarTheme {
   type="date"
   mbsc-calendar
   style="visibility:hidden"
-  #mbscCalendar="mobiscroll"
-  [mbsc-options]="options">
+  #mbscCalendar="mobiscroll">
 `
-}) export class Calendar implements OnChanges {
+}) export class Calendar {
   @Output() dateChange: EventEmitter<Date> = new EventEmitter<Date>();
   @Input() public date: Date;
   @Input() public minDate?: Date;
@@ -49,15 +48,13 @@ export namespace CalendarTheme {
     this.options = { theme, display };
   }
 
-  public ngOnChanges() {
-    this.options.min = this.minDate;
-    this.options.max = this.maxDate;
+  public displayCalendar() {
     if (this.mbscCalendar) {
+      this.options.min = this.minDate;
+      this.options.max = this.maxDate;
       this.mbscCalendar.option(this.options);
     }
-  }
-
-  public displayCalendar() {
+    
     this.mbscCalendar.show();
   }
 }
