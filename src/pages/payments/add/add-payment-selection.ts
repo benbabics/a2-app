@@ -25,7 +25,7 @@ export namespace AddPaymentSelectionNavParams {
   templateUrl: "add-payment-selection.html"
 })
 export class AddPaymentSelectionPage extends SecurePage {
-  public selectionType: String;
+  public selectionType: string;
   private onSelection: Function;
   public selectedItem: SelectableOption;
   public options: SelectableOption[];
@@ -35,12 +35,16 @@ export class AddPaymentSelectionPage extends SecurePage {
     public navCtrl: NavController,
     public navParams: NavParams
   ) {
-    super("Payments.Selection", injector);
+    super("Payments.Add.Selection", injector);
 
     this.selectionType = this.navParams.get(AddPaymentSelectionNavParams.SelectionType);
     this.options = this.navParams.get(AddPaymentSelectionNavParams.Options);
     this.selectedItem = this.navParams.get(AddPaymentSelectionNavParams.SelectedItem);
     this.onSelection = this.navParams.get(AddPaymentSelectionNavParams.OnSelection);
+  }
+
+  public get pageTitle(): string {
+    return this.CONSTANTS.LABELS[this.selectionType]
   }
 
   public handleSubmit() {
