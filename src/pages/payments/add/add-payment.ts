@@ -19,6 +19,7 @@ export namespace AddPaymentNavParams {
   export const Payment: AddPaymentNavParams = "payment";
 }
 
+// Todo: UserPayment interface
 interface PaymentBuffer {
   amount: PaymentAmount;
   date: string;
@@ -87,17 +88,9 @@ export class AddPaymentPage extends SecurePage {
     this.navigateToSelectionPage("bankAccount", options, selectedItem);
   }
 
-  private navigateToSelectionPage(selectionType: string, options: SelectableOption[], selectedItem: SelectableOption) {
+  private navigateToSelectionPage(selectionType: keyof PaymentBuffer, options: SelectableOption[], selectedItem: SelectableOption) {
     let onSelection = (selectedItem: SelectableOption) => new Promise(resolve => {
-      switch(selectionType) {
-        case "amount":
-          this.payment.amount = <PaymentAmount>selectedItem;
-          break;
-
-        case "bankAccount":
-          this.payment.bankAccount = <BankAccount>selectedItem;
-          break;
-      }
+      this.payment[selectionType] = selectedItem;
       resolve();
     });
 

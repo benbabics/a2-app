@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import * as accounting from "accounting-js";
 import { TextInput } from 'ionic-angular';
-import { Component, Input, ViewChild, OnChanges, SimpleChanges } from "@angular/core";
+import { Component, Input, ViewChild, OnInit } from "@angular/core";
 import { PaymentAmount, PaymentAmountTypes } from './../../../../providers/payment-service';
 
 type FormInputTypes = TextInput;
@@ -10,7 +10,7 @@ type FormInputTypes = TextInput;
   selector: "option-amount",
   templateUrl: "option-amount.html"
 })
-export class OptionAmount implements OnChanges {
+export class OptionAmount implements OnInit {
 
   @Input() option: PaymentAmount;
   @ViewChild("otherAmountInput") otherAmountInput: FormInputTypes;
@@ -18,11 +18,8 @@ export class OptionAmount implements OnChanges {
   private _otherAmount: number;
   private keyOtherAmount = PaymentAmountTypes.OtherAmount;
 
-  // ಠ_ಠ this is dumb! no lifecycle hooks for inner-components?!
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.option && changes.option.currentValue) {
-      this._otherAmount = changes.option.currentValue.value;
-    }
+  ngOnInit() {
+    this._otherAmount = this.option.value;
   }
 
   public get isOtherAmountOption(): boolean {
