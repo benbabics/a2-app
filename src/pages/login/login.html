@@ -37,7 +37,7 @@
                   floating
                   [maxlength]="CONSTANTS.password.maxLength"></ion-input>
               <ion-icon ion-button
-                  *ngIf="(fingerprintProfileAvailable && user.password.length === 0) || true"
+                  *ngIf="fingerprintProfileAvailable && user.password.length === 0"
                   color="white" 
                   (click)="onLogin($event, true)" 
                   item-right 
