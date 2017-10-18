@@ -2,15 +2,14 @@
   <div #titleHeadingBar id="title-heading-bar" class="fadein"></div>
 
   <div id="login-content">
-    <ion-card id="card-form">
       <form novalidate *ngIf="versionCheckComplete" #form="ngForm" (ngSubmit)="onLogin($event, setupFingerprintAuth)">
         <ion-list id="input-list">
-          <ion-item id="username-field" (tap)="verifyFingerprintRemoval()">
+          <ion-item id="username-field" (click)="verifyFingerprintRemoval()">
             <ion-label floating> {{ CONSTANTS.userName.label }} </ion-label>
-            <ion-input [(ngModel)]="maskableUsername"
+            <ion-input *ngIf="!fingerprintProfileAvailable"
+                  [(ngModel)]="maskableUsername"
                   (blur)="usernameIsFocused = false"
                   (focus)="usernameIsFocused = true"
-                  [disabled]="fingerprintProfileAvailable"
                   name="userName"
                   type="text"
                   required
@@ -21,6 +20,7 @@
                   wexClear
                   floating
                   [maxlength]="CONSTANTS.userName.maxLength"></ion-input>
+            <ion-input *ngIf="fingerprintProfileAvailable" [value]="maskableUsername" disabled name="userName" type="text"></ion-input>
           </ion-item>
           
           <ion-item id="password-field">
@@ -67,7 +67,6 @@
       <div *ngIf="!versionCheckComplete">
         <span id="loading-indicator"><ion-spinner class="action-spinner"></ion-spinner></span>
       </div>
-    </ion-card>
   </div>
 
   <div #keyboardSpacer id="keyboard-spacer"></div>

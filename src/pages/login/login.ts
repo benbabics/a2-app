@@ -168,7 +168,7 @@ export class LoginPage extends Page {
     //note: Ionic adds and removes this class by default, but it adds a 400ms delay first which is unacceptable here.
     //see http://ionicframework.com/docs/api/page/keyboard/
     this.content.getNativeElement().classList.add("keyboard-open");
-    this.keyboardSpacer.nativeElement.style.height = `${event.keyboardHeight + 56}px`;
+    this.keyboardSpacer.nativeElement.style.height = `${event.keyboardHeight + 65}px`;
     this.renderer.addClass(this.titleHeadingBar.nativeElement, "fadeout");
     this.renderer.removeClass(this.titleHeadingBar.nativeElement, "fadein");
   }
