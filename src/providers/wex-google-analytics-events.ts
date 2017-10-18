@@ -6,9 +6,15 @@ import { Session } from "../models";
 import { User } from "@angular-wex/models";
 import { PlatformReady } from "../decorators/platform-ready";
 import { WexPlatform } from "./platform";
+import { Provider } from "@angular/core";
 
 @Injectable()
 export class WexGoogleAnalyticsEvents extends GoogleAnalytics {
+  public static readonly PROVIDER_DEFINITION: Provider = {
+    provide: GoogleAnalytics,
+    useClass: WexGoogleAnalyticsEvents,
+    deps: [SessionManager, WexPlatform],
+  };
 
   @Value("GOOGLE_ANALYTICS.TRACKING_ID")
   private TRACKING_ID: string;

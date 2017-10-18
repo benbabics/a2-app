@@ -95,6 +95,10 @@ export class CardsDetailsPage extends DetailsPage {
     }
   }
 
+  public cannotChangeStatusMessage() {
+    this.wexAppSnackbarController.createQueued(this.CONSTANTS.noReactivation).present();
+  }
+
   private buildActionSheet(actions: CardStatusDetails[]): ActionSheetOptions {
 
     let buttons: ActionSheetButton[] = actions.map((action) => ({

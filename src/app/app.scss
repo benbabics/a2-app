@@ -19,6 +19,8 @@
 @import "../styles/placeholders/ui-management";
 @import "../../node_modules/primeng/resources/primeng.min";
 
+@import "../../node_modules/css-ripple-effect/dist/ripple.min";
+
 .ion-page ion-content {
   background: #ddd;
   background: linear-gradient(to top right, #ddd, #eee);

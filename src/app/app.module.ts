@@ -92,7 +92,7 @@ import { Network } from "@ionic-native/network";
 import { WexAppVersionCheck } from "../providers/wex-app-version-check";
 import { VersionCheck } from "../pages/login/version-check/version-check";
 import { AppSymbols } from "./app.symbols";
-import { NgIdleModule, Idle } from "@ng-idle/core";
+import { NgIdleModule } from "@ng-idle/core";
 import { Environment } from "../environments/environment";
 import { MockBackend } from "@angular/http/testing";
 import { MockHttp } from "@angular-wex/mocks";
@@ -247,7 +247,8 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     Market,
     //# app providers
     //----------------------
-    { // Force service instatiation
+    {
+      // Force service instatiation
       provide: APP_INITIALIZER,
       useFactory: APP_INITIALIZER_FACTORY,
       deps: [UserIdle, GoogleAnalytics],
@@ -265,26 +266,18 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
       provide: SessionInfoRequestors,
       useClass: DefaultSessionInfoRequestors
     },
-    {
-      provide: GoogleAnalytics,
-      useClass: WexGoogleAnalyticsEvents,
-      deps: [SessionManager, WexPlatform]
-    },
+    WexGoogleAnalyticsEvents.PROVIDER_DEFINITION,
     {
       provide: Http,
       useFactory: HTTP_FACTORY,
       deps: [XHRBackend, MockBackend, NetworkStatus, RequestOptions]
     },
     {
-      provide: UserIdle,
-      useClass: UserIdle,
-      deps: [SessionManager, Idle, WexNavigationController, WexPlatform]
-    },
-    {
       provide: PaymentService,
       useClass: PaymentService,
       deps: [SessionManager, SessionCache]
     },
+    UserIdle.PROVIDER_DEFINITION,
     SessionManager,
     AuthenticationManager,
     UiNotificationsController,

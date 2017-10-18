@@ -6,13 +6,13 @@
 
 <ion-content padding class="fingerprint-terms-modal">
     <div class="terms" [innerHtml]="platform.constant(CONSTANTS.terms)"></div>
-
-    <ion-footer padding>
-        <button ion-button [color]="platform.isIos ? '' : 'white'" [outline]="platform.isIos" (click)="response(false)">
-            <span>{{ CONSTANTS.BUTTONS.DECLINE }}</span>
-        </button>
-        <button ion-button class="button-gradient" (click)="response(true)">
-            <span>{{ CONSTANTS.BUTTONS.ACCEPT }}</span>
-        </button>
-    </ion-footer>
 </ion-content>
+
+<ion-footer padding>
+    <button ion-button [color]="platform.isIos ? '' : 'white'" [outline]="platform.isIos" (click)="response(false)">
+        <span>{{ CONSTANTS.BUTTONS.DECLINE }}</span>
+    </button>
+    <button ion-button class="button-gradient" (click)="response(true)">
+        <span>{{ CONSTANTS.BUTTONS.ACCEPT }}</span>
+    </button>
+</ion-footer>
