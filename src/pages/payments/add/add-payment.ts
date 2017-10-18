@@ -36,7 +36,7 @@ interface PaymentBuffer {
 export class AddPaymentPage extends SecurePage {
   @ViewChild("calendar") public calendar: Calendar;
 
-  private payment: PaymentBuffer = <PaymentBuffer>{};
+  public payment: PaymentBuffer = <PaymentBuffer>{};
   public minPaymentDate: Date = new Date();
   public maxPaymentDate: Date = moment().add(moment.duration(180, "days")).toDate();
 
@@ -45,7 +45,7 @@ export class AddPaymentPage extends SecurePage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private viewController: ViewController,
-    private paymentService: PaymentService
+    public paymentService: PaymentService
   ) {
     super("Payments.Add", injector);
   }
@@ -74,6 +74,10 @@ export class AddPaymentPage extends SecurePage {
     console.log(moment(this.paymentDueDate).toDate());
     console.log(this.paymentDate);
     return moment(this.paymentDueDate).toDate() < this.paymentDate && this.paymentService.hasMinimumPaymentDue;
+  }
+
+  public get hasMinimumPaymentDue(): boolean {
+    return this.paymentService.hasMinimumPaymentDue;
   }
 
   public cancel(data?: any) {

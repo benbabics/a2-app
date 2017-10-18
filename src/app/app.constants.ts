@@ -462,6 +462,13 @@ export namespace ConstantsInfo {
             warningPaymentDate: "Payment date is after due date"
           },
 
+          SELECTION: {
+            LABELS: {
+              amount: "Amount",
+              bankAccount: "Bank Account"
+            }
+          },
+
           //# Add Payment Confirmation page
           CONFIRMATION: {
             title: "Payment Confirmation",
