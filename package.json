@@ -99,6 +99,7 @@
         "ionic-plugin-keyboard": "~2.2.1",
         "ionicons": "3.0.0",
         "lodash": "^4.17.4",
+        "mbsc-calendar": "^1.0.1",
         "moment": "^2.18.1",
         "nativesettingsopener": "1.0.1",
         "primeng": "^4.1.3",
