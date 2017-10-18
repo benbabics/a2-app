@@ -233,3 +233,22 @@ ion-list .item-md {
 .md .footer-md::before {
   background: none;
 }
+
+.fade-transition {
+  &.fadein {
+    animation: fadein  .5s;
+    visibility: visible;
+  }
+  &.fadeout {
+    animation: fadeout .5s;
+    visibility: hidden;
+  }
+}
+@keyframes fadein {
+  0%{opacity:0;visibility:visible;}
+  100%{opacity:1;}
+}
+@keyframes fadeout {
+  0%{opacity:1;visibility:visible;}
+  100%{opacity:0;visibility: hidden;}
+}
