@@ -61,6 +61,14 @@ export class AddPaymentPage extends SecurePage {
     return this.paymentService.paymentDueDate;
   }
 
+  public get displayAmountWarning(): boolean {
+    return this.payment.amount.value < this.paymentService.minimumPaymentDue;
+  }
+
+  public get displayDueDateWarning(): boolean {
+    return false;
+  }
+
   public cancel(data?: any) {
     this.viewController.dismiss(data);
   }

@@ -51,8 +51,12 @@ export class PaymentService {
     return this.invoiceSummary.details.paymentDueDate;
   }
 
+  public get minimumPaymentDue(): number {
+    return this.invoiceSummary.details.minimumPaymentDue;
+  }
+
   public get hasMinimumPaymentDue(): boolean {
-    return !!this.invoiceSummary.details.minimumPaymentDue;
+    return !!this.minimumPaymentDue;
   }
 
   public get amountOptions(): PaymentAmount[] {

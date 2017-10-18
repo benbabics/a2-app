@@ -39,7 +39,7 @@
       <ion-label>
         <h2>{{payment.amount.value | wexCurrency}}</h2>
         <p>{{ payment.amount.label }}</p>
-        <p *ngIf="false" class="item-warning">{{ CONSTANTS.LABELS.warningAmount }}</p>
+        <p *ngIf="displayAmountWarning" class="item-warning">{{ CONSTANTS.LABELS.warningAmount }}</p>
       </ion-label>
       <ion-icon item-right ios="ios-arrow-forward"></ion-icon>
     </button>
@@ -51,7 +51,7 @@
       <ion-label>
         <h2>{{paymentDate | wexDate:true:'MMMM D'}}</h2>
         <p *ngIf="hasMinimumPaymentDue">{{ CONSTANTS.LABELS.due }} {{paymentDueDate | wexDate:true:'MMMM D'}}</p>
-        <p *ngIf="false" class="item-warning">{{ CONSTANTS.LABELS.warningPaymentDate }}</p>
+        <p *ngIf="displayDueDateWarning" class="item-warning">{{ CONSTANTS.LABELS.warningPaymentDate }}</p>
       </ion-label>
       <ion-icon item-right ios="ios-arrow-forward"></ion-icon>
     </button>
