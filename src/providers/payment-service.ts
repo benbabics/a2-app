@@ -8,19 +8,20 @@ import { Value } from "../decorators/value";
 
 export type PaymentAmountTypes = keyof {
   minimumPaymentDue: string,
-  currentBalance: string
+  currentBalance: string,
+  otherAmount: string
 };
 
 export namespace PaymentAmountTypes {
   export const MinimumPaymentDue: PaymentAmountTypes = "minimumPaymentDue";
   export const CurrentBalance: PaymentAmountTypes = "currentBalance";
+  export const OtherAmount: PaymentAmountTypes = "otherAmount";
 }
 
 export interface PaymentAmount {
   key: string;
   value: number;
   label: string;
-  editable?: boolean;
 }
 
 Injectable()
@@ -62,11 +63,11 @@ export class PaymentService {
   public get amountOptions(): PaymentAmount[] {
     let payments: any = _.pick(this.invoiceSummary.details, PaymentAmountTypes.MinimumPaymentDue, PaymentAmountTypes.CurrentBalance);
     let options = _.map(payments, (value: number, key: string) => {
-      return <PaymentAmount>{ key, value, label: this.LABELS[key], editable: false };
+      return <PaymentAmount>{ key, value, label: this.LABELS[key] };
     });
 
     // push other amount option
-    let otherAmountOption = { key: "otherAmount", value: 0, label: this.LABELS.otherAmount, editable: true };
+    let otherAmountOption = { key: PaymentAmountTypes.OtherAmount, value: 0, label: this.LABELS.otherAmount };
     options.push(<PaymentAmount>otherAmountOption);
 
     return options;
