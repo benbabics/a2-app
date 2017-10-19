@@ -24,10 +24,10 @@
     <button ion-item *ngIf="paymentBankAccount" (click)="updateBankAccount()">
       <ion-label>
         <h2>
-          {{paymentBankAccount.details.name}}
-          (...{{paymentBankAccount.details.lastFourDigits}})
+          {{ paymentBankAccount.details.name }}
+          (...{{ paymentBankAccount.details.lastFourDigits }})
         </h2>
-        <p>{{paymentBankAccount.details.name}}</p>
+        <p>{{ paymentBankAccount.details.name }}</p>
       </ion-label>
       <ion-icon item-right ios="ios-arrow-forward"></ion-icon>
     </button>
@@ -37,8 +37,8 @@
 
     <button ion-item *ngIf="payment.amount" (click)="updateAmount()">
       <ion-label>
-        <h2>{{payment.amount.value | wexCurrency}}</h2>
-        <p>{{ payment.amount.label }}</p>
+        <h2>{{ payment.amount.value | wexCurrency }}</h2>
+        <p>{{ paymentLabel }}</p>
         <p *ngIf="displayAmountWarning" class="item-warning">{{ CONSTANTS.LABELS.warningAmount }}</p>
       </ion-label>
       <ion-icon item-right ios="ios-arrow-forward"></ion-icon>
@@ -49,8 +49,8 @@
 
     <button ion-item>
       <ion-label>
-        <h2>{{paymentDate | wexDate:true:'MMMM D'}}</h2>
-        <p *ngIf="hasMinimumPaymentDue">{{ CONSTANTS.LABELS.due }} {{paymentDueDate | wexDate:true:'MMMM D'}}</p>
+        <h2>{{ paymentDate | wexDate:true:DATE_FORMAT }}</h2>
+        <p *ngIf="hasMinimumPaymentDue">{{ CONSTANTS.LABELS.due }} {{ paymentDueDate | wexDate:true:DATE_FORMAT }}</p>
         <p *ngIf="displayDueDateWarning" class="item-warning">{{ CONSTANTS.LABELS.warningPaymentDate }}</p>
       </ion-label>
       <ion-icon item-right ios="ios-arrow-forward"></ion-icon>

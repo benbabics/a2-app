@@ -54,7 +54,7 @@ export class AddPaymentSummaryPage extends SecurePage {
   public confirm() {
     let accountId: string = this.session.user.billingCompany.details.accountId;
     let paymentRequest: PaymentRequest = {
-      amount: this.userPayment.amount,
+      amount: this.userPayment.amount.value,
       scheduledDate: this.userPayment.date,
       bankAccountId: this.userPayment.bankAccount.details.id
     };

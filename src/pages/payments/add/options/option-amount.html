@@ -1,16 +1,16 @@
 <ion-item *ngIf="!isOtherAmountOption">
   <ion-label>
-    <h2>{{option.label}}</h2>
-    <p>{{option.value | wexCurrency}}</p>
+    <h2>{{ label }}</h2>
+    <p>{{ option.value | wexCurrency }}</p>
   </ion-label>
   <ion-radio [value]="option"></ion-radio>
 </ion-item>
 
 <ion-item *ngIf="isOtherAmountOption">
   <ion-label>
-    <p>{{option.label}}</p>
+    <p>{{ label }}</p>
     <ion-input #otherAmountInput
-               name="{{keyOtherAmount}}"
+               name="{{ option.type }}"
                type="tel"
                [(ngModel)]="otherAmount">
     </ion-input>

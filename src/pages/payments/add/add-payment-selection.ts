@@ -1,16 +1,13 @@
 import { Component, Injector } from "@angular/core";
-import { NavParams, NavController /*, ViewController*/ } from "ionic-angular";
+import { NavParams, NavController } from "ionic-angular";
 import { SecurePage } from "../../secure-page";
-import { PaymentAmount } from "./../../../providers/payment-service";
-import { BankAccount } from "@angular-wex/models";
-
-export type SelectableOption = PaymentAmount | BankAccount;
+import { PaymentSelectionOption } from "./../../../providers/payment-service";
 
 export type AddPaymentSelectionNavParams = keyof {
-  selectionType: String,
-  options: SelectableOption[],
-  selectedItem: SelectableOption,
-  onSelection: Function
+  selectionType
+  options
+  selectedItem
+  onSelection
 };
 
 export namespace AddPaymentSelectionNavParams {
@@ -26,21 +23,22 @@ export namespace AddPaymentSelectionNavParams {
 })
 export class AddPaymentSelectionPage extends SecurePage {
   public selectionType: string;
-  private onSelection: Function;
-  public selectedItem: SelectableOption;
-  public options: SelectableOption[];
+  private onSelection: (selection: PaymentSelectionOption) => void;
+  public selectedItem: PaymentSelectionOption;
+  public options: PaymentSelectionOption[];
 
   constructor(
     injector: Injector,
+    navParams: NavParams,
     public navCtrl: NavController,
-    public navParams: NavParams
+    
   ) {
     super("Payments.Add.Selection", injector);
 
-    this.selectionType = this.navParams.get(AddPaymentSelectionNavParams.SelectionType);
-    this.options = this.navParams.get(AddPaymentSelectionNavParams.Options);
-    this.selectedItem = this.navParams.get(AddPaymentSelectionNavParams.SelectedItem);
-    this.onSelection = this.navParams.get(AddPaymentSelectionNavParams.OnSelection);
+    this.selectionType = navParams.get(AddPaymentSelectionNavParams.SelectionType);
+    this.options = navParams.get(AddPaymentSelectionNavParams.Options);
+    this.selectedItem = navParams.get(AddPaymentSelectionNavParams.SelectedItem);
+    this.onSelection = navParams.get(AddPaymentSelectionNavParams.OnSelection);
   }
 
   public get pageTitle(): string {
@@ -48,6 +46,7 @@ export class AddPaymentSelectionPage extends SecurePage {
   }
 
   public handleSubmit() {
-    this.onSelection(this.selectedItem).then(() => this.navCtrl.pop());
+    this.onSelection(this.selectedItem);
+    this.navCtrl.pop();
   }
 }

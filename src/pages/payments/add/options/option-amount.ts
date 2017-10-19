@@ -2,7 +2,8 @@ import * as _ from "lodash";
 import * as accounting from "accounting-js";
 import { TextInput } from "ionic-angular";
 import { Component, Input, ViewChild, OnInit } from "@angular/core";
-import { PaymentAmount, PaymentAmountTypes } from "./../../../../providers/payment-service";
+import { UserPaymentAmount, UserPaymentAmountType } from "../../../../models";
+import { Value } from "../../../../decorators/value";
 
 type FormInputTypes = TextInput;
 
@@ -12,18 +13,22 @@ type FormInputTypes = TextInput;
 })
 export class OptionAmount implements OnInit {
 
-  @Input() option: PaymentAmount;
+  @Input() option: UserPaymentAmount;
   @ViewChild("otherAmountInput") otherAmountInput: FormInputTypes;
+  @Value("PAGES.PAYMENTS.ADD.LABELS") public readonly LABELS: any;  
 
   private _otherAmount: number;
-  public keyOtherAmount = PaymentAmountTypes.OtherAmount;
 
   ngOnInit() {
     this._otherAmount = this.option.value;
   }
 
   public get isOtherAmountOption(): boolean {
-    return this.option.key === this.keyOtherAmount;
+    return this.option.type === UserPaymentAmountType.OtherAmount;
+  }
+
+  public get label(): string {
+    return this.LABELS[this.option.type];
   }
 
   public get otherAmount(): string {

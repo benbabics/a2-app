@@ -8,24 +8,18 @@ import {
 } from "ionic-angular";
 import { SecurePage } from "../../secure-page";
 import { BankAccount, Payment } from "@angular-wex/models";
-import { PaymentService, PaymentAmount } from "./../../../providers/payment-service";
-import { AddPaymentSelectionPage, SelectableOption } from "./add-payment-selection";
+import { PaymentService, PaymentSelectionOption } from "./../../../providers/payment-service";
+import { AddPaymentSelectionPage } from "./add-payment-selection";
+import { UserPayment } from "../../../models";
+import { Value } from "../../../decorators/value";
 
 export type AddPaymentNavParams = keyof {
-  payment?: Payment
+  payment
 };
 
 export namespace AddPaymentNavParams {
   export const Payment: AddPaymentNavParams = "payment";
 }
-
-// Todo: UserPayment interface
-interface PaymentBuffer {
-  amount: PaymentAmount;
-  date: string;
-  bankAccount: BankAccount;
-}
-
 
 //# AddPaymentPage
 @Component({
@@ -34,7 +28,11 @@ interface PaymentBuffer {
 })
 export class AddPaymentPage extends SecurePage {
 
-  public payment: PaymentBuffer = <PaymentBuffer>{};
+  @Value("PAGES.PAYMENTS.ADD.LABELS") private readonly LABELS: any;  
+
+  public readonly DATE_FORMAT: string = "MMMM D";
+
+  public payment: UserPayment = {} as UserPayment;
 
   constructor(
     injector: Injector,
@@ -62,6 +60,10 @@ export class AddPaymentPage extends SecurePage {
     return this.paymentService.paymentDueDate;
   }
 
+  public get paymentLabel(): string {
+    return this.LABELS[this.payment.amount.type];
+  }
+
   public get displayAmountWarning(): boolean {
     return this.payment.amount.value < this.paymentService.minimumPaymentDue;
   }
@@ -80,7 +82,7 @@ export class AddPaymentPage extends SecurePage {
 
   public updateAmount() {
     let options = this.paymentService.amountOptions,
-        selectedItem = _.first(_.filter(options, {key: this.payment.amount.key}));
+        selectedItem = _.first(_.filter(options, { type: this.payment.amount.type }));
 
     this.navigateToSelectionPage("amount", options, selectedItem);
   }
@@ -92,11 +94,8 @@ export class AddPaymentPage extends SecurePage {
     this.navigateToSelectionPage("bankAccount", options, selectedItem);
   }
 
-  private navigateToSelectionPage(selectionType: keyof PaymentBuffer, options: SelectableOption[], selectedItem: SelectableOption) {
-    let onSelection = (selectedItem: SelectableOption) => new Promise(resolve => {
-      this.payment[selectionType] = selectedItem;
-      resolve();
-    });
+  private navigateToSelectionPage(selectionType: keyof UserPayment, options: PaymentSelectionOption[], selectedItem: PaymentSelectionOption) {
+    let onSelection = (selectedItem: PaymentSelectionOption) => this.payment[selectionType] = selectedItem;
 
     this.navCtrl.push(AddPaymentSelectionPage, { selectionType, options, selectedItem, onSelection });
   }
@@ -105,9 +104,13 @@ export class AddPaymentPage extends SecurePage {
     let existingPayment: Payment = this.navParams.get(AddPaymentNavParams.Payment);
 
     if (existingPayment) {
-      // this.payment.amount = existingPayment.details.amount;
+      this.payment.amount = {
+        type: this.paymentService.resolvePaymentAmountType(existingPayment.details.amount),
+        value: existingPayment.details.amount
+      };
       this.payment.date = existingPayment.details.scheduledDate;
       this.payment.bankAccount = existingPayment.bankAccount;
+      this.payment.id = existingPayment.details.id;
     }
     else {
       this.payment.amount = this.paymentService.defaultAmount;

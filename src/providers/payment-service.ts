@@ -1,35 +1,17 @@
 import * as _ from "lodash";
 import { Injectable } from "@angular/core";
-import { Session } from "../models";
+import { Session, UserPaymentAmount, UserPaymentAmountType } from "../models";
 import { SessionManager } from "./session-manager";
 import { SessionCache } from "./session-cache";
 import { InvoiceSummary, BankAccount } from "@angular-wex/models";
-import { Value } from "../decorators/value";
 
-export type PaymentAmountTypes = keyof {
-  minimumPaymentDue: string,
-  currentBalance: string,
-  otherAmount: string
-};
-
-export namespace PaymentAmountTypes {
-  export const MinimumPaymentDue: PaymentAmountTypes = "minimumPaymentDue";
-  export const CurrentBalance: PaymentAmountTypes = "currentBalance";
-  export const OtherAmount: PaymentAmountTypes = "otherAmount";
-}
-
-export interface PaymentAmount {
-  key: string;
-  value: number;
-  label: string;
-}
+export type PaymentSelectionOption = UserPaymentAmount | BankAccount;
 
 Injectable();
 export class PaymentService {
 
-  @Value("PAGES.PAYMENTS.ADD.LABELS") private readonly LABELS: any;
-
   private session: Session = {};
+  private _amountOptions: UserPaymentAmount[];
 
   constructor(
     private sessionManager: SessionManager,
@@ -42,6 +24,10 @@ export class PaymentService {
 
   public get bankAccounts(): BankAccount[] {
     return this.session.bankAccounts || [];
+  }
+
+  public get currentBalance(): number {
+    return this.invoiceSummary.details.currentBalance;
   }
 
   public get invoiceSummary(): InvoiceSummary {
@@ -60,26 +46,26 @@ export class PaymentService {
     return !!this.minimumPaymentDue;
   }
 
-  public get amountOptions(): PaymentAmount[] {
-    let payments: any = _.pick(this.invoiceSummary.details, PaymentAmountTypes.MinimumPaymentDue, PaymentAmountTypes.CurrentBalance);
-    let options = _.map(payments, (value: number, key: string) => {
-      return <PaymentAmount>{ key, value, label: this.LABELS[key] };
-    });
-
-    // push other amount option
-    let otherAmountOption = { key: PaymentAmountTypes.OtherAmount, value: 0, label: this.LABELS.otherAmount };
-    options.push(<PaymentAmount>otherAmountOption);
-
-    return options;
+  public get amountOptions(): UserPaymentAmount[] {
+    return this._amountOptions;
   }
 
-  public get defaultAmount(): PaymentAmount {
-    let key = this.hasMinimumPaymentDue ? PaymentAmountTypes.MinimumPaymentDue : PaymentAmountTypes.CurrentBalance;
-    return _.first(_.filter(this.amountOptions, { key }));
+  public get defaultAmount(): UserPaymentAmount {
+    let type = this.hasMinimumPaymentDue ? UserPaymentAmountType.MinimumPaymentDue : UserPaymentAmountType.CurrentBalance;
+
+    return _.first(_.filter(this.amountOptions, { type }));
   }
 
   public get defaultBankAccount(): BankAccount {
     return _.first(this.bankAccounts);
+  }
+
+  public resolvePaymentAmountType(amount: number): UserPaymentAmountType {
+    switch (amount) {
+      case this.minimumPaymentDue: return UserPaymentAmountType.MinimumPaymentDue;
+      case this.currentBalance: return UserPaymentAmountType.CurrentBalance;
+      default: return UserPaymentAmountType.OtherAmount;
+    }
   }
 
   private clearSession() {
@@ -89,6 +75,14 @@ export class PaymentService {
   private requestSessionDetails() {
     let sessionInfo = [Session.Field.InvoiceSummary, Session.Field.BankAccounts];
     this.sessionCache.getSessionDetails(sessionInfo)
-      .subscribe((session: Session) => this.session = session);
+      .subscribe((session: Session) => {
+        this.session = session;
+
+        // Populate the payment amount options
+        this._amountOptions = UserPaymentAmountType.values.map((paymentAmountType) => ({
+          type: paymentAmountType,
+          value: _.get(this.invoiceSummary.details, paymentAmountType, 0)
+        }));
+      });
   }
 }
