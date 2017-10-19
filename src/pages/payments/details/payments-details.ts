@@ -17,6 +17,8 @@ export namespace PaymentsDetailsNavParams {
 })
 export class PaymentsDetailsPage extends DetailsPage {
 
+  public readonly DATE_FORMAT: string = "MMM D, YYYY";
+
   public payment: Payment;
 
   constructor(
@@ -25,5 +27,17 @@ export class PaymentsDetailsPage extends DetailsPage {
   ) {
     super("Payments.Details", injector);
     this.payment = this.navParams.get(PaymentsDetailsNavParams.Payment);
+  }
+
+  public get headerLabel(): string {
+    return this.isScheduled ? this.CONSTANTS.header.scheduled : this.CONSTANTS.header.completed;
+  }
+
+  public get isCompleted(): boolean {
+    return this.payment.isComplete;
+  }
+
+  public get isScheduled(): boolean {
+    return this.payment.isScheduled;
   }
 }

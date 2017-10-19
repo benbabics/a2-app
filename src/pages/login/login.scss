@@ -144,10 +144,10 @@ page-login {
           &.item {
             font-size: inherit;
             margin: 0;
-          }
 
-          .item-inner {
-            padding: 0;
+            > .item-inner {
+              padding: 0 !important;
+            }  
           }
 
           ion-input {

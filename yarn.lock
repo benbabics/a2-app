@@ -10,9 +10,9 @@
   version "1.2.3"
   resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-mocks.git#145f780f242228f26dd779573a806bdbb8d419b3"
 
-"@angular-wex/models@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-models.git#85c5e5aa3c3":
-  version "1.4.8"
-  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-models.git#85c5e5aa3c31e08a729cab2318239930abaa8112"
+"@angular-wex/models@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-models.git#c3e9f08d149":
+  version "1.4.9-alpha.0"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-models.git#c3e9f08d149d6d24f563d1392aaea8f53078e21d"
 
 "@angular-wex/tslint-rules@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-tslint-rules.git#2a1e4977656":
   version "1.0.0-alpha"

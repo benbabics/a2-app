@@ -45,7 +45,7 @@
     "dependencies": {
         "@angular-wex/api-providers": "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-api-providers#8a890b1fc8b",
         "@angular-wex/mocks": "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-mocks.git#145f780f242",
-        "@angular-wex/models": "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-models.git#85c5e5aa3c3",
+        "@angular-wex/models": "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-models.git#c3e9f08d149",
         "@angular-wex/validators": "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-validators.git#dca3f5c68dc",
         "@angular/animations": "4.1.3",
         "@angular/common": "4.1.3",

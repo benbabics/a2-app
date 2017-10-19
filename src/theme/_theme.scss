@@ -70,10 +70,14 @@ ion-icon.icon-ios.tab-button-icon[aria-label*="fa"] {
 //# Items
 // --------------------------------------------------
 
-ion-list .item-ios {
+ion-list.list-ios ion-item.item-block.item-ios {
   padding-left: 0;
 
-  & > .item-inner {
+  &:first-child {
+    border-top: 0;
+  }
+
+  > .item-inner {
     padding-left: 16px;
   }
 }
@@ -124,7 +128,7 @@ ion-item-group.ios-item-indent {
   }
 }
 
-.card-ios .list-ios .item-ios.item-block .item-inner {
+.card-ios ion-list.list-ios ion-item.item-ios.item-block {
   // Show dividers on ion-list items that are inside ion-cards
   border-bottom: 1px solid $list-border-color;
 }
@@ -224,7 +228,7 @@ ion-list .item-md {
   }
 }
 
-.card-md .list-md .item-md.item-block .item-inner {
+ion-list.list-md ion-item.item.item-md.item-block > .item-inner {
   // Show dividers on ion-list items that are inside ion-cards
   border-bottom: 1px solid $list-border-color;
 }

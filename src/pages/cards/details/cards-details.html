@@ -19,10 +19,12 @@
       </button>
     </div>
 
-    <wex-details-view [model]="card"
-                      [includedFields]="CONSTANTS.LIST.includedFields"
-                      [mappedFieldNames]="CONSTANTS.LIST.mappedFieldNames">
-    </wex-details-view>
+    <ion-card-content>
+      <wex-details-view [model]="card"
+                        [includedFields]="CONSTANTS.LIST.includedFields"
+                        [mappedFieldNames]="CONSTANTS.LIST.mappedFieldNames">
+      </wex-details-view>
+    </ion-card-content>
   </ion-card>
 
   <ion-card id="card-actions">

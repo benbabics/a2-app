@@ -1,18 +1,38 @@
-.detail-list ion-item ion-label {
-  @include flexbox();
-  @include flex-direction(row);
-  @include justify-content(space-between);
+.detail-list ion-item .item-inner {
 
-  & > * {
-    &.property-name {
-      text-align: left;
+  @at-root .md & {
+    padding-left: 0;
+  }
+
+  ion-label {
+
+    @at-root .md & > .property-name {
       color: color($colors, dark-gray);
+      font-size: 1.4rem;
+      line-height: 1.58;
+      display: block;
     }
-
-    &.property-value {
-      text-align: right;
+  
+    @at-root .ios & {
+      @include flexbox();
+      @include flex-direction(row);
+      @include justify-content(space-between);
+  
+      > * {
+  
+        &.property-name {
+          text-align: left;
+        }
+    
+        &.property-value {
+          text-align: right;
+          color: color($colors, gray);
+        }
+      }
     }
   }
 }
 
-wex-details-view {}
+wex-details-view {
+  @extend .detail-list;
+}
