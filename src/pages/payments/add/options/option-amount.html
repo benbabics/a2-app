@@ -7,7 +7,10 @@
 </ion-item>
 
 <ion-item *ngIf="isOtherAmountOption" [hidden]="isSelected">
-  <ion-label> {{ label }} </ion-label>
+  <ion-label>
+    <p>{{ label }}</p>
+    <h2>{{ option.value | wexCurrency }}</h2>
+  </ion-label>
   <ion-radio #radio [value]="option"></ion-radio>
 </ion-item>
 <div *ngIf="isOtherAmountOption && isSelected">
