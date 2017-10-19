@@ -15,7 +15,7 @@ export class OptionAmount implements OnInit {
 
   @Input() option: UserPaymentAmount;
   @ViewChild("otherAmountInput") otherAmountInput: FormInputTypes;
-  @Value("PAGES.PAYMENTS.ADD.LABELS") public readonly LABELS: any;  
+  @Value("PAGES.PAYMENTS.ADD.LABELS") public readonly LABELS: any;
 
   private _otherAmount: number;
 

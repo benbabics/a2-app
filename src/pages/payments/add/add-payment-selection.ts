@@ -30,8 +30,7 @@ export class AddPaymentSelectionPage extends SecurePage {
   constructor(
     injector: Injector,
     navParams: NavParams,
-    public navCtrl: NavController,
-    
+    public navCtrl: NavController
   ) {
     super("Payments.Add.Selection", injector);
 

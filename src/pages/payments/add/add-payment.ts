@@ -28,7 +28,7 @@ export namespace AddPaymentNavParams {
 })
 export class AddPaymentPage extends SecurePage {
 
-  @Value("PAGES.PAYMENTS.ADD.LABELS") private readonly LABELS: any;  
+  @Value("PAGES.PAYMENTS.ADD.LABELS") private readonly LABELS: any;
 
   public readonly DATE_FORMAT: string = "MMMM D";
 
