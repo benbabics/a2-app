@@ -10,8 +10,8 @@
   <ion-label>
     <p>{{ label }}</p>
     <ion-input #otherAmountInput
-               name="{{ option.type }}"
                type="tel"
+               [name]="option.type"
                [(ngModel)]="otherAmount">
     </ion-input>
   </ion-label>
