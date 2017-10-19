@@ -158,7 +158,6 @@ export class AddPaymentPage extends SecurePage {
         value: existingPayment.details.amount
       };
       this.payment.id = existingPayment.details.id;
-      // this.payment.amount = existingPayment.details.amount;
       this.payment.date = moment(existingPayment.details.scheduledDate).toDate();
       this.payment.bankAccount = existingPayment.bankAccount;
     }
