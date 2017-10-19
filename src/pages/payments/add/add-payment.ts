@@ -111,7 +111,7 @@ export class AddPaymentPage extends SecurePage {
   public handleSchedulePayment() {
     let paymentRequest: PaymentRequest = {
       amount: this.payment.amount.value,
-      scheduledDate: moment(this.payment.date).toISOString(),
+      scheduledDate: this.payment.date.toISOString(),
       bankAccountId: this.payment.bankAccount.details.id
     };
 
