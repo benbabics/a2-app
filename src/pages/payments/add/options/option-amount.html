@@ -8,12 +8,12 @@
 
 <ion-item *ngIf="isOtherAmountOption">
   <ion-label>
+    <p>{{option.label}}</p>
     <ion-input #otherAmountInput
                name="{{keyOtherAmount}}"
                type="tel"
                [(ngModel)]="otherAmount">
     </ion-input>
-    <p>{{option.label}}</p>
   </ion-label>
   <ion-radio [value]="option"></ion-radio>
 </ion-item>

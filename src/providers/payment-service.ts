@@ -1,8 +1,8 @@
 import * as _ from "lodash";
 import { Injectable } from "@angular/core";
 import { Session } from "../models";
-import { SessionManager } from './session-manager';
-import { SessionCache } from './session-cache';
+import { SessionManager } from "./session-manager";
+import { SessionCache } from "./session-cache";
 import { InvoiceSummary, BankAccount } from "@angular-wex/models";
 import { Value } from "../decorators/value";
 
@@ -24,7 +24,7 @@ export interface PaymentAmount {
   label: string;
 }
 
-Injectable()
+Injectable();
 export class PaymentService {
 
   @Value("PAGES.PAYMENTS.ADD.LABELS") private readonly LABELS: any;
