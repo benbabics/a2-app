@@ -1,0 +1,33 @@
+option-amount {
+  .item-ios.item-label-stacked .text-input, .item-ios.item-label-floating .text-input {
+    margin-top: 0;
+  }
+  ion-label[floating] {
+    opacity: .4;
+  }
+
+  .item-radio-checked.item-ios ion-label {
+    color: black;
+  }
+
+  .item-input, .item-radio-checked { 
+    .item-inner {
+      &::after {
+        font-family: "Ionicons";
+        font-size: 3rem;
+        font-weight: 600;
+        color: color($colors, primary);
+        content: "\f3ff";
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  input::before {
+    content: "$";
+  }
+
+  .radio-checked {
+    display: none !important;
+  }
+}
