@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { BankAccount } from '@angular-wex/models';
+import { BankAccount } from "@angular-wex/models";
 
 @Component({
   selector: "option-bank-account",

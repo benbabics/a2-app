@@ -1,8 +1,8 @@
 import { Component, Injector } from "@angular/core";
 import { NavParams, NavController /*, ViewController*/ } from "ionic-angular";
 import { SecurePage } from "../../secure-page";
-import { PaymentAmount } from './../../../providers/payment-service';
-import { BankAccount } from '@angular-wex/models';
+import { PaymentAmount } from "./../../../providers/payment-service";
+import { BankAccount } from "@angular-wex/models";
 
 export type SelectableOption = PaymentAmount | BankAccount;
 
@@ -44,7 +44,7 @@ export class AddPaymentSelectionPage extends SecurePage {
   }
 
   public get pageTitle(): string {
-    return this.CONSTANTS.LABELS[this.selectionType]
+    return this.CONSTANTS.LABELS[this.selectionType];
   }
 
   public handleSubmit() {
