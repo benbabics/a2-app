@@ -78,7 +78,8 @@ import {
   WexIfPlatformAndroidDirective,
   WexIfPlatformIosDirective,
   WexKeyboardAware,
-  WexClear
+  WexClear,
+  AutofocusDirective
 } from "../directives";
 import { InAppBrowser } from "@ionic-native/in-app-browser";
 import { AddPaymentPage } from "../pages/payments/add/add-payment";
@@ -100,6 +101,7 @@ import { ModelGeneratorsModule } from "@angular-wex/models/mocks";
 import { MockResponsesModule } from "@angular-wex/api-providers/mocks";
 import { MbscModule } from "mbsc-calendar";
 import { Calendar } from "../components/calendar/calendar";
+import { CurrencyMaskModule } from "ng2-currency-mask";
 
 export function APP_INITIALIZER_FACTORY() {
   return function () { };
@@ -174,6 +176,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     WexInvoiceDisplay,
     WexKeyboardAware,
     WexClear,
+    AutofocusDirective,
     ResizableSvg,
     Calendar
   ],
@@ -196,6 +199,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     LocalStorageModule.withConfig({ storageType: "localStorage" }),
     NgIdleModule.forRoot(),
     ProgressBarModule,
+    CurrencyMaskModule,
     //# MobiScroll
     //----------------------
     MbscModule, // add the mobiscroll module

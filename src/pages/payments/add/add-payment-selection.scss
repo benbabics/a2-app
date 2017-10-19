@@ -1,0 +1,30 @@
+page-add-payment-selection {
+
+  .item-radio-checked {
+    &.item-ios, &.item-md {
+      ion-label {
+        color: black;
+      }
+    }
+  }
+
+  .item-radio-checked {
+    @at-root .md & .button-effect {
+      display: none !important;
+    }
+    .item-inner {
+      &::after {
+        font-family: "Ionicons";
+        font-size: 3rem;
+        font-weight: 600;
+        color: color($colors, primary);
+        content: "\f3ff";
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  .radio-checked, .radio-icon {
+    display: none !important;
+  }
+}

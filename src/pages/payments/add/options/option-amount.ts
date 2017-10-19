@@ -1,11 +1,7 @@
-import * as _ from "lodash";
-import * as accounting from "accounting-js";
-import { TextInput } from "ionic-angular";
+import { RadioButton } from "ionic-angular";
 import { Component, Input, ViewChild, OnInit } from "@angular/core";
 import { UserPaymentAmount, UserPaymentAmountType } from "../../../../models";
 import { Value } from "../../../../decorators/value";
-
-type FormInputTypes = TextInput;
 
 @Component({
   selector: "option-amount",
@@ -14,13 +10,15 @@ type FormInputTypes = TextInput;
 export class OptionAmount implements OnInit {
 
   @Input() option: UserPaymentAmount;
-  @ViewChild("otherAmountInput") otherAmountInput: FormInputTypes;
+  @ViewChild("radio") radio: RadioButton;
   @Value("PAGES.PAYMENTS.ADD.LABELS") public readonly LABELS: any;
 
-  private _otherAmount: number;
+  public otherAmount: number;
 
   ngOnInit() {
-    this._otherAmount = this.option.value;
+    if (this.isOtherAmountOption) {
+      this.otherAmount = this.option.value;
+    }
   }
 
   public get isOtherAmountOption(): boolean {
@@ -31,20 +29,7 @@ export class OptionAmount implements OnInit {
     return this.LABELS[this.option.type];
   }
 
-  public get otherAmount(): string {
-    if (_.isNumber(this._otherAmount)) {
-      if (this.otherAmountInput && this.otherAmountInput._isFocus ) {
-        return accounting.unformat(this._otherAmount);
-      }
-      else {
-        return accounting.format(this._otherAmount);
-      }
-    }
-
-    return "";
-  }
-
-  public set otherAmount(amount: string) {
-    this._otherAmount = accounting.unformat(amount);
+  public get isSelected(): boolean {
+    return this.radio ? this.radio.checked : false;
   }
 }

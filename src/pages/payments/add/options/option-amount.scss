@@ -1,0 +1,14 @@
+option-amount {
+  #custom-input-label, .item-md p, .item-ios p {
+    font-size: 1.4rem;
+    color: color($colors, light-header-text);
+  }
+
+  #custom-input {
+    text-align: left !important;
+  }
+
+  .custom-input-item {
+    @extend .item-radio-checked;
+  }
+}

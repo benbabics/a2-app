@@ -23,7 +23,7 @@ export interface UserPaymentAmount {
 export interface UserPayment {
 
   amount: UserPaymentAmount;
-  date: string;
+  date: Date;
   bankAccount: BankAccount;
   id?: string;
 }

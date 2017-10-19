@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import * as moment from "moment";
-import { Component, Injector } from "@angular/core";
+import { Component, Injector, ViewChild } from "@angular/core";
 import {
   NavParams,
   NavController,
@@ -16,6 +16,7 @@ import { UserPayment } from "../../../models";
 import { Value } from "../../../decorators/value";
 import { AddPaymentConfirmationPage } from "./confirmation/add-payment-confirmation";
 import { PaymentProvider, PaymentRequest } from "@angular-wex/api-providers";
+import { Calendar } from "../../../components/calendar/calendar";
 
 export type AddPaymentNavParams = keyof {
   payment
@@ -31,12 +32,15 @@ export namespace AddPaymentNavParams {
   templateUrl: "add-payment.html"
 })
 export class AddPaymentPage extends SecurePage {
+  @ViewChild("calendar") public calendar: Calendar;
 
   @Value("PAGES.PAYMENTS.ADD.LABELS") private readonly LABELS: any;
 
   public readonly DATE_FORMAT: string = "MMMM D";
 
   public payment: UserPayment = {} as UserPayment;
+  public minPaymentDate: Date = new Date();
+  public maxPaymentDate: Date = moment().add(moment.duration(180, "days")).toDate();
   public isLoading: boolean = false;
 
   constructor(
@@ -44,7 +48,7 @@ export class AddPaymentPage extends SecurePage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private viewController: ViewController,
-    private paymentService: PaymentService,
+    public paymentService: PaymentService,
     private paymentProvider: PaymentProvider
   ) {
     super("Payments.Add", injector);
@@ -58,12 +62,12 @@ export class AddPaymentPage extends SecurePage {
     return this.payment.bankAccount;
   }
 
-  public get paymentDate(): string {
+  public get paymentDate(): Date {
     return this.payment.date;
   }
 
-  public get paymentDueDate(): string {
-    return this.paymentService.paymentDueDate;
+  public get paymentDueDate(): Date {
+    return moment(this.paymentService.paymentDueDate).toDate();
   }
 
   public get paymentLabel(): string {
@@ -75,7 +79,7 @@ export class AddPaymentPage extends SecurePage {
   }
 
   public get displayDueDateWarning(): boolean {
-    return false;
+    return moment(this.paymentDueDate).toDate() < this.paymentDate && this.paymentService.hasMinimumPaymentDue;
   }
 
   public get hasMinimumPaymentDue(): boolean {
@@ -93,6 +97,10 @@ export class AddPaymentPage extends SecurePage {
     this.navigateToSelectionPage("amount", options, selectedItem);
   }
 
+  public updateDate() {
+    this.calendar.displayCalendar();
+  }
+
   public updateBankAccount() {
     let options = this.paymentService.bankAccounts,
         selectedItem = this.payment.bankAccount;
@@ -103,7 +111,7 @@ export class AddPaymentPage extends SecurePage {
   public handleSchedulePayment() {
     let paymentRequest: PaymentRequest = {
       amount: this.payment.amount.value,
-      scheduledDate: this.payment.date,
+      scheduledDate: moment(this.payment.date).toISOString(),
       bankAccountId: this.payment.bankAccount.details.id
     };
 
@@ -150,12 +158,13 @@ export class AddPaymentPage extends SecurePage {
         value: existingPayment.details.amount
       };
       this.payment.id = existingPayment.details.id;
-      this.payment.date = existingPayment.details.scheduledDate;
+      // this.payment.amount = existingPayment.details.amount;
+      this.payment.date = moment(existingPayment.details.scheduledDate).toDate();
       this.payment.bankAccount = existingPayment.bankAccount;
     }
     else {
       this.payment.amount = this.paymentService.defaultAmount;
-      this.payment.date = moment().toISOString();
+      this.payment.date = moment().toDate();
       this.payment.bankAccount = this.paymentService.defaultBankAccount;
     }
   }

@@ -6,14 +6,17 @@
   <ion-radio [value]="option"></ion-radio>
 </ion-item>
 
-<ion-item *ngIf="isOtherAmountOption">
-  <ion-label>
-    <p>{{ label }}</p>
-    <ion-input #otherAmountInput
-               type="tel"
-               [name]="option.type"
-               [(ngModel)]="otherAmount">
-    </ion-input>
-  </ion-label>
-  <ion-radio [value]="option"></ion-radio>
+<ion-item *ngIf="isOtherAmountOption" [hidden]="isSelected">
+  <ion-label> {{ label }} </ion-label>
+  <ion-radio #radio [value]="option"></ion-radio>
 </ion-item>
+<div *ngIf="isOtherAmountOption && isSelected">
+<ion-item class="custom-input-item">
+  <div id="custom-input-label"> {{ label }} </div>
+  <input id="custom-input"
+         Autofocus
+         type="tel"
+         currencyMask [options]="{ prefix: '$', thousands: '', decimal: '.' }"
+         [(ngModel)]="otherAmount">
+</ion-item>
+</div>

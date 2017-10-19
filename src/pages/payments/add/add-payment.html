@@ -47,13 +47,14 @@
     <!-- Payment Date -->
     <ion-list-header>{{ CONSTANTS.LABELS.paymentDate }}</ion-list-header>
 
-    <button ion-item>
+    <button ion-item (click)="updateDate()">
       <ion-label>
         <h2>{{ paymentDate | wexDate:true:DATE_FORMAT }}</h2>
-        <p *ngIf="hasMinimumPaymentDue">{{ CONSTANTS.LABELS.due }} {{ paymentDueDate | wexDate:true:DATE_FORMAT }}</p>
+        <p *ngIf="paymentService.hasMinimumPaymentDue">{{ CONSTANTS.LABELS.due }} {{ paymentDueDate | wexDate:true:DATE_FORMAT }}</p>
         <p *ngIf="displayDueDateWarning" class="item-warning">{{ CONSTANTS.LABELS.warningPaymentDate }}</p>
       </ion-label>
       <ion-icon item-right ios="ios-arrow-forward"></ion-icon>
+      <calendar #calendar [(date)]="this.payment.date"  [minDate]="minPaymentDate" [maxDate]="maxPaymentDate"></calendar>
     </button>
   </ion-item-group>
 

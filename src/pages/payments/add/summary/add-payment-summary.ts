@@ -55,7 +55,7 @@ export class AddPaymentSummaryPage extends SecurePage {
     let accountId: string = this.session.user.billingCompany.details.accountId;
     let paymentRequest: PaymentRequest = {
       amount: this.userPayment.amount.value,
-      scheduledDate: this.userPayment.date,
+      scheduledDate: moment(this.userPayment.date).toISOString(),
       bankAccountId: this.userPayment.bankAccount.details.id
     };
     let paymentState: Observable<Payment>;
