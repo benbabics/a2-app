@@ -54,7 +54,7 @@ export namespace CalendarTheme {
       this.options.max = this.maxDate;
       this.mbscCalendar.option(this.options);
     }
-    
+
     this.mbscCalendar.show();
   }
 }

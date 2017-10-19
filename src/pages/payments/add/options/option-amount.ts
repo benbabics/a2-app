@@ -1,8 +1,8 @@
 import * as _ from "lodash";
 import * as accounting from "accounting-js";
-import { TextInput } from 'ionic-angular';
+import { TextInput } from "ionic-angular";
 import { Component, Input, ViewChild, OnInit } from "@angular/core";
-import { PaymentAmount, PaymentAmountTypes } from './../../../../providers/payment-service';
+import { PaymentAmount, PaymentAmountTypes } from "./../../../../providers/payment-service";
 
 type FormInputTypes = TextInput;
 
@@ -31,7 +31,9 @@ export class OptionAmount implements OnInit {
       if (this.otherAmountInput && this.otherAmountInput._isFocus ) {
         return accounting.unformat(this._otherAmount);
       }
-      else return accounting.format(this._otherAmount);
+      else {
+        return accounting.format(this._otherAmount);
+      }
     }
 
     return "";

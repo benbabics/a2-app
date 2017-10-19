@@ -8,7 +8,7 @@ import {
 } from "ionic-angular";
 import { SecurePage } from "../../secure-page";
 import { BankAccount, Payment } from "@angular-wex/models";
-import { PaymentService, PaymentAmount } from './../../../providers/payment-service';
+import { PaymentService, PaymentAmount } from "./../../../providers/payment-service";
 import { AddPaymentSelectionPage, SelectableOption } from "./add-payment-selection";
 import { Calendar } from "../../../components/calendar/calendar";
 
@@ -25,7 +25,7 @@ interface PaymentBuffer {
   amount: PaymentAmount;
   date: Date;
   bankAccount: BankAccount;
-};
+}
 
 
 //# AddPaymentPage
