@@ -2,15 +2,29 @@ option-amount {
   .item-ios.item-label-stacked .text-input, .item-ios.item-label-floating .text-input {
     margin-top: 0;
   }
-  ion-label[floating] {
+  ion-label[floating], .item-input .label-md {
     opacity: .4;
-  }
-
-  .item-radio-checked.item-ios ion-label {
     color: black;
   }
 
-  .item-input, .item-radio-checked { 
+  .item-radio-checked {
+    &.item-ios, &.item-md {
+      ion-label {
+        color: black;
+      }
+    }
+  }
+
+  .item-input-has-focus, .input-has-focus {
+    .label-md[floating] {
+      color: black;
+    }
+  } 
+
+  .item-input, .item-radio-checked {
+    @at-root .md & .button-effect {
+      display: none !important;
+    }
     .item-inner {
       &::after {
         font-family: "Ionicons";
@@ -27,7 +41,7 @@ option-amount {
     content: "$";
   }
 
-  .radio-checked {
+  .radio-checked, .radio-icon {
     display: none !important;
   }
 }
