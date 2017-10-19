@@ -71,8 +71,6 @@ export class AddPaymentPage extends SecurePage {
   }
 
   public get displayDueDateWarning(): boolean {
-    console.log(moment(this.paymentDueDate).toDate());
-    console.log(this.paymentDate);
     return moment(this.paymentDueDate).toDate() < this.paymentDate && this.paymentService.hasMinimumPaymentDue;
   }
 

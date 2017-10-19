@@ -6,14 +6,18 @@
   <ion-radio [value]="option"></ion-radio>
 </ion-item>
 
-<ion-item *ngIf="isOtherAmountOption">
-  <ion-label>
-    <ion-input #otherAmountInput
-               name="{{keyOtherAmount}}"
-               type="tel"
-               [(ngModel)]="otherAmount">
-    </ion-input>
-    <p>{{option.label}}</p>
-  </ion-label>
-  <ion-radio [value]="option"></ion-radio>
+<ion-item *ngIf="isOtherAmountOption" [hidden]="isSelected">
+  <ion-label> {{option.label}} </ion-label>
+  <ion-radio #radio [value]="option"></ion-radio>
 </ion-item>
+<div *ngIf="isOtherAmountOption && isSelected">
+<ion-item>
+  <ion-label floating> {{option.label}} </ion-label>
+  <ion-input #otherAmountInput
+             floating
+             name="{{keyOtherAmount}}"
+             type="tel"
+             [(ngModel)]="otherAmount">
+  </ion-input>
+</ion-item>
+</div>

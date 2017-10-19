@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import * as accounting from "accounting-js";
-import { TextInput } from 'ionic-angular';
+import { TextInput, RadioButton } from 'ionic-angular';
 import { Component, Input, ViewChild, OnInit } from "@angular/core";
 import { PaymentAmount, PaymentAmountTypes } from './../../../../providers/payment-service';
 
@@ -14,12 +14,17 @@ export class OptionAmount implements OnInit {
 
   @Input() option: PaymentAmount;
   @ViewChild("otherAmountInput") otherAmountInput: FormInputTypes;
+  @ViewChild("radio") radio: RadioButton;
 
   private _otherAmount: number;
   public keyOtherAmount = PaymentAmountTypes.OtherAmount;
 
   ngOnInit() {
     this._otherAmount = this.option.value;
+  }
+
+  public get isSelected(): boolean {
+    return this.radio ? this.radio.checked : false;
   }
 
   public get isOtherAmountOption(): boolean {
