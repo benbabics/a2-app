@@ -6,12 +6,16 @@ import {
   NavController,
   ViewController,
 } from "ionic-angular";
+import { Observable } from "rxjs/Observable";
 import { SecurePage } from "../../secure-page";
+import { Session } from "../../../models/session";
 import { BankAccount, Payment } from "@angular-wex/models";
 import { PaymentService, PaymentSelectionOption } from "./../../../providers/payment-service";
 import { AddPaymentSelectionPage } from "./add-payment-selection";
 import { UserPayment } from "../../../models";
 import { Value } from "../../../decorators/value";
+import { AddPaymentConfirmationPage } from "./confirmation/add-payment-confirmation";
+import { PaymentProvider, PaymentRequest } from "@angular-wex/api-providers";
 
 export type AddPaymentNavParams = keyof {
   payment
@@ -33,13 +37,15 @@ export class AddPaymentPage extends SecurePage {
   public readonly DATE_FORMAT: string = "MMMM D";
 
   public payment: UserPayment = {} as UserPayment;
+  public isLoading: boolean = false;
 
   constructor(
     injector: Injector,
     public navCtrl: NavController,
     public navParams: NavParams,
     private viewController: ViewController,
-    private paymentService: PaymentService
+    private paymentService: PaymentService,
+    private paymentProvider: PaymentProvider
   ) {
     super("Payments.Add", injector);
   }
@@ -94,10 +100,45 @@ export class AddPaymentPage extends SecurePage {
     this.navigateToSelectionPage("bankAccount", options, selectedItem);
   }
 
+  public handleSchedulePayment() {
+    let paymentRequest: PaymentRequest = {
+      amount: this.payment.amount.value,
+      scheduledDate: this.payment.date,
+      bankAccountId: this.payment.bankAccount.details.id
+    };
+
+    this.schedulePayment(paymentRequest);
+  }
+
   private navigateToSelectionPage(selectionType: keyof UserPayment, options: PaymentSelectionOption[], selectedItem: PaymentSelectionOption) {
     let onSelection = (selectedItem: PaymentSelectionOption) => this.payment[selectionType] = selectedItem;
 
     this.navCtrl.push(AddPaymentSelectionPage, { selectionType, options, selectedItem, onSelection });
+  }
+
+  private schedulePayment(paymentRequest: PaymentRequest) {
+    this.isLoading = true;
+
+    let accountId: string = this.session.user.billingCompany.details.accountId;
+    let paymentState: Observable<Payment>;
+
+    if (this.isEditingPayment) {
+      paymentState = this.paymentProvider.editPayment(accountId, this.payment.id, paymentRequest);
+    }
+    else {
+      paymentState = this.paymentProvider.addPayment(accountId, paymentRequest);
+    }
+
+    paymentState
+      .finally(() => this.isLoading = false)
+      .subscribe((payment) => {
+        // Update the cache
+        this.sessionCache.requestSessionDetail(Session.Field.Payments);
+        this.navCtrl.setRoot(AddPaymentConfirmationPage, { payment });
+      }, (error) => {
+        /* TODO - What do we do here? */
+        console.error(error);
+      });
   }
 
   private populatePayment(): void {
@@ -108,9 +149,9 @@ export class AddPaymentPage extends SecurePage {
         type: this.paymentService.resolvePaymentAmountType(existingPayment.details.amount),
         value: existingPayment.details.amount
       };
+      this.payment.id = existingPayment.details.id;
       this.payment.date = existingPayment.details.scheduledDate;
       this.payment.bankAccount = existingPayment.bankAccount;
-      this.payment.id = existingPayment.details.id;
     }
     else {
       this.payment.amount = this.paymentService.defaultAmount;
