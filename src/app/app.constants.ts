@@ -459,7 +459,8 @@ export namespace ConstantsInfo {
             paymentDate: "Payment Date",
             schedulePayment: "Schedule Payment",
             warningAmount: "Amount is less than min payment due",
-            warningPaymentDate: "Payment date is after due date"
+            warningPaymentDate: "Payment date is after due date",
+            instructionalText: "Payments scheduled after 3:30 PM EST, on a weekend, or on a holiday will be processed on the following business day"
           },
 
           SELECTION: {
