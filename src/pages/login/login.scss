@@ -49,6 +49,7 @@ page-login {
     }
 
     #title-heading-bar {
+      @extend .fade-transition;
       @include flex-grow(1);
 
       background: no-repeat center center url("../assets/pages/login/logo.png");
@@ -73,8 +74,12 @@ page-login {
         color: white;
       }
 
-      ion-input > input[disabled] {
-        opacity: 1;
+      ion-input {
+        font-size: 16px;
+
+        > input[disabled] {
+          opacity: 1;
+        }
       }
 
       @at-root .ios & .item-label-floating ion-label {
@@ -84,15 +89,6 @@ page-login {
       ion-label[floating].label {
         opacity: .4;
         letter-spacing: 1.1px;
-      }
-    }
-
-    ion-card {
-      background: transparent;
-      
-      &.card-ios, &.card-md {
-        box-shadow: none;
-        -webkit-box-shadow: none;
       }
     }
 
@@ -111,7 +107,6 @@ page-login {
       @include flex-direction(column);
       @include justify-content(space-between);
 
-      height: 95%;
       margin-bottom: -8px;
 
       ion-list {
@@ -122,6 +117,11 @@ page-login {
         background-color: transparent;
         border-bottom: none;
         font-size: 13px;
+      }
+
+      .item-inner, .item-ios.item-block .item-inner {
+        padding: 0;
+        border: 0;
       }
 
       ion-list {
@@ -146,10 +146,6 @@ page-login {
             margin: 0;
           }
 
-          .item-inner {
-            padding: 0;
-          }
-
           ion-input {
             font-weight: bold;
           }
@@ -157,9 +153,11 @@ page-login {
       }
 
       #password-field {
+        margin-top: 1rem;
+
         ion-icon {
           @include align-self(flex-end);
-          margin: 0px 0px 2px 5px;
+          margin: 0px 0px 5px 5px;
           background-color: transparent;
           box-shadow: none;
           font-size: 2.8rem;
@@ -168,6 +166,8 @@ page-login {
       }
 
       #login-settings {
+        padding-top: 1rem;
+
         ion-item {
           padding-left: 0px;
         }
@@ -179,6 +179,8 @@ page-login {
         }
 
         ion-checkbox {
+          margin-right: 0;
+
           @at-root .checkbox-md .checkbox-icon {
             border-color: rgba(255, 255, 255, 0.7);
           }
@@ -205,6 +207,7 @@ page-login {
       }
 
       #form-actions button {
+        margin-top: 1.5rem;
         @include action-indicator-color(color($colors, primary));
         @at-root .ios & {
           border-radius: 3px;
