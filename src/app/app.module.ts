@@ -88,7 +88,6 @@ import { OptionAmount } from "../pages/payments/add/options/option-amount";
 import { OptionBankAccount } from "../pages/payments/add/options/option-bank-account";
 import { AngularWexValidatorsModule } from "@angular-wex/validators";
 import { AddPaymentConfirmationPage } from "../pages/payments/add/confirmation/add-payment-confirmation";
-import { AddPaymentSummaryPage } from "../pages/payments/add/summary/add-payment-summary";
 import { Network } from "@ionic-native/network";
 import { WexAppVersionCheck } from "../providers/wex-app-version-check";
 import { VersionCheck } from "../pages/login/version-check/version-check";
@@ -150,7 +149,6 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     OptionAmount,
     OptionBankAccount,
     AddPaymentConfirmationPage,
-    AddPaymentSummaryPage,
     TransactionDetailsPage,
     ActionIndicator,
     WexCurrency,
@@ -232,7 +230,6 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     OptionAmount,
     OptionBankAccount,
     AddPaymentConfirmationPage,
-    AddPaymentSummaryPage,
     PrivacyPolicyPage
   ],
   providers: [
