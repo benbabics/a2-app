@@ -39,7 +39,7 @@ export class UserEnrollmentFlow extends Page {
 
   private loadOnlineEnrollmentApp() {
     this.isLoading = false;
-    let browser = this.inAppBrowser.create(this.ENROLLMENT_URL);
+    let browser = this.inAppBrowser.create(this.ENROLLMENT_URL, "_blank");
     browser.on("loaderror").subscribe(() => this.closeOnlineEnrollmentAppWithErrorAlert(browser));
   }
 

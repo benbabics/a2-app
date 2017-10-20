@@ -96,7 +96,7 @@ export class CardsDetailsPage extends DetailsPage {
   }
 
   public cannotChangeStatusMessage() {
-    this.wexAppSnackbarController.createQueued(this.CONSTANTS.noReactivation).present();
+    this.wexAlertController.alert(this.CONSTANTS.noReactivation);
   }
 
   private buildActionSheet(actions: CardStatusDetails[]): ActionSheetOptions {
