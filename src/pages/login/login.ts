@@ -230,7 +230,7 @@ export class LoginPage extends Page {
                 additionalParams.push(useFingerprintAuth ? "Biometric" : "Manual");
               }
 
-              this.trackAnalyticsEvent(analyticsEvent, additionalParams);
+              this.trackAnalyticsEvent(analyticsEvent, ...additionalParams);
             }
           }
         });

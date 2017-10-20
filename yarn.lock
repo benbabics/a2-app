@@ -2,17 +2,17 @@
 # yarn lockfile v1
 
 
-"@angular-wex/api-providers@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-api-providers.git#dd589abad87":
-  version "1.3.14"
-  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-api-providers.git#dd589abad87c8a80c8db2a233e19296e397be89a"
+"@angular-wex/api-providers@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-api-providers#8a890b1fc8b":
+  version "1.3.15"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-api-providers#8a890b1fc8b6d27be15af4941c76515576143c2c"
 
 "@angular-wex/mocks@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-mocks.git#145f780f242":
   version "1.2.3"
   resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-mocks.git#145f780f242228f26dd779573a806bdbb8d419b3"
 
-"@angular-wex/models@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-models.git#b314d7896e0":
-  version "1.4.7"
-  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-models.git#b314d7896e031ee0988baa8582f53c57f4bde2da"
+"@angular-wex/models@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-models.git#85c5e5aa3c3":
+  version "1.4.8"
+  resolved "git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-models.git#85c5e5aa3c31e08a729cab2318239930abaa8112"
 
 "@angular-wex/tslint-rules@git+http://bitbucket.int.wrightexpress.com/scm/mob/angular-wex-tslint-rules.git#2a1e4977656":
   version "1.0.0-alpha"
@@ -1593,9 +1593,9 @@ cordova-plugin-google-analytics@^1.8.3:
   version "1.8.3"
   resolved "https://registry.yarnpkg.com/cordova-plugin-google-analytics/-/cordova-plugin-google-analytics-1.8.3.tgz#234b152c4874e22675fcffc9a57ac378385f6a0a"
 
-cordova-plugin-inappbrowser@^1.7.1:
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/cordova-plugin-inappbrowser/-/cordova-plugin-inappbrowser-1.7.1.tgz#435b43f591fe7bfa95ea98dbe0004841fe59ba51"
+cordova-plugin-inappbrowser@1.8.1:
+  version "1.8.1"
+  resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/cordova-plugin-inappbrowser/-/cordova-plugin-inappbrowser-1.8.1.tgz#dc9f06deafc929d5718cea4d26f1f5f0da5b7b34"
 
 cordova-plugin-ionic-webview@^1.1.8:
   version "1.1.8"
