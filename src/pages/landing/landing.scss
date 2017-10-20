@@ -2,7 +2,7 @@ page-landing {
   
   @mixin faint {
     font-weight: 400;
-    color: #9b99a9;
+    color: #9b99a9 !important;
   }
 
   .faint {
@@ -15,8 +15,8 @@ page-landing {
     }
   }
 
-  .list-ios, .list-md {
-  & > .item-block {
+  .z {
+    & > .item-block {
       &:first-child {
         border-top: none;
       }
@@ -49,16 +49,26 @@ page-landing {
     }
 
     ion-item {
-      border-bottom: 0.55px solid #c8c7cc;
-      [item-left] {
-        @include faint;
-      }
-      [item-right] {
-        font-weight: bold;
+
+      ion-label {
         margin: 8px 0 8px 8px;
       }
+      
+      .property-name {
+        @include faint;
+      }
+
+      .property-value {
+        font-weight: bold;
+        color: black !important;
+      }
+
       .item-inner {
         padding-right: 0 !important;
+      }
+
+      &:not(:last-child) > .item-inner {
+        border-bottom: 0.55px solid #c8c7cc !important;
       }
     }
 

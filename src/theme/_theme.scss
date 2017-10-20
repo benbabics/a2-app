@@ -228,7 +228,7 @@ ion-list .item-md {
   }
 }
 
-ion-list.list-md ion-item.item.item-md.item-block > .item-inner {
+.card-md ion-list.list-md ion-item.item.item-md.item-block > .item-inner {
   // Show dividers on ion-list items that are inside ion-cards
   border-bottom: 1px solid $list-border-color;
 }

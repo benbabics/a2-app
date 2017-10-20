@@ -52,20 +52,20 @@
     </ion-item>
     <ion-item>
       <action-indicator [when]="!invoiceSummary"></action-indicator>
-      <div *ngIf="invoiceSummary">
+      <div class="ios" *ngIf="invoiceSummary">
         <div class="section-heading"> {{ CONSTANTS.summary }} </div>
-        <ion-list class="summary-list">
+        <ion-list class="summary-list detail-list">
           <ion-item *ngIf="!session.user.isClassic">
-            <span item-left>{{ CONSTANTS.pending }}</span>
-            <span item-right>{{ invoiceSummary.details.pendingAmount | wexCurrency }}</span>
+            <span class="property-name">{{ CONSTANTS.pending }}</span>
+            <span class="property-value">{{ invoiceSummary.details.pendingAmount | wexCurrency }}</span>
           </ion-item>
           <ion-item>
-            <span item-left>{{ CONSTANTS.minimumPayment }}</span>
-            <span item-right>{{ invoiceSummary.details.minimumPaymentDue | wexCurrency }}</span>
+            <span class="property-name">{{ CONSTANTS.minimumPayment }}</span>
+            <span class="property-value">{{ invoiceSummary.details.minimumPaymentDue | wexCurrency }}</span>
           </ion-item>
           <ion-item>
-            <span item-left>{{ CONSTANTS.paymentDueDate }}</span>
-            <span item-right>{{ invoiceSummary.details.paymentDueDate | wexDate:true:'MMMM Do, YYYY' }}</span>
+            <span class="property-name">{{ CONSTANTS.paymentDueDate }}</span>
+            <span class="property-value">{{ invoiceSummary.details.paymentDueDate | wexDate:true:'MMMM Do, YYYY' }}</span>
           </ion-item>
         </ion-list>
       </div>
