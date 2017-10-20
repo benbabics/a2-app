@@ -1,7 +1,46 @@
 page-add-payment-confirmation {
 
+  .payemnt-confirmation-header {
+    padding: 2rem 0;
+    text-align: center;
+
+    h2 {
+      margin-bottom: .5rem;
+      font-weight: normal;
+      font-size: 1.8rem;
+    }
+    p {
+      margin-top: 0;
+      font-size: 1.7rem;
+      color: color($colors, gray);
+    }
+  }
+
   &.ion-page ion-content {
-    background: color($colors, white);
+    .list {
+      margin-bottom: 0;
+
+      @at-root .md & {
+        .item-inner {
+          margin-left: 2rem;
+          padding-left: 0;
+        }
+
+        .input-wrapper {
+          @include flex-direction(column);
+          @include align-items(flex-start);
+        }
+
+        .label {
+          margin-bottom: 0;
+          font-size: 1.2rem;
+          color: color($colors, gray);
+        }
+        [item-content] {
+          margin-bottom: 1rem;
+        }
+      }
+    }
   }
 
   #success-header {

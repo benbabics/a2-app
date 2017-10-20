@@ -1,18 +1,41 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar transparent>
     <ion-title>{{ CONSTANTS.title }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-  <div>
-    <h1 id="success-header">{{ CONSTANTS.LABELS.success }}</h1>
-    <ion-icon padding-left large id="success-icon" name="checkmark-circle" color="success-dark"></ion-icon>
-  </div>
+<ion-content>
+  <section class="payemnt-confirmation-header">
+    <img src="assets/pages/payments/payment-success-envelope.svg" class="payment-success-envelope">
+    <h2>{{ CONSTANTS.LABELS.paymentDate }}</h2>
+    <p>{{ payment.details.scheduledDate | wexDate:true:DATE_FORMAT }}</p>
+  </section>
 
-  <p [innerHTML]="confirmationMessage"></p>
+  <ion-list>
+    <ion-item>
+      <ion-label>{{ CONSTANTS.LABELS.bankAccount }}</ion-label>
+      <div item-content>{{ payment.details.bankAccount.name }}</div>
+    </ion-item>
 
-  <div padding-top id="button-container">
-    <button ion-button (click)="finish()">{{ CONSTANTS.LABELS.complete }}</button>
+    <ion-item>
+      <ion-label>{{ CONSTANTS.LABELS.amount }}</ion-label>
+      <div item-content>{{ payment.details.amount | wexCurrency }}</div>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>{{ CONSTANTS.LABELS.method }}</ion-label>
+      <div item-content>{{ payment.details.bankAccount.name }}</div>
+    </ion-item>
+
+    <!--
+    <ion-item>
+      <ion-label>{{ CONSTANTS.LABELS.confirmation }}</ion-label>
+      <div item-content>1234567890</div>
+    </ion-item>
+    -->
+  </ion-list>
+
+  <div padding id="button-container">
+    <button ion-button block class="button-gradient" (click)="finish()">{{ CONSTANTS.BUTTONS.OK }}</button>
   </div>
 </ion-content>

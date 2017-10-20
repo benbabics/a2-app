@@ -472,15 +472,14 @@ export namespace ConstantsInfo {
 
           //# Add Payment Confirmation page
           CONFIRMATION: {
-            title: "Payment Confirmation",
+            title: "Successfully scheduled",
 
             LABELS: {
-              success: "Success!",
-              complete: "Complete"
-            },
-
-            MESSAGES: {
-              confirmationMessage: "Your payment of <strong><%= paymentAmount %></strong> from <strong><%= bankAccount %></strong> is scheduled to be processed on <strong><%= paymentDate %></strong>."
+              amount: "Amount",
+              bankAccount: "Bank Account",
+              confirmation: "Confirmation",
+              method: "Method",
+              paymentDate: "Payment Date"
             }
           },
           //# Add Payment Summary page
