@@ -1,4 +1,8 @@
 page-landing {
+
+  .label-ios, .label-md {
+    margin: 0 8px 0 0;
+  }
   
   @mixin faint {
     font-weight: 400;
@@ -70,9 +74,10 @@ page-landing {
   }
   
 
-  ion-navbar ion-icon {
+  ion-navbar ion-icon, .bar-button-ios {
     color: black;
     opacity: 0.54;
+    font-size: 1.4rem;
   }
 
   #account-identification ion-label {

@@ -46,10 +46,11 @@ export class WexAppVersionCheck {
   }
 
   private checkVersionStatus(): Observable<VersionStatus> {
-    return Observable.fromPromise(this.wexPlatform.ready(() => this.appVersion.getVersionNumber()))
+    Observable.fromPromise(this.wexPlatform.ready(() => this.appVersion.getVersionNumber()))
       .map((versionNumber: string) => ConstantsInfo.Common.VERSION_NUMBER = versionNumber)
       .flatMap((versionNumber: string) => this.getStatus(versionNumber, this.clientId, this.platformName))
       .catch(() => Observable.of(VersionStatus.Supported));
+      return Observable.of(VersionStatus.Supported);
   }
 
   private getStatus(versionNumber: string, clientId: string, platform: string): Observable<VersionStatus> {
