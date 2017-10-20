@@ -1,7 +1,17 @@
 page-add-payment {
 
+  .bar-button-ios {
+    font-size: 1.4rem;
+  }
+
+  @at-root .md & ion-item-group {
+    border-bottom: 1px solid color($colors, light-border);
+  }
+
   &.ion-page ion-content {
-    background: color($colors, white);
+    @at-root .md & {
+      background: color($colors, separator-md);
+    }
 
     .scroll-content {
       @include flexbox();
@@ -15,14 +25,9 @@ page-add-payment {
     @include md-shadow();
   }
 
-  #action-list {
-    margin-top: $content-margin * 1.5;
-    padding: 0 $content-padding;
-
-    .instructional-text {
-      padding: 0 $content-padding * 2;
-      color: lighten(color($colors, gray), 10%);
-      text-align: center;
+  .ion-md-create, .ion-ios-arrow-forward {
+    &:before {
+    opacity: .26;
     }
   }
 
@@ -47,5 +52,20 @@ page-add-payment {
       @include flex-grow(0);
       @include flex-shrink(0);
     }
+  }
+
+  #submit-button {
+    @at-root .md & {
+      height: 5rem;
+    }
+  }
+
+  #info-text {
+    margin: auto;
+    padding-top: 1rem;
+    text-align: center;
+    opacity: .5;
+    font-size: 13px;
+    width: 90%;
   }
 }

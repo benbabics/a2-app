@@ -1,16 +1,9 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons *wexIfPlatformAndroid left>
-      <button ion-button icon-only (click)="cancel()">
-        <ion-icon name="arrow-back"></ion-icon>
-      </button>
-    </ion-buttons>
-
     <ion-title>{{ isEditingPayment ? CONSTANTS.EDIT.title : CONSTANTS.CREATE.title }}</ion-title>
-
-    <ion-buttons *wexIfPlatformIos right>
-      <button ion-button (click)="cancel()">
-        <ion-icon name="close"></ion-icon>
+    <ion-buttons right>
+      <button ion-button icon-only (click)="cancel()">
+        <ion-icon name="md-close"></ion-icon>
       </button>
     </ion-buttons>
   </ion-toolbar>
@@ -19,7 +12,7 @@
 <ion-content>
   <ion-item-group class="ios-item-indent">
     <!-- Bank Account -->
-    <ion-list-header>{{ CONSTANTS.LABELS.bankAccount }}</ion-list-header>
+    <ion-item-divider>{{ CONSTANTS.LABELS.bankAccount }}</ion-item-divider>
 
     <button ion-item *ngIf="paymentBankAccount" (click)="updateBankAccount()">
       <ion-label>
@@ -29,11 +22,11 @@
         </h2>
         <p>{{ paymentBankAccount.details.name }}</p>
       </ion-label>
-      <ion-icon item-right ios="ios-arrow-forward"></ion-icon>
+      <ion-icon item-right md="md-create" ios="ios-arrow-forward"></ion-icon>
     </button>
 
     <!-- Amount -->
-    <ion-list-header>{{ CONSTANTS.LABELS.paymentAmount }}</ion-list-header>
+    <ion-item-divider>{{ CONSTANTS.LABELS.paymentAmount }}</ion-item-divider>
 
     <button ion-item *ngIf="payment.amount" (click)="updateAmount()">
       <ion-label>
@@ -41,11 +34,11 @@
         <p>{{ paymentLabel }}</p>
         <p *ngIf="displayAmountWarning" class="item-warning">{{ CONSTANTS.LABELS.warningAmount }}</p>
       </ion-label>
-      <ion-icon item-right ios="ios-arrow-forward"></ion-icon>
+      <ion-icon item-right md="md-create" ios="ios-arrow-forward"></ion-icon>
     </button>
 
     <!-- Payment Date -->
-    <ion-list-header>{{ CONSTANTS.LABELS.paymentDate }}</ion-list-header>
+    <ion-item-divider>{{ CONSTANTS.LABELS.paymentDate }}</ion-item-divider>
 
     <button ion-item (click)="updateDate()">
       <ion-label>
@@ -53,16 +46,16 @@
         <p *ngIf="paymentService.hasMinimumPaymentDue">{{ CONSTANTS.LABELS.due }} {{ paymentDueDate | wexDate:true:DATE_FORMAT }}</p>
         <p *ngIf="displayDueDateWarning" class="item-warning">{{ CONSTANTS.LABELS.warningPaymentDate }}</p>
       </ion-label>
-      <ion-icon item-right ios="ios-arrow-forward"></ion-icon>
+      <ion-icon item-right md="md-create" ios="ios-arrow-forward"></ion-icon>
       <calendar #calendar [(date)]="this.payment.date"  [minDate]="minPaymentDate" [maxDate]="maxPaymentDate"></calendar>
     </button>
   </ion-item-group>
 
-  <ion-list id="action-list">
-    <button ion-button block class="button-gradient" (click)="handleSchedulePayment()">
+  <ion-list id="action-list" padding>
+    <button id="submit-button" class="button-gradient" ion-button block (click)="handleSchedulePayment()">
       <action-indicator large [when]="isLoading">{{ CONSTANTS.LABELS.schedulePayment }}</action-indicator>
     </button>
 
-    <p class="instructional-text">{{ CONSTANTS.LABELS.instructionalText }}</p>
+    <p id="info-text">{{ CONSTANTS.LABELS.instructionalText }}</p>
   </ion-list>
 </ion-content>
