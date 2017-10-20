@@ -75,7 +75,7 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   }
 
   protected sortItems(payments: Payment[]): Payment[] {
-    return StaticListPage.defaultItemSort<Payment, Payment.Details>(payments, "id", "asc");
+    return StaticListPage.defaultItemSort<Payment, Payment.Details>(payments, "scheduledDate", "desc");
   }
 
   public getStatus(payment: Payment): string {
