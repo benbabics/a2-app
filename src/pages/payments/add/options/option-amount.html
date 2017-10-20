@@ -8,8 +8,7 @@
 
 <ion-item *ngIf="isOtherAmountOption" [hidden]="isSelected">
   <ion-label>
-    <p>{{ label }}</p>
-    <h2>{{ option.value | wexCurrency }}</h2>
+    <h2>{{ label }}</h2>
   </ion-label>
   <ion-radio #radio [value]="option"></ion-radio>
 </ion-item>
@@ -20,6 +19,7 @@
          Autofocus
          type="tel"
          currencyMask [options]="{ prefix: '$', thousands: '', decimal: '.' }"
-         [(ngModel)]="otherAmount">
+         [(ngModel)]="otherAmount"
+         (ngModelChange)="otherAmountEmit.emit(otherAmount)">
 </ion-item>
 </div>

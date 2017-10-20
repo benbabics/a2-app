@@ -1,5 +1,5 @@
 import { RadioButton } from "ionic-angular";
-import { Component, Input, ViewChild, OnInit } from "@angular/core";
+import { Component, Input, ViewChild, OnInit, Output, EventEmitter } from "@angular/core";
 import { UserPaymentAmount, UserPaymentAmountType } from "../../../../models";
 import { Value } from "../../../../decorators/value";
 
@@ -10,14 +10,17 @@ import { Value } from "../../../../decorators/value";
 export class OptionAmount implements OnInit {
 
   @Input() option: UserPaymentAmount;
+  @Output() otherAmountEmit: EventEmitter<number> = new EventEmitter<number>();
   @ViewChild("radio") radio: RadioButton;
   @Value("PAGES.PAYMENTS.ADD.LABELS") public readonly LABELS: any;
 
   public otherAmount: number;
 
   ngOnInit() {
-    if (this.isOtherAmountOption) {
+    if (this.isOtherAmountOption && !!this.option.value) {
       this.otherAmount = this.option.value;
+    } else {
+      this.otherAmount = 0;
     }
   }
 

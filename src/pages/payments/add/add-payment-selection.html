@@ -7,7 +7,7 @@
 <ion-content>
   <div [ngSwitch]="selectionType">
     <ion-list radio-group *ngSwitchCase="'amount'" [(ngModel)]="selectedItem" [ngSwitch]="selectionType">
-      <option-amount *ngFor="let option of options" [option]="option"></option-amount>
+      <option-amount *ngFor="let option of options" [option]="option" (otherAmountEmit)="otherAmount = $event"></option-amount>
     </ion-list>
 
     <ion-list radio-group *ngSwitchCase="'bankAccount'" [(ngModel)]="selectedItem" [ngSwitch]="selectionType">

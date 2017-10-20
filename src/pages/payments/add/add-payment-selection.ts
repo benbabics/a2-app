@@ -2,6 +2,7 @@ import { Component, Injector } from "@angular/core";
 import { NavParams, NavController } from "ionic-angular";
 import { SecurePage } from "../../secure-page";
 import { PaymentSelectionOption } from "./../../../providers/payment-service";
+import { UserPaymentAmount, UserPaymentAmountType } from "../../../models/user-payment";
 
 export type AddPaymentSelectionNavParams = keyof {
   selectionType
@@ -44,8 +45,17 @@ export class AddPaymentSelectionPage extends SecurePage {
     return this.CONSTANTS.LABELS[this.selectionType];
   }
 
+  public otherAmount: number;
+  isPaymentAmount(selectedItem: PaymentSelectionOption): selectedItem is UserPaymentAmount {
+    return "type" in selectedItem;
+  }
+
+
   public handleSubmit() {
     this.onSelection(this.selectedItem);
+    if (this.isPaymentAmount(this.selectedItem) && (this.selectedItem as UserPaymentAmount).type === UserPaymentAmountType.OtherAmount) {
+      this.selectedItem.value = this.otherAmount;
+    }
     this.navCtrl.pop();
   }
 }
