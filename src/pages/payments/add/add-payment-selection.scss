@@ -48,13 +48,13 @@ page-add-payment-selection {
     }
   }
 
-  .options-list {
+  #options-list > ion-list {
     @at-root .md & {
       margin-top: 1rem;
       border-top: 1px solid color($colors, light-border);
     } @at-root .ios & {
       margin-top: 2rem;
-      border-top: 0.55px solid color($colors, border) !important;
+      border-top: 0.55px solid color($colors, border);
     }
   }
 
