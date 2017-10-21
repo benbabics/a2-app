@@ -1,5 +1,23 @@
 page-add-payment-selection {
 
+  @at-root .ios & {
+    .item-inner {
+      padding-left: 0;
+      margin-left: 16px;
+    }
+
+    option-amount, option-bank-account {
+      &:last-of-type {
+        ion-item, [ion-item] {
+          .item-inner {
+            margin-left: 0;
+            padding-left: 16px;
+          }
+        }
+      }
+    }
+  }
+
   .item-radio-checked {
     &.item-ios, &.item-md {
       ion-label {

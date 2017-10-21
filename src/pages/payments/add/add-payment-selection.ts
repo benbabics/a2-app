@@ -26,6 +26,7 @@ export class AddPaymentSelectionPage extends SecurePage {
   public selectionType: string;
   private onSelection: (selection: PaymentSelectionOption) => void;
   public selectedItem: PaymentSelectionOption;
+  public initialSelection: PaymentSelectionOption;
   public options: PaymentSelectionOption[];
 
   constructor(
@@ -38,24 +39,49 @@ export class AddPaymentSelectionPage extends SecurePage {
     this.selectionType = navParams.get(AddPaymentSelectionNavParams.SelectionType);
     this.options = navParams.get(AddPaymentSelectionNavParams.Options);
     this.selectedItem = navParams.get(AddPaymentSelectionNavParams.SelectedItem);
+    this.initialSelection = this.selectedItem;
     this.onSelection = navParams.get(AddPaymentSelectionNavParams.OnSelection);
+    if (this.isCustomPaymentAmount) {
+      this.otherAmount = (this.selectedItem as UserPaymentAmount).value;
+    }
   }
 
   public get pageTitle(): string {
     return this.CONSTANTS.LABELS[this.selectionType];
   }
 
-  public otherAmount: number;
+  public otherAmount: number = 0;
   isPaymentAmount(selectedItem: PaymentSelectionOption): selectedItem is UserPaymentAmount {
     return "type" in selectedItem;
+  }
+
+  public get isCustomPaymentAmount(): boolean {
+    return this.isPaymentAmount(this.selectedItem) && (this.selectedItem as UserPaymentAmount).type === UserPaymentAmountType.OtherAmount;
   }
 
 
   public handleSubmit() {
     this.onSelection(this.selectedItem);
-    if (this.isPaymentAmount(this.selectedItem) && (this.selectedItem as UserPaymentAmount).type === UserPaymentAmountType.OtherAmount) {
-      this.selectedItem.value = this.otherAmount;
+    if (this.isCustomPaymentAmount) {
+      (this.selectedItem as UserPaymentAmount).value = this.otherAmount;
     }
     this.navCtrl.pop();
+  }
+
+  public get disableSubmit() {
+    // If this is a new custom amount, enable the button (as long as the custom amount is not 0).
+    if (this.isCustomPaymentAmount) {
+      if (this.otherAmount === 0) {
+        return true;
+      } else if ((this.selectedItem as UserPaymentAmount).value !== this.otherAmount) {
+        return false;
+      }
+    }
+    // Otherwise, if the selected item is the same, disable the button.
+    if (this.selectedItem === this.initialSelection) {
+      return true;
+    }
+    // Otherwise, the selection must be new, so enable the button.
+    return false;
   }
 }
