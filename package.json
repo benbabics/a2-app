@@ -6,7 +6,6 @@
     "scripts": {
         "prelint": "awk '{print}' ./node_modules/@angular-wex/tslint-rules/tslint.json ./tslint-overrides.json | json --deep-merge > ./tslint.json",
         "lint": "tslint --project .",
-        "postlint": "rimraf ./tslint.json",
         "clean": "ionic-app-scripts clean --no-interactive",
         "build": "ionic-app-scripts build --no-interactive",
         "ionic:prepare": "ionic cordova prepare --no-interactive --verbose",
@@ -36,7 +35,7 @@
         "ionic:run:ios:prerelease": "yarn ionic:run:ios -- --aot --prod",
         "ionic:run:ios:release": "yarn ionic:run:ios -- --aot --release --prod",
         "install:globals": "yarn global add ionic@3.4.0 cordova@7.0.1 protractor@5.1.2 fs-extra superagent strip-ansi rimraf copyfiles",
-        "postinstall": "yarn install:globals",
+        "postinstall": "yarn install:globals && yarn prelint",
         "e2e:prepare": "webdriver-manager update",
         "e2e:start-server": "webdriver-manager start",
         "pree2e:run": "rimraf tests/e2e/build && tsc -p tests/e2e",

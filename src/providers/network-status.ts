@@ -15,15 +15,21 @@ export class NetworkStatus {
     @Value("GLOBAL_NOTIFICATIONS.serverConnectionError") private serverError: string;
     @Value("GLOBAL_NOTIFICATIONS.networkError") private networkError: string;
     private networkErrorToast: QueuedToast;
+    private get noConnectionAvailable(): boolean {
+      return this.network.type === ConnectionConstants.NONE;
+    }
 
     constructor(private wexAppSnackbarController: WexAppSnackbarController, private network: Network, private platform: WexPlatform) {
         this.watchConnectionErrors();
-        this.platform.ready(() => this.onResumeSubscription());
+        if (!this.platform.isIos) {
+          this.platform.ready(() => this.onResumeSubscription());
+        }
     }
 
     private onResumeSubscription() {
       this.platform.resume.subscribe(() => {
-        if (this.network.type === ConnectionConstants.NONE) {
+        console.warn("Connection type onResume: " + this.network.type);
+        if (this.noConnectionAvailable) {
           if (!this.networkErrorToast) {
             this.networkErrorToast = this.createErrorToast(this.networkError, false, true);
             this.networkErrorToast.present();
@@ -45,14 +51,16 @@ export class NetworkStatus {
 
     private watchConnectionErrors() {
       this.network.onDisconnect().subscribe(() => {
-        if (!this.networkErrorToast) {
+        console.warn("Connection type onDisconnect: " + this.network.type);
+        if (!this.networkErrorToast && (this.noConnectionAvailable || this.platform.isIos)) {
           this.networkErrorToast = this.createErrorToast(this.networkError, false, true);
           this.networkErrorToast.present();
         }
       });
 
       this.network.onConnect().subscribe(() => {
-        if (!!this.networkErrorToast) {
+        console.warn("Connection type onConnect: " + this.network.type);
+        if (!!this.networkErrorToast && (!this.noConnectionAvailable || this.platform.isIos)) {
           this.networkErrorToast.dismiss();
           this.networkErrorToast = null;
         }

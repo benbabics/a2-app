@@ -19,10 +19,11 @@ page-payments {
     text-align: center;
 
     button {
+      font-weight: 600;
       @include action-indicator-color(color($colors, white));
       @at-root .ios & {
         margin-top: 9%;
-        margin-bottom: 7%;
+        margin-bottom: 5%;
       }
       @at-root .md & {
         height: 5rem;
@@ -50,10 +51,10 @@ page-payments {
       font-size: 1.2rem;
       font-weight: 500;
       text-transform: uppercase !important;
-      letter-spacing: .7rem;
+      letter-spacing: .05rem;
     }
     .min-payment {
-      margin-top: 8%;
+      margin-top: 15%;
     }
 
     #current-and-pending {
@@ -61,13 +62,13 @@ page-payments {
       @include justify-content(space-around);
 
       #current, #pending {
+        font-weight: 600;
         width: 50%;
         div {
           padding: .3rem;
         }
         .balance-type {
           color: color($colors, primary);
-          font-weight: 500;
         }
         .value {
           font-weight: normal;

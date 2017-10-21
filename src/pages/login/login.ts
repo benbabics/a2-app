@@ -1,7 +1,7 @@
 import { WexNavBar, WexAppSnackbarController } from "../../components";
 import { Session } from "../../models";
 import * as _ from "lodash";
-import { Component, ViewChild, ElementRef, Injector } from "@angular/core";
+import { Component, ViewChild, ElementRef, Injector, Renderer2 } from "@angular/core";
 import { NavParams, Content, NavController, ModalController } from "ionic-angular";
 import { Page } from "../page";
 import { SessionManager, Fingerprint, AuthenticationMethod } from "../../providers";
@@ -98,6 +98,7 @@ export class LoginPage extends Page {
     private appSnackbarController: WexAppSnackbarController,
     private wexAppVersionCheck: WexAppVersionCheck,
     private modalController: ModalController,
+    private renderer: Renderer2,
     injector: Injector
   ) {
     super("Login", injector);
@@ -167,14 +168,16 @@ export class LoginPage extends Page {
     //note: Ionic adds and removes this class by default, but it adds a 400ms delay first which is unacceptable here.
     //see http://ionicframework.com/docs/api/page/keyboard/
     this.content.getNativeElement().classList.add("keyboard-open");
-    this.keyboardSpacer.nativeElement.style.height = `${event.keyboardHeight}px`;
-    this.titleHeadingBar.nativeElement.style.display = "none";
+    this.keyboardSpacer.nativeElement.style.height = `${event.keyboardHeight + 65}px`;
+    this.renderer.addClass(this.titleHeadingBar.nativeElement, "fadeout");
+    this.renderer.removeClass(this.titleHeadingBar.nativeElement, "fadein");
   }
 
   private onKeyboardClose() {
     this.content.getNativeElement().classList.remove("keyboard-open");
     this.keyboardSpacer.nativeElement.style.height = "0px";
-    this.titleHeadingBar.nativeElement.style.display = "block";
+    this.renderer.addClass(this.titleHeadingBar.nativeElement, "fadein");
+    this.renderer.removeClass(this.titleHeadingBar.nativeElement, "fadeout");
   }
 
   private login(useFingerprintAuth?: boolean) {
@@ -230,7 +233,7 @@ export class LoginPage extends Page {
                 additionalParams.push(useFingerprintAuth ? "Biometric" : "Manual");
               }
 
-              this.trackAnalyticsEvent(analyticsEvent, additionalParams);
+              this.trackAnalyticsEvent(analyticsEvent, ...additionalParams);
             }
           }
         });
