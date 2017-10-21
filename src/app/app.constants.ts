@@ -463,6 +463,7 @@ export namespace ConstantsInfo {
           SELECTION: {
             LABELS: {
               amount: "Amount",
+              select: "Select",
               bankAccount: "Bank Account"
             }
           },

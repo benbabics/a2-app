@@ -24,6 +24,22 @@ page-add-payment-selection {
     }
   }
 
+  #action-list button {
+    @at-root .md & {
+      height: 5rem;
+    }
+  }
+
+  .options-list {
+    @at-root .md & {
+      margin-top: 1rem;
+      border-top: 1px solid color($colors, light-border);
+    } @at-root .ios & {
+      margin-top: 2rem;
+      border-top: 0.55px solid color($colors, border) !important;
+    }
+  }
+
   .radio-checked, .radio-icon {
     display: none !important;
   }
