@@ -16,6 +16,7 @@ import { WexAppVersionCheck } from "../../providers/wex-app-version-check";
 import { VersionCheck } from "./version-check/version-check";
 import { NameUtils } from "../../utils/name-utils";
 import { WexPlatform } from "../../providers/platform";
+import { StatusBar } from "@ionic-native/status-bar";
 
 export type LoginPageNavParams = keyof {
   fromLogOut,
@@ -63,6 +64,7 @@ export class LoginPage extends Page {
   @ViewChild("titleHeadingBar") titleHeadingBar: ElementRef;
 
   @Value("STORAGE.KEYS.USERNAME") private readonly USERNAME_KEY: string;
+  @Value("ANDROID_STATUS_BAR_COLOR") private readonly ANDROID_STATUS_BAR_COLOR: string;
 
   private _onKeyboardOpen = event => this.onKeyboardOpen(event);
   private _onKeyboardClose = () => this.onKeyboardClose();
@@ -99,6 +101,7 @@ export class LoginPage extends Page {
     private wexAppVersionCheck: WexAppVersionCheck,
     private modalController: ModalController,
     private renderer: Renderer2,
+    private statusBar: StatusBar,
     injector: Injector
   ) {
     super("Login", injector);
@@ -330,6 +333,25 @@ export class LoginPage extends Page {
         this.login(true);
       }
     }, 500));
+
+    this.setStatusBarForLogin();
+  }
+
+  private setStatusBarForLogin() {
+    if (this.platform.isAndroid) {
+      this.statusBar.hide();
+    } else {
+      this.statusBar.styleLightContent();
+    }
+  }
+
+  private setStatusBarForApp() {
+    if (this.platform.isAndroid) {
+      this.statusBar.show();
+      this.statusBar.backgroundColorByHexString(this.ANDROID_STATUS_BAR_COLOR);
+    } else {
+      this.statusBar.styleDefault();
+    }
   }
 
   ionViewDidEnter() {
@@ -352,6 +374,7 @@ export class LoginPage extends Page {
     if (this.resumeSubscription) {
       this.resumeSubscription.unsubscribe();
     }
+    this.setStatusBarForApp();
   }
 
   public onLogin(event: Event, useFingerprintAuth?: boolean) {

@@ -14,6 +14,7 @@ export namespace ConstantsInfo {
     // Version number gets replaced after WexAppVersionCheck replaces it, which is required for the app to start.
     VERSION_NUMBER: "MOCK",
     APP_TITLE: "Fleet SmartHub",
+    ANDROID_STATUS_BAR_COLOR: "#e0e0e0",
     //# Storage
     STORAGE: {
       ID: "FLEET_MANAGER-",
