@@ -57,8 +57,8 @@
     </a>
   </ion-list>
 
-  <div id="md-button-container">
-    <button *wexIfPlatformAndroid ion-button block id="button-cancel-payment" color="white"  (click)="cancelPayment()">
+  <div *wexIfPlatformAndroid id="md-button-container">
+    <button ion-button block id="button-cancel-payment" color="white"  (click)="cancelPayment()">
       {{ CONSTANTS.cancelButton }}
     </button>
   </div>
