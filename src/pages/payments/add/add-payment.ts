@@ -142,7 +142,7 @@ export class AddPaymentPage extends SecurePage {
     paymentState
       .finally(() => this.isLoading = false)
       .catch((error) => {
-        this.wexAlertController.alert(this.CONSTANTS.changesFailed);
+        this.wexAlertController.alert(this.CONSTANTS.LABELS.changesFailed);
         return Observable.throw(error);
       })
       .subscribe((payment) => {
