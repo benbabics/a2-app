@@ -13,7 +13,7 @@
     <span id="payment-date">{{ payment.details.scheduledDate | wexDate:false:DATE_FORMAT }}</span>
   </div>
 
-  <ion-list class="detail detail-list">
+  <ion-list padding-bottom class="detail detail-list">
     <ion-item>
       <ion-label>
         <span class="property-name">{{ CONSTANTS.bankAccount }}</span>
@@ -42,4 +42,14 @@
       </ion-label>
     </ion-item>
   </ion-list>
+
+  <ion-list *wexIfPlatformIos>
+    <a *ngIf="isScheduled" ion-item id="button-cancel-payment">Cancel Payment</a>
+  </ion-list>
+
+  <div id="md-button-container">
+    <button *wexIfPlatformAndroid ion-button block id="button-cancel-payment" color="white">
+      Cancel Payment
+    </button>
+  </div>
 </ion-content>
