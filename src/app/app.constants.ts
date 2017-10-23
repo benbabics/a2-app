@@ -447,6 +447,7 @@ export namespace ConstantsInfo {
             title: "Edit Payment"
           },
           LABELS: {
+            changesFailed: "We are unable to process your changes at this time",
             bankAccount: "Bank Account",
             currentBalance: "Current Balance",
             due: "Due",

@@ -17,6 +17,7 @@ import { Value } from "../../../decorators/value";
 import { AddPaymentConfirmationPage } from "./confirmation/add-payment-confirmation";
 import { PaymentProvider, PaymentRequest } from "@angular-wex/api-providers";
 import { Calendar } from "../../../components/calendar/calendar";
+import { WexAlertController } from "../../../components/wex-alert-controller/wex-alert-controller";
 
 export type AddPaymentNavParams = keyof {
   payment
@@ -49,6 +50,7 @@ export class AddPaymentPage extends SecurePage {
     public navParams: NavParams,
     private viewController: ViewController,
     public paymentService: PaymentService,
+    public wexAlertController: WexAlertController,
     private paymentProvider: PaymentProvider
   ) {
     super("Payments.Add", injector);
@@ -139,6 +141,10 @@ export class AddPaymentPage extends SecurePage {
 
     paymentState
       .finally(() => this.isLoading = false)
+      .catch((error) => {
+        this.wexAlertController.alert(this.CONSTANTS.changesFailed);
+        return Observable.throw(error);
+      })
       .subscribe((payment) => {
         // Update the cache
         this.sessionCache.requestSessionDetail(Session.Field.Payments);
