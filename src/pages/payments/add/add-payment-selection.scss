@@ -1,0 +1,64 @@
+page-add-payment-selection {
+
+  @at-root .ios & {
+    .item-inner {
+      padding-left: 0;
+      margin-left: 16px;
+    }
+
+    option-amount, option-bank-account {
+      &:last-of-type {
+        ion-item, [ion-item] {
+          .item-inner {
+            margin-left: 0;
+            padding-left: 16px;
+          }
+        }
+      }
+    }
+  }
+
+  .item-radio-checked {
+    &.item-ios, &.item-md {
+      ion-label {
+        color: black;
+      }
+    }
+  }
+
+  .item-radio-checked {
+    @at-root .md & .button-effect {
+      display: none !important;
+    }
+    .item-inner {
+      &::after {
+        font-family: "Ionicons";
+        font-size: 3rem;
+        font-weight: 600;
+        color: color($colors, primary);
+        content: "\f3ff";
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  #action-list button {
+    @at-root .md & {
+      height: 5rem;
+    }
+  }
+
+  #options-list > ion-list {
+    @at-root .md & {
+      margin-top: 1rem;
+      border-top: 1px solid color($colors, light-border);
+    } @at-root .ios & {
+      margin-top: 2rem;
+      border-top: 0.55px solid color($colors, border);
+    }
+  }
+
+  .radio-checked, .radio-icon {
+    display: none !important;
+  }
+}

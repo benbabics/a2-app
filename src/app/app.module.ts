@@ -57,7 +57,8 @@ import {
   UserIdle,
   AuthenticationManager,
   UiNotificationsController,
-  WexNavigationController
+  WexNavigationController,
+  PaymentService
 } from "../providers";
 import { WexCurrency, WexDate, WexDateTime, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
@@ -77,13 +78,16 @@ import {
   WexIfPlatformAndroidDirective,
   WexIfPlatformIosDirective,
   WexKeyboardAware,
-  WexClear
+  WexClear,
+  AutofocusDirective
 } from "../directives";
 import { InAppBrowser } from "@ionic-native/in-app-browser";
 import { AddPaymentPage } from "../pages/payments/add/add-payment";
+import { AddPaymentSelectionPage } from "../pages/payments/add/add-payment-selection";
+import { OptionAmount } from "../pages/payments/add/options/option-amount";
+import { OptionBankAccount } from "../pages/payments/add/options/option-bank-account";
 import { AngularWexValidatorsModule } from "@angular-wex/validators";
 import { AddPaymentConfirmationPage } from "../pages/payments/add/confirmation/add-payment-confirmation";
-import { AddPaymentSummaryPage } from "../pages/payments/add/summary/add-payment-summary";
 import { Network } from "@ionic-native/network";
 import { WexAppVersionCheck } from "../providers/wex-app-version-check";
 import { VersionCheck } from "../pages/login/version-check/version-check";
@@ -94,6 +98,9 @@ import { MockBackend } from "@angular/http/testing";
 import { MockHttp } from "@angular-wex/mocks";
 import { ModelGeneratorsModule } from "@angular-wex/models/mocks";
 import { MockResponsesModule } from "@angular-wex/api-providers/mocks";
+import { MbscModule } from "mbsc-calendar";
+import { Calendar } from "../components/calendar/calendar";
+import { CurrencyMaskModule } from "ng2-currency-mask";
 
 export function APP_INITIALIZER_FACTORY() {
   return function () { };
@@ -138,8 +145,10 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     PrivacyPolicyPage,
     TransactionsPage,
     AddPaymentPage,
+    AddPaymentSelectionPage,
+    OptionAmount,
+    OptionBankAccount,
     AddPaymentConfirmationPage,
-    AddPaymentSummaryPage,
     TransactionDetailsPage,
     ActionIndicator,
     WexCurrency,
@@ -165,7 +174,9 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     WexInvoiceDisplay,
     WexKeyboardAware,
     WexClear,
-    ResizableSvg
+    AutofocusDirective,
+    ResizableSvg,
+    Calendar
   ],
   imports: [
     //# Angular
@@ -185,7 +196,11 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     //----------------------
     LocalStorageModule.withConfig({ storageType: "localStorage" }),
     NgIdleModule.forRoot(),
-    ProgressBarModule
+    ProgressBarModule,
+    CurrencyMaskModule,
+    //# MobiScroll
+    //----------------------
+    MbscModule, // add the mobiscroll module
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -211,8 +226,10 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     PrivacyPolicyPage,
     TransactionsPage,
     AddPaymentPage,
+    AddPaymentSelectionPage,
+    OptionAmount,
+    OptionBankAccount,
     AddPaymentConfirmationPage,
-    AddPaymentSummaryPage,
     PrivacyPolicyPage
   ],
   providers: [
@@ -261,6 +278,11 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
       provide: Http,
       useFactory: HTTP_FACTORY,
       deps: [XHRBackend, MockBackend, NetworkStatus, RequestOptions]
+    },
+    {
+      provide: PaymentService,
+      useClass: PaymentService,
+      deps: [SessionManager, SessionCache]
     },
     UserIdle.PROVIDER_DEFINITION,
     SessionManager,

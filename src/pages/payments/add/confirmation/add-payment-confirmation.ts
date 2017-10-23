@@ -1,4 +1,3 @@
-import * as _ from "lodash";
 import { Component, Injector } from "@angular/core";
 import {
   NavParams,
@@ -10,7 +9,6 @@ import { NavBarController } from "../../../../providers";
 import { Payment } from "@angular-wex/models";
 import { PaymentsPage } from "../../payments";
 import { WexNavBar } from "../../../../components";
-import { WexDate, WexCurrency } from "../../../../pipes/index";
 
 export type AddPaymentConfirmationNavParams = keyof {
   payment: Payment
@@ -26,10 +24,8 @@ export namespace AddPaymentConfirmationNavParams {
 })
 export class AddPaymentConfirmationPage extends SecurePage {
 
-  private wexDatePipe: WexDate = new WexDate();
-  private wexCurrencyPipe: WexCurrency = new WexCurrency();
-
   public payment: Payment;
+  public readonly DATE_FORMAT: string = "MMMM D, YYYY";
 
   constructor(
     injector: Injector,
@@ -41,14 +37,6 @@ export class AddPaymentConfirmationPage extends SecurePage {
     super("Payments.Add.Confirmation", injector);
 
     this.payment = this.navParams.get(AddPaymentConfirmationNavParams.Payment);
-  }
-
-  public get confirmationMessage(): string {
-    return _.template(this.CONSTANTS.MESSAGES.confirmationMessage)({
-      paymentAmount: this.wexCurrencyPipe.transform(this.payment.details.amount),
-      paymentDate: this.wexDatePipe.transform(this.payment.details.scheduledDate, false),
-      bankAccount: this.payment.details.bankAccount.name
-    });
   }
 
   public finish() {

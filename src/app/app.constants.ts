@@ -441,28 +441,44 @@ export namespace ConstantsInfo {
         //# Add Payment page
         ADD: {
           CREATE: {
-            title: "Make Payment"
+            title: "Schedule Payment"
           },
           EDIT: {
             title: "Edit Payment"
           },
           LABELS: {
-            paymentAmount: "Payment Amount",
-            paymentDate: "Payment Date",
-            bankAccount: "Bank Account"
+            changesFailed: "We are unable to process your changes at this time",
+            bankAccount: "Bank Account",
+            currentBalance: "Current Balance",
+            due: "Due",
+            minimumPaymentDue: "Min Payment Due",
+            otherAmount: "Other Amount",
+            paymentAmount: "Amount",
+            paymentDate: "Payment date",
+            schedulePayment: "Schedule Payment",
+            warningAmount: "Amount is less than min payment due",
+            warningPaymentDate: "Payment date is after due date",
+            instructionalText: "Payments scheduled after 3:30 PM EST, on a weekend, or on a holiday will be processed on the following business day"
+          },
+
+          SELECTION: {
+            LABELS: {
+              amount: "Amount",
+              select: "Select",
+              bankAccount: "Bank Account"
+            }
           },
 
           //# Add Payment Confirmation page
           CONFIRMATION: {
-            title: "Payment Confirmation",
+            title: "Successfully scheduled",
 
             LABELS: {
-              success: "Success!",
-              complete: "Complete"
-            },
-
-            MESSAGES: {
-              confirmationMessage: "Your payment of <strong><%= paymentAmount %></strong> from <strong><%= bankAccount %></strong> is scheduled to be processed on <strong><%= paymentDate %></strong>."
+              amount: "Amount",
+              bankAccount: "Bank Account",
+              confirmation: "Confirmation",
+              method: "Method",
+              paymentDate: "Payment Date"
             }
           },
           //# Add Payment Summary page
