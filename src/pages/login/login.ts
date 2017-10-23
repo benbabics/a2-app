@@ -341,7 +341,7 @@ export class LoginPage extends Page {
     if (this.platform.isIos) {
       this.statusBar.styleLightContent();
     } else {
-      this.statusBar.backgroundColorByHexString(this.ANDROID_STATUS_BAR_COLOR.LOGIN)
+      this.statusBar.backgroundColorByHexString(this.ANDROID_STATUS_BAR_COLOR.LOGIN);
     }
   }
 
