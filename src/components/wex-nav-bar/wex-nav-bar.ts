@@ -1,4 +1,3 @@
-import { NavBarController } from "./../../providers/nav-bar-controller";
 import { Component } from "@angular/core";
 import { CardsPage } from "../../pages/cards/cards";
 import { DriversPage } from "../../pages/drivers/drivers";
@@ -17,7 +16,7 @@ export class WexNavBar {
 
   @Value("NAVIGATION") public CONSTANTS: any;
 
-  constructor(private navBarController: NavBarController, public platform: WexPlatform) { }
+  constructor(public platform: WexPlatform) { }
 
   public get CardsPage() {
     return CardsPage;
@@ -37,10 +36,6 @@ export class WexNavBar {
 
   public get TransactionsPage() {
     return TransactionsPage;
-  }
-
-  public get paymentsBadgeText(): string {
-    return this.navBarController.paymentsBadgeText;
   }
 
   public resetTab(tab: Tab) {
