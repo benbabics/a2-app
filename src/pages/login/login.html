@@ -52,7 +52,7 @@
             <ion-checkbox item-right name="rememberMeToggle" [(ngModel)]="rememberMe" (click)="rememberMeToggle()" [disabled]="setupFingerprintAuth"></ion-checkbox>
           </ion-item>
 
-          <ion-item *ngIf="fingerprintAuthAvailable && !fingerprintProfileAvailable">
+          <ion-item *ngIf="(fingerprintAuthAvailable && !fingerprintProfileAvailable) || true">
             <ion-label item-left [innerHtml]="fingerprintDisabledLabel"></ion-label>
             <ion-checkbox item-right name="setupFingerprintAuthToggle" [(ngModel)]="setupFingerprintAuthToggle"></ion-checkbox>
           </ion-item>
