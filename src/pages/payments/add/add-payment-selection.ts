@@ -68,7 +68,7 @@ export class AddPaymentSelectionPage extends SecurePage {
     this.navCtrl.pop();
   }
 
-  public get disableSubmit() {
+  public get disableSubmit(): boolean {
     // If this is a new custom amount, enable the button (as long as the custom amount is not 0).
     if (this.isCustomPaymentAmount) {
       if (this.otherAmount === 0) {
