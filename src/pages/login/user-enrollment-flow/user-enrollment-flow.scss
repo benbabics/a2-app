@@ -1,6 +1,11 @@
 user-enrollment-flow {
+
   button action-indicator span {
     text-transform: none;
+  }
+
+  .text, .link {
+    font-size: 14px;
   }
 
   @include action-indicator-color(white);
