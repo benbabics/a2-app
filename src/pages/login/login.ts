@@ -64,7 +64,7 @@ export class LoginPage extends Page {
   @ViewChild("titleHeadingBar") titleHeadingBar: ElementRef;
 
   @Value("STORAGE.KEYS.USERNAME") private readonly USERNAME_KEY: string;
-  @Value("ANDROID_STATUS_BAR_COLOR") private readonly ANDROID_STATUS_BAR_COLOR: string;
+  @Value("ANDROID_STATUS_BAR_COLOR") private readonly ANDROID_STATUS_BAR_COLOR;
 
   private _onKeyboardOpen = event => this.onKeyboardOpen(event);
   private _onKeyboardClose = () => this.onKeyboardClose();
@@ -338,19 +338,18 @@ export class LoginPage extends Page {
   }
 
   private setStatusBarForLogin() {
-    if (this.platform.isAndroid) {
-      this.statusBar.hide();
-    } else {
+    if (this.platform.isIos) {
       this.statusBar.styleLightContent();
+    } else {
+      this.statusBar.backgroundColorByHexString(this.ANDROID_STATUS_BAR_COLOR.LOGIN)
     }
   }
 
   private setStatusBarForApp() {
-    if (this.platform.isAndroid) {
-      this.statusBar.show();
-      this.statusBar.backgroundColorByHexString(this.ANDROID_STATUS_BAR_COLOR);
-    } else {
+    if (this.platform.isIos) {
       this.statusBar.styleDefault();
+    } else {
+      this.statusBar.backgroundColorByHexString(this.ANDROID_STATUS_BAR_COLOR.APP);
     }
   }
 
