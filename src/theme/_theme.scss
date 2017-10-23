@@ -200,6 +200,16 @@ ion-header {
 // --------------------------------------------------
 
 ion-item-divider {
+  &.centered {
+    text-align: center;
+  }
+
+  &:not(.centered) {
+    .label-ios {
+      margin: 15px 8px 7px 0;
+    }
+  }
+
   color: color($colors, light-header-text);
   &[sticky] {
     top: -1px !important;
@@ -221,6 +231,7 @@ ion-item-divider {
     border-color: color($colors, border);
     border-width: 0.55px 0;
   }
+
   @at-root .md & {
     font-weight: 500;
     background-color: color($colors, separator-md);
