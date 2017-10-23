@@ -1,7 +1,11 @@
-import { NavParams } from "ionic-angular";
+import { NavParams, ModalController, NavController } from "ionic-angular";
 import { Component, Injector } from "@angular/core";
 import { DetailsPage } from "../../details-page";
 import { Payment } from "@angular-wex/models";
+import { WexPlatform } from "../../../providers";
+import { AddPaymentPage } from "../add/add-payment";
+import { PaymentProvider } from "@angular-wex/api-providers";
+import { WexAlertController } from "../../../components/wex-alert-controller/wex-alert-controller";
 
 export type PaymentsDetailsNavParams = keyof {
   payment
@@ -23,6 +27,11 @@ export class PaymentsDetailsPage extends DetailsPage {
 
   constructor(
     public navParams: NavParams,
+    public platform: WexPlatform,
+    public modalCtrl: ModalController,
+    public paymentProvider: PaymentProvider,
+    public wexAlertController: WexAlertController,
+    public navCtrl: NavController,
     injector: Injector
   ) {
     super("Payments.Details", injector);
@@ -39,5 +48,16 @@ export class PaymentsDetailsPage extends DetailsPage {
 
   public get isScheduled(): boolean {
     return this.payment.isScheduled;
+  }
+
+  public cancelPayment() {
+    this.wexAlertController.confirmation(this.CONSTANTS.cancelPaymentConfirmation, () => {
+      this.paymentProvider.cancelPayment(this.session.user.billingCompany.details.accountId, this.payment.details.id)
+        .subscribe(() => this.navCtrl.pop());
+    });
+  }
+
+  public editPayment() {
+    this.modalCtrl.create(AddPaymentPage, { payment: this.payment }).present();
   }
 }

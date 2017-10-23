@@ -9,8 +9,8 @@ export class WexAlertController {
 
     constructor(private alertController: AlertController, private platform: WexPlatform) { }
 
-    public confirmation(message: string, yesHandler: () => void) {
-        this.alertController.create({
+    public confirmation(message: string, yesHandler: () => void): Promise<any> {
+        return this.alertController.create({
             message,
             buttons: [
                 {
@@ -24,8 +24,8 @@ export class WexAlertController {
         }).present();
     }
 
-    public alert(message: string) {
-        this.alertController.create({
+    public alert(message: string): Promise<any> {
+        return this.alertController.create({
             message,
             buttons: [
                 {

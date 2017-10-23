@@ -5,7 +5,7 @@ page-payments-details {
         @at-root .md & {
             background: none;
 
-            .scroll-content {
+            #header-container, ion-list.detail-list {
                 padding-left: 16px;                
             }
         }
@@ -47,6 +47,9 @@ page-payments-details {
             @include flexbox();
             @include flex-direction(column);
             @include align-items(center);
+
+            padding-left: 20%;
+            padding-right: 20%;
         }
 
         #button-cancel-payment {
@@ -60,6 +63,7 @@ page-payments-details {
             }
 
             @at-root .md & {
+                height: 48px;
                 
                 .button-inner {
                     color: color($colors, alert);
