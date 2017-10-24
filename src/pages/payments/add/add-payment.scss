@@ -5,7 +5,7 @@ page-add-payment {
   }
 
   @at-root .md & ion-item-group {
-    border-bottom: 1px solid color($colors, light-border);
+    @extend %md-item-border;
   }
 
   &.ion-page ion-content {

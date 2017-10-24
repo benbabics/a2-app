@@ -1,10 +1,12 @@
 wex-list {
 
-  ion-list {
+  ion-item-group {
     margin-bottom: 24px !important;
 
-    > span > span > ion-item-group > span:last-of-type wex-list-item .item-inner {
-      border-bottom: none !important;
+    > .grouped > span, > .ungrouped {
+      > :last-of-type wex-list-item .item > .item-inner {
+        border-bottom: 0;
+      }
     }
   }
 
@@ -16,32 +18,28 @@ wex-list {
     font-weight: bold;
   }
 
-  ion-list wex-list-item {
-    .item-md, .item-ios {
-      > .item-inner {
-        padding-left: 0px;
-        margin-left: 16px;
-      }
-    }
-  
+  ion-item-group wex-list-item {
     .label-ios, .label-md {
       margin: 0;
     }
   
     .item .item-inner {
+
       @at-root .ios & {
-        border-bottom: 0.55px solid color($colors, border);
+        @extend %ios-item-border;
+
         ion-label {
           padding: 0.5rem;
           padding-left: 0;
         }
-      } @at-root .md & {
-        border-bottom: 0.55px solid color($colors, light-border);
+      }
+
+      @at-root .md & {
+        @extend %md-item-border;
+
         ion-label {
-          @at-root .md & {
-            padding: .3rem;
-            padding-left: 0;
-          }
+          padding: .3rem;
+          padding-left: 0;
         }
       }
     }

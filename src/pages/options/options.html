@@ -6,26 +6,26 @@
 
 <ion-content>
 
-  <ion-item-group class="ios-item-indent">
-    <ion-list-header *ngIf="fingerprintAuthAvailable">
+  <ion-item-group [ngClass]="{ 'inset-items': platform.isIos }">
+    <ion-item-divider *ngIf="fingerprintAuthAvailable">
       {{ CONSTANTS.settings }}
-    </ion-list-header>
+    </ion-item-divider>
     <ion-item *ngIf="fingerprintAuthAvailable">
       <ion-label>{{ platform.fingerprintTitle() }}</ion-label>
       <ion-toggle [color]="switchColor" 
                   name="enableFingerprintAuthToggle" 
                   [(ngModel)]="enableFingerprintAuthToggle"></ion-toggle>
     </ion-item>
-    <ion-list-header>
+    <ion-item-divider>
       {{ CONSTANTS.support }}
-    </ion-list-header>
+    </ion-item-divider>
     <button ion-item (click)="goToPage(pages.ContactUsPage)">
       <ion-label>{{ CONSTANTS.contactUs }}</ion-label>
       <ion-icon item-right ios="ios-arrow-forward"></ion-icon>
     </button>
-    <ion-list-header>
+    <ion-item-divider>
       {{ CONSTANTS.legal }}
-    </ion-list-header>
+    </ion-item-divider>
     <button ion-item (click)="goToPage(pages.TermsOfUsePage)">
       <ion-label>{{ CONSTANTS.termsOfUse }}</ion-label>
       <ion-icon item-right ios="ios-arrow-forward"></ion-icon>
@@ -34,7 +34,7 @@
         <ion-label>{{ CONSTANTS.privacyPolicy }}</ion-label>
         <ion-icon item-right ios="ios-arrow-forward"></ion-icon>
     </button>
-    <ion-list-header class="list-header-collapsed"></ion-list-header>
+    <ion-item-divider class="list-header-collapsed"></ion-item-divider>
     <button ion-item (click)="logout()">
       <ion-label>{{ CONSTANTS.logOut }}</ion-label>
       <ion-icon item-right ios="ios-arrow-forward"></ion-icon>

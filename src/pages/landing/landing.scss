@@ -1,7 +1,8 @@
 page-landing {
+  @include page-background-white();
 
   .label-ios, .label-md {
-    margin: 0 8px 0 0;
+    margin: 0 !important;
   }
   
   @mixin faint {
@@ -12,26 +13,12 @@ page-landing {
   .faint {
     @include faint;
   }
-  
-  @at-root .md &, .ios & {
-    &.ion-page > ion-content {
-      background: color($colors, white);
-    }
+
+  ion-list {
+    border: 0 !important;
   }
 
-  .z {
-    & > .item-block {
-      &:first-child {
-        border-top: none;
-      }
-
-      &:last-child {
-        border-bottom: none;
-      }
-    }
-  }
-
-  .page-list > ion-item ion-label {
+  .page-list ion-item ion-label {
 
     & > action-indicator [loading="true"] {
       @include flexbox();
@@ -72,7 +59,13 @@ page-landing {
       }
 
       &:not(:last-child) > .item-inner {
-        border-bottom: 0.55px solid #c8c7cc !important;
+        @at-root .ios & {
+          @extend %ios-item-border;
+        }
+
+        @at-root .md & {
+          @extend %md-item-border;
+        }
       }
     }
 

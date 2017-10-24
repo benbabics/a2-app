@@ -1,34 +1,32 @@
-<ion-list class="wex-list">
+<ion-item-group class="wex-list">
   <wex-list-header *ngIf="headerFields" [fields]="headerFields">
   </wex-list-header>
 
-  <span *ngIf="isGrouped">
+  <span class="grouped" *ngIf="isGrouped">
     <span *ngFor="let divider of dividers; let i = index">
-      <ion-item-group>
-        <ion-item-divider *ngIf="getListForDivider(i)?.length" sticky [ngClass]="divider.toLowerCase()">
-          {{ divider }}
-        </ion-item-divider>
-        <span *ngFor="let item of getListForDivider(i)">
-          <ng-template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{$implicit: item}"></ng-template>
-        </span>
-      </ion-item-group>
+      <ion-item-divider *ngIf="getListForDivider(i)?.length" sticky [ngClass]="divider.toLowerCase()">
+        {{ divider }}
+      </ion-item-divider>
+      <span *ngFor="let item of getListForDivider(i)">
+        <ng-template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{$implicit: item}"></ng-template>
+      </span>
     </span>
   </span>
 
-  <span *ngIf="!isGrouped">
+  <span class="ungrouped" *ngIf="!isGrouped">
     <span *ngFor="let item of itemsRendered">
       <ng-template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{$implicit: item}"></ng-template>
     </span>
   </span>
 
-  <span *ngIf="isGreekingVisible">
+  <span class="greeking" *ngIf="isGreekingVisible">
     <span *ngFor="let i of greekedElements">
       <wex-list-item class="greeking-item">
         <span [wexGreeking]="greekingData"></span>
       </wex-list-item>
     </span>
   </span>
-</ion-list>
+</ion-item-group>
 
 <ion-card *ngIf="hasNoItems && !forceGreeking" class="no-records">
   <ion-item>

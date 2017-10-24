@@ -6,11 +6,19 @@
 
 <ion-content>
   <div id="options-list" [ngSwitch]="selectionType">
-    <ion-list radio-group *ngSwitchCase="'amount'" [(ngModel)]="selectedItem" [ngSwitch]="selectionType">
+    <ion-list radio-group 
+              *ngSwitchCase="'amount'"
+              [(ngModel)]="selectedItem"
+              [ngSwitch]="selectionType"
+              [ngClass]="{ 'inset-items': platform.isIos }">
       <option-amount *ngFor="let option of options" [option]="option" (otherAmountEmit)="otherAmount = $event"></option-amount>
     </ion-list>
 
-    <ion-list radio-group *ngSwitchCase="'bankAccount'" [(ngModel)]="selectedItem" [ngSwitch]="selectionType">
+    <ion-list radio-group 
+              *ngSwitchCase="'bankAccount'"
+              [(ngModel)]="selectedItem"
+              [ngSwitch]="selectionType"
+              [ngClass]="{ 'inset-items': platform.isIos }">
       <option-bank-account *ngFor="let option of options" [option]="option"></option-bank-account>
     </ion-list>
   </div>

@@ -121,7 +121,6 @@ page-login {
 
       .item-inner, .item-ios.item-block .item-inner {
         padding: 0;
-        border: 0;
       }
 
       ion-list {
@@ -171,6 +170,7 @@ page-login {
 
       #login-settings {
         padding-top: 1rem;
+        border: 0;
 
         ion-item {
           padding-left: 0px;
