@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{pageTitle}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div id="options-list" [ngSwitch]="selectionType">
+    <ion-list radio-group *ngSwitchCase="'amount'" [(ngModel)]="selectedItem" [ngSwitch]="selectionType">
+      <option-amount *ngFor="let option of options" [option]="option" (otherAmountEmit)="otherAmount = $event"></option-amount>
+    </ion-list>
+
+    <ion-list radio-group *ngSwitchCase="'bankAccount'" [(ngModel)]="selectedItem" [ngSwitch]="selectionType">
+      <option-bank-account *ngFor="let option of options" [option]="option"></option-bank-account>
+    </ion-list>
+  </div>
+
+  <ion-list id="action-list" padding>
+    <button [disabled]="disableSubmit" ion-button block class="button-gradient" (click)="handleSubmit($event)">
+      {{ CONSTANTS.LABELS.select }}
+    </button>
+  </ion-list>
+</ion-content>

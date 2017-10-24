@@ -78,37 +78,6 @@ page-payments {
     }
   }
 
-  ion-item-divider {
-    color: color($colors, light-header-text);
-    &[sticky] {
-      top: -1px;
-    }
-
-    &.item-divider-ios, &.item-divider-md {
-      color: color($colors, light-header-text);
-    }
-
-    @at-root .ios & {
-      text-transform: uppercase;
-      letter-spacing: .08rem;
-      font-weight: 500;
-      font-size: 1.2rem;
-
-      background-color: color($colors, eggshell);
-
-      text-align: center;
-      border-style: solid;
-      border-color: color($colors, border);
-      border-width: 0.55px 0;
-    }
-    @at-root .md & {
-      font-weight: 500;
-      background-color: color($colors, separator-md);
-      border: solid color($colors, light-border);
-      border-width: 1px 0;
-    }
-  }
-
   ion-list wex-list-item {
     .item-md [item-left] {
       margin: 0;

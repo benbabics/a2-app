@@ -1,0 +1,87 @@
+import { Component, Injector } from "@angular/core";
+import { NavParams, NavController } from "ionic-angular";
+import { SecurePage } from "../../secure-page";
+import { PaymentSelectionOption } from "./../../../providers/payment-service";
+import { UserPaymentAmount, UserPaymentAmountType } from "../../../models/user-payment";
+
+export type AddPaymentSelectionNavParams = keyof {
+  selectionType
+  options
+  selectedItem
+  onSelection
+};
+
+export namespace AddPaymentSelectionNavParams {
+  export const SelectionType: AddPaymentSelectionNavParams = "selectionType";
+  export const Options: AddPaymentSelectionNavParams = "options";
+  export const SelectedItem: AddPaymentSelectionNavParams = "selectedItem";
+  export const OnSelection: AddPaymentSelectionNavParams = "onSelection";
+}
+
+@Component({
+  selector: "page-add-payment-selection",
+  templateUrl: "add-payment-selection.html"
+})
+export class AddPaymentSelectionPage extends SecurePage {
+  public selectionType: string;
+  private onSelection: (selection: PaymentSelectionOption) => void;
+  public selectedItem: PaymentSelectionOption;
+  public initialSelection: PaymentSelectionOption;
+  public options: PaymentSelectionOption[];
+
+  constructor(
+    injector: Injector,
+    navParams: NavParams,
+    public navCtrl: NavController
+  ) {
+    super("Payments.Add.Selection", injector);
+
+    this.selectionType = navParams.get(AddPaymentSelectionNavParams.SelectionType);
+    this.options = navParams.get(AddPaymentSelectionNavParams.Options);
+    this.selectedItem = navParams.get(AddPaymentSelectionNavParams.SelectedItem);
+    this.initialSelection = this.selectedItem;
+    this.onSelection = navParams.get(AddPaymentSelectionNavParams.OnSelection);
+    if (this.isCustomPaymentAmount) {
+      this.otherAmount = (this.selectedItem as UserPaymentAmount).value;
+    }
+  }
+
+  public get pageTitle(): string {
+    return this.CONSTANTS.LABELS[this.selectionType];
+  }
+
+  public otherAmount: number = 0;
+  isPaymentAmount(selectedItem: PaymentSelectionOption): selectedItem is UserPaymentAmount {
+    return "type" in selectedItem;
+  }
+
+  public get isCustomPaymentAmount(): boolean {
+    return this.isPaymentAmount(this.selectedItem) && (this.selectedItem as UserPaymentAmount).type === UserPaymentAmountType.OtherAmount;
+  }
+
+
+  public handleSubmit() {
+    this.onSelection(this.selectedItem);
+    if (this.isCustomPaymentAmount) {
+      (this.selectedItem as UserPaymentAmount).value = this.otherAmount;
+    }
+    this.navCtrl.pop();
+  }
+
+  public get disableSubmit(): boolean {
+    // If this is a new custom amount, enable the button (as long as the custom amount is not 0).
+    if (this.isCustomPaymentAmount) {
+      if (this.otherAmount === 0) {
+        return true;
+      } else if ((this.selectedItem as UserPaymentAmount).value !== this.otherAmount) {
+        return false;
+      }
+    }
+    // Otherwise, if the selected item is the same, disable the button.
+    if (this.selectedItem === this.initialSelection) {
+      return true;
+    }
+    // Otherwise, the selection must be new, so enable the button.
+    return false;
+  }
+}
