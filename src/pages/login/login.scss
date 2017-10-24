@@ -129,12 +129,8 @@ page-login {
         ion-item {
           background-color: transparent;
 
-          &.item-block:last-child, & {
+          @at-root .ios &.item-block {
               border-bottom: 1px solid white;
-              
-              @at-root .md & {
-                border-bottom-color: rgba(255,255,255,.4);
-              }
           }
 
           &.item-block:first-child {
@@ -173,6 +169,10 @@ page-login {
       #login-settings {
         padding-top: 1rem;
         border: 0;
+
+        .item-md.item-block .item-inner {
+          border-bottom: none;
+        }
 
         ion-item {
           padding-left: 0px;
