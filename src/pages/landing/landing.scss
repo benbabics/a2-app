@@ -39,7 +39,7 @@ page-landing {
       padding: inherit;
     }
 
-    ion-item {
+    ion-item.item {
 
       ion-label {
         margin: 8px 0 8px 8px;
@@ -54,7 +54,8 @@ page-landing {
         color: black !important;
       }
 
-      .item-inner {
+       > .item-inner {
+        padding-left: 0 !important;
         padding-right: 0 !important;
       }
 
