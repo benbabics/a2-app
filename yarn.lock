@@ -160,27 +160,11 @@
     ws "1.1.1"
     xml2js "0.4.17"
 
-"@ionic/cli-plugin-cordova@1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@ionic/cli-plugin-cordova/-/cli-plugin-cordova-1.4.0.tgz#2d3dd7bbd7321e0f1994b6f1a217176f55145296"
+"@ionic/cli-plugin-proxy@1.4.12":
+  version "1.4.12"
+  resolved "https://registry.yarnpkg.com/@ionic/cli-plugin-proxy/-/cli-plugin-proxy-1.4.12.tgz#96266b9ae1fdf4af12304d735589a9bdd20200a7"
   dependencies:
-    "@ionic/cli-utils" "1.4.0"
-    chalk "^1.1.3"
-    xml2js "^0.4.17"
-
-"@ionic/cli-plugin-ionic-angular@1.4.1":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@ionic/cli-plugin-ionic-angular/-/cli-plugin-ionic-angular-1.4.1.tgz#bb94b7ad61c2f79757b2dff041c0b7e2151777ec"
-  dependencies:
-    "@ionic/cli-utils" "1.7.0"
-    chalk "^2.0.0"
-    tslib "^1.7.1"
-
-"@ionic/cli-plugin-proxy@1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@ionic/cli-plugin-proxy/-/cli-plugin-proxy-1.4.0.tgz#5dfbd43aa9ea54649ad9100e61af40b32f3ddf9c"
-  dependencies:
-    "@ionic/cli-utils" "1.6.0"
+    "@ionic/cli-utils" "1.13.0"
     superagent-proxy "^1.0.2"
     tslib "^1.7.1"
 
@@ -219,75 +203,40 @@
     wrap-ansi "^3.0.1"
     ws "^3.2.0"
 
-"@ionic/cli-utils@1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@ionic/cli-utils/-/cli-utils-1.4.0.tgz#78c70b69c3b98a463aa01ea507d7d01da3dfa675"
+"@ionic/cli-utils@1.13.0":
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/@ionic/cli-utils/-/cli-utils-1.13.0.tgz#5eb08ddedc96a4f47cced9311d63f338c7306639"
   dependencies:
-    archiver "^1.3.0"
-    chalk "^1.1.3"
-    cross-spawn "^4.0.2"
-    dargs "^5.1.0"
-    inquirer "^3.0.6"
-    leek "0.0.24"
-    lodash "^4.17.4"
-    minimist "^1.2.0"
-    ncp "^2.0.0"
-    os-name "^2.0.1"
-    rimraf "^2.5.4"
-    semver "^5.3.0"
-    slice-ansi "0.0.4"
-    string-width "^2.0.0"
-    superagent "^3.5.2"
-    uuid "^3.0.1"
-    wrap-ansi "^2.1.0"
-
-"@ionic/cli-utils@1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@ionic/cli-utils/-/cli-utils-1.6.0.tgz#33909ec8bdbb086121aac6fcf5c2db951e204e7d"
-  dependencies:
-    archiver "^1.3.0"
+    archiver "^2.0.3"
+    basic-auth "^1.1.0"
+    body-parser "^1.18.1"
     chalk "^2.0.0"
-    ci-info "^1.0.0"
-    cross-spawn "^4.0.2"
-    dargs "^5.1.0"
-    dev-null "^0.1.1"
-    inquirer "^3.0.6"
-    leek "0.0.24"
-    lodash "^4.17.4"
-    minimist "^1.2.0"
-    ncp "^2.0.0"
-    semver "^5.3.0"
-    slice-ansi "^1.0.0"
-    string-width "^2.1.0"
-    strip-ansi "^4.0.0"
-    superagent "^3.5.2"
-    tslib "^1.7.1"
-    uuid "^3.0.1"
-    wrap-ansi "^2.1.0"
-
-"@ionic/cli-utils@1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@ionic/cli-utils/-/cli-utils-1.7.0.tgz#05bdbf3e7533eeeee27d58f3adbfe26bf2bf0d1d"
-  dependencies:
-    archiver "^2.0.0"
-    chalk "^2.0.0"
-    ci-info "^1.0.0"
+    chokidar "^1.7.0"
+    ci-info "^1.1.1"
     cross-spawn "^5.1.0"
     dargs "^5.1.0"
-    dev-null "^0.1.1"
-    inquirer "^3.2.1"
+    diff "^3.3.1"
+    elementtree "^0.1.7"
+    express "^4.15.4"
+    inquirer "^3.3.0"
     leek "0.0.24"
     lodash "^4.17.4"
     minimist "^1.2.0"
     ncp "^2.0.0"
+    opn "^5.1.0"
+    proxy-middleware "^0.15.0"
     semver "^5.4.1"
     slice-ansi "^1.0.0"
+    ssh-config "^1.1.1"
     string-width "^2.1.1"
     strip-ansi "^4.0.0"
-    superagent "^3.5.2"
+    superagent "^3.6.0"
+    tar "^2.2.1"
+    tiny-lr "^1.0.5"
     tslib "^1.7.1"
     uuid "^3.0.1"
     wrap-ansi "^3.0.1"
+    ws "^3.2.0"
 
 "@ionic/discover@^0.3.1":
   version "0.3.1"
@@ -451,10 +400,6 @@ angular-2-local-storage@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/angular-2-local-storage/-/angular-2-local-storage-1.0.1.tgz#3b846c90b2fffc9124f7bacc347f22d043a1e3a4"
 
-ansi-escapes@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/ansi-escapes/-/ansi-escapes-2.0.0.tgz#5bae52be424878dd9783e8910e3fc2922e83c81b"
-
 ansi-escapes@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/ansi-escapes/-/ansi-escapes-3.0.0.tgz#ec3e8b4e9f8064fc02c3ac9b65f1c275bda8ef92"
@@ -502,34 +447,6 @@ archiver-utils@^1.3.0:
     lodash "^4.8.0"
     normalize-path "^2.0.0"
     readable-stream "^2.0.0"
-
-archiver@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/archiver/-/archiver-1.3.0.tgz#4f2194d6d8f99df3f531e6881f14f15d55faaf22"
-  dependencies:
-    archiver-utils "^1.3.0"
-    async "^2.0.0"
-    buffer-crc32 "^0.2.1"
-    glob "^7.0.0"
-    lodash "^4.8.0"
-    readable-stream "^2.0.0"
-    tar-stream "^1.5.0"
-    walkdir "^0.0.11"
-    zip-stream "^1.1.0"
-
-archiver@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/archiver/-/archiver-2.0.0.tgz#ffb73ecccd8dd65b0019e1180f78092a053d43c4"
-  dependencies:
-    archiver-utils "^1.3.0"
-    async "^2.0.0"
-    buffer-crc32 "^0.2.1"
-    glob "^7.0.0"
-    lodash "^4.8.0"
-    readable-stream "^2.0.0"
-    tar-stream "^1.5.0"
-    walkdir "^0.0.11"
-    zip-stream "^1.2.0"
 
 archiver@^2.0.3:
   version "2.0.3"
@@ -1301,10 +1218,6 @@ chokidar@1.7.0, chokidar@^1.6.1, chokidar@^1.7.0:
   optionalDependencies:
     fsevents "^1.0.0"
 
-ci-info@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-1.0.0.tgz#dc5285f2b4e251821683681c381c3388f46ec534"
-
 ci-info@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-1.1.1.tgz#47b44df118c48d2597b56d342e7e25791060171a"
@@ -1484,7 +1397,7 @@ cookie@0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.3.1.tgz#e7e0a1f9ef43b4c8ba925c5c5a96e806d16873bb"
 
-cookiejar@^2.0.6, cookiejar@^2.1.0:
+cookiejar@^2.1.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/cookiejar/-/cookiejar-2.1.1.tgz#41ad57b1b555951ec171412a81942b1e8200d34a"
 
@@ -1707,13 +1620,6 @@ cross-spawn@^3.0.0:
     lru-cache "^4.0.1"
     which "^1.2.9"
 
-cross-spawn@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-4.0.2.tgz#7b9247621c23adfdd3856004a823cbe397424d41"
-  dependencies:
-    lru-cache "^4.0.1"
-    which "^1.2.9"
-
 cryptiles@2.x.x:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/cryptiles/-/cryptiles-2.0.5.tgz#3bdfecdc608147c1c67202fa291e7dca59eaa3b8"
@@ -1870,10 +1776,6 @@ detect-indent@^4.0.0:
   resolved "https://registry.yarnpkg.com/detect-indent/-/detect-indent-4.0.0.tgz#f76d064352cdf43a1cb6ce619c4ee3a9475de208"
   dependencies:
     repeating "^2.0.0"
-
-dev-null@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/dev-null/-/dev-null-0.1.1.tgz#5a205ce3c2b2ef77b6238d6ba179eb74c6a0e818"
 
 diff@^3.2.0:
   version "3.3.0"
@@ -2874,25 +2776,6 @@ inline-process-browser@^1.0.0:
     falafel "^1.0.1"
     through2 "^0.6.5"
 
-inquirer@^3.0.6, inquirer@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/inquirer/-/inquirer-3.2.1.tgz#06ceb0f540f45ca548c17d6840959878265fa175"
-  dependencies:
-    ansi-escapes "^2.0.0"
-    chalk "^2.0.0"
-    cli-cursor "^2.1.0"
-    cli-width "^2.0.0"
-    external-editor "^2.0.4"
-    figures "^2.0.0"
-    lodash "^4.3.0"
-    mute-stream "0.0.7"
-    run-async "^2.2.0"
-    rx-lite "^4.0.8"
-    rx-lite-aggregates "^4.0.8"
-    string-width "^2.1.0"
-    strip-ansi "^4.0.0"
-    through "^2.3.6"
-
 inquirer@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/inquirer/-/inquirer-3.3.0.tgz#9dd2f2ad765dcab1ff0443b491442a20ba227dc9"
@@ -3648,7 +3531,7 @@ mime@1.4.1, mime@^1.3.6:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/mime/-/mime-1.4.1.tgz#121f9ebc49e3766f311a76e1fa1c8003c4b03aa6"
 
-mime@^1.2.11, mime@^1.3.4:
+mime@^1.2.11:
   version "1.3.6"
   resolved "https://registry.yarnpkg.com/mime/-/mime-1.3.6.tgz#591d84d3653a6b0b4a3b9df8de5aa8108e72e5e0"
 
@@ -4329,7 +4212,7 @@ qs@6.4.0, qs@~6.4.0:
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.4.0.tgz#13e26d28ad6b0ffaa91312cd3bf708ed351e7233"
 
-qs@6.5.0, qs@^6.1.0, qs@^6.4.0:
+qs@6.5.0, qs@^6.4.0:
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.0.tgz#8d04954d364def3efc55b5a0793e1e2c8b1e6e49"
 
@@ -4916,10 +4799,6 @@ slash@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-1.0.0.tgz#c41f2f6c39fc16d1cd17ad4b5d896114ae470d55"
 
-slice-ansi@0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/slice-ansi/-/slice-ansi-0.0.4.tgz#edbf8903f66f7ce2f8eafd6ceed65e264c831b35"
-
 slice-ansi@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/slice-ansi/-/slice-ansi-1.0.0.tgz#044f1a49d8842ff307aad6b505ed178bd950134d"
@@ -5089,7 +4968,7 @@ string-width@^1.0.1, string-width@^1.0.2:
     is-fullwidth-code-point "^1.0.0"
     strip-ansi "^3.0.0"
 
-string-width@^2.0.0, string-width@^2.1.0, string-width@^2.1.1:
+string-width@^2.1.0, string-width@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-2.1.1.tgz#ab93f27a8dc13d28cac815c462143a6d9012ae9e"
   dependencies:
@@ -5144,21 +5023,6 @@ superagent-proxy@^1.0.2:
   dependencies:
     debug "2"
     proxy-agent "2"
-
-superagent@^3.5.2:
-  version "3.5.2"
-  resolved "https://registry.yarnpkg.com/superagent/-/superagent-3.5.2.tgz#3361a3971567504c351063abeaae0faa23dbf3f8"
-  dependencies:
-    component-emitter "^1.2.0"
-    cookiejar "^2.0.6"
-    debug "^2.2.0"
-    extend "^3.0.0"
-    form-data "^2.1.1"
-    formidable "^1.1.1"
-    methods "^1.1.1"
-    mime "^1.3.4"
-    qs "^6.1.0"
-    readable-stream "^2.0.5"
 
 superagent@^3.6.0:
   version "3.6.0"
@@ -5688,7 +5552,7 @@ wordwrap@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/wordwrap/-/wordwrap-1.0.0.tgz#27584810891456a4171c8d0226441ade90cbcaeb"
 
-wrap-ansi@^2.0.0, wrap-ansi@^2.1.0:
+wrap-ansi@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-2.1.0.tgz#d8fc3d284dd05794fe84973caecdd1cf824fdd85"
   dependencies:
@@ -5876,7 +5740,7 @@ yargs@~3.10.0:
     decamelize "^1.0.0"
     window-size "0.1.0"
 
-zip-stream@^1.1.0, zip-stream@^1.2.0:
+zip-stream@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/zip-stream/-/zip-stream-1.2.0.tgz#a8bc45f4c1b49699c6b90198baacaacdbcd4ba04"
   dependencies:
