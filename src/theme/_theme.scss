@@ -30,14 +30,16 @@ ion-fab {
 // --------------------------------------------------
 
 ion-list, ion-item-group {
+  $padding-width: 16px;
   
   &.inset-items {
       
     .item.item-block {
-      padding-left: 16px;
+      padding-left: $padding-width;
         
       > .item-inner {
         padding-left: 0;
+        padding-right: $padding-width;
       }
     }
   }
@@ -48,7 +50,8 @@ ion-list, ion-item-group {
       padding-left: 0;
     
       > .item-inner {
-        padding-left: 16px;
+        padding-left: $padding-width;
+        padding-right: $padding-width;
       }
     }
   }
@@ -168,6 +171,7 @@ ion-icon.icon-ios.tab-button-icon[aria-label*="fa"] {
       // icons
       ion-icon[ios="ios-arrow-forward"] {
         font-size: 2.2rem;
+        margin-right: 0;
     
         &::before {
           vertical-align: middle;
