@@ -1,4 +1,4 @@
-<ion-item-group class="wex-list">
+<ion-item-group class="wex-list" [ngClass]="{ 'inset-items': platform.isIos }">
   <wex-list-header *ngIf="headerFields" [fields]="headerFields">
   </wex-list-header>
 

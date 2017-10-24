@@ -105,10 +105,14 @@ ion-icon.icon-ios.tab-button-icon[aria-label*="fa"] {
   }
 }
 
-//# Items
+//# Lists/Items
 // --------------------------------------------------
 %ios-item-border {
   border-bottom: 0.55px solid color($colors, border);
+}
+
+%ios-list-top-border {
+  border-top: 0.55px solid color($colors, border);
 }
 
 .ios {
@@ -132,36 +136,40 @@ ion-icon.icon-ios.tab-button-icon[aria-label*="fa"] {
         border-bottom: none;
       }
     }
+  }
+
+  ion-list {
+    @extend %ios-list-top-border;
+  }
+  
+  ion-item-group {
+    // .list-header collapsabled
+    ion-list-header.list-header-collapsed:not(.list-header-ios) {
+      min-height: 0;
+      ion-label { margin: 0; }
+    }
     
-    ion-item-group {
-      // .list-header collapsabled
-      ion-list-header.list-header-collapsed:not(.list-header-ios) {
-        min-height: 0;
-        ion-label { margin: 0; }
+    ion-list-header.list-header-md {
+      padding-top: 1.5rem;
+    }
+    .item-md + .list-header-md {
+      margin-top: 1.5rem;
+    }
+    
+    // .list-header borders
+    .item-ios.list-header-ios {
+      &:not(:last-of-type) {
+        @extend %ios-item-border;
       }
-      
-      ion-list-header.list-header-md {
-        padding-top: 1.5rem;
-      }
-      .item-md + .list-header-md {
-        margin-top: 1.5rem;
-      }
-      
-      // .list-header borders
-      .item-ios.list-header-ios {
-        &:not(:last-of-type) {
-          @extend %ios-item-border;
-        }
-      }
-      
-      .item:not(.list-header) {
-        // icons
-        ion-icon[ios="ios-arrow-forward"] {
-          font-size: 2.2rem;
-      
-          &::before {
-            vertical-align: middle;
-          }
+    }
+    
+    .item:not(.list-header) {
+      // icons
+      ion-icon[ios="ios-arrow-forward"] {
+        font-size: 2.2rem;
+    
+        &::before {
+          vertical-align: middle;
         }
       }
     }

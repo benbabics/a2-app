@@ -2,6 +2,7 @@ import * as _ from "lodash";
 import { Component, Input, TemplateRef, ContentChild, Query } from "@angular/core";
 import { Value } from "../../decorators/value";
 import { WexGreeking } from "../index";
+import { WexPlatform } from "../../providers";
 
 @Component({
   selector: "wex-list",
@@ -30,6 +31,8 @@ export class WexList {
   @Input() forceGreeking?: boolean;
 
   @ContentChild(TemplateRef) itemTemplate: Query;
+
+  constructor(public platform: WexPlatform) { }
 
   public get greekedElements(): undefined[] {
     return new Array(this.greekedElementCount || WexList.DEFAULT_NUM_GREEKED_ELEMENTS);
