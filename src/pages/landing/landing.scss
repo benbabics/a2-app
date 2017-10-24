@@ -1,37 +1,24 @@
 page-landing {
+  @include page-background-white();
 
   .label-ios, .label-md {
-    margin: 0 8px 0 0;
+    margin: 0 !important;
   }
   
   @mixin faint {
     font-weight: 400;
-    color: #9b99a9;
+    color: #9b99a9 !important;
   }
 
   .faint {
     @include faint;
   }
-  
-  @at-root .md &, .ios & {
-    &.ion-page > ion-content {
-      background: color($colors, white);
-    }
+
+  ion-list {
+    border: 0 !important;
   }
 
-  .list-ios, .list-md {
-  & > .item-block {
-      &:first-child {
-        border-top: none;
-      }
-
-      &:last-child {
-        border-bottom: none;
-      }
-    }
-  }
-
-  .page-list > ion-item ion-label {
+  .page-list ion-item ion-label {
 
     & > action-indicator [loading="true"] {
       @include flexbox();
@@ -52,17 +39,34 @@ page-landing {
       padding: inherit;
     }
 
-    ion-item {
-      border-bottom: 0.55px solid #c8c7cc;
-      [item-left] {
-        @include faint;
-      }
-      [item-right] {
-        font-weight: bold;
+    ion-item.item {
+
+      ion-label {
         margin: 8px 0 8px 8px;
       }
-      .item-inner {
+      
+      .property-name {
+        @include faint;
+      }
+
+      .property-value {
+        font-weight: bold;
+        color: black !important;
+      }
+
+       > .item-inner {
+        padding-left: 0 !important;
         padding-right: 0 !important;
+      }
+
+      &:not(:last-child) > .item-inner {
+        @at-root .ios & {
+          @extend %ios-item-border;
+        }
+
+        @at-root .md & {
+          @extend %md-item-border;
+        }
       }
     }
 

@@ -9,6 +9,10 @@ option-amount {
   }
 
   .custom-input-item {
+    .item-inner {
+      border-bottom: none !important;
+    }
+
     @extend .item-radio-checked;
   }
 }

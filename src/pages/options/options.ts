@@ -4,7 +4,7 @@ import { TermsOfUsePage } from "../terms-of-use/terms-of-use";
 import { PrivacyPolicyPage } from "../privacy-policy/privacy-policy";
 import { NavController } from "ionic-angular";
 import { FingerprintController } from "./fingerprint-control";
-import { WexNavigationController } from "../../providers";
+import { WexNavigationController, WexPlatform } from "../../providers";
 
 @Component({
   selector: "options-page",
@@ -16,7 +16,8 @@ export class OptionsPage extends FingerprintController {
 
   constructor(injector: Injector,
     private navController: NavController,
-    private wexNavigationController: WexNavigationController
+    private wexNavigationController: WexNavigationController,
+    public platform: WexPlatform
   ) {
     super("Options", injector);
   }

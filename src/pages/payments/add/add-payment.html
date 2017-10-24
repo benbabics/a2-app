@@ -51,11 +51,11 @@
     </button>
   </ion-item-group>
 
-  <ion-list id="action-list" padding>
+  <div id="action-list" padding>
     <button id="submit-button" class="button-gradient" ion-button block (click)="handleSchedulePayment()">
       <action-indicator large [when]="isLoading">{{ CONSTANTS.LABELS.schedulePayment }}</action-indicator>
     </button>
 
     <p id="info-text">{{ CONSTANTS.LABELS.instructionalText }}</p>
-  </ion-list>
+  </div>
 </ion-content>

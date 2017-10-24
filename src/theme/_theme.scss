@@ -26,6 +26,47 @@ ion-fab {
   }
 }
 
+//# List/Group Items
+// --------------------------------------------------
+
+ion-list, ion-item-group {
+  $padding-width: 16px;
+  
+  &.inset-items {
+      
+    .item.item-block {
+      padding-left: $padding-width;
+        
+      > .item-inner {
+        padding-left: 0;
+        padding-right: $padding-width;
+      }
+    }
+  }
+  
+  &:not(.inset-items) {
+  
+    .item.item-block {
+      padding-left: 0;
+    
+      > .item-inner {
+        padding-left: $padding-width;
+        padding-right: $padding-width;
+      }
+    }
+  }
+
+  .item.item-divider {
+    margin-top: -1px;
+  }
+
+  .item .item-warning {
+    margin-top: .5rem;
+    color: color($colors, wex-warning);
+    font-weight: 500;
+  }
+}
+
 
 
 //// App iOS Styles
@@ -67,62 +108,86 @@ ion-icon.icon-ios.tab-button-icon[aria-label*="fa"] {
   }
 }
 
-//# Items
+//# Lists/Items
 // --------------------------------------------------
-
-ion-list .item-ios {
-  padding-left: 0;
-
-  & > .item-inner {
-    padding-left: 16px;
-  }
+%ios-item-border {
+  border-bottom: 0.55px solid color($colors, border);
 }
 
-ion-item-group.ios-item-indent {
-  // .list-header collapsabled
-  ion-list-header.list-header-collapsed:not(.list-header-ios) {
-    min-height: 0;
-    ion-label { margin: 0; }
-  }
+%ios-list-top-border {
+  border-top: 0.55px solid color($colors, border);
+}
 
-  ion-list-header.list-header-md {
-    padding-top: 1.5rem;
-  }
-  .item-md + .list-header-md {
-    margin-top: 1.5rem;
-  }
+.ios {
+  ion-list, ion-item-group {
+    @extend %ios-item-border;
+    border-width: 1px; // Needed to fix border rendering glitch in some builds of Chrome
+    
+    > .item.item-ios {
 
-  // .list-header borders
-  .item-ios.list-header-ios {
-    &:not(:first-of-type) {
-      border-top: 0.55px solid #bcbbc1;
+      &.item-divider {
+        border-top: 0;
+        border-top: 1px solid color($colors, border) !important;
+      }
+
+      &:not(.item-divider) {
+        border: 0;
+      }
+    }
+
+    > :last-of-type {
+      > .item-inner, > .item > .item-inner {
+        border-bottom: none;
+      }
     }
   }
 
-  .item:not(.list-header) {
-    // borders
-    .item-inner {
-      border-bottom: none;
+  ion-list {
+    @extend %ios-list-top-border;
+  }
+  
+  ion-item-group {
+    // .list-header collapsabled
+    ion-list-header.list-header-collapsed:not(.list-header-ios) {
+      min-height: 0;
+      ion-label { margin: 0; }
     }
-
-    &.item-ios:last-of-type {
-      border-bottom: 0.55px solid #bcbbc1;
+    
+    ion-list-header.list-header-md {
+      padding-top: 1.5rem;
     }
-
-    // icons
-    ion-icon[ios="ios-arrow-forward"] {
-      font-size: 2.2rem;
-
-      &::before {
-        vertical-align: middle;
+    .item-md + .list-header-md {
+      margin-top: 1.5rem;
+    }
+    
+    // .list-header borders
+    .item-ios.list-header-ios {
+      &:not(:last-of-type) {
+        @extend %ios-item-border;
+      }
+    }
+    
+    .item:not(.list-header) {
+      // icons
+      ion-icon[ios="ios-arrow-forward"] {
+        font-size: 2.2rem;
+        margin-right: 0;
+    
+        &::before {
+          vertical-align: middle;
+        }
       }
     }
   }
 }
 
-.card-ios .list-ios .item-ios.item-block .item-inner {
-  // Show dividers on ion-list items that are inside ion-cards
-  border-bottom: 1px solid $list-border-color;
+.card-ios ion-list.list-ios {
+  border: none;
+
+  .item.item-ios.item-block:not(:last-child) .item-inner {
+    // Show dividers on ion-list items that are inside ion-cards
+    @extend %ios-item-border;
+  }
 }
 
 /**
@@ -255,22 +320,31 @@ ion-item-divider {
 
 //# Items
 // --------------------------------------------------
+%md-item-border {
+  border-bottom: 0.55px solid color($colors, light-border);
+}
 
-ion-list .item-md {
-  padding-left: 0;
+.md {
+  ion-list, ion-item-group {
 
-  & > .item-inner {
-    padding-left: 16px;
+    .item.item-divider {
+      border-top: 1px solid color($colors, light-border) !important;
+    }
+
+    ion-item-group {
+
+      ion-list-header.list-header-md {
+        padding-top: 1.5rem;
+      }
+
+      .item-md + .list-header-md {
+        margin-top: 1.5rem;
+      }
+    }
   }
 }
 
-.item .item-warning {
-  margin-top: .5rem;
-  color: color($colors, wex-warning);
-  font-weight: 500;
-}
-
-.card-md .list-md .item-md.item-block .item-inner {
+.card-md ion-list.list-md .item.item-md.item-block > .item-inner {
   // Show dividers on ion-list items that are inside ion-cards
   border-bottom: 1px solid $list-border-color;
 }

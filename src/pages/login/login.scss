@@ -121,10 +121,11 @@ page-login {
 
       .item-inner, .item-ios.item-block .item-inner {
         padding: 0;
-        border: 0;
       }
 
       ion-list {
+        border-top: none;
+
         ion-item {
           background-color: transparent;
 
@@ -140,6 +141,10 @@ page-login {
           &.item {
             font-size: inherit;
             margin: 0;
+
+            > .item-inner {
+              padding: 0 !important;
+            }  
           }
 
           ion-input {
@@ -163,6 +168,7 @@ page-login {
 
       #login-settings {
         padding-top: 1rem;
+        border: 0;
 
         .item-md.item-block .item-inner {
           border-bottom: none;

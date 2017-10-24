@@ -19,29 +19,30 @@
       </button>
     </div>
 
-    <ion-list class="detail detail-list">
-      <ion-item>
-        <ion-label>
-          <span class="property-name">{{ CONSTANTS.LABELS.promptId }}</span>
-          <span text-wrap class="property-value">{{ driver.details.promptId }}</span>
-        </ion-label>
-      </ion-item>
+    <ion-card-content>
+      <ion-list class="detail detail-list">
+        <ion-item>
+          <ion-label>
+            <span class="property-name">{{ CONSTANTS.LABELS.promptId }}</span>
+            <span text-wrap class="property-value">{{ driver.details.promptId }}</span>
+          </ion-label>
+        </ion-item>
 
-      <ion-item *ngIf="areFieldsAccessible">
-        <ion-label>
-          <span class="property-name">{{ CONSTANTS.LABELS.cellPhoneNumber }}</span>
-          <span text-wrap class="property-value">{{ driver.details.cellPhoneNumber }}</span>
-        </ion-label>
-      </ion-item>
+        <ion-item *ngIf="areFieldsAccessible">
+          <ion-label>
+            <span class="property-name">{{ CONSTANTS.LABELS.cellPhoneNumber }}</span>
+            <span text-wrap class="property-value">{{ driver.details.cellPhoneNumber }}</span>
+          </ion-label>
+        </ion-item>
 
-      <ion-item *ngIf="areFieldsAccessible">
-        <ion-label>
-          <span class="property-name">{{ CONSTANTS.LABELS.emailAddress }}</span>
-          <span text-wrap class="property-value">{{ driver.details.emailAddress }}</span>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-
+        <ion-item *ngIf="areFieldsAccessible">
+          <ion-label>
+            <span class="property-name">{{ CONSTANTS.LABELS.emailAddress }}</span>
+            <span text-wrap class="property-value">{{ driver.details.emailAddress }}</span>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
   </ion-card>
 
   <ion-card id="card-actions">

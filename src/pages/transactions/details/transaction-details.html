@@ -6,97 +6,99 @@
 
 <ion-content>
   <ion-card>
-    <ion-list class="detail detail-list">
-      <ion-item>
-        <ion-label>
-          <span class="property-name">{{ CONSTANTS.LABELS.cardNumber }}</span>
-          <span text-wrap class="property-value">{{ transaction.details.embossedCardNumber | wexCardNumber }}</span>
-        </ion-label>
-      </ion-item>
+    <ion-card-content>
+      <ion-list class="detail detail-list">
+        <ion-item>
+          <ion-label>
+            <span class="property-name">{{ CONSTANTS.LABELS.cardNumber }}</span>
+            <span text-wrap class="property-value">{{ transaction.details.embossedCardNumber | wexCardNumber }}</span>
+          </ion-label>
+        </ion-item>
 
-      <ion-item>
-        <ion-label>
-          <span class="property-name">{{ CONSTANTS.LABELS.postDate }}</span>
-          <span text-wrap class="property-value">{{ transaction.details.postDate | wexDate }}</span>
-        </ion-label>
-      </ion-item>
+        <ion-item>
+          <ion-label>
+            <span class="property-name">{{ CONSTANTS.LABELS.postDate }}</span>
+            <span text-wrap class="property-value">{{ transaction.details.postDate | wexDate }}</span>
+          </ion-label>
+        </ion-item>
 
-      <ion-item>
-        <ion-label>
-          <span class="property-name">{{ CONSTANTS.LABELS.transDateTime }}</span>
-          <span text-wrap class="property-value">{{ transaction.details.transactionDate | wexDateTime }}</span>
-        </ion-label>
-      </ion-item>
+        <ion-item>
+          <ion-label>
+            <span class="property-name">{{ CONSTANTS.LABELS.transDateTime }}</span>
+            <span text-wrap class="property-value">{{ transaction.details.transactionDate | wexDateTime }}</span>
+          </ion-label>
+        </ion-item>
 
-      <ion-item>
-        <ion-label>
-          <span class="property-name">{{ CONSTANTS.LABELS.transId }}</span>
-          <span text-wrap class="property-value">{{ transaction.details.transactionId }}</span>
-        </ion-label>
-      </ion-item>
+        <ion-item>
+          <ion-label>
+            <span class="property-name">{{ CONSTANTS.LABELS.transId }}</span>
+            <span text-wrap class="property-value">{{ transaction.details.transactionId }}</span>
+          </ion-label>
+        </ion-item>
 
-      <ion-item>
-        <ion-label>
-          <span class="property-name">{{ CONSTANTS.LABELS.grossCost }}</span>
-          <span text-wrap class="property-value">{{ transaction.details.grossCost | wexCurrency }}</span>
-        </ion-label>
-      </ion-item>
+        <ion-item>
+          <ion-label>
+            <span class="property-name">{{ CONSTANTS.LABELS.grossCost }}</span>
+            <span text-wrap class="property-value">{{ transaction.details.grossCost | wexCurrency }}</span>
+          </ion-label>
+        </ion-item>
 
-      <ion-item>
-        <ion-label>
-          <span class="property-name">{{ CONSTANTS.LABELS.netCost }}</span>
-          <span text-wrap class="property-value">{{ transaction.details.netCost | wexCurrency }}</span>
-        </ion-label>
-      </ion-item>
+        <ion-item>
+          <ion-label>
+            <span class="property-name">{{ CONSTANTS.LABELS.netCost }}</span>
+            <span text-wrap class="property-value">{{ transaction.details.netCost | wexCurrency }}</span>
+          </ion-label>
+        </ion-item>
 
-      <ion-item>
-        <ion-label>
-          <span class="property-name">{{ CONSTANTS.LABELS.productDesc }}</span>
-          <span text-wrap class="property-value">{{ transaction.details.productDescription }}</span>
-        </ion-label>
-      </ion-item>
+        <ion-item>
+          <ion-label>
+            <span class="property-name">{{ CONSTANTS.LABELS.productDesc }}</span>
+            <span text-wrap class="property-value">{{ transaction.details.productDescription }}</span>
+          </ion-label>
+        </ion-item>
 
-      <ion-item>
-        <ion-label>
-          <span class="property-name">{{ CONSTANTS.LABELS.driverFirstName }}</span>
-          <span text-wrap class="property-value">{{ driverFirstName }}</span>
-        </ion-label>
-      </ion-item>
+        <ion-item>
+          <ion-label>
+            <span class="property-name">{{ CONSTANTS.LABELS.driverFirstName }}</span>
+            <span text-wrap class="property-value">{{ driverFirstName }}</span>
+          </ion-label>
+        </ion-item>
 
-      <ion-item>
-        <ion-label>
-          <span class="property-name">{{ CONSTANTS.LABELS.driverLastName }}</span>
-          <span text-wrap class="property-value">{{ driverLastName }}</span>
-        </ion-label>
-      </ion-item>
+        <ion-item>
+          <ion-label>
+            <span class="property-name">{{ CONSTANTS.LABELS.driverLastName }}</span>
+            <span text-wrap class="property-value">{{ driverLastName }}</span>
+          </ion-label>
+        </ion-item>
 
-      <ion-item>
-        <ion-label>
-          <span class="property-name">{{ CONSTANTS.LABELS.assetId }}</span>
-          <span text-wrap class="property-value">{{ transaction.details.customVehicleId }}</span>
-        </ion-label>
-      </ion-item>
+        <ion-item>
+          <ion-label>
+            <span class="property-name">{{ CONSTANTS.LABELS.assetId }}</span>
+            <span text-wrap class="property-value">{{ transaction.details.customVehicleId }}</span>
+          </ion-label>
+        </ion-item>
 
-      <ion-item>
-        <ion-label>
-          <span class="property-name">{{ CONSTANTS.LABELS.odometer }}</span>
-          <span text-wrap class="property-value">{{ transaction.details.currentOdometer }}</span>
-        </ion-label>
-      </ion-item>
+        <ion-item>
+          <ion-label>
+            <span class="property-name">{{ CONSTANTS.LABELS.odometer }}</span>
+            <span text-wrap class="property-value">{{ transaction.details.currentOdometer }}</span>
+          </ion-label>
+        </ion-item>
 
-      <ion-item>
-        <ion-label>
-          <span class="property-name">{{ CONSTANTS.LABELS.merchantName }}</span>
-          <span text-wrap class="property-value">{{ transaction.details.merchantName }}</span>
-        </ion-label>
-      </ion-item>
+        <ion-item>
+          <ion-label>
+            <span class="property-name">{{ CONSTANTS.LABELS.merchantName }}</span>
+            <span text-wrap class="property-value">{{ transaction.details.merchantName }}</span>
+          </ion-label>
+        </ion-item>
 
-      <ion-item>
-        <ion-label>
-          <span class="property-name">{{ CONSTANTS.LABELS.merchantLocation }}</span>
-          <span text-wrap class="property-value">{{ transaction.details.merchantCity }}, {{ transaction.details.merchantState }}</span>
-        </ion-label>
-      </ion-item>
-    </ion-list>
+        <ion-item>
+          <ion-label>
+            <span class="property-name">{{ CONSTANTS.LABELS.merchantLocation }}</span>
+            <span text-wrap class="property-value">{{ transaction.details.merchantCity }}, {{ transaction.details.merchantState }}</span>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
   </ion-card>
 </ion-content>

@@ -3,6 +3,7 @@ import { NavParams, NavController } from "ionic-angular";
 import { SecurePage } from "../../secure-page";
 import { PaymentSelectionOption } from "./../../../providers/payment-service";
 import { UserPaymentAmount, UserPaymentAmountType } from "../../../models/user-payment";
+import { WexPlatform } from "../../../providers";
 
 export type AddPaymentSelectionNavParams = keyof {
   selectionType
@@ -32,7 +33,8 @@ export class AddPaymentSelectionPage extends SecurePage {
   constructor(
     injector: Injector,
     navParams: NavParams,
-    public navCtrl: NavController
+    public navCtrl: NavController,
+    public platform: WexPlatform
   ) {
     super("Payments.Add.Selection", injector);
 

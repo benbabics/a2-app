@@ -429,16 +429,15 @@ export namespace ConstantsInfo {
           title:         "Payment Details",
           amount:        "Amount",
           bankAccount:   "Bank Account",
-          postedDate:    "Date Posted",
-          scheduledDate: "Date Scheduled",
+          confirmation:  "Confirmation",
           inProcess:     "In Process",
           method:        "Method",
-          editButton:    "Edit Payment",
+          editButton:    "Edit",
           cancelButton:  "Cancel Payment",
-          cancelPaymentConfirmation: {
-              content:   "Are you sure you want to cancel this scheduled payment?",
-              yesButton: "Yes",
-              noButton:  "No"
+          cancelPaymentConfirmation: "Are you sure you want to cancel this scheduled payment?",
+          header: {
+            scheduled: "Scheduled",
+            completed: "Completed"
           }
         },
 

@@ -1,0 +1,74 @@
+page-payments-details {
+
+    ion-content {
+
+        @at-root .md & {
+            background: none;
+
+            #header-container, ion-list.detail-list {
+                padding-left: 16px;                
+            }
+        }
+
+        #header-container {
+            @include flexbox();
+            @include flex-direction(column);
+            @include justify-content(center);
+
+            @at-root .ios & {
+                @include align-items(center);
+            }
+
+            > * {
+                padding: 0.4rem;
+            }
+
+            #payment-header {
+                font-size: 3.2rem;
+                font-weight: 500;
+
+                @at-root .ios & {
+                    letter-spacing: -0.7px;
+                }
+        
+                &.completed {
+                    color: color($colors, secondary);
+                }
+            }
+        
+            #payment-date {
+                font-size: 1.6rem;
+                letter-spacing: -0.4px;
+                opacity: 0.5;
+            }
+        }
+
+        #md-button-container {
+            @include flexbox();
+            @include flex-direction(column);
+            @include align-items(center);
+
+            padding-left: 20%;
+            padding-right: 20%;
+        }
+
+        #button-cancel-payment {
+
+            @at-root .ios & {
+
+                ion-label {
+                    text-align: center;
+                    color: color($colors, alert);
+                }
+            }
+
+            @at-root .md & {
+                height: 48px;
+                
+                .button-inner {
+                    color: color($colors, alert);
+                }
+            }
+        }
+    }
+}
