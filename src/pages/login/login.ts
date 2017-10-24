@@ -223,6 +223,8 @@ export class LoginPage extends Page {
           if (!fingerprintVerificationError.userCanceled && !fingerprintVerificationError.exceededAttempts) {
             this.appSnackbarController.createQueued({
               message: this.getLoginErrorDisplayText(errorCode),
+              showCloseButton: true,
+              cssClass: "red"
             }).present();
 
             // Check to see if this error maps to a trackable analytics error
