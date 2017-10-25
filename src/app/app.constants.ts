@@ -443,6 +443,18 @@ export namespace ConstantsInfo {
 
         //# Add Payment page
         ADD: {
+          ANALYTICS: {
+            EVENTS: {
+              makePaymentInitial: ["MakePaymentInitial"],
+              makePaymentEdit: ["MakePaymentEdit"],
+              bankAccountSchedule: ["SelectBankAccountSchedulePayment"],
+              bankAccountEdit: ["SelectBankAccountEditPayment"],
+              amountSchedule: ["EnterAmountSchedulePayment"],
+              amountEdit: ["EnterAmountEditPayment"],
+              confirmationScheduled: ["PaymentConfirmationScheduled"],
+              confirmationUpdated: ["PaymentConfirmationUpdated"]
+            }
+          },
           CREATE: {
             title: "Schedule Payment"
           },
