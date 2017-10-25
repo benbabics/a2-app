@@ -124,6 +124,9 @@ export class AddPaymentPage extends SecurePage {
     let onSelection = (selectedItem: PaymentSelectionOption) => this.payment[selectionType] = selectedItem;
 
     this.navCtrl.push(AddPaymentSelectionPage, { selectionType, options, selectedItem, onSelection });
+
+    const event = selectionType + (this.isEditingPayment ? "Edit" : "Schedule");
+    this.trackAnalyticsEvent(event);
   }
 
   private schedulePayment(paymentRequest: PaymentRequest) {
@@ -149,6 +152,7 @@ export class AddPaymentPage extends SecurePage {
         // Update the cache
         this.sessionCache.requestSessionDetail(Session.Field.Payments);
         this.navCtrl.setRoot(AddPaymentConfirmationPage, { payment });
+        this.trackAnalyticsEvent(this.isEditingPayment ? "confirmationUpdated" : "confirmationScheduled");
       }, (error) => {
         /* TODO - What do we do here? */
         console.error(error);
@@ -177,6 +181,7 @@ export class AddPaymentPage extends SecurePage {
   ionViewDidEnter() {
     if (_.isEmpty(this.payment)) {
       this.populatePayment();
+      this.trackAnalyticsEvent(this.isEditingPayment ? "makePaymentEdit" : "makePaymentInitial");
     }
   }
 }
