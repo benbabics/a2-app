@@ -54,10 +54,19 @@ export class PaymentsDetailsPage extends DetailsPage {
     this.wexAlertController.confirmation(this.CONSTANTS.cancelPaymentConfirmation, () => {
       this.paymentProvider.cancelPayment(this.session.user.billingCompany.details.accountId, this.payment.details.id)
         .subscribe(() => this.navCtrl.pop());
+
+      this.trackAnalyticsEvent("paymentCancelYes");
     });
+
+    this.trackAnalyticsEvent("paymentCancelPrompt");
   }
 
   public editPayment() {
     this.modalCtrl.create(AddPaymentPage, { payment: this.payment }).present();
+    this.trackAnalyticsEvent("paymentEdit");
+  }
+
+  ionViewWillEnter() {
+    this.trackAnalyticsEvent("paymentDetails");
   }
 }

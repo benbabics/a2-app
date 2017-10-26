@@ -45,12 +45,13 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   ionViewWillEnter() {
     let invoiceSummary = this.sessionCache.getSessionDetail(Session.Field.InvoiceSummary);
     invoiceSummary.subscribe((invoiceSummary) => {
-        this.minPaymentDueDate = _.template(this.CONSTANTS.payNowSection.on)({
-          dueDate: moment(invoiceSummary.paymentDueDate).format("MMMM Do, YYYY")
-        });
-        this.invoiceSummary = invoiceSummary;
+      this.minPaymentDueDate = _.template(this.CONSTANTS.payNowSection.on)({
+        dueDate: moment(invoiceSummary.paymentDueDate).format("MMMM Do, YYYY")
       });
-      super.ionViewWillEnter();
+      this.invoiceSummary = invoiceSummary;
+    });
+    super.ionViewWillEnter();
+    this.trackAnalyticsEvent("paymentActivity");
   }
 
   private canMakePayment(): Promise<MakePaymentAvailability | undefined> {
@@ -89,19 +90,22 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   public addPayment() {
     if (!this.makePaymentModal) {
       this.canMakePayment()
-        .then(() => {
-          this.makePaymentModal = this.modalController.create(AddPaymentPage);
+      .then(() => {
+        this.makePaymentModal = this.modalController.create(AddPaymentPage);
 
-          this.makePaymentModal.onDidDismiss(() => this.makePaymentModal = null);
-          this.makePaymentModal.present();
-        })
-        .catch((availability: MakePaymentAvailability) => {
-          // get the reason that the user can't make a payment
-          let unavailabilityReason = _.reduce<any, string>(availability.details, (acc, isReason, reason) => isReason ? reason : acc, "");
-          let unavailabilityReasonMessage = _.get<string>(this.CONSTANTS.UNAVAILABILITY_REASONS, unavailabilityReason, this.CONSTANTS.UNAVAILABILITY_REASONS.default);
+        this.makePaymentModal.onDidDismiss(() => this.makePaymentModal = null);
+        this.makePaymentModal.present();
+      })
+      .catch((availability: MakePaymentAvailability) => {
+        // get the reason that the user can't make a payment
+        let unavailabilityReason = _.reduce<any, string>(availability.details, (acc, isReason, reason) => isReason ? reason : acc, "");
+        let unavailabilityReasonMessage = _.get<string>(this.CONSTANTS.UNAVAILABILITY_REASONS, unavailabilityReason, this.CONSTANTS.UNAVAILABILITY_REASONS.default);
 
-          this.alertController.alert(unavailabilityReasonMessage);
-        });
+        this.alertController.alert(unavailabilityReasonMessage);
+        this.trackAnalyticsEvent(unavailabilityReason);
+      });
+
+      this.trackAnalyticsEvent("addPayment");
     }
   }
 }

@@ -46,5 +46,7 @@ export class AddPaymentConfirmationPage extends SecurePage {
       .then(() => this.navBarCtrl.select(PaymentsPage))
       .then(() => this.navCtrl.remove(firstViewCtrl.index, this.navCtrl.length()))
       .then(() => firstViewCtrl.dismiss());
+
+    this.trackAnalyticsEvent("confirmationOk");
   }
 }

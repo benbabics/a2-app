@@ -101,6 +101,11 @@ export namespace ConstantsInfo {
     },
     //# App Navigation
     NAVIGATION: {
+      ANALYTICS: {
+        EVENTS: {
+          "Payments": ["Payment", "PaymentsOption"]
+        },
+      },
       LABELS: {
         "login": "Login",
         "landing": "Home",
@@ -394,6 +399,16 @@ export namespace ConstantsInfo {
 
       //# Payments page
       PAYMENTS: {
+        ANALYTICS: {
+          EVENTS: {
+            paymentActivity: ["PaymentActivity"],
+            addPayment: ["Payment", "MakePaymentOption"],
+            shouldDisplayCurrentBalanceDueMessage: ["Payment", "OKNoBalanceDueLink"],
+            shouldDisplayBankAccountSetupMessage: ["Payment", "OKNoBankAccountLink"],
+            shouldDisplayDirectDebitEnabledMessage: ["Payment", "OKDirectDebitSetupLink"],
+            shouldDisplayOutstandingPaymentMessage: ["Payment", "OKPaymentScheduledLink"]
+          }
+        },
         payNowSection: {
           minPaymentDate: "Min payment due",
           on: "on ${ dueDate }",
@@ -426,6 +441,14 @@ export namespace ConstantsInfo {
 
         //# Payments Details page
         DETAILS: {
+          ANALYTICS: {
+            EVENTS: {
+              paymentDetails: ["PaymentDetails"],
+              paymentCancelPrompt: ["Payment", "CancelPaymentLink"],
+              paymentCancelYes: ["Payment", "YESCancelPaymentLink"],
+              paymentEdit: ["Payment", "EditPaymentLink"]
+            }
+          },
           title:         "Payment Details",
           amount:        "Amount",
           bankAccount:   "Bank Account",
@@ -486,8 +509,12 @@ export namespace ConstantsInfo {
 
           //# Add Payment Confirmation page
           CONFIRMATION: {
+            ANALYTICS: {
+              EVENTS: {
+                confirmationOk: ["Payment", "OKConfirmationLink"]
+              }
+            },
             title: "Successfully scheduled",
-
             LABELS: {
               amount: "Amount",
               bankAccount: "Bank Account",
