@@ -160,6 +160,22 @@
     ws "1.1.1"
     xml2js "0.4.17"
 
+"@ionic/cli-plugin-cordova@1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@ionic/cli-plugin-cordova/-/cli-plugin-cordova-1.4.0.tgz#2d3dd7bbd7321e0f1994b6f1a217176f55145296"
+  dependencies:
+    "@ionic/cli-utils" "1.4.0"
+    chalk "^1.1.3"
+    xml2js "^0.4.17"
+
+"@ionic/cli-plugin-ionic-angular@1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@ionic/cli-plugin-ionic-angular/-/cli-plugin-ionic-angular-1.4.1.tgz#bb94b7ad61c2f79757b2dff041c0b7e2151777ec"
+  dependencies:
+    "@ionic/cli-utils" "1.7.0"
+    chalk "^2.0.0"
+    tslib "^1.7.1"
+
 "@ionic/cli-plugin-proxy@1.4.12":
   version "1.4.12"
   resolved "https://registry.yarnpkg.com/@ionic/cli-plugin-proxy/-/cli-plugin-proxy-1.4.12.tgz#96266b9ae1fdf4af12304d735589a9bdd20200a7"
@@ -237,6 +253,52 @@
     uuid "^3.0.1"
     wrap-ansi "^3.0.1"
     ws "^3.2.0"
+
+"@ionic/cli-utils@1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@ionic/cli-utils/-/cli-utils-1.4.0.tgz#78c70b69c3b98a463aa01ea507d7d01da3dfa675"
+  dependencies:
+    archiver "^1.3.0"
+    chalk "^1.1.3"
+    cross-spawn "^4.0.2"
+    dargs "^5.1.0"
+    inquirer "^3.0.6"
+    leek "0.0.24"
+    lodash "^4.17.4"
+    minimist "^1.2.0"
+    ncp "^2.0.0"
+    os-name "^2.0.1"
+    rimraf "^2.5.4"
+    semver "^5.3.0"
+    slice-ansi "0.0.4"
+    string-width "^2.0.0"
+    superagent "^3.5.2"
+    uuid "^3.0.1"
+    wrap-ansi "^2.1.0"
+
+"@ionic/cli-utils@1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@ionic/cli-utils/-/cli-utils-1.7.0.tgz#05bdbf3e7533eeeee27d58f3adbfe26bf2bf0d1d"
+  dependencies:
+    archiver "^2.0.0"
+    chalk "^2.0.0"
+    ci-info "^1.0.0"
+    cross-spawn "^5.1.0"
+    dargs "^5.1.0"
+    dev-null "^0.1.1"
+    inquirer "^3.2.1"
+    leek "0.0.24"
+    lodash "^4.17.4"
+    minimist "^1.2.0"
+    ncp "^2.0.0"
+    semver "^5.4.1"
+    slice-ansi "^1.0.0"
+    string-width "^2.1.1"
+    strip-ansi "^4.0.0"
+    superagent "^3.5.2"
+    tslib "^1.7.1"
+    uuid "^3.0.1"
+    wrap-ansi "^3.0.1"
 
 "@ionic/discover@^0.3.1":
   version "0.3.3"
@@ -441,7 +503,21 @@ archiver-utils@^1.3.0:
     normalize-path "^2.0.0"
     readable-stream "^2.0.0"
 
-archiver@^2.0.3:
+archiver@^1.3.0:
+  version "1.3.0"
+  resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/archiver/-/archiver-1.3.0.tgz#4f2194d6d8f99df3f531e6881f14f15d55faaf22"
+  dependencies:
+    archiver-utils "^1.3.0"
+    async "^2.0.0"
+    buffer-crc32 "^0.2.1"
+    glob "^7.0.0"
+    lodash "^4.8.0"
+    readable-stream "^2.0.0"
+    tar-stream "^1.5.0"
+    walkdir "^0.0.11"
+    zip-stream "^1.1.0"
+
+archiver@^2.0.0, archiver@^2.0.3:
   version "2.1.0"
   resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/archiver/-/archiver-2.1.0.tgz#d2df2e8d5773a82c1dcce925ccc41450ea999afd"
   dependencies:
@@ -1223,7 +1299,7 @@ chokidar@1.7.0, chokidar@^1.6.1, chokidar@^1.7.0:
   optionalDependencies:
     fsevents "^1.0.0"
 
-ci-info@^1.1.1:
+ci-info@^1.0.0, ci-info@^1.1.1:
   version "1.1.1"
   resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/ci-info/-/ci-info-1.1.1.tgz#47b44df118c48d2597b56d342e7e25791060171a"
 
@@ -1405,7 +1481,7 @@ copyfiles@^1.2.0:
     noms "0.0.0"
     through2 "^2.0.1"
 
-cordova-android@~6.1.2:
+cordova-android@6.1.2:
   version "6.1.2"
   resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/cordova-android/-/cordova-android-6.1.2.tgz#9606739a114f0a37f49053e364c96d84fb462bf8"
   dependencies:
@@ -1416,7 +1492,7 @@ cordova-android@~6.1.2:
     q "^1.4.1"
     shelljs "^0.5.3"
 
-cordova-browser@^4.1.0:
+cordova-browser@4.1.0:
   version "4.1.0"
   resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/cordova-browser/-/cordova-browser-4.1.0.tgz#75079065e5cd50aa6743cbd85317617053fb20c6"
   dependencies:
@@ -1426,14 +1502,14 @@ cordova-browser@^4.1.0:
     q "^1.4.1"
     shelljs "^0.6.0"
 
-cordova-common@2.1.0:
-  version "2.1.0"
-  resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/cordova-common/-/cordova-common-2.1.0.tgz#bb357ee1b9825031ed9db3c56b592efe973d1640"
+cordova-common@2.0.2:
+  version "2.0.2"
+  resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/cordova-common/-/cordova-common-2.0.2.tgz#57467976b8afd5e0bd0a13111b66a420441601cb"
   dependencies:
     ansi "^0.3.1"
     bplist-parser "^0.1.0"
     cordova-registry-mapper "^1.1.8"
-    elementtree "0.1.6"
+    elementtree "^0.1.6"
     glob "^5.0.13"
     minimatch "^3.0.0"
     osenv "^0.1.3"
@@ -1462,12 +1538,12 @@ cordova-common@^1.5.0:
     underscore "^1.8.3"
     unorm "^1.3.3"
 
-cordova-ios@^4.5.1:
-  version "4.5.2"
-  resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/cordova-ios/-/cordova-ios-4.5.2.tgz#46b410fe2d14b449547c1d617e988aa6d80da37c"
+cordova-ios@4.4.0:
+  version "4.4.0"
+  resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/cordova-ios/-/cordova-ios-4.4.0.tgz#5cd6ef7224505db558446e4637ad97d0878c74ef"
   dependencies:
-    cordova-common "2.1.0"
-    ios-sim "^6.1.2"
+    cordova-common "2.0.2"
+    ios-sim "^5.0.12"
     nopt "^3.0.6"
     plist "^1.2.0"
     q "^1.4.1"
@@ -1613,6 +1689,13 @@ cross-spawn@5.1.0, cross-spawn@^5.1.0:
 cross-spawn@^3.0.0:
   version "3.0.1"
   resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/cross-spawn/-/cross-spawn-3.0.1.tgz#1256037ecb9f0c5f79e3d6ef135e30770184b982"
+  dependencies:
+    lru-cache "^4.0.1"
+    which "^1.2.9"
+
+cross-spawn@^4.0.2:
+  version "4.0.2"
+  resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/cross-spawn/-/cross-spawn-4.0.2.tgz#7b9247621c23adfdd3856004a823cbe397424d41"
   dependencies:
     lru-cache "^4.0.1"
     which "^1.2.9"
@@ -1776,6 +1859,10 @@ detect-indent@^4.0.0:
   dependencies:
     repeating "^2.0.0"
 
+dev-null@^0.1.1:
+  version "0.1.1"
+  resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/dev-null/-/dev-null-0.1.1.tgz#5a205ce3c2b2ef77b6238d6ba179eb74c6a0e818"
+
 diff@^3.2.0, diff@^3.3.1:
   version "3.4.0"
   resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/diff/-/diff-3.4.0.tgz#b1d85507daf3964828de54b37d0d73ba67dda56c"
@@ -1825,12 +1912,6 @@ ee-first@1.1.1:
 electron-to-chromium@^1.3.24:
   version "1.3.27"
   resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/electron-to-chromium/-/electron-to-chromium-1.3.27.tgz#78ecb8a399066187bb374eede35d9c70565a803d"
-
-elementtree@0.1.6:
-  version "0.1.6"
-  resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/elementtree/-/elementtree-0.1.6.tgz#2ac4c46ea30516c8c4cbdb5e3ac7418e592de20c"
-  dependencies:
-    sax "0.3.5"
 
 elementtree@^0.1.6, elementtree@^0.1.7:
   version "0.1.7"
@@ -2744,7 +2825,7 @@ inline-process-browser@^1.0.0:
     falafel "^1.0.1"
     through2 "^0.6.5"
 
-inquirer@^3.3.0:
+inquirer@^3.0.6, inquirer@^3.2.1, inquirer@^3.3.0:
   version "3.3.0"
   resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/inquirer/-/inquirer-3.3.0.tgz#9dd2f2ad765dcab1ff0443b491442a20ba227dc9"
   dependencies:
@@ -2802,14 +2883,14 @@ ionicons@3.0.0:
   version "3.0.0"
   resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/ionicons/-/ionicons-3.0.0.tgz#40b8daf4fd7a31150bd002160f66496e22a98c3c"
 
-ios-sim@^6.1.2:
-  version "6.1.2"
-  resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/ios-sim/-/ios-sim-6.1.2.tgz#7b9df7c35abd5b9d4c014248174e8b9e5b97ecc4"
+ios-sim@^5.0.12:
+  version "5.1.0"
+  resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/ios-sim/-/ios-sim-5.1.0.tgz#5d78a29e520ba0973145fb4257eb9b2a41018da6"
   dependencies:
     bplist-parser "^0.0.6"
     nopt "1.0.9"
     plist "^1.2.0"
-    simctl "^1.1.1"
+    simctl "^1.0.0"
 
 ip@^1.1.4, ip@^1.1.5:
   version "1.1.5"
@@ -4575,10 +4656,6 @@ saucelabs@~1.3.0:
   dependencies:
     https-proxy-agent "^1.0.0"
 
-sax@0.3.5:
-  version "0.3.5"
-  resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/sax/-/sax-0.3.5.tgz#88fcfc1f73c0c8bbd5b7c776b6d3f3501eed073d"
-
 sax@0.6.x:
   version "0.6.1"
   resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/sax/-/sax-0.6.1.tgz#563b19c7c1de892e09bfc4f2fc30e3c27f0952b9"
@@ -4744,7 +4821,7 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.2"
   resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
 
-simctl@^1.1.1:
+simctl@^1.0.0:
   version "1.1.1"
   resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/simctl/-/simctl-1.1.1.tgz#e26cc3c04e662250b4457b5b4c48cc12484f3814"
   dependencies:
@@ -4762,6 +4839,10 @@ simple-plist@^0.2.1:
 slash@^1.0.0:
   version "1.0.0"
   resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/slash/-/slash-1.0.0.tgz#c41f2f6c39fc16d1cd17ad4b5d896114ae470d55"
+
+slice-ansi@0.0.4:
+  version "0.0.4"
+  resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/slice-ansi/-/slice-ansi-0.0.4.tgz#edbf8903f66f7ce2f8eafd6ceed65e264c831b35"
 
 slice-ansi@^1.0.0:
   version "1.0.0"
@@ -4933,7 +5014,7 @@ string-width@^1.0.1, string-width@^1.0.2:
     is-fullwidth-code-point "^1.0.0"
     strip-ansi "^3.0.0"
 
-string-width@^2.1.0, string-width@^2.1.1:
+string-width@^2.0.0, string-width@^2.1.0, string-width@^2.1.1:
   version "2.1.1"
   resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/string-width/-/string-width-2.1.1.tgz#ab93f27a8dc13d28cac815c462143a6d9012ae9e"
   dependencies:
@@ -4989,7 +5070,7 @@ superagent-proxy@^1.0.2:
     debug "2"
     proxy-agent "2"
 
-superagent@^3.6.0:
+superagent@^3.5.2, superagent@^3.6.0:
   version "3.7.0"
   resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/superagent/-/superagent-3.7.0.tgz#bd58bfde2cbc5305adb9ccbb6dacba18408629d6"
   dependencies:
@@ -5396,6 +5477,10 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
+walkdir@^0.0.11:
+  version "0.0.11"
+  resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/walkdir/-/walkdir-0.0.11.tgz#a16d025eb931bd03b52f308caed0f40fcebe9532"
+
 watchpack@^1.3.1:
   version "1.4.0"
   resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/watchpack/-/watchpack-1.4.0.tgz#4a1472bcbb952bd0a9bb4036801f954dfb39faac"
@@ -5514,7 +5599,7 @@ wordwrap@~1.0.0:
   version "1.0.0"
   resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/wordwrap/-/wordwrap-1.0.0.tgz#27584810891456a4171c8d0226441ade90cbcaeb"
 
-wrap-ansi@^2.0.0:
+wrap-ansi@^2.0.0, wrap-ansi@^2.1.0:
   version "2.1.0"
   resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/wrap-ansi/-/wrap-ansi-2.1.0.tgz#d8fc3d284dd05794fe84973caecdd1cf824fdd85"
   dependencies:
@@ -5709,7 +5794,7 @@ yargs@~3.10.0:
     decamelize "^1.0.0"
     window-size "0.1.0"
 
-zip-stream@^1.2.0:
+zip-stream@^1.1.0, zip-stream@^1.2.0:
   version "1.2.0"
   resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/zip-stream/-/zip-stream-1.2.0.tgz#a8bc45f4c1b49699c6b90198baacaacdbcd4ba04"
   dependencies:
