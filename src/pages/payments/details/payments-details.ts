@@ -1,4 +1,4 @@
-import { NavParams, ModalController, NavController } from "ionic-angular";
+import { NavParams, NavController, App } from "ionic-angular";
 import { Component, Injector } from "@angular/core";
 import { DetailsPage } from "../../details-page";
 import { Payment } from "@angular-wex/models";
@@ -28,10 +28,10 @@ export class PaymentsDetailsPage extends DetailsPage {
   constructor(
     public navParams: NavParams,
     public platform: WexPlatform,
-    public modalCtrl: ModalController,
     public paymentProvider: PaymentProvider,
     public wexAlertController: WexAlertController,
     public navCtrl: NavController,
+    public app: App,
     injector: Injector
   ) {
     super("Payments.Details", injector);
@@ -58,6 +58,6 @@ export class PaymentsDetailsPage extends DetailsPage {
   }
 
   public editPayment() {
-    this.modalCtrl.create(AddPaymentPage, { payment: this.payment }).present();
+    this.app.getRootNav().push(AddPaymentPage, { payment: this.payment });
   }
 }
