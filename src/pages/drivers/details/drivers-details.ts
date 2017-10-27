@@ -8,7 +8,6 @@ import { Driver, DriverStatus, OnlineApplication } from "@angular-wex/models";
 import { DriverProvider, TransactionSearchFilterBy } from "@angular-wex/api-providers";
 import { DetailsPage } from "../../details-page";
 import { ActionSheetOptions } from "ionic-angular/components/action-sheet/action-sheet-options";
-import { WexAlertController } from "../../../components/wex-alert-controller/wex-alert-controller";
 import { TransactionsPage, TransactionListType } from "../../transactions/transactions";
 import { NameUtils } from "../../../utils/name-utils";
 
@@ -30,7 +29,6 @@ export class DriversDetailsPage extends DetailsPage {
   constructor(
     public navParams: NavParams,
     private actionSheetController: ActionSheetController,
-    private wexAlertController: WexAlertController,
     private driverProvider: DriverProvider,
     private wexAppSnackbarController: WexAppSnackbarController,
     private events: Events,
@@ -70,13 +68,7 @@ export class DriversDetailsPage extends DetailsPage {
     let buttons: ActionSheetButton[] = actions.map(action => ({
       text: action.label,
       icon: !this.platform.is("ios") ? action.icon : null,
-      handler: () => {
-        if (action.id === this.CONSTANTS.statuses.TERMINATED) {
-          this.confirmTermination();
-        } else {
-          this.updateDriverStatus(action.id);
-        }
-      }
+      handler: () => this.updateDriverStatus(action.id)
     }));
     return {
       title: this.CONSTANTS.actionStatusTitle,
@@ -89,12 +81,6 @@ export class DriversDetailsPage extends DetailsPage {
         }
       ]
     };
-  }
-
-  private confirmTermination() {
-    let message = this.CONSTANTS.confirmMessageTerminate;
-    let yesHandler = () => this.updateDriverStatus(this.CONSTANTS.statuses.TERMINATED as DriverStatus);
-    this.wexAlertController.confirmation(message, yesHandler);
   }
 
   private updateDriverStatus(newStatus: DriverStatus) {
