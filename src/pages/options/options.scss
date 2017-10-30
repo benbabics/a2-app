@@ -1,7 +1,7 @@
 options-page {
   @at-root .md & {
     &.ion-page > ion-content {
-      background: color($colors, white);
+        background: color($colors, separator-md);
     }
 
     .list-header-md {
@@ -9,16 +9,10 @@ options-page {
       font-weight: 500;
     }
 
-    ion-list {
-      ion-item, [ion-item] {
-        margin: 10px 8px 15px 0;
-      }
-
-      ion-list-header .label-md {
-        margin: 15px 8px 10px 0;
-      }
+    ion-item-group {
+      border-bottom: 1px solid color($colors, light-border);
     }
-
+    
     ion-item .list-md .item-block .item-inner{
       border: none;
     }
@@ -29,7 +23,7 @@ options-page {
       }
 
       > .item-block:last-child {
-        border-top: 1px solid #dedede;
+        border-top: 1px solid color($colors, light-border);
         padding-top: 15px;
       }
     }
