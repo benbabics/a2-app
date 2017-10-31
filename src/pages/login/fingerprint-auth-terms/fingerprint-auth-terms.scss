@@ -1,11 +1,10 @@
 modal-fingerprint-auth-terms {
   $button-padding: 1rem;
 
-  .ios, & {
-    &.ion-page > ion-content {
+  
+  @at-root .ios &.ion-page > ion-content {
       background: color($colors, white);
     }
-  }
 
   @at-root .ios & {
     ion-footer {

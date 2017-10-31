@@ -4,7 +4,9 @@ import { ViewController } from "ionic-angular";
 import { WexPlatform, UiNotificationsController } from "../../../providers";
 import { FingerprintLogProvider } from "@angular-wex/api-providers";
 import { Observable } from "rxjs";
+import { StatusBarStyle, PageTheme } from "../../../decorators/status-bar";
 
+@StatusBarStyle(PageTheme.Light)
 @Component({
   selector: "modal-fingerprint-auth-terms",
   templateUrl: "fingerprint-auth-terms.html"

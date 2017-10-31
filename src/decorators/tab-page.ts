@@ -2,8 +2,8 @@ import { WexAppBackButtonController } from "./../providers";
 import { NavBarController } from "./../providers/nav-bar-controller";
 import { MyApp } from "./../app/app.component";
 import { LandingPage } from "../pages/landing/landing";
+import { GenericConstructor } from "./generic-constructor";
 
-type GenericConstructor = { new (...args: any[]): any };
 const ionViewDidEnter = "ionViewDidEnter", ionViewWillLeave = "ionViewWillLeave";
 
 export function TabPage<T extends GenericConstructor>(): Function {

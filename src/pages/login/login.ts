@@ -16,7 +16,7 @@ import { WexAppVersionCheck } from "../../providers/wex-app-version-check";
 import { VersionCheck } from "./version-check/version-check";
 import { NameUtils } from "../../utils/name-utils";
 import { WexPlatform } from "../../providers/platform";
-import { StatusBar } from "@ionic-native/status-bar";
+import { StatusBarStyle, PageTheme } from "../../decorators/status-bar";
 
 export type LoginPageNavParams = keyof {
   fromLogOut,
@@ -54,6 +54,7 @@ export namespace LoginAnalyticsEvent {
 
 declare const cordova: any;
 
+@StatusBarStyle(PageTheme.Dark)
 @Component({
   selector: "page-login",
   templateUrl: "login.html"
@@ -64,7 +65,6 @@ export class LoginPage extends Page {
   @ViewChild("titleHeadingBar") titleHeadingBar: ElementRef;
 
   @Value("STORAGE.KEYS.USERNAME") private readonly USERNAME_KEY: string;
-  @Value("ANDROID_STATUS_BAR_COLOR") private readonly ANDROID_STATUS_BAR_COLOR;
 
   private _onKeyboardOpen = event => this.onKeyboardOpen(event);
   private _onKeyboardClose = () => this.onKeyboardClose();
@@ -101,7 +101,6 @@ export class LoginPage extends Page {
     private wexAppVersionCheck: WexAppVersionCheck,
     private modalController: ModalController,
     private renderer: Renderer2,
-    private statusBar: StatusBar,
     injector: Injector
   ) {
     super("Login", injector);
@@ -287,7 +286,13 @@ export class LoginPage extends Page {
     this.wexAppVersionCheck.status
       .subscribe(status => {
         let versionCheckModal = this.modalController.create(VersionCheck, { status });
-        versionCheckModal.onDidDismiss(() => this.completeLoading());
+        versionCheckModal.onDidDismiss(() => {
+          try {
+            // Fixes StatusBarStyle
+            (this as any).ionViewWillEnter();
+          } catch (e) { }
+          this.completeLoading();
+        });
         versionCheckModal.present();
       });
   }
@@ -335,25 +340,9 @@ export class LoginPage extends Page {
         this.login(true);
       }
     }, 500));
-
-    this.setStatusBarForLogin();
   }
 
-  private setStatusBarForLogin() {
-    if (this.platform.isIos) {
-      this.statusBar.styleLightContent();
-    } else {
-      this.statusBar.backgroundColorByHexString(this.ANDROID_STATUS_BAR_COLOR.LOGIN);
-    }
-  }
 
-  private setStatusBarForApp() {
-    if (this.platform.isIos) {
-      this.statusBar.styleDefault();
-    } else {
-      this.statusBar.backgroundColorByHexString(this.ANDROID_STATUS_BAR_COLOR.APP);
-    }
-  }
 
   ionViewDidEnter() {
     this.wexAppVersionCheck.isSupported
@@ -375,7 +364,6 @@ export class LoginPage extends Page {
     if (this.resumeSubscription) {
       this.resumeSubscription.unsubscribe();
     }
-    this.setStatusBarForApp();
   }
 
   public onLogin(event: Event, useFingerprintAuth?: boolean) {

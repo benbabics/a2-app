@@ -11,7 +11,9 @@ import { NameUtils } from "../../utils/name-utils";
 import { OptionsPage } from "../options/options";
 import { WexPlatform } from "../../providers/platform";
 import { Value } from "../../decorators/value";
+import { PageTheme, StatusBarStyle } from "../../decorators/status-bar";
 
+@StatusBarStyle(PageTheme.Light)
 @Component({
   selector: "page-landing",
   templateUrl: "landing.html"
