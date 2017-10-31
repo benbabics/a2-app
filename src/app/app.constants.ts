@@ -103,7 +103,7 @@ export namespace ConstantsInfo {
     NAVIGATION: {
       ANALYTICS: {
         EVENTS: {
-          "Payments": ["Payment", "PaymentsOption"]
+          "Payments": ["Payment", "PaymentOption"]
         },
       },
       LABELS: {
