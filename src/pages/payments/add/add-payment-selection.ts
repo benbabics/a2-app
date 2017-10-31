@@ -43,8 +43,8 @@ export class AddPaymentSelectionPage extends SecurePage {
     this.selectedItem = navParams.get(AddPaymentSelectionNavParams.SelectedItem);
     this.initialSelection = this.selectedItem;
     this.onSelection = navParams.get(AddPaymentSelectionNavParams.OnSelection);
-    if (this.isCustomPaymentAmount) {
-      this.otherAmount = (this.selectedItem as UserPaymentAmount).value;
+    if (this.isPaymentAmount) {
+      this.otherAmount = (this.options as UserPaymentAmount[])[this.options.length - 1].value;
     }
   }
 
@@ -75,12 +75,12 @@ export class AddPaymentSelectionPage extends SecurePage {
     if (this.isCustomPaymentAmount) {
       if (this.otherAmount === 0) {
         return true;
-      } else if ((this.selectedItem as UserPaymentAmount).value !== this.otherAmount) {
-        return false;
+      } else if ((this.selectedItem as UserPaymentAmount).value === this.otherAmount) {
+        return (this.selectedItem === this.initialSelection);
       }
     }
     // Otherwise, if the selected item is the same, disable the button.
-    if (this.selectedItem === this.initialSelection) {
+    else if (this.selectedItem === this.initialSelection) {
       return true;
     }
     // Otherwise, the selection must be new, so enable the button.

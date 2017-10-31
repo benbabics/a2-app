@@ -2,7 +2,7 @@ import * as _ from "lodash";
 import * as moment from "moment";
 import { Observable } from "rxjs";
 import { Component, Injector } from "@angular/core";
-import { NavParams, NavController, ModalController, Modal } from "ionic-angular";
+import { NavParams, NavController, App } from "ionic-angular";
 import { StaticListPage, GroupedList, FetchOptions } from "../static-list-page";
 import { Payment, PaymentStatus, MakePaymentAvailability } from "@angular-wex/models";
 import { PaymentsDetailsPage } from "./details/payments-details";
@@ -19,7 +19,6 @@ import { WexAlertController } from "../../components/wex-alert-controller/wex-al
 })
 export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   private static readonly PAYMENT_STATUSES: PaymentStatus[] = [PaymentStatus.SCHEDULED, PaymentStatus.COMPLETE];
-  private makePaymentModal: Modal;
 
   public checkingMakePaymentAvailability: boolean = false;
 
@@ -29,17 +28,11 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private modalController: ModalController,
+    private app: App,
     private alertController: WexAlertController,
     injector: Injector
   ) {
     super("Payments", injector);
-  }
-
-  ionViewDidLeave() {
-    if (this.makePaymentModal) {
-      this.makePaymentModal.dismiss();
-    }
   }
 
   ionViewWillEnter() {
@@ -88,13 +81,9 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   }
 
   public addPayment() {
-    if (!this.makePaymentModal) {
-      this.canMakePayment()
+    this.canMakePayment()
       .then(() => {
-        this.makePaymentModal = this.modalController.create(AddPaymentPage);
-
-        this.makePaymentModal.onDidDismiss(() => this.makePaymentModal = null);
-        this.makePaymentModal.present();
+        this.app.getRootNav().push(AddPaymentPage);
       })
       .catch((availability: MakePaymentAvailability) => {
         // get the reason that the user can't make a payment
@@ -105,7 +94,6 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
         this.trackAnalyticsEvent(unavailabilityReason);
       });
 
-      this.trackAnalyticsEvent("addPayment");
-    }
+    this.trackAnalyticsEvent("addPayment");
   }
 }

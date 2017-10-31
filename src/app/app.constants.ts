@@ -152,7 +152,7 @@ export namespace ConstantsInfo {
           reissueMessage: "Your card has been reissued.",
           reissueMessageDuration: 5000, //ms
           actionStatusTitle: "Select Card Status",
-          noReactivation: "Terminated cards cannot be reactivated",
+          noReactivation: "Terminated status is final and cannot be changed",
           actionStatusCancel: "Cancel",
 
           STATUS: {

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="897" id="com.wex.fleetsmarthub" ios-CFBundleVersion="897" version="5.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="898" id="com.wex.fleetsmarthub" ios-CFBundleVersion="898" version="5.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Fleet SmartHub</name>
     <description>Manage your fleet accounts directly from your phone.</description>
     <author email="MobileDevelopment@wexinc.com" href="http://www.wexinc.com">WEX Mobile Development Team</author>
@@ -85,9 +85,8 @@
         <param name="ios-package" value="CDVWKWebViewEngine" />
     </feature>
     <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
-    <engine name="android" spec="~6.1.2" />
-    <engine name="browser" spec="^4.1.0" />
-    <engine name="ios" spec="^4.5.1" />
+    <engine name="android" spec="6.1.2" />
+    <engine name="ios" spec="4.4.0" />
     <plugin name="cordova-plugin-android-fingerprint-auth" spec="~1.2.7" />
     <plugin name="cordova-plugin-app-version" spec="~0.1.9" />
     <plugin name="cordova-plugin-console" spec="1.0.5" />
@@ -104,5 +103,5 @@
     <plugin name="cordova-plugin-touch-id" spec="~3.2.0" />
     <plugin name="cordova-plugin-whitelist" spec="1.3.1" />
     <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
-    <plugin name="nativesettingsopener" spec="1.0.1" />
+    <plugin name="wex-cordova-open-native-settings" spec="1.0.1" />
 </widget>
