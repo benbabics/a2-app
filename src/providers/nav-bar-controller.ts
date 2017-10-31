@@ -70,6 +70,10 @@ export class NavBarController {
     }
   }
 
+  public show(value: boolean) {
+    this.ionTabs.setTabbarHidden(!value);
+  }
+
   public getTab(page: Function): Tab {
     let tabIndex = this.pages.indexOf(page.name);
 
