@@ -9,7 +9,6 @@ import { BrandProvider } from "@angular-wex/api-providers";
 import { WexAppBackButtonController } from "../../providers/wex-app-back-button-controller";
 import { NameUtils } from "../../utils/name-utils";
 import { OptionsPage } from "../options/options";
-import { WexPlatform } from "../../providers/platform";
 import { Value } from "../../decorators/value";
 import { PageTheme, StatusBarStyle } from "../../decorators/status-bar";
 
@@ -70,7 +69,6 @@ export class LandingPage extends SecurePage {
     public navParams: NavParams,
     private brandProvider: BrandProvider,
     private navBarController: NavBarController,
-    private platform: WexPlatform,
     private wexAppSnackbarController: WexAppSnackbarController,
     public injector: Injector,
     private wexAppBackButtonController: WexAppBackButtonController,
@@ -86,7 +84,7 @@ export class LandingPage extends SecurePage {
   }
 
   private hardwareBackSnackbar = () => {
-    this.wexAppBackButtonController.registerAction(this.platform.exitApp);
+    this.wexAppBackButtonController.deregisterAction();
     let queued = this.wexAppSnackbarController.createQueued(this.CONSTANTS.BACK_TO_EXIT as ToastOptions);
     queued.onDidDismiss(this.registerBackButton);
     queued.present();

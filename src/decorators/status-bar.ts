@@ -22,7 +22,7 @@ function setStatusBarForDarkPage() {
   if (platform().isIos) {
     statusBar().styleLightContent();
   } else {
-    statusBar().backgroundColorByHexString(ANDROID_STATUS_BAR_COLOR.LIGHT);
+    statusBar().backgroundColorByHexString(ANDROID_STATUS_BAR_COLOR.DARK);
   }
 }
 
@@ -30,7 +30,7 @@ function setStatusBarForLightPage() {
   if (platform().isIos) {
     statusBar().styleDefault();
   } else {
-    statusBar().backgroundColorByHexString(ANDROID_STATUS_BAR_COLOR.DARK);
+    statusBar().backgroundColorByHexString(ANDROID_STATUS_BAR_COLOR.LIGHT);
   }
 }
 
