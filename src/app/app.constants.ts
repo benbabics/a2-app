@@ -400,8 +400,8 @@ export namespace ConstantsInfo {
       //# Payments page
       PAYMENTS: {
         ANALYTICS: {
+          PAGE_NAME: "paymentActivity",
           EVENTS: {
-            paymentActivity: ["PaymentActivity"],
             addPayment: ["Payment", "MakePaymentOption"],
             shouldDisplayCurrentBalanceDueMessage: ["Payment", "OKNoBalanceDueLink"],
             shouldDisplayBankAccountSetupMessage: ["Payment", "OKNoBankAccountLink"],
@@ -442,8 +442,8 @@ export namespace ConstantsInfo {
         //# Payments Details page
         DETAILS: {
           ANALYTICS: {
+            PAGE_NAME: "paymentDetails",
             EVENTS: {
-              paymentDetails: ["PaymentDetails"],
               paymentCancelPrompt: ["Payment", "CancelPaymentLink"],
               paymentCancelYes: ["Payment", "YESCancelPaymentLink"],
               paymentEdit: ["Payment", "EditPaymentLink"]

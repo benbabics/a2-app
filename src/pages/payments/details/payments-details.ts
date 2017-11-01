@@ -65,8 +65,4 @@ export class PaymentsDetailsPage extends DetailsPage {
     this.app.getRootNav().push(AddPaymentPage, { payment: this.payment });
     this.trackAnalyticsEvent("paymentEdit");
   }
-
-  ionViewWillEnter() {
-    this.trackAnalyticsEvent("paymentDetails");
-  }
 }

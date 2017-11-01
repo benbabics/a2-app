@@ -44,7 +44,6 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
       this.invoiceSummary = invoiceSummary;
     });
     super.ionViewWillEnter();
-    this.trackAnalyticsEvent("paymentActivity");
   }
 
   private canMakePayment(): Promise<MakePaymentAvailability | undefined> {
