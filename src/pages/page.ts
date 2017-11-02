@@ -22,7 +22,7 @@ export abstract class Page implements OnInit {
 
   ngOnInit() {
     let params = this.params || {};
-    if (!this.params || !!params.trackView) {
+    if (!this.params || params.trackView !== false) {
       this.trackAnalyticsPageView(params.trackingName || this.pageName);
     }
   }
