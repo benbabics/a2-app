@@ -34,7 +34,7 @@ export class AddPaymentConfirmationPage extends SecurePage {
     public navBarCtrl: NavBarController,
     private app: App
   ) {
-    super("Payments.Add.Confirmation", injector);
+    super("Payments.Add.Confirmation", injector, null, { trackView: false });
 
     this.payment = this.navParams.get(AddPaymentConfirmationNavParams.Payment);
   }

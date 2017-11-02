@@ -400,7 +400,7 @@ export namespace ConstantsInfo {
       //# Payments page
       PAYMENTS: {
         ANALYTICS: {
-          PAGE_NAME: "paymentActivity",
+          PAGE: "PaymentActivity",
           EVENTS: {
             addPayment: ["Payment", "MakePaymentOption"],
             shouldDisplayCurrentBalanceDueMessage: ["Payment", "OKNoBalanceDueLink"],
@@ -442,7 +442,7 @@ export namespace ConstantsInfo {
         //# Payments Details page
         DETAILS: {
           ANALYTICS: {
-            PAGE_NAME: "paymentDetails",
+            PAGE: "PaymentDetails",
             EVENTS: {
               paymentCancelPrompt: ["Payment", "CancelPaymentLink"],
               paymentCancelYes: ["Payment", "YESCancelPaymentLink"],
@@ -467,15 +467,15 @@ export namespace ConstantsInfo {
         //# Add Payment page
         ADD: {
           ANALYTICS: {
-            EVENTS: {
-              makePaymentInitial: ["MakePaymentInitial"],
-              makePaymentEdit: ["MakePaymentEdit"],
-              bankAccountSchedule: ["SelectBankAccountSchedulePayment"],
-              bankAccountEdit: ["SelectBankAccountEditPayment"],
-              amountSchedule: ["EnterAmountSchedulePayment"],
-              amountEdit: ["EnterAmountEditPayment"],
-              confirmationScheduled: ["PaymentConfirmationScheduled"],
-              confirmationUpdated: ["PaymentConfirmationUpdated"]
+            PAGES: {
+              amountSchedule: "EnterAmountSchedulePayment",
+              amountEdit: "EnterAmountEditPayment",
+              bankAccountSchedule: "SelectBankAccountSchedulePayment",
+              bankAccountEdit: "SelectBankAccountEditPayment",
+              confirmationScheduled: "PaymentConfirmationScheduled",
+              confirmationUpdated: "PaymentConfirmationUpdated",
+              makePaymentInitial: "MakePaymentInitial",
+              makePaymentEdit: "MakePaymentEdit"
             }
           },
           CREATE: {

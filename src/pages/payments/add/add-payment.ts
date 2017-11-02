@@ -53,7 +53,7 @@ export class AddPaymentPage extends SecurePage {
     public wexAlertController: WexAlertController,
     private paymentProvider: PaymentProvider
   ) {
-    super("Payments.Add", injector);
+    super("Payments.Add", injector, null, { trackView: false });
   }
 
   public get isEditingPayment(): boolean {
@@ -126,7 +126,7 @@ export class AddPaymentPage extends SecurePage {
     this.navCtrl.push(AddPaymentSelectionPage, { selectionType, options, selectedItem, onSelection });
 
     const event = selectionType + (this.isEditingPayment ? "Edit" : "Schedule");
-    this.trackAnalyticsEvent(event);
+    this.trackAnalyticsPageView(event);
   }
 
   private schedulePayment(paymentRequest: PaymentRequest) {
@@ -152,7 +152,7 @@ export class AddPaymentPage extends SecurePage {
         // Update the cache
         this.sessionCache.requestSessionDetail(Session.Field.Payments);
         this.navCtrl.setRoot(AddPaymentConfirmationPage, { payment });
-        this.trackAnalyticsEvent(this.isEditingPayment ? "confirmationUpdated" : "confirmationScheduled");
+        this.trackAnalyticsPageView(this.isEditingPayment ? "confirmationUpdated" : "confirmationScheduled");
       }, (error) => {
         /* TODO - What do we do here? */
         console.error(error);
@@ -181,7 +181,7 @@ export class AddPaymentPage extends SecurePage {
   ionViewDidEnter() {
     if (_.isEmpty(this.payment)) {
       this.populatePayment();
-      this.trackAnalyticsEvent(this.isEditingPayment ? "makePaymentEdit" : "makePaymentInitial");
+      this.trackAnalyticsPageView(this.isEditingPayment ? "makePaymentEdit" : "makePaymentInitial");
     }
   }
 }

@@ -1,5 +1,5 @@
 import { Injector } from "@angular/core";
-import { Page } from "./page";
+import { Page, PageParams } from "./page";
 import { Session } from "../models";
 import { SessionCache } from "../providers";
 
@@ -10,8 +10,8 @@ export abstract class SecurePage extends Page {
   protected session: Session = {};
   protected sessionCache: SessionCache;
 
-  constructor(pageName: string, injector: Injector, protected requiredSessionInfo?: Session.Field[]) {
-    super(pageName, injector);
+  constructor(pageName: string, injector: Injector, protected requiredSessionInfo?: Session.Field[], params?: PageParams) {
+    super(pageName, injector, params);
 
     this.sessionCache = this.injector.get(SessionCache);
     this.requiredSessionInfo = SecurePage.DEFAULT_REQUIRED_SESSION_DETAILS.concat(requiredSessionInfo || []);
