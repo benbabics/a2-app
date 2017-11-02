@@ -231,7 +231,7 @@ export namespace ConstantsInfo {
       //# Drivers page
       DRIVERS: {
         listLabels: ["Name", "Driver ID"],
-        searchLabel: "Search Name or Driver ID",
+        searchLabel: "Search name or driver id",
         greekingData: [
           {left: 3, top: 10, right: 15, bottom: 35},
           {left: 3, top: 55, right: 15, bottom: 80},
