@@ -1,22 +1,24 @@
-import { Injector, Component } from "@angular/core";
+import { Injector, Component, OnDestroy } from "@angular/core";
 import { ContactUsPage } from "../contact-us/contact-us";
 import { TermsOfUsePage } from "../terms-of-use/terms-of-use";
 import { PrivacyPolicyPage } from "../privacy-policy/privacy-policy";
 import { NavController } from "ionic-angular";
 import { FingerprintController } from "./fingerprint-control";
 import { WexNavigationController, WexPlatform } from "../../providers";
+import { NavBarController } from "../../providers/nav-bar-controller";
 
 @Component({
   selector: "options-page",
   templateUrl: "./options.html"
 })
-export class OptionsPage extends FingerprintController {
+export class OptionsPage extends FingerprintController implements OnDestroy {
   public readonly pages = { ContactUsPage, TermsOfUsePage, PrivacyPolicyPage };
   public fingerprintAuthAvailable: boolean = false;
 
   constructor(injector: Injector,
     private navController: NavController,
     private wexNavigationController: WexNavigationController,
+    private navBarController: NavBarController,
     public platform: WexPlatform
   ) {
     super("Options", injector);
@@ -35,8 +37,19 @@ export class OptionsPage extends FingerprintController {
   }
 
   public ionViewWillEnter(): void {
-      this.platform.ready(() => this.fingerprint.isAvailable
+    // Hide navbar if on Android
+    if (!this.platform.isIos) {
+      this.navBarController.show(false);
+    }
+    this.platform.ready(() => this.fingerprint.isAvailable
         .then(() => this.fingerprintAuthAvailable = true));
     super.ionViewWillEnter();
+  }
+
+  public ngOnDestroy() {
+    // Replace hidden navbar if on Android
+    if (!this.platform.isIos) {
+      this.navBarController.show(true);
+    }
   }
 }
