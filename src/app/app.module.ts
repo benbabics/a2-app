@@ -30,7 +30,8 @@ import {
   WexStaticListPageHeader,
   WexStaticListPageContent,
   WexInvoiceDisplay,
-  ResizableSvg
+  ResizableSvg,
+  DriverListItem
 } from "../components";
 
 import { StatusBar } from "@ionic-native/status-bar";
@@ -176,6 +177,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     WexClear,
     AutofocusDirective,
     ResizableSvg,
+    DriverListItem,
     Calendar
   ],
   imports: [

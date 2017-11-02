@@ -11,3 +11,4 @@ export * from "./wex-nav-bar/wex-nav-bar";
 export * from "./wex-static-list-page-content/wex-static-list-page-content";
 export * from "./wex-static-list-page-header/wex-static-list-page-header";
 export * from "./resizable-svg/resizable-svg";
+export * from "./driver-list-item/driver-list-item";

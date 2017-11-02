@@ -6,7 +6,6 @@ import { DriversDetailsPage } from "./details/drivers-details";
 import { StaticListPage, FetchOptions, GroupedList } from "../static-list-page";
 import { Session } from "../../models";
 import { TabPage } from "../../decorators/tab-page";
-import { NameUtils } from "../../utils/name-utils";
 
 @TabPage()
 @Component({
@@ -50,9 +49,5 @@ export class DriversPage extends StaticListPage<Driver, Driver.Details> {
 
   public goToDetailPage(driver: Driver): void {
     this.navCtrl.push( DriversDetailsPage, { driver } );
-  }
-
-  public getFullName(driver: Driver): string {
-    return NameUtils.PrintableName(driver.details.lastName, driver.details.firstName);
   }
 }

@@ -41,7 +41,7 @@
       </div>
 
       <div *ngIf="isDriverView" class="content driver-content">
-        <span content-expand>{{ listDisplayName(item) }}</span>
+        <driver-list-item [driver]="item"></driver-list-item>
       </div>
 
       <div *ngIf="isCardView" class="content card-content">
