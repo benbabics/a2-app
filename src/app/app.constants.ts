@@ -14,10 +14,6 @@ export namespace ConstantsInfo {
     // Version number gets replaced after WexAppVersionCheck replaces it, which is required for the app to start.
     VERSION_NUMBER: "MOCK",
     APP_TITLE: "Fleet SmartHub",
-    ANDROID_STATUS_BAR_COLOR: {
-      APP:  "#e0e0e0",
-      LOGIN: "#000000"
-    },
     //# Storage
     STORAGE: {
       ID: "FLEET_MANAGER-",
@@ -529,10 +525,7 @@ export namespace ConstantsInfo {
         title          : "Contact Us",
         contentHeading : "Do you have a question or comment?",
         content        : "Send us an email, including your name and the name of your business. A representative will respond as soon as possible.",
-        sendEmailButton: {
-          android: "Send Email",
-          ios: "Send Us an Email"
-        },
+        sendEmailButton: "Send Us an Email",
         sendEmailLink  : "mailto:MobileApplications@wexinc.com?subject=Fleet SmartHub version "
       },
 

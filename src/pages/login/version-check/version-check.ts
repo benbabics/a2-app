@@ -5,7 +5,9 @@ import { VersionStatus } from "@angular-wex/models";
 import { WexPlatform } from "../../../providers/platform";
 import { Market } from "@ionic-native/market";
 import { WexAppBackButtonController } from "../../../providers/wex-app-back-button-controller";
+import { PageTheme, StatusBarStyle } from "../../../decorators/status-bar";
 
+@StatusBarStyle(PageTheme.Light)
 @Component({
   selector: "version-check",
   templateUrl: "version-check.html"
