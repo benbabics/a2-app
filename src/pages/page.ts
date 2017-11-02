@@ -39,8 +39,8 @@ export abstract class Page implements OnInit {
   }
 
   protected trackAnalyticsPageView(pageName: string) {
-    let trackingName = _.get<string>(this.CONSTANTS, `ANALYTICS.PAGE`)
-                    || _.get<string>(this.CONSTANTS, `ANALYTICS.PAGES.${pageName}`, pageName);
+    let trackingName = _.get<string>(this.CONSTANTS, `ANALYTICS.PAGES.${pageName}`)
+                    || _.get<string>(this.CONSTANTS, `ANALYTICS.PAGE`, pageName);
     this.googleAnalytics.trackView(trackingName);
   }
 
