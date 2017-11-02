@@ -44,7 +44,7 @@ export class AddPaymentSelectionPage extends SecurePage {
     this.initialSelection = this.selectedItem;
     this.onSelection = navParams.get(AddPaymentSelectionNavParams.OnSelection);
     if (this.isPaymentAmount) {
-      this.otherAmount = (this.options as UserPaymentAmount[])[this.options.length - 1].value;
+      this.otherAmount = this.customAmount.value;
     }
   }
 
@@ -61,11 +61,17 @@ export class AddPaymentSelectionPage extends SecurePage {
     return this.isPaymentAmount(this.selectedItem) && (this.selectedItem as UserPaymentAmount).type === UserPaymentAmountType.OtherAmount;
   }
 
+  public get customAmount(): UserPaymentAmount {
+    return (this.options as UserPaymentAmount[])[this.options.length - 1];
+  }
+
 
   public handleSubmit() {
     this.onSelection(this.selectedItem);
     if (this.isCustomPaymentAmount) {
       (this.selectedItem as UserPaymentAmount).value = this.otherAmount;
+    } else if (this.isPaymentAmount) {
+      this.customAmount.value = 0;
     }
     this.navCtrl.pop();
   }
