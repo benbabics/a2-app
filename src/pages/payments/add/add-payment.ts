@@ -103,6 +103,10 @@ export class AddPaymentPage extends SecurePage {
     this.calendar.displayCalendar();
   }
 
+  public get submitButtonText() {
+    return this.isEditingPayment ? this.CONSTANTS.LABELS.updatePayment : this.CONSTANTS.LABELS.schedulePayment;
+  }
+
   public updateBankAccount() {
     let options = this.paymentService.bankAccounts,
         selectedItem = this.payment.bankAccount;
