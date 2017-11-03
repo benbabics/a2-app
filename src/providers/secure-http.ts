@@ -17,12 +17,20 @@ export class SecureHttp extends Http {
     super(backend, defaultOptions);
   }
 
+  public delete(url: string, options?: RequestOptionsArgs): Observable<Response> {
+    return this.intercept((options: RequestOptionsArgs) => super.delete(url, options), url, options);
+  }
+
   public get(url: string, options?: RequestOptionsArgs): Observable<Response> {
     return this.intercept((options: RequestOptionsArgs) => super.get(url, options), url, options);
   }
 
   public post(url: string, body: any, options?: RequestOptionsArgs): Observable<Response> {
     return this.intercept((options: RequestOptionsArgs) => super.post(url, body, options), url, options);
+  }
+
+  public put(url: string, body: any, options?: RequestOptionsArgs): Observable<Response> {
+    return this.intercept((options: RequestOptionsArgs) => super.put(url, body, options), url, options);
   }
 
   public options(url: string, options?: RequestOptionsArgs): Observable<Response> {
