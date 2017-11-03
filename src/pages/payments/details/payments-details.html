@@ -54,13 +54,13 @@
   <div *ngIf="isScheduled" padding-top>
     <ion-list *wexIfPlatformIos>
       <a ion-item id="button-cancel-payment" (click)="cancelPayment()">
-        {{ CONSTANTS.cancelButton }}
+        <action-indicator [when]="isCanceling">{{ CONSTANTS.cancelButton }}</action-indicator>
       </a>
     </ion-list>
 
     <div *wexIfPlatformAndroid id="md-button-container">
       <button ion-button block id="button-cancel-payment" color="white"  (click)="cancelPayment()">
-        {{ CONSTANTS.cancelButton }}
+        <action-indicator [when]="isCanceling">{{ CONSTANTS.cancelButton }}</action-indicator>
       </button>
     </div>
   </div>
