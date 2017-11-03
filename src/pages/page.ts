@@ -6,22 +6,36 @@ import { AppConstants } from "../app/app.constants";
 const Constants = AppConstants();
 
 export interface PageParams {
+  pageName: string;
   trackView?: boolean;
   trackingName?: string;
 }
+
+export type PageDetails = string | PageParams;
 
 export abstract class Page implements OnInit {
 
   public readonly CONSTANTS: any;
   public googleAnalytics: GoogleAnalytics;
 
-  constructor(public readonly pageName: string, public injector: Injector, protected params?: PageParams) {
+  protected pageName: string;
+  protected params: PageParams;
+
+  constructor(pageDetails: PageDetails, public injector: Injector) {
+    if (_.isObject(pageDetails)) {
+      this.params = <PageParams>pageDetails;
+      this.pageName = this.params.pageName;
+    }
+    else {
+      this.pageName = <string>pageDetails;
+    }
+
     this.CONSTANTS = _.merge(this.defaultConstants, this.pageConstants);
     this.googleAnalytics = injector.get(GoogleAnalytics);
   }
 
   ngOnInit() {
-    let params = this.params || {};
+    let params = this.params || <PageParams>{};
     if (!this.params || params.trackView !== false) {
       this.trackAnalyticsPageView(params.trackingName || this.pageName);
     }

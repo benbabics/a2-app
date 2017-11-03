@@ -53,7 +53,7 @@ export class AddPaymentPage extends SecurePage {
     public wexAlertController: WexAlertController,
     private paymentProvider: PaymentProvider
   ) {
-    super("Payments.Add", injector, null, { trackView: false });
+    super({ pageName: "Payments.Add", trackView: false }, injector);
   }
 
   public get isEditingPayment(): boolean {
