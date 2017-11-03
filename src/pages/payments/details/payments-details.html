@@ -1,11 +1,11 @@
 <ion-header>
   <ion-navbar>
     <ion-title>{{ CONSTANTS.title }}</ion-title>
-    <ion-buttons *ngIf="isScheduled" right>
+    <ion-buttons *ngIf="isScheduled && !multiplePending" right>
       <button *wexIfPlatformAndroid ion-button icon-only (click)="editPayment()">
         <ion-icon name="create"></ion-icon>
       </button>
-      <button class="edit-button" *wexIfPlatformIos ion-button color="primary" (click)="editPayment()">
+      <button *wexIfPlatformIos class="edit-button" ion-button color="primary" (click)="editPayment()">
         {{ CONSTANTS.editButton }}
       </button>
     </ion-buttons>

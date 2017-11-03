@@ -9,11 +9,13 @@ import { PaymentProvider } from "@angular-wex/api-providers";
 import { WexAlertController } from "../../../components/wex-alert-controller/wex-alert-controller";
 
 export type PaymentsDetailsNavParams = keyof {
-  payment
+  payment,
+  multiplePending
 };
 
 export namespace PaymentsDetailsNavParams {
   export const Payment: PaymentsDetailsNavParams = "payment";
+  export const MultiplePending: PaymentsDetailsNavParams = "multiplePending";
 }
 
 @Component({
@@ -26,6 +28,7 @@ export class PaymentsDetailsPage extends DetailsPage {
 
   public payment: Payment;
   public isCanceling: boolean;
+  public multiplePending: boolean;
 
   constructor(
     public navParams: NavParams,
@@ -38,6 +41,7 @@ export class PaymentsDetailsPage extends DetailsPage {
   ) {
     super("Payments.Details", injector);
     this.payment = this.navParams.get(PaymentsDetailsNavParams.Payment);
+    this.multiplePending = this.navParams.get(PaymentsDetailsNavParams.MultiplePending);
   }
 
   public get headerLabel(): string {

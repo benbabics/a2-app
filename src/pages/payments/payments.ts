@@ -76,7 +76,7 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   }
 
   public goToDetailPage(payment: Payment) {
-    this.navCtrl.push(PaymentsDetailsPage, { payment });
+    this.navCtrl.push(PaymentsDetailsPage, { payment, multiplePending: (this.items.filter(x => x.isScheduled).length > 1) });
   }
 
   public addPayment() {
