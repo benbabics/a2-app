@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import { GoogleAnalytics } from "@ionic-native/google-analytics";
-import { Component, Injector } from "@angular/core";
+import { Component } from "@angular/core";
 import { CardsPage } from "../../pages/cards/cards";
 import { DriversPage } from "../../pages/drivers/drivers";
 import { LandingPage } from "../../pages/landing/landing";
@@ -17,11 +17,8 @@ import { WexPlatform } from "../../providers/platform";
 export class WexNavBar {
 
   @Value("NAVIGATION") public CONSTANTS: any;
-  public googleAnalytics: GoogleAnalytics;
 
-  constructor(public platform: WexPlatform, public injector: Injector) {
-    this.googleAnalytics = injector.get(GoogleAnalytics);
-  }
+  constructor(public platform: WexPlatform, protected googleAnalytics: GoogleAnalytics) {}
 
   public get CardsPage() {
     return CardsPage;
