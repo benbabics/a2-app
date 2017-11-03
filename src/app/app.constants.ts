@@ -40,7 +40,7 @@ export namespace ConstantsInfo {
     },
     //# Buttons
     BUTTONS: {
-      OK: "Ok",
+      OK: "OK",
       CANCEL: "Cancel",
       CLOSE: "Close",
       YES: "Yes",
