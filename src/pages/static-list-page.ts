@@ -9,6 +9,7 @@ export { GroupedList } from "./list-page";
 import { WexGreeking } from "../components";
 import { SessionInfoOptions } from "../providers";
 import { Content } from "ionic-angular";
+import { PageDetails } from "./page";
 
 export interface FetchOptions extends SessionInfoOptions {
   forceRequest?: boolean;
@@ -63,7 +64,7 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   public abstract goToDetailPage(element: T);
 
   constructor(
-    pageName: string,
+    pageName: PageDetails,
     public injector: Injector,
     protected searchFilterFields?: (keyof DetailsT)[],
     requiredSessionInfo?: Session.Field[]
