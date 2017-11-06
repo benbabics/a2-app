@@ -55,7 +55,7 @@ export class AddPaymentPage extends SecurePage {
     private paymentProvider: PaymentProvider,
     public navBarCtrl: NavBarController,
   ) {
-    super("Payments.Add", injector);
+    super({ pageName: "Payments.Add", trackView: false }, injector);
   }
 
   public get isEditingPayment(): boolean {
@@ -130,6 +130,9 @@ export class AddPaymentPage extends SecurePage {
     let onSelection = (selectedItem: PaymentSelectionOption) => this.payment[selectionType] = selectedItem;
 
     this.navCtrl.push(AddPaymentSelectionPage, { selectionType, options, selectedItem, onSelection });
+
+    const event = selectionType + (this.isEditingPayment ? "Edit" : "Schedule");
+    this.trackAnalyticsPageView(event);
   }
 
   private schedulePayment(paymentRequest: PaymentRequest) {
@@ -156,6 +159,7 @@ export class AddPaymentPage extends SecurePage {
         this.sessionCache.requestSessionDetail(Session.Field.Payments);
         this.navCtrl.push(AddPaymentConfirmationPage, { payment })
           .then(() => this.navCtrl.removeView(this.viewController));
+        this.trackAnalyticsPageView(this.isEditingPayment ? "confirmationUpdated" : "confirmationScheduled");
       }, (error) => {
         /* TODO - What do we do here? */
         console.error(error);
@@ -184,6 +188,7 @@ export class AddPaymentPage extends SecurePage {
   ionViewDidEnter() {
     if (_.isEmpty(this.payment)) {
       this.populatePayment();
+      this.trackAnalyticsPageView(this.isEditingPayment ? "makePaymentEdit" : "makePaymentInitial");
     }
   }
 }

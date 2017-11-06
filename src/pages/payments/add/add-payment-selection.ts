@@ -38,7 +38,7 @@ export class AddPaymentSelectionPage extends SecurePage {
     public navCtrl: NavController,
     public platform: WexPlatform
   ) {
-    super("Payments.Add.Selection", injector);
+    super({ pageName: "Payments.Add.Selection", trackView: false }, injector);
 
     this.selectionType = navParams.get(AddPaymentSelectionNavParams.SelectionType);
     this.options = navParams.get(AddPaymentSelectionNavParams.Options);

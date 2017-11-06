@@ -38,12 +38,12 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   ionViewWillEnter() {
     let invoiceSummary = this.sessionCache.getSessionDetail(Session.Field.InvoiceSummary);
     invoiceSummary.subscribe((invoiceSummary) => {
-        this.minPaymentDueDate = _.template(this.CONSTANTS.payNowSection.on)({
-          dueDate: moment(invoiceSummary.paymentDueDate).format("MMMM Do, YYYY")
-        });
-        this.invoiceSummary = invoiceSummary;
+      this.minPaymentDueDate = _.template(this.CONSTANTS.payNowSection.on)({
+        dueDate: moment(invoiceSummary.paymentDueDate).format("MMMM Do, YYYY")
       });
-      super.ionViewWillEnter();
+      this.invoiceSummary = invoiceSummary;
+    });
+    super.ionViewWillEnter();
   }
 
   private canMakePayment(): Promise<MakePaymentAvailability | undefined> {
@@ -90,6 +90,9 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
         let unavailabilityReasonMessage = _.get<string>(this.CONSTANTS.UNAVAILABILITY_REASONS, unavailabilityReason, this.CONSTANTS.UNAVAILABILITY_REASONS.default);
 
         this.alertController.alert(unavailabilityReasonMessage);
+        this.trackAnalyticsEvent(unavailabilityReason);
       });
+
+    this.trackAnalyticsEvent("addPayment");
   }
 }

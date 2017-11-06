@@ -30,12 +30,13 @@ export class AddPaymentConfirmationPage extends SecurePage {
     public navParams: NavParams,
     public navBarCtrl: NavBarController
   ) {
-    super("Payments.Add.Confirmation", injector);
+    super({ pageName: "Payments.Add.Confirmation", trackView: false }, injector);
 
     this.payment = this.navParams.get(AddPaymentConfirmationNavParams.Payment);
   }
 
   public finish() {
     this.navCtrl.pop({ direction: "forward" });
+    this.trackAnalyticsEvent("confirmationOk");
   }
 }

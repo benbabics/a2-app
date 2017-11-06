@@ -71,10 +71,15 @@ export class PaymentsDetailsPage extends DetailsPage {
         .map(() => _.remove(SessionCache.cachedValues.payments, payment => payment.details.id === this.payment.details.id))
         .map(() => this.isCanceling = false)
         .subscribe(() => this.navCtrl.pop());
+
+      this.trackAnalyticsEvent("paymentCancelYes");
     });
+
+    this.trackAnalyticsEvent("paymentCancelPrompt");
   }
 
   public editPayment() {
     this.app.getRootNav().push(AddPaymentPage, { payment: this.payment });
+    this.trackAnalyticsEvent("paymentEdit");
   }
 }
