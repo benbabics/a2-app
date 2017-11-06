@@ -97,6 +97,11 @@ export namespace ConstantsInfo {
     },
     //# App Navigation
     NAVIGATION: {
+      ANALYTICS: {
+        EVENTS: {
+          "Payments": ["Payment", "PaymentOption"]
+        },
+      },
       LABELS: {
         "login": "Login",
         "landing": "Home",
@@ -390,6 +395,16 @@ export namespace ConstantsInfo {
 
       //# Payments page
       PAYMENTS: {
+        ANALYTICS: {
+          PAGE: "PaymentActivity",
+          EVENTS: {
+            addPayment: ["Payment", "MakePaymentOption"],
+            shouldDisplayCurrentBalanceDueMessage: ["Payment", "OKNoBalanceDueLink"],
+            shouldDisplayBankAccountSetupMessage: ["Payment", "OKNoBankAccountLink"],
+            shouldDisplayDirectDebitEnabledMessage: ["Payment", "OKDirectDebitSetupLink"],
+            shouldDisplayOutstandingPaymentMessage: ["Payment", "OKPaymentScheduledLink"]
+          }
+        },
         payNowSection: {
           minPaymentDate: "Min payment due",
           on: "on ${ dueDate }",
@@ -422,6 +437,14 @@ export namespace ConstantsInfo {
 
         //# Payments Details page
         DETAILS: {
+          ANALYTICS: {
+            PAGE: "PaymentDetails",
+            EVENTS: {
+              paymentCancelPrompt: ["Payment", "CancelPaymentLink"],
+              paymentCancelYes: ["Payment", "YESCancelPaymentLink"],
+              paymentEdit: ["Payment", "EditPaymentLink"]
+            }
+          },
           title:         "Payment Details",
           amount:        "Amount",
           bankAccount:   "Bank Account",
@@ -439,6 +462,18 @@ export namespace ConstantsInfo {
 
         //# Add Payment page
         ADD: {
+          ANALYTICS: {
+            PAGES: {
+              amountSchedule: "EnterAmountSchedulePayment",
+              amountEdit: "EnterAmountEditPayment",
+              bankAccountSchedule: "SelectBankAccountSchedulePayment",
+              bankAccountEdit: "SelectBankAccountEditPayment",
+              confirmationScheduled: "PaymentConfirmationScheduled",
+              confirmationUpdated: "PaymentConfirmationUpdated",
+              makePaymentInitial: "MakePaymentInitial",
+              makePaymentEdit: "MakePaymentEdit"
+            }
+          },
           CREATE: {
             title: "Schedule Payment"
           },
@@ -470,8 +505,12 @@ export namespace ConstantsInfo {
 
           //# Add Payment Confirmation page
           CONFIRMATION: {
+            ANALYTICS: {
+              EVENTS: {
+                confirmationOk: ["Payment", "OKConfirmationLink"]
+              }
+            },
             title: "Successfully scheduled",
-
             LABELS: {
               amount: "Amount",
               bankAccount: "Bank Account",
