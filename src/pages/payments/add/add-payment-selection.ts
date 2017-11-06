@@ -4,6 +4,8 @@ import { SecurePage } from "../../secure-page";
 import { PaymentSelectionOption } from "./../../../providers/payment-service";
 import { UserPaymentAmount, UserPaymentAmountType } from "../../../models/user-payment";
 import { WexPlatform } from "../../../providers";
+import { BankAccount } from "@angular-wex/models";
+import * as _ from "lodash";
 
 export type AddPaymentSelectionNavParams = keyof {
   selectionType
@@ -41,11 +43,19 @@ export class AddPaymentSelectionPage extends SecurePage {
     this.selectionType = navParams.get(AddPaymentSelectionNavParams.SelectionType);
     this.options = navParams.get(AddPaymentSelectionNavParams.Options);
     this.selectedItem = navParams.get(AddPaymentSelectionNavParams.SelectedItem);
+    if (this.isBankAccount) {
+      this.identifyBankAccountFromOptions();
+    }
     this.initialSelection = this.selectedItem;
     this.onSelection = navParams.get(AddPaymentSelectionNavParams.OnSelection);
     if (this.isPaymentAmount) {
-      this.otherAmount = (this.options as UserPaymentAmount[])[this.options.length - 1].value;
+      this.otherAmount = this.customAmount.value;
     }
+  }
+
+  private identifyBankAccountFromOptions() {
+    let selectedId = (this.selectedItem as BankAccount).details.id;
+    this.selectedItem = _.find((this.options as BankAccount[]), account => account.details.id === selectedId);
   }
 
   public get pageTitle(): string {
@@ -53,12 +63,20 @@ export class AddPaymentSelectionPage extends SecurePage {
   }
 
   public otherAmount: number = 0;
-  isPaymentAmount(selectedItem: PaymentSelectionOption): selectedItem is UserPaymentAmount {
-    return "type" in selectedItem;
+  public get isPaymentAmount(): boolean {
+    return !(this.selectedItem instanceof BankAccount);
+  }
+
+  public get isBankAccount(): boolean {
+    return this.selectedItem instanceof BankAccount;
   }
 
   public get isCustomPaymentAmount(): boolean {
-    return this.isPaymentAmount(this.selectedItem) && (this.selectedItem as UserPaymentAmount).type === UserPaymentAmountType.OtherAmount;
+    return this.isPaymentAmount && (this.selectedItem as UserPaymentAmount).type === UserPaymentAmountType.OtherAmount;
+  }
+
+  public get customAmount(): UserPaymentAmount {
+    return (this.options as UserPaymentAmount[])[this.options.length - 1];
   }
 
 
@@ -66,17 +84,21 @@ export class AddPaymentSelectionPage extends SecurePage {
     this.onSelection(this.selectedItem);
     if (this.isCustomPaymentAmount) {
       (this.selectedItem as UserPaymentAmount).value = this.otherAmount;
+    } else if (this.isPaymentAmount) {
+      this.customAmount.value = 0;
     }
     this.navCtrl.pop();
   }
 
   public get disableSubmit(): boolean {
     // If this is a new custom amount, enable the button (as long as the custom amount is not 0).
+    if (this.isPaymentAmount) {
     if (this.isCustomPaymentAmount) {
       if (this.otherAmount === 0) {
         return true;
       } else if ((this.selectedItem as UserPaymentAmount).value === this.otherAmount) {
         return (this.selectedItem === this.initialSelection);
+        }
       }
     }
     // Otherwise, if the selected item is the same, disable the button.

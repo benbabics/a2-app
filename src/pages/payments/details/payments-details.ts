@@ -7,13 +7,16 @@ import { WexPlatform, SessionCache } from "../../../providers";
 import { AddPaymentPage } from "../add/add-payment";
 import { PaymentProvider } from "@angular-wex/api-providers";
 import { WexAlertController } from "../../../components/wex-alert-controller/wex-alert-controller";
+import { Session } from "../../../models/session";
 
 export type PaymentsDetailsNavParams = keyof {
-  payment
+  payment,
+  multiplePending
 };
 
 export namespace PaymentsDetailsNavParams {
   export const Payment: PaymentsDetailsNavParams = "payment";
+  export const MultiplePending: PaymentsDetailsNavParams = "multiplePending";
 }
 
 @Component({
@@ -26,6 +29,7 @@ export class PaymentsDetailsPage extends DetailsPage {
 
   public payment: Payment;
   public isCanceling: boolean;
+  public multiplePending: boolean;
 
   constructor(
     public navParams: NavParams,
@@ -36,7 +40,7 @@ export class PaymentsDetailsPage extends DetailsPage {
     public app: App,
     injector: Injector
   ) {
-    super("Payments.Details", injector);
+    super("Payments.Details", injector, [Session.Field.Payments]);
     this.payment = this.navParams.get(PaymentsDetailsNavParams.Payment);
   }
 
@@ -50,6 +54,13 @@ export class PaymentsDetailsPage extends DetailsPage {
 
   public get isScheduled(): boolean {
     return this.payment.isScheduled;
+  }
+
+  public ionViewCanEnter(): Promise<any> {
+    return super.ionViewCanEnter()
+      .then(() => {
+        this.multiplePending = this.session.payments.filter(payment => payment.isScheduled).length > 1;
+      });
   }
 
   public cancelPayment() {
