@@ -5,6 +5,7 @@ import { PaymentSelectionOption } from "./../../../providers/payment-service";
 import { UserPaymentAmount, UserPaymentAmountType } from "../../../models/user-payment";
 import { WexPlatform } from "../../../providers";
 import { BankAccount } from "@angular-wex/models";
+import * as _ from "lodash";
 
 export type AddPaymentSelectionNavParams = keyof {
   selectionType
@@ -52,12 +53,9 @@ export class AddPaymentSelectionPage extends SecurePage {
     }
   }
 
-  public identifyBankAccountFromOptions() {
+  private identifyBankAccountFromOptions() {
     let selectedId = (this.selectedItem as BankAccount).details.id;
-    let index = this.options.map(x => (x as BankAccount).details.id).findIndex(x => x === selectedId);
-    if (index !== -1) {
-      this.selectedItem = this.options[index];
-    }
+    this.selectedItem = _.find((this.options as BankAccount[]), account => account.details.id === selectedId);
   }
 
   public get pageTitle(): string {

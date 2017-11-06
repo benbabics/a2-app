@@ -1,9 +1,4 @@
 page-payments-details {
-
-    @at-root .ios & .bar-button-default.bar-button-ios-primary, {
-        color: black;
-    }
-
     ion-content {
 
         @at-root .md & {

@@ -25,10 +25,6 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   public minPaymentDueDate: string;
   public invoiceSummary: InvoiceSummary;
 
-  private get multiplePending(): boolean {
-    return (this.items.filter(payment => payment.isScheduled).length > 1);
-  }
-
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -80,7 +76,7 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   }
 
   public goToDetailPage(payment: Payment) {
-    this.navCtrl.push(PaymentsDetailsPage, { payment, multiplePending: this.multiplePending });
+    this.navCtrl.push(PaymentsDetailsPage, { payment });
   }
 
   public addPayment() {
