@@ -47,6 +47,9 @@ export class PaymentService {
   }
 
   public get amountOptions(): UserPaymentAmount[] {
+    if (!this.minimumPaymentDue) {
+      return _.reject(this._amountOptions, { type: UserPaymentAmountType.MinimumPaymentDue });
+    }
     return this._amountOptions;
   }
 
