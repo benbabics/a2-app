@@ -19,6 +19,8 @@ import { PaymentProvider, PaymentRequest } from "@angular-wex/api-providers";
 import { Calendar } from "../../../components/calendar/calendar";
 import { WexAlertController } from "../../../components/wex-alert-controller/wex-alert-controller";
 import { NavBarController } from "../../../providers/nav-bar-controller";
+import { Events } from "ionic-angular";
+import { PaymentsPage } from "../payments";
 
 export type AddPaymentNavParams = keyof {
   payment
@@ -54,6 +56,7 @@ export class AddPaymentPage extends SecurePage {
     public wexAlertController: WexAlertController,
     private paymentProvider: PaymentProvider,
     public navBarCtrl: NavBarController,
+    private events: Events
   ) {
     super({ pageName: "Payments.Add", trackView: false }, injector);
   }
@@ -158,7 +161,8 @@ export class AddPaymentPage extends SecurePage {
         // Update the cache
         this.sessionCache.requestSessionDetail(Session.Field.Payments);
         this.navCtrl.push(AddPaymentConfirmationPage, { payment })
-          .then(() => this.navCtrl.removeView(this.viewController));
+          .then(() => this.navCtrl.removeView(this.viewController))
+          .then(() => this.events.publish(PaymentsPage.REFRESH_EVENT));
         this.trackAnalyticsPageView(this.isEditingPayment ? "confirmationUpdated" : "confirmationScheduled");
       }, (error) => {
         /* TODO - What do we do here? */
