@@ -1,5 +1,9 @@
 page-add-payment-confirmation {
 
+  @at-root .ios & ion-title {
+      text-transform: capitalize;
+  }
+
   .payemnt-confirmation-header {
     padding: 2rem 0;
     text-align: center;

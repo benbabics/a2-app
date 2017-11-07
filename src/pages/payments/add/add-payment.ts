@@ -18,6 +18,7 @@ import { AddPaymentConfirmationPage } from "./confirmation/add-payment-confirmat
 import { PaymentProvider, PaymentRequest } from "@angular-wex/api-providers";
 import { Calendar } from "../../../components/calendar/calendar";
 import { WexAlertController } from "../../../components/wex-alert-controller/wex-alert-controller";
+import { NavBarController } from "../../../providers/nav-bar-controller";
 
 export type AddPaymentNavParams = keyof {
   payment
@@ -51,9 +52,10 @@ export class AddPaymentPage extends SecurePage {
     private viewController: ViewController,
     public paymentService: PaymentService,
     public wexAlertController: WexAlertController,
-    private paymentProvider: PaymentProvider
+    private paymentProvider: PaymentProvider,
+    public navBarCtrl: NavBarController,
   ) {
-    super("Payments.Add", injector);
+    super({ pageName: "Payments.Add", trackView: false }, injector);
   }
 
   public get isEditingPayment(): boolean {
@@ -103,6 +105,10 @@ export class AddPaymentPage extends SecurePage {
     this.calendar.displayCalendar();
   }
 
+  public get submitButtonText() {
+    return this.isEditingPayment ? this.CONSTANTS.LABELS.updatePayment : this.CONSTANTS.LABELS.schedulePayment;
+  }
+
   public updateBankAccount() {
     let options = this.paymentService.bankAccounts,
         selectedItem = this.payment.bankAccount;
@@ -124,6 +130,9 @@ export class AddPaymentPage extends SecurePage {
     let onSelection = (selectedItem: PaymentSelectionOption) => this.payment[selectionType] = selectedItem;
 
     this.navCtrl.push(AddPaymentSelectionPage, { selectionType, options, selectedItem, onSelection });
+
+    const event = selectionType + (this.isEditingPayment ? "Edit" : "Schedule");
+    this.trackAnalyticsPageView(event);
   }
 
   private schedulePayment(paymentRequest: PaymentRequest) {
@@ -148,7 +157,9 @@ export class AddPaymentPage extends SecurePage {
       .subscribe((payment) => {
         // Update the cache
         this.sessionCache.requestSessionDetail(Session.Field.Payments);
-        this.navCtrl.setRoot(AddPaymentConfirmationPage, { payment });
+        this.navCtrl.push(AddPaymentConfirmationPage, { payment })
+          .then(() => this.navCtrl.removeView(this.viewController));
+        this.trackAnalyticsPageView(this.isEditingPayment ? "confirmationUpdated" : "confirmationScheduled");
       }, (error) => {
         /* TODO - What do we do here? */
         console.error(error);
@@ -177,6 +188,7 @@ export class AddPaymentPage extends SecurePage {
   ionViewDidEnter() {
     if (_.isEmpty(this.payment)) {
       this.populatePayment();
+      this.trackAnalyticsPageView(this.isEditingPayment ? "makePaymentEdit" : "makePaymentInitial");
     }
   }
 }

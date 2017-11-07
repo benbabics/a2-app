@@ -1,7 +1,7 @@
 import { WexAppSnackbarController } from "./../../components/wex-app-snackbar-controller/wex-app-snackbar-controller";
 import { NavBarController, UiNotificationsController } from "../../providers";
 import { Component, Injector } from "@angular/core";
-import { NavController, NavParams, ToastOptions, App } from "ionic-angular";
+import { NavController, NavParams, ToastOptions } from "ionic-angular";
 import { InvoiceSummary, CompanyStub } from "@angular-wex/models";
 import { Session } from "../../models";
 import { SecurePage } from "../secure-page";
@@ -9,9 +9,10 @@ import { BrandProvider } from "@angular-wex/api-providers";
 import { WexAppBackButtonController } from "../../providers/wex-app-back-button-controller";
 import { NameUtils } from "../../utils/name-utils";
 import { OptionsPage } from "../options/options";
-import { WexPlatform } from "../../providers/platform";
 import { Value } from "../../decorators/value";
+import { PageTheme, StatusBarStyle } from "../../decorators/status-bar";
 
+@StatusBarStyle(PageTheme.Light)
 @Component({
   selector: "page-landing",
   templateUrl: "landing.html"
@@ -68,9 +69,7 @@ export class LandingPage extends SecurePage {
     public navParams: NavParams,
     private brandProvider: BrandProvider,
     private navBarController: NavBarController,
-    private platform: WexPlatform,
     private wexAppSnackbarController: WexAppSnackbarController,
-    private appController: App,
     public injector: Injector,
     private wexAppBackButtonController: WexAppBackButtonController,
     private uiNotificationsController: UiNotificationsController
@@ -85,7 +84,7 @@ export class LandingPage extends SecurePage {
   }
 
   private hardwareBackSnackbar = () => {
-    this.wexAppBackButtonController.registerAction(this.platform.exitApp);
+    this.wexAppBackButtonController.deregisterAction();
     let queued = this.wexAppSnackbarController.createQueued(this.CONSTANTS.BACK_TO_EXIT as ToastOptions);
     queued.onDidDismiss(this.registerBackButton);
     queued.present();
@@ -131,10 +130,6 @@ export class LandingPage extends SecurePage {
   }
 
   public onShowOptions() {
-    if (this.platform.isIos) {
-      this.navCtrl.push(OptionsPage);
-    } else {
-      this.appController.getRootNav().push(OptionsPage);
-    }
+    this.navCtrl.push(OptionsPage);
   }
 }

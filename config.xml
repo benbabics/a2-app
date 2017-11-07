@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="898" id="com.wex.fleetsmarthub" ios-CFBundleVersion="898" version="5.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="900" id="com.wex.fleetsmarthub" ios-CFBundleVersion="900" version="5.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Fleet SmartHub</name>
     <description>Manage your fleet accounts directly from your phone.</description>
     <author email="MobileDevelopment@wexinc.com" href="http://www.wexinc.com">WEX Mobile Development Team</author>

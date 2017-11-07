@@ -1,11 +1,11 @@
 <ion-header>
   <ion-navbar>
     <ion-title>{{ CONSTANTS.title }}</ion-title>
-    <ion-buttons *ngIf="isScheduled" right>
+    <ion-buttons *ngIf="isScheduled && !multiplePending" right>
       <button *wexIfPlatformAndroid ion-button icon-only (click)="editPayment()">
         <ion-icon name="create"></ion-icon>
       </button>
-      <button *wexIfPlatformIos ion-button color="primary" (click)="editPayment()">
+      <button *wexIfPlatformIos color="black" ion-button (click)="editPayment()">
         {{ CONSTANTS.editButton }}
       </button>
     </ion-buttons>
@@ -54,13 +54,13 @@
   <div *ngIf="isScheduled" padding-top>
     <ion-list *wexIfPlatformIos>
       <a ion-item id="button-cancel-payment" (click)="cancelPayment()">
-        {{ CONSTANTS.cancelButton }}
+        <action-indicator [when]="isCanceling">{{ CONSTANTS.cancelButton }}</action-indicator>
       </a>
     </ion-list>
 
     <div *wexIfPlatformAndroid id="md-button-container">
       <button ion-button block id="button-cancel-payment" color="white"  (click)="cancelPayment()">
-        {{ CONSTANTS.cancelButton }}
+        <action-indicator [when]="isCanceling">{{ CONSTANTS.cancelButton }}</action-indicator>
       </button>
     </div>
   </div>

@@ -14,10 +14,6 @@ export namespace ConstantsInfo {
     // Version number gets replaced after WexAppVersionCheck replaces it, which is required for the app to start.
     VERSION_NUMBER: "MOCK",
     APP_TITLE: "Fleet SmartHub",
-    ANDROID_STATUS_BAR_COLOR: {
-      APP:  "#e0e0e0",
-      LOGIN: "#000000"
-    },
     //# Storage
     STORAGE: {
       ID: "FLEET_MANAGER-",
@@ -44,7 +40,7 @@ export namespace ConstantsInfo {
     },
     //# Buttons
     BUTTONS: {
-      OK: "Ok",
+      OK: "OK",
       CANCEL: "Cancel",
       CLOSE: "Close",
       YES: "Yes",
@@ -101,6 +97,11 @@ export namespace ConstantsInfo {
     },
     //# App Navigation
     NAVIGATION: {
+      ANALYTICS: {
+        EVENTS: {
+          "Payments": ["Payment", "PaymentOption"]
+        },
+      },
       LABELS: {
         "login": "Login",
         "landing": "Home",
@@ -394,6 +395,16 @@ export namespace ConstantsInfo {
 
       //# Payments page
       PAYMENTS: {
+        ANALYTICS: {
+          PAGE: "PaymentActivity",
+          EVENTS: {
+            addPayment: ["Payment", "MakePaymentOption"],
+            shouldDisplayCurrentBalanceDueMessage: ["Payment", "OKNoBalanceDueLink"],
+            shouldDisplayBankAccountSetupMessage: ["Payment", "OKNoBankAccountLink"],
+            shouldDisplayDirectDebitEnabledMessage: ["Payment", "OKDirectDebitSetupLink"],
+            shouldDisplayOutstandingPaymentMessage: ["Payment", "OKPaymentScheduledLink"]
+          }
+        },
         payNowSection: {
           minPaymentDate: "Min payment due",
           on: "on ${ dueDate }",
@@ -426,6 +437,14 @@ export namespace ConstantsInfo {
 
         //# Payments Details page
         DETAILS: {
+          ANALYTICS: {
+            PAGE: "PaymentDetails",
+            EVENTS: {
+              paymentCancelPrompt: ["Payment", "CancelPaymentLink"],
+              paymentCancelYes: ["Payment", "YESCancelPaymentLink"],
+              paymentEdit: ["Payment", "EditPaymentLink"]
+            }
+          },
           title:         "Payment Details",
           amount:        "Amount",
           bankAccount:   "Bank Account",
@@ -443,6 +462,18 @@ export namespace ConstantsInfo {
 
         //# Add Payment page
         ADD: {
+          ANALYTICS: {
+            PAGES: {
+              amountSchedule: "EnterAmountSchedulePayment",
+              amountEdit: "EnterAmountEditPayment",
+              bankAccountSchedule: "SelectBankAccountSchedulePayment",
+              bankAccountEdit: "SelectBankAccountEditPayment",
+              confirmationScheduled: "PaymentConfirmationScheduled",
+              confirmationUpdated: "PaymentConfirmationUpdated",
+              makePaymentInitial: "MakePaymentInitial",
+              makePaymentEdit: "MakePaymentEdit"
+            }
+          },
           CREATE: {
             title: "Schedule Payment"
           },
@@ -459,6 +490,7 @@ export namespace ConstantsInfo {
             paymentAmount: "Amount",
             paymentDate: "Payment date",
             schedulePayment: "Schedule Payment",
+            updatePayment: "Update Payment",
             warningAmount: "Amount is less than min payment due",
             warningPaymentDate: "Payment date is after due date",
             instructionalText: "Payments scheduled after 3:30 PM EST, on a weekend, or on a holiday will be processed on the following business day"
@@ -474,8 +506,12 @@ export namespace ConstantsInfo {
 
           //# Add Payment Confirmation page
           CONFIRMATION: {
+            ANALYTICS: {
+              EVENTS: {
+                confirmationOk: ["Payment", "OKConfirmationLink"]
+              }
+            },
             title: "Successfully scheduled",
-
             LABELS: {
               amount: "Amount",
               bankAccount: "Bank Account",
@@ -529,10 +565,7 @@ export namespace ConstantsInfo {
         title          : "Contact Us",
         contentHeading : "Do you have a question or comment?",
         content        : "Send us an email, including your name and the name of your business. A representative will respond as soon as possible.",
-        sendEmailButton: {
-          android: "Send Email",
-          ios: "Send Us an Email"
-        },
+        sendEmailButton: "Send Us an Email",
         sendEmailLink  : "mailto:MobileApplications@wexinc.com?subject=Fleet SmartHub version "
       },
 
