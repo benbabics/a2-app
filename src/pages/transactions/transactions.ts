@@ -1,8 +1,8 @@
 import { Observable } from "rxjs";
 import * as _ from "lodash";
 import * as moment from "moment";
-import { Component, Injector } from "@angular/core";
-import { NavController, NavParams, SegmentButton } from "ionic-angular";
+import { Component, Injector, ViewChild, DoCheck, ElementRef } from "@angular/core";
+import { NavController, NavParams, SegmentButton, Content } from "ionic-angular";
 import { StaticListPage, GroupedList } from "../static-list-page";
 import { Session, PostedTransactionList, DynamicList } from "../../models";
 import { WexGreeking } from "../../components";
@@ -14,6 +14,8 @@ import { TabPage } from "../../decorators/tab-page";
 import { Value } from "../../decorators/value";
 import { LocalStorageService } from "angular-2-local-storage/dist";
 import { NameUtils } from "../../utils/name-utils";
+import { TransactionDriverView } from "../drivers/drivers";
+import { TransactionCardView } from "../cards/cards";
 
 export type BaseTransactionT = BaseTransaction<BaseTransaction.Details>;
 export type TransactionListModelType = Card | Driver | BaseTransactionT;
@@ -275,8 +277,20 @@ class TransactionsPageFilteredListView extends TransactionsPageDateView {
   selector: "page-transactions",
   templateUrl: "transactions.html"
 })
-export class TransactionsPage extends StaticListPage<TransactionListModelType, TransactionListModelTypeDetails> {
+export class TransactionsPage extends StaticListPage<TransactionListModelType, TransactionListModelTypeDetails> implements DoCheck {
   @Value("STORAGE.KEYS.LAST_TRANSACTION_VIEW") private readonly LAST_TRANSACTION_VIEW_KEY: string;
+  @ViewChild("listNav") listNav: NavController;
+  @ViewChild("header") header: ElementRef;
+
+  public static HEADER_HEIGHT: number = 0;
+
+  ngDoCheck() {
+    try {
+      TransactionsPage.HEADER_HEIGHT = (this.header as any).nativeElement.clientHeight;
+    } catch (e) {
+      TransactionsPage.HEADER_HEIGHT = 0;
+    }
+  }
 
   private static readonly ListViews: Map<TransactionListType, AbstractTransactionsPageListViewConstructor> = (() => {
     let listView = new Map();
@@ -364,6 +378,17 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
       }
 
       this.selectedListView = new listViewType(this);
+
+      if (!this.isDateView) {
+          let view;
+        if (this.isDriverView) {
+          view = TransactionDriverView;
+        } else if (this.isCardView) {
+          view = TransactionCardView;
+        }
+
+        this.listNav.push(view, {  }, { animate: false });
+      }
     }
 
     // Re-render the list
@@ -500,4 +525,15 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
       this.selectList(transactionListType || TransactionListType.Date);
     });
   }
+}
+
+export function resizeContentForTransactionHeader(content: Content, heightHasBeenSet: boolean): boolean {
+  let element = content._elementRef.nativeElement;
+  if (!heightHasBeenSet && !!TransactionsPage.HEADER_HEIGHT) {
+    let originalHeight = element.clientHeight;
+    element.style.height = `${originalHeight - TransactionsPage.HEADER_HEIGHT}px`;
+    element.style.top = `${TransactionsPage.HEADER_HEIGHT - 1}px`;
+  }
+
+  return !!TransactionsPage.HEADER_HEIGHT;
 }

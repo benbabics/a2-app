@@ -1,9 +1,9 @@
-<ion-header>
+<ion-header *ngIf="!contentOnly">
   <wex-static-list-page-header [page]="this">
   </wex-static-list-page-header>
 </ion-header>
 
-<ion-content>
+<ion-content #content>
   <ion-refresher (ionRefresh)="onRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>

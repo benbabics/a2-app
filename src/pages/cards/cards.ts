@@ -1,11 +1,13 @@
 import { Observable } from "rxjs";
 import { CardsDetailsPage } from "./details/cards-details";
-import { Component, Injector } from "@angular/core";
+import { Component, Injector, DoCheck } from "@angular/core";
 import { NavParams, NavController, Events } from "ionic-angular";
 import { StaticListPage, GroupedList, FetchOptions } from "../static-list-page";
 import { Card, CardStatus } from "@angular-wex/models";
 import { Session } from "../../models";
 import { TabPage } from "../../decorators/tab-page";
+import { TransactionsPage, TransactionListType, resizeContentForTransactionHeader } from "../transactions/transactions";
+import { TransactionSearchFilterBy } from "@angular-wex/api-providers";
 
 @TabPage()
 @Component({
@@ -23,12 +25,13 @@ export class CardsPage extends StaticListPage<Card, Card.Details> {
 
   protected readonly listGroupDisplayOrder: string[] = CardsPage.CARD_STATUSES;
   public readonly dividerLabels: string[] = CardsPage.CARD_STATUSES.map(CardStatus.displayName);
+  public readonly contentOnly: boolean = false;
 
-  constructor(
+  public constructor(
     public navCtrl: NavController,
-    injector: Injector,
     public navParams: NavParams,
-    public events: Events
+    events: Events,
+    injector: Injector
   ) {
     super("Cards", injector, CardsPage.SEARCH_FILTER_FIELDS);
 
@@ -49,5 +52,21 @@ export class CardsPage extends StaticListPage<Card, Card.Details> {
 
   public goToDetailPage(card: Card) {
     this.navCtrl.push(CardsDetailsPage, { card });
+  }
+}
+
+export class TransactionCardView extends CardsPage implements DoCheck {
+  public readonly contentOnly: boolean = true;
+  private heightHasBeenSet: boolean;
+
+  public ngDoCheck() {
+    this.heightHasBeenSet = resizeContentForTransactionHeader(this.content, this.heightHasBeenSet);
+  }
+
+  public goToDetailPage(item: Card): Promise<any> {
+    return this.navCtrl.push(TransactionsPage, {
+      selectedList: TransactionListType.Date,
+      filter: [TransactionSearchFilterBy.Card, item.details.cardId ]
+    });
   }
 }

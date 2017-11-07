@@ -1,11 +1,13 @@
 import { NavController, NavParams, Events } from "ionic-angular";
 import { Observable } from "rxjs/Observable";
-import { Component, Injector } from "@angular/core";
+import { Component, Injector, DoCheck } from "@angular/core";
 import { Driver, DriverStatus } from "@angular-wex/models";
 import { DriversDetailsPage } from "./details/drivers-details";
 import { StaticListPage, FetchOptions, GroupedList } from "../static-list-page";
 import { Session } from "../../models";
 import { TabPage } from "../../decorators/tab-page";
+import { TransactionsPage, TransactionListType, resizeContentForTransactionHeader } from "../transactions/transactions";
+import { TransactionSearchFilterBy } from "@angular-wex/api-providers";
 
 @TabPage()
 @Component({
@@ -23,6 +25,7 @@ export class DriversPage extends StaticListPage<Driver, Driver.Details> {
 
   protected readonly listGroupDisplayOrder: string[] = DriversPage.DRIVER_STATUSES;
   public readonly dividerLabels: string[] = DriversPage.DRIVER_STATUSES.map(DriverStatus.displayName);
+  public readonly contentOnly: boolean = false;
 
   constructor(
     public navCtrl: NavController,
@@ -49,5 +52,21 @@ export class DriversPage extends StaticListPage<Driver, Driver.Details> {
 
   public goToDetailPage(driver: Driver): void {
     this.navCtrl.push( DriversDetailsPage, { driver } );
+  }
+}
+
+export class TransactionDriverView extends DriversPage implements DoCheck {
+  public readonly contentOnly: boolean = true;
+  private heightHasBeenSet: boolean;
+
+  public ngDoCheck() {
+    this.heightHasBeenSet = resizeContentForTransactionHeader(this.content, this.heightHasBeenSet);
+  }
+
+  public goToDetailPage(item: Driver): Promise<any> {
+    return this.navCtrl.push(TransactionsPage, {
+      selectedList: TransactionListType.Date,
+      filter: [TransactionSearchFilterBy.Driver, item.details.promptId]
+    });
   }
 }
