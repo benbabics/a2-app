@@ -1,7 +1,7 @@
 import { Component, Injector } from "@angular/core";
 import { Page } from "../page";
 import { InAppBrowser } from "@ionic-native/in-app-browser";
-import { Value } from "../../decorators/value";
+import { WexAppVersionCheck } from "../../providers/wex-app-version-check";
 
 @Component({
   selector: "page-privacy-policy",
@@ -10,14 +10,17 @@ import { Value } from "../../decorators/value";
 export class PrivacyPolicyPage extends Page {
   private sectionVisibility: boolean[];
 
-  @Value("VERSION_NUMBER") private versionNumber: string;
+  private versionNumber: string;
   public get closing(): string {
     return this.CONSTANTS.closing.replace("$VERSION_NUMBER$", this.versionNumber);
   }
 
-  constructor(private inAppBrowser: InAppBrowser, injector: Injector) {
+  constructor(private inAppBrowser: InAppBrowser,
+              injector: Injector,
+              private wexAppVersionCheck: WexAppVersionCheck) {
     super("Privacy Policy", injector);
     this.sectionVisibility = new Array<boolean>(14);
+    this.versionNumber = this.wexAppVersionCheck.versionNumber;
   }
 
   public openUrl(url: string): void {
