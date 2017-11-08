@@ -1,17 +1,24 @@
-import { Directive, ElementRef, Input, AfterViewInit } from "@angular/core";
-import * as _ from "lodash";
+import { Directive, ElementRef, Input, DoCheck, HostListener } from "@angular/core";
 
 @Directive({
   selector: "[Autofocus]"
 })
-export class AutofocusDirective implements AfterViewInit {
-    @Input() ngAutofocus: boolean | string;
+export class AutofocusDirective implements DoCheck {
+  @Input("Autofocus") Autofocus: boolean;
+  private hasFocused: boolean = false;
 
-    constructor(private el: ElementRef) { }
+  constructor(private el: ElementRef) { }
 
-    public ngAfterViewInit() {
-      if (this.ngAutofocus || this.ngAutofocus === "" || _.isNil(this.ngAutofocus)) {
-        this.el.nativeElement.focus();
-      }
+  public ngDoCheck() {
+    if (this.Autofocus === true && !this.hasFocused) {
+      this.el.nativeElement.focus();
+    } else if (this.Autofocus === false) {
+      this.hasFocused = false;
     }
+  }
+
+  @HostListener("focus")
+  public onFocus() {
+    this.hasFocused = true;
+  }
 }
