@@ -64,7 +64,7 @@ export class TransactionDriverView extends DriversPage implements DoCheck {
   }
 
   public goToDetailPage(item: Driver): Promise<any> {
-    return this.navCtrl.push(TransactionsPage, {
+    return this.navCtrl.parent.push(TransactionsPage, {
       selectedList: TransactionListType.Date,
       filter: [TransactionSearchFilterBy.Driver, item.details.promptId]
     });

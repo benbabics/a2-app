@@ -1,7 +1,7 @@
 import { Observable } from "rxjs";
 import { CardsDetailsPage } from "./details/cards-details";
 import { Component, Injector, DoCheck } from "@angular/core";
-import { NavParams, NavController, Events } from "ionic-angular";
+import { NavParams, NavController, Events, App } from "ionic-angular";
 import { StaticListPage, GroupedList, FetchOptions } from "../static-list-page";
 import { Card, CardStatus } from "@angular-wex/models";
 import { Session } from "../../models";
@@ -30,6 +30,7 @@ export class CardsPage extends StaticListPage<Card, Card.Details> {
   public constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    protected app: App,
     events: Events,
     injector: Injector
   ) {
@@ -64,7 +65,7 @@ export class TransactionCardView extends CardsPage implements DoCheck {
   }
 
   public goToDetailPage(item: Card): Promise<any> {
-    return this.navCtrl.push(TransactionsPage, {
+    return this.navCtrl.parent.push(TransactionsPage, {
       selectedList: TransactionListType.Date,
       filter: [TransactionSearchFilterBy.Card, item.details.cardId ]
     });
