@@ -3,7 +3,7 @@ wex-list {
   ion-list {
     margin-bottom: 24px !important;
     
-    > .grouped > span, > .ungrouped {
+    > .grouped > span > ion-item-group, > .ungrouped {
       > :last-of-type wex-list-item .item > .item-inner {
         border-bottom: 0;
       }
