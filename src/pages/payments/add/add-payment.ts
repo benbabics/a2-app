@@ -12,7 +12,7 @@ import { Session } from "../../../models/session";
 import { BankAccount, Payment } from "@angular-wex/models";
 import { PaymentService, PaymentSelectionOption } from "./../../../providers/payment-service";
 import { AddPaymentSelectionPage } from "./add-payment-selection";
-import { UserPayment } from "../../../models";
+import { UserPayment, UserPaymentAmountType } from "../../../models";
 import { Value } from "../../../decorators/value";
 import { AddPaymentConfirmationPage } from "./confirmation/add-payment-confirmation";
 import { PaymentProvider, PaymentRequest } from "@angular-wex/api-providers";
@@ -94,6 +94,7 @@ export class AddPaymentPage extends SecurePage {
   }
 
   public cancel(data?: any) {
+    this.clearCustomAmount();
     this.viewController.dismiss(data);
   }
 
@@ -162,12 +163,19 @@ export class AddPaymentPage extends SecurePage {
         this.sessionCache.requestSessionDetail(Session.Field.Payments);
         this.navCtrl.push(AddPaymentConfirmationPage, { payment })
           .then(() => this.navCtrl.removeView(this.viewController))
-          .then(() => this.events.publish(PaymentsPage.REFRESH_EVENT));
+          .then(() => this.events.publish(PaymentsPage.REFRESH_EVENT))
+          .then(() => this.clearCustomAmount());
         this.trackAnalyticsPageView(this.isEditingPayment ? "confirmationUpdated" : "confirmationScheduled");
       }, (error) => {
         /* TODO - What do we do here? */
         console.error(error);
       });
+  }
+
+  private clearCustomAmount() {
+    if (this.payment.amount.type === UserPaymentAmountType.OtherAmount) {
+      this.payment.amount.value = 0;
+    }
   }
 
   private populatePayment(): void {
