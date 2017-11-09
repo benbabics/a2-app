@@ -6,8 +6,9 @@ import { StaticListPage, GroupedList, FetchOptions } from "../static-list-page";
 import { Card, CardStatus } from "@angular-wex/models";
 import { Session } from "../../models";
 import { TabPage } from "../../decorators/tab-page";
-import { TransactionsPage, TransactionListType, resizeContentForTransactionHeader } from "../transactions/transactions";
+import { TransactionsPage } from "../transactions/transactions";
 import { TransactionSearchFilterBy } from "@angular-wex/api-providers";
+import { TransactionDateSublist } from "../transactions/transactions-date-view/transactions-date-view";
 
 @TabPage()
 @Component({
@@ -61,12 +62,11 @@ export class TransactionCardView extends CardsPage implements DoCheck {
   private heightHasBeenSet: boolean;
 
   public ngDoCheck() {
-    this.heightHasBeenSet = resizeContentForTransactionHeader(this.content, this.heightHasBeenSet);
+    this.heightHasBeenSet = TransactionsPage.ResizeContentForTransactionHeader(this.content, this.heightHasBeenSet);
   }
 
   public goToDetailPage(item: Card): Promise<any> {
-    return this.navCtrl.parent.push(TransactionsPage, {
-      selectedList: TransactionListType.Date,
+    return this.navCtrl.parent.push(TransactionDateSublist, {
       filter: [TransactionSearchFilterBy.Card, item.details.cardId ]
     });
   }

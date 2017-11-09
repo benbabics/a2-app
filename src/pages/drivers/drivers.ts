@@ -6,7 +6,8 @@ import { DriversDetailsPage } from "./details/drivers-details";
 import { StaticListPage, FetchOptions, GroupedList } from "../static-list-page";
 import { Session } from "../../models";
 import { TabPage } from "../../decorators/tab-page";
-import { TransactionsPage, TransactionListType, resizeContentForTransactionHeader } from "../transactions/transactions";
+import { TransactionsPage } from "../transactions/transactions";
+import { TransactionDateSublist } from "../transactions/transactions-date-view/transactions-date-view";
 import { TransactionSearchFilterBy } from "@angular-wex/api-providers";
 
 @TabPage()
@@ -60,12 +61,11 @@ export class TransactionDriverView extends DriversPage implements DoCheck {
   private heightHasBeenSet: boolean;
 
   public ngDoCheck() {
-    this.heightHasBeenSet = resizeContentForTransactionHeader(this.content, this.heightHasBeenSet);
+    this.heightHasBeenSet = TransactionsPage.ResizeContentForTransactionHeader(this.content, this.heightHasBeenSet);
   }
 
   public goToDetailPage(item: Driver): Promise<any> {
-    return this.navCtrl.parent.push(TransactionsPage, {
-      selectedList: TransactionListType.Date,
+    return this.navCtrl.parent.push(TransactionDateSublist, {
       filter: [TransactionSearchFilterBy.Driver, item.details.promptId]
     });
   }

@@ -13,6 +13,7 @@ import { OptionsPage } from "../pages/options/options";
 import { FingerprintAuthenticationTermsPage } from "../pages/login/fingerprint-auth-terms/fingerprint-auth-terms";
 import { LandingPage } from "../pages/landing/landing";
 import { CardsPage, TransactionCardView } from "../pages/cards/cards";
+import { TransactionDateView, TransactionDateSublist } from "../pages/transactions/transactions-date-view/transactions-date-view";
 import { CardsDetailsPage } from "./../pages/cards/details/cards-details";
 import { DriversPage, TransactionDriverView } from "./../pages/drivers/drivers";
 import { DriversDetailsPage } from "./../pages/drivers/details/drivers-details";
@@ -136,6 +137,8 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     LandingPage,
     UserEnrollmentFlow,
     CardsPage,
+    TransactionDateView,
+    TransactionDateSublist,
     CardsDetailsPage,
     CardsReissuePage,
     DriversPage,
@@ -215,6 +218,8 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     LandingPage,
     UserEnrollmentFlow,
     CardsPage,
+    TransactionDateView,
+    TransactionDateSublist,
     CardsDetailsPage,
     CardsReissuePage,
     DriversPage,

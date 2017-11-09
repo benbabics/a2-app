@@ -8,8 +8,8 @@ import { Driver, DriverStatus, OnlineApplication } from "@angular-wex/models";
 import { DriverProvider, TransactionSearchFilterBy } from "@angular-wex/api-providers";
 import { DetailsPage } from "../../details-page";
 import { ActionSheetOptions } from "ionic-angular/components/action-sheet/action-sheet-options";
-import { TransactionsPage, TransactionListType } from "../../transactions/transactions";
 import { NameUtils } from "../../../utils/name-utils";
+import { TransactionDateSublist } from "../../transactions/transactions-date-view/transactions-date-view";
 
 interface DriverStatusDetails {
   id: DriverStatus;
@@ -116,8 +116,7 @@ export class DriversDetailsPage extends DetailsPage {
   }
 
   public viewTransactions() {
-    this.navController.push(TransactionsPage, {
-      selectedList: TransactionListType.Date,
+    this.navController.push(TransactionDateSublist, {
       filter: [TransactionSearchFilterBy.Driver, this.driver.details.promptId]
     });
   }

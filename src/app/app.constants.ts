@@ -752,8 +752,19 @@ export namespace ConstantsInfo {
 
       //# Transactions page
       TRANSACTIONS: {
+        SEGMENTS: {
+          DRIVER: "Driver",
+          DATE: "Date",
+          CARD: "Card"
+        },
         DATE: {
+          title: "Transactions",
           listLabels: ["Transactions"],
+          LABELS: {
+            pending: "Pending",
+            today: "Today",
+            yesterday: "Yesterday"
+          },
           greekingData: [
             { left: 3, top: 10, right: 33, bottom: 22 },
             { left: 3, top: 32, right: 33, bottom: 44 },
@@ -763,30 +774,6 @@ export namespace ConstantsInfo {
           ],
           greekedElementCount: 15
         },
-        DRIVER_NAME: {
-          listLabels: ["Driver Name"],
-          greekingData: [
-            { left: 3, top: 30, right: 25, bottom: 55 },
-          ],
-          greekedElementCount: 15
-        },
-        CARD_NUMBER: {
-          listLabels: ["Card Number", "Embossing"],
-          greekingData: [
-            { left: 3, top: 10, right: 15, bottom: 35 },
-            { left: 3, top: 55, right: 15, bottom: 80 },
-            { left: 20, top: 20, right: 86, bottom: 32 },
-            { left: 20, top: 47, right: 86, bottom: 59 },
-            { left: 20, top: 74, right: 86, bottom: 86 }
-          ],
-          greekedElementCount: 15
-        },
-        LABELS: {
-          pending: "Pending",
-          today: "Today",
-          yesterday: "Yesterday"
-        },
-        title: "Transactions",
 
         //# Transaction Details page
         DETAILS: {
