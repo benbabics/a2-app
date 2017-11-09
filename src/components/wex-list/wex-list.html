@@ -1,15 +1,17 @@
-<ion-item-group class="wex-list" [ngClass]="{ 'inset-items': platform.isIos }">
+<ion-list class="wex-list" [ngClass]="{ 'inset-items': platform.isIos }">
   <wex-list-header *ngIf="headerFields" [fields]="headerFields">
   </wex-list-header>
 
   <span class="grouped" *ngIf="isGrouped">
     <span *ngFor="let divider of dividers; let i = index">
-      <ion-item-divider *ngIf="getListForDivider(i)?.length" sticky [ngClass]="divider.toLowerCase()">
-        {{ divider }}
-      </ion-item-divider>
-      <span *ngFor="let item of getListForDivider(i)">
-        <ng-template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{$implicit: item}"></ng-template>
-      </span>
+      <ion-item-group [ngClass]="{ 'inset-items': platform.isIos }">
+        <ion-item-divider *ngIf="getListForDivider(i)?.length" sticky [ngClass]="divider.toLowerCase()">
+          {{ divider }}
+        </ion-item-divider>
+        <span *ngFor="let item of getListForDivider(i)">
+          <ng-template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{$implicit: item}"></ng-template>
+        </span>
+      </ion-item-group>
     </span>
   </span>
 
@@ -26,7 +28,7 @@
       </wex-list-item>
     </span>
   </span>
-</ion-item-group>
+</ion-list>
 
 <ion-card *ngIf="hasNoItems && !forceGreeking" class="no-records">
   <ion-item>
