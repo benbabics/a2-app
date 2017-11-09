@@ -8,6 +8,7 @@ import { LocalStorageService } from "angular-2-local-storage/dist";
 import { Value } from "../decorators/value";
 import { WexPlatform } from "./platform";
 import { UiNotificationsController } from "./ui-notifications-controller";
+import { Session } from "../models";
 
 export enum AuthenticationMethod {
   Secret,
@@ -23,7 +24,8 @@ export class AuthenticationManager {
     private fingerprint: Fingerprint,
     private localStorageService: LocalStorageService,
     private platform: WexPlatform,
-    private uiNotificationsController: UiNotificationsController
+    private uiNotificationsController: UiNotificationsController,
+    private sessionCache: SessionCache
   ) { }
 
   public authenticate(userCredentials: UserCredentials, authenticationMethod: AuthenticationMethod): Observable<string> {
@@ -58,9 +60,9 @@ export class AuthenticationManager {
     }
     // Request a token with the provided username and secret
     return secret
-      .map((secret: string) => SessionCache.cachedValues.clientSecret = secret)
+      .map((secret: string) => this.sessionCache.updateValue(Session.Field.ClientSecret, secret))
       .flatMap((secret: string) => this.authProvider.requestToken({ username: userCredentials.username, password: secret }))
-      .map((token: string) => this.devAuthToken = SessionCache.cachedValues.token = token);
+      .map((token: string) => this.devAuthToken = this.sessionCache.updateValue(Session.Field.Token, token));
   }
 
   public set devAuthToken(token: string) {

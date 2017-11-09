@@ -1,7 +1,6 @@
 import * as _ from "lodash";
 import { Injectable } from "@angular/core";
 import { Session, UserPaymentAmount, UserPaymentAmountType } from "../models";
-import { SessionManager } from "./session-manager";
 import { SessionCache } from "./session-cache";
 import { InvoiceSummary, BankAccount } from "@angular-wex/models";
 
@@ -10,16 +9,12 @@ export type PaymentSelectionOption = UserPaymentAmount | BankAccount;
 Injectable();
 export class PaymentService {
 
-  private session: Session = {};
+  private session: Session = {} as Session;
   private _amountOptions: UserPaymentAmount[];
 
-  constructor(
-    private sessionManager: SessionManager,
-    private sessionCache: SessionCache
-  ) {
-    this.sessionManager.sessionStateObserver.subscribe(session => {
-      session ? this.requestSessionDetails() : this.clearSession();
-    });
+  constructor(private sessionCache: SessionCache) {
+    this.sessionCache.sessionState$
+      .subscribe(session => session ? this.requestSessionDetails() : this.clearSession());
   }
 
   public get bankAccounts(): BankAccount[] {
@@ -69,12 +64,12 @@ export class PaymentService {
   }
 
   private clearSession() {
-    this.session = {};
+    this.session = {} as Session;
   }
 
   private requestSessionDetails() {
     let sessionInfo = [Session.Field.InvoiceSummary, Session.Field.BankAccounts];
-    this.sessionCache.getSessionDetails(sessionInfo)
+    this.sessionCache.updateSome$(sessionInfo)
       .subscribe((session: Session) => {
         this.session = session;
 

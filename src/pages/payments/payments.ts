@@ -3,7 +3,7 @@ import * as moment from "moment";
 import { Observable } from "rxjs";
 import { Component, Injector } from "@angular/core";
 import { NavParams, NavController, App } from "ionic-angular";
-import { StaticListPage, GroupedList, FetchOptions } from "../static-list-page";
+import { StaticListPage, GroupedList } from "../static-list-page";
 import { Payment, PaymentStatus, MakePaymentAvailability } from "@angular-wex/models";
 import { PaymentsDetailsPage } from "./details/payments-details";
 import { Session } from "../../models";
@@ -11,14 +11,20 @@ import { AddPaymentPage } from "./add/add-payment";
 import { TabPage } from "../../decorators/tab-page";
 import { InvoiceSummary } from "@angular-wex/models";
 import { WexAlertController } from "../../components/wex-alert-controller/wex-alert-controller";
+import { Reactive, StateEmitter } from "angular-rxjs-extensions";
 
-@TabPage()
 @Component({
   selector: "page-payments",
   templateUrl: "payments.html"
 })
+@Reactive()
+@TabPage()
 export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
+
   private static readonly PAYMENT_STATUSES: PaymentStatus[] = [PaymentStatus.SCHEDULED, PaymentStatus.COMPLETE];
+
+  @StateEmitter.Alias("session$.invoiceSummary")
+  private invoiceSummary$: Observable<InvoiceSummary>;
 
   public checkingMakePaymentAvailability: boolean = false;
 
@@ -32,12 +38,11 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
     private alertController: WexAlertController,
     injector: Injector
   ) {
-    super("Payments", injector);
+    super("Payments", Session.Field.Payments, injector, null, [Session.Field.InvoiceSummary]);
   }
 
   ionViewWillEnter() {
-    let invoiceSummary = this.sessionCache.getSessionDetail(Session.Field.InvoiceSummary);
-    invoiceSummary.subscribe((invoiceSummary) => {
+    this.invoiceSummary$.subscribe((invoiceSummary) => {
       this.minPaymentDueDate = _.template(this.CONSTANTS.payNowSection.on)({
         dueDate: moment(invoiceSummary.paymentDueDate).format("MMMM Do, YYYY")
       });
@@ -49,7 +54,8 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   private canMakePayment(): Promise<MakePaymentAvailability | undefined> {
     this.checkingMakePaymentAvailability = true;
 
-    return this.sessionCache.getSessionDetail(Session.Field.MakePaymentAvailability, { forceRequest: true })
+    return this.sessionCache.update$(Session.Field.MakePaymentAvailability)
+      .map(session => session.makePaymentAvailability)
       .toPromise()
       .then((availability: MakePaymentAvailability) => {
         if (!availability.details.makePaymentAllowed) {
@@ -57,10 +63,6 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
         }
       })
       .finally(() => this.checkingMakePaymentAvailability = false);
-  }
-
-  protected fetch(options?: FetchOptions): Observable<Payment[]> {
-    return this.sessionCache.getSessionDetail(Session.Field.Payments, options);
   }
 
   protected groupItems(payments: Payment[]): GroupedList<Payment> {

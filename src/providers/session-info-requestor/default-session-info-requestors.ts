@@ -26,7 +26,8 @@ import {
 } from "@angular-wex/models";
 import {
   PostedTransactionList,
-  Session
+  Session,
+  DynamicList
 } from "../../models";
 import { SessionInfoRequestors, SessionInfoRequestorDetails } from "./session-info-requestor";
 import { DynamicSessionListInfoRequestor } from "./dynamic-session-list-info-requestor";
@@ -37,11 +38,15 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
   @Value("INT_MAX_32") private INT_MAX_32: number;
 
   private readonly tokenRequestor: SessionInfoRequestorDetails = {
-    requestor: (): Observable<string> => Observable.of(SessionCache.cachedValues.token) //Fetched independently
+    requestor: (): Observable<string> => SessionCache.sessionState$
+      .take(1)
+      .map(session => Session.Field.Token in session ? session[Session.Field.Token] : null) //Fetched independently
   };
 
   private readonly clientSecretRequestor: SessionInfoRequestorDetails = {
-    requestor: (): Observable<string> => Observable.of(SessionCache.cachedValues.clientSecret)
+    requestor: (): Observable<string> => SessionCache.sessionState$
+    .take(1)
+    .map(session => Session.Field.ClientSecret in session ? session[Session.Field.ClientSecret] : null) //Fetched independently
   };
 
   private readonly userRequestor: SessionInfoRequestorDetails = {
@@ -89,7 +94,7 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
     }
   };
 
-  private readonly postedTransactionsInfoRequestor: SessionInfoRequestorDetails = new SessionPostedTransactionRequestor(this.transactionProvider);
+  private readonly postedTransactionsInfoRequestor: PostedTransactionRequestor = new SessionPostedTransactionRequestor(this.transactionProvider);
 
   private readonly postedTransactionsRequestor: SessionInfoRequestorDetails = {
     requiredFields: [Session.Field.PostedTransactionsInfo],
@@ -150,8 +155,12 @@ export class PostedTransactionRequestor extends DynamicSessionListInfoRequestor<
 
   protected readonly listMergeId: keyof PostedTransaction.Details = "transactionId";
 
-  constructor(private transactionProvider: TransactionProvider, public dynamicList: PostedTransactionList) {
-    super(PostedTransaction, [Session.Field.User]);
+  constructor(private transactionProvider: TransactionProvider, private dynamicList: PostedTransactionList) {
+    super([Session.Field.User]);
+  }
+
+  public get dynamicList$(): Observable<PostedTransactionList> {
+    return Observable.of(this.dynamicList);
   }
 
   protected search(session: Session, params: any): Observable<ListResponse<PostedTransaction>> {
@@ -165,11 +174,15 @@ export class SessionPostedTransactionRequestor extends PostedTransactionRequesto
     super(transactionProvider, undefined);
   }
 
-  public get dynamicList(): PostedTransactionList {
-    return SessionCache.cachedValues.postedTransactionsInfo;
-  }
+  public get dynamicList$(): Observable<PostedTransactionList> {
+    return SessionCache.sessionState$.asObservable()
+      .take(1)
+      .filter(Boolean)
+      .map((session: Session) => {
+        session.postedTransactionsInfo = session.postedTransactionsInfo || DynamicList.create(PostedTransaction);
 
-  public set dynamicList(dynamicList: PostedTransactionList) {
-    SessionCache.cachedValues.postedTransactionsInfo = dynamicList;
+        SessionCache.sessionState$.next(session);
+        return session.postedTransactionsInfo;
+      });
   }
 }

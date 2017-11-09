@@ -36,19 +36,8 @@ export class MyApp {
 
       if (this.platform.isDevMode) {
         sessionManager.restoreFromDevAuthToken();
+        sessionManager.cache.session$.subscribe(() => this.rootPage = WexNavBar);
       }
     });
-
-    sessionManager.sessionStateObserver.subscribe(session => this.onSessionChange(session));
-  }
-
-  private onSessionChange(session) {
-    if (session && this.platform.isDevMode) {
-      this.rootPage = WexNavBar;
-    }
-  }
-
-  public get isUserLoggedIn(): boolean {
-    return SessionManager.hasSession;
   }
 }

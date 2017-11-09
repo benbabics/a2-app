@@ -64,12 +64,13 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   public abstract goToDetailPage(element: T);
 
   constructor(
-    pageName: PageDetails,
+    pageDetails: PageDetails,
+    protected listDataField: Session.Field,
     public injector: Injector,
     protected searchFilterFields?: (keyof DetailsT)[],
     requiredSessionInfo?: Session.Field[]
   ) {
-    super(pageName, injector, requiredSessionInfo);
+    super(pageDetails, injector, requiredSessionInfo);
   }
 
   public static defaultItemSort<T extends Model<DetailsT>, DetailsT>(items: T[], sortBy: keyof DetailsT, order: "asc" | "desc" = "asc"): T[] {
@@ -80,7 +81,6 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
     return ListPage.groupByDetails<T, DetailsT>(items, groupBy, groups);
   }
 
-  protected abstract fetch(options?: FetchOptions): Observable<T[]>;
   protected abstract sortItems(items: T[]): T[];
 
   protected get displayedItemGroups(): GroupedList<T> {
@@ -113,6 +113,17 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   protected createSearchRegex(searchFilter: string) {
     //do a case-insensitive search
     return new RegExp(_.escapeRegExp(searchFilter), "i");
+  }
+
+  protected fetch(options?: FetchOptions): Observable<T[]> {
+    return (function (): Observable<Session> {
+      if (options.forceRequest) {
+        return this.sessionCache.update$(this.listDataField, options);
+      }
+      else {
+        return this.sessionCache.require$(this.listDataField);
+      }
+    })().map(session => session[this.listDataField] as any);
   }
 
   protected fetchResults(options?: FetchOptions): Observable<T[]> {

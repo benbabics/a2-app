@@ -8,7 +8,6 @@ import {
 } from "ionic-angular";
 import { Observable } from "rxjs/Observable";
 import { SecurePage } from "../../secure-page";
-import { Session } from "../../../models/session";
 import { BankAccount, Payment } from "@angular-wex/models";
 import { PaymentService, PaymentSelectionOption } from "./../../../providers/payment-service";
 import { AddPaymentSelectionPage } from "./add-payment-selection";
@@ -156,7 +155,7 @@ export class AddPaymentPage extends SecurePage {
       })
       .subscribe((payment) => {
         // Update the cache
-        this.sessionCache.requestSessionDetail(Session.Field.Payments);
+        //this.sessionCache.update$(Session.Field.Payments);
         this.navCtrl.push(AddPaymentConfirmationPage, { payment })
           .then(() => this.navCtrl.removeView(this.viewController));
         this.trackAnalyticsPageView(this.isEditingPayment ? "confirmationUpdated" : "confirmationScheduled");

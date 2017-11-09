@@ -1,8 +1,7 @@
-import { Observable } from "rxjs";
 import { CardsDetailsPage } from "./details/cards-details";
 import { Component, Injector } from "@angular/core";
 import { NavParams, NavController, Events } from "ionic-angular";
-import { StaticListPage, GroupedList, FetchOptions } from "../static-list-page";
+import { StaticListPage, GroupedList } from "../static-list-page";
 import { Card, CardStatus } from "@angular-wex/models";
 import { Session } from "../../models";
 import { TabPage } from "../../decorators/tab-page";
@@ -30,13 +29,9 @@ export class CardsPage extends StaticListPage<Card, Card.Details> {
     public navParams: NavParams,
     public events: Events
   ) {
-    super("Cards", injector, CardsPage.SEARCH_FILTER_FIELDS);
+    super("Cards", Session.Field.Cards, injector, CardsPage.SEARCH_FILTER_FIELDS);
 
     events.subscribe("cards:statusUpdate", () => this.updateList());
-  }
-
-  protected fetch(options?: FetchOptions): Observable<Card[]> {
-    return this.sessionCache.getSessionDetail(Session.Field.Cards, options);
   }
 
   protected groupItems(cards: Card[]): GroupedList<Card> {

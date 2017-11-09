@@ -1,5 +1,5 @@
 import { WexAppSnackbarController } from "./../../components/wex-app-snackbar-controller/wex-app-snackbar-controller";
-import { NavBarController, UiNotificationsController } from "../../providers";
+import { UiNotificationsController } from "../../providers";
 import { Component, Injector } from "@angular/core";
 import { NavController, NavParams, ToastOptions } from "ionic-angular";
 import { InvoiceSummary, CompanyStub } from "@angular-wex/models";
@@ -11,125 +11,125 @@ import { NameUtils } from "../../utils/name-utils";
 import { OptionsPage } from "../options/options";
 import { Value } from "../../decorators/value";
 import { PageTheme, StatusBarStyle } from "../../decorators/status-bar";
+import { StateEmitter, EventSource, Reactive } from "angular-rxjs-extensions";
+import { ViewWillEnter, ViewWillLeave, ViewDidEnter } from "angular-rxjs-extensions-ionic";
+import { Observable, Subject } from "rxjs";
 
-@StatusBarStyle(PageTheme.Light)
+
 @Component({
   selector: "page-landing",
   templateUrl: "landing.html"
 })
+@Reactive()
+@StatusBarStyle(PageTheme.Light)
 export class LandingPage extends SecurePage {
+
+  @Value("APP_TITLE") APP_TITLE: string;
+
+  @ViewWillEnter() private viewWillEnter$: Observable<void>;
+  @ViewWillLeave() private viewWillLeave$: Observable<void>;
+  @ViewDidEnter() private viewDidEnter$: Observable<void>;
+  @EventSource() private onShowOptions$: Observable<any>;
+
+  @StateEmitter.Alias("session$.user.billingCompany")
+  private billingCompany$: Observable<CompanyStub>;
+
+  @StateEmitter.Alias("session$.invoiceSummary")
+  private invoiceSummary$: Observable<InvoiceSummary>;
+
+  @StateEmitter() private companyName$: Subject<string>;
+  @StateEmitter() private paymentPercent$: Subject<number>;
+  @StateEmitter() private remainingBalance$: Subject<number>;
+  @StateEmitter() private creditLimit$: Subject<number>;
+  @StateEmitter() private progressBarColor$: Subject<string>;
+  @StateEmitter() private progressBarStyles$: Subject<string>;
+  @StateEmitter({ initialValue: 0 }) private currentPaymentPercent$: Subject<number>;
+  @StateEmitter() private brandLogoData$: Subject<string>;
+
+  //private isCurrentView$ = new BehaviorSubject<boolean>(false);
+  private onHardwareBackButton$ = new Subject<void>();
 
   private readonly REQUIRED_SESSION_FIELDS: Session.Field[] = [
     Session.Field.User,
     Session.Field.InvoiceSummary,
     Session.Field.Payments
-  ]; //72 hours
-  private isCurrentView: boolean;
-
-  @Value("APP_TITLE") APP_TITLE: string;
-  public scheduledPaymentsCount = 0;
-  public brandLogoData: string;
-  public currentPaymentPercent: number = 0;
-
-  public get companyName(): string {
-    return NameUtils.PrintableName(this.billingCompany.details.name);
-  }
-
-  public get paymentPercent(): number {
-    let value = this.invoiceSummary.details.currentBalance / this.invoiceSummary.details.creditLimit * 100;
-    return value <= 100 ? value : 100;
-  }
-
-  public get remainingBalance(): number {
-    return Math.floor(this.invoiceSummary.details.creditLimit - this.invoiceSummary.details.currentBalance);
-  }
-
-  public get creditLimit(): number {
-    return Math.floor(this.invoiceSummary.details.creditLimit);
-  }
-
-  public get progressBarColor(): string {
-    let value = this.paymentPercent;
-
-    if (value <= 50) {
-      return "green";
-    } else if (value <= 75) {
-      return "yellow";
-    } else {
-      return "red";
-    }
-  }
-
-  public get progressBarStyles(): string {
-    return `${this.progressBarColor} wex-payment-bar`;
-  }
+  ];
 
   constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    private brandProvider: BrandProvider,
-    private navBarController: NavBarController,
-    private wexAppSnackbarController: WexAppSnackbarController,
+    brandProvider: BrandProvider,
+    uiNotificationsController: UiNotificationsController,
+    wexAppSnackbarController: WexAppSnackbarController,
+    wexAppBackButtonController: WexAppBackButtonController,
     public injector: Injector,
-    private wexAppBackButtonController: WexAppBackButtonController,
-    private uiNotificationsController: UiNotificationsController
+    public navCtrl: NavController,
+    public navParams: NavParams
   ) {
     super("Landing", injector);
-  }
 
-  private registerBackButton = () => {
-    if (this.isCurrentView) {
-      this.wexAppBackButtonController.registerAction(this.hardwareBackSnackbar);
-    }
-  }
+    const registerBackButtonAction = () => wexAppBackButtonController.registerAction(() => this.onHardwareBackButton$.next());
 
-  private hardwareBackSnackbar = () => {
-    this.wexAppBackButtonController.deregisterAction();
-    let queued = this.wexAppSnackbarController.createQueued(this.CONSTANTS.BACK_TO_EXIT as ToastOptions);
-    queued.onDidDismiss(this.registerBackButton);
-    queued.present();
-  }
+    this.session$
+      .take(1)
+      .filter(Boolean)
+      .flatMap(session => brandProvider.logo(session.user.details.brand))
+      .subscribe((brandLogoData: string) => this.brandLogoData$.next(brandLogoData));
 
-  public get billingCompany(): CompanyStub {
-    return this.session.user.billingCompany;
-  }
+    this.billingCompany$
+      .take(1)
+      .filter(Boolean)
+      .subscribe(billingCompany => this.companyName$.next(NameUtils.PrintableName(billingCompany.details.name)));
 
-  public get invoiceSummary(): InvoiceSummary {
-    return this.session.invoiceSummary;
-  }
+    this.invoiceSummary$
+      .take(1)
+      .filter(Boolean)
+      .subscribe(invoiceSummary => {
+        let paymentPercent = Math.min(invoiceSummary.details.currentBalance / invoiceSummary.details.creditLimit * 100, 100);
+        let progressBarColor = (function () {
+          if (paymentPercent <= 50) {
+            return "green";
+          } else if (paymentPercent <= 75) {
+            return "yellow";
+          } else {
+            return "red";
+          }
+        })();
 
-  ionViewWillEnter() {
-    //don't pre-fetch the data for this page to allow for dynamic in-page loading
-    this.sessionCache.getSessionDetails(this.REQUIRED_SESSION_FIELDS)
-      .subscribe((session: Session) => {
-        this.session = session;
+        this.paymentPercent$.next(paymentPercent);
+        this.remainingBalance$.next(Math.floor(invoiceSummary.details.creditLimit - invoiceSummary.details.currentBalance));
+        this.creditLimit$.next(Math.floor(invoiceSummary.details.creditLimit));
+        this.progressBarColor$.next(progressBarColor);
+        this.progressBarStyles$.next(`${progressBarColor} wex-payment-bar`);
 
-        // Change in currentPaymentPercent forces credit-bar to slide smoothly.
-        this.currentPaymentPercent = 0;
-        setTimeout(() => this.currentPaymentPercent = this.paymentPercent, 100);
-
-        let scheduledCount = this.session.payments.filter(payment => payment.isScheduled).length;
-
-        // Update the payment tab badge with the scheduled count
-        this.navBarController.paymentsBadgeText = scheduledCount > 0 ? String(scheduledCount) : "";
-
-        this.brandProvider.logo(this.session.user.details.brand)
-          .subscribe((brandLogoData: string) => this.brandLogoData = brandLogoData);
+        // Delayed change in currentPaymentPercent forces credit-bar to slide smoothly.
+        setTimeout(() => this.currentPaymentPercent$.next(paymentPercent), 100);
       });
-  }
 
-  ionViewDidEnter() {
-    this.isCurrentView = true;
-    this.registerBackButton();
-    this.uiNotificationsController.presentFingerprintProfileSuccessMessage();
-  }
+    // Update the page's relevant session details when the page is entered
+    this.viewWillEnter$
+      .flatMap(() => this.sessionCache.updateSome$(this.REQUIRED_SESSION_FIELDS))
+      .subscribe();
 
-  ionViewWillLeave() {
-    this.isCurrentView = false;
-    this.wexAppBackButtonController.deregisterAction();
-  }
+    this.viewDidEnter$
+      .map(() => registerBackButtonAction())
+      .map(() => uiNotificationsController.presentFingerprintProfileSuccessMessage())
+      .subscribe();
 
-  public onShowOptions() {
-    this.navCtrl.push(OptionsPage);
+    this.viewWillLeave$.subscribe(() => wexAppBackButtonController.deregisterAction());
+
+    this.onHardwareBackButton$
+      .map(() => wexAppBackButtonController.deregisterAction())
+      .subscribe(() => {
+        // Show the exit prompt snackbar
+        let queued = wexAppSnackbarController.createQueued(this.CONSTANTS.BACK_TO_EXIT as ToastOptions);
+        queued.onDidDismiss(() => {
+          // If this is the active page, re-register the exit prompt for the next click
+          if (navCtrl.getActive().name === this.constructor.name) {
+            registerBackButtonAction();
+          }
+        });
+        queued.present();
+      });
+
+    this.onShowOptions$.subscribe(() => navCtrl.push(OptionsPage));
   }
 }

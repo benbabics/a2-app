@@ -36,8 +36,8 @@ function setStatusBarForLightPage() {
 
 const ionViewWillEnter = "ionViewWillEnter";
 
-export function StatusBarStyle<T extends GenericConstructor>(theme: PageTheme): Function {
-  return (constructor: T) => {
+export function StatusBarStyle(theme: PageTheme): Function {
+  return function<T extends GenericConstructor>(constructor: T) {
     return class extends constructor {
       public ionViewWillEnter() {
         if (theme === PageTheme.Light) {

@@ -1,9 +1,8 @@
 import { NavController, NavParams, Events } from "ionic-angular";
-import { Observable } from "rxjs/Observable";
 import { Component, Injector } from "@angular/core";
 import { Driver, DriverStatus } from "@angular-wex/models";
 import { DriversDetailsPage } from "./details/drivers-details";
-import { StaticListPage, FetchOptions, GroupedList } from "../static-list-page";
+import { StaticListPage, GroupedList } from "../static-list-page";
 import { Session } from "../../models";
 import { TabPage } from "../../decorators/tab-page";
 import { NameUtils } from "../../utils/name-utils";
@@ -31,13 +30,9 @@ export class DriversPage extends StaticListPage<Driver, Driver.Details> {
     events: Events,
     injector: Injector
   ) {
-    super("Drivers", injector, DriversPage.SEARCH_FILTER_FIELDS);
+    super("Drivers", Session.Field.Drivers, injector, DriversPage.SEARCH_FILTER_FIELDS);
 
     events.subscribe("drivers:statusUpdate", () => this.updateList());
-  }
-
-  protected fetch(options?: FetchOptions): Observable<Driver[]> {
-    return this.sessionCache.getSessionDetail(Session.Field.Drivers, options);
   }
 
   protected groupItems(drivers: Driver[]): GroupedList<Driver> {

@@ -14,22 +14,22 @@ import { DynamicList } from "./dynamic-list";
 
 export type PostedTransactionList = DynamicList<PostedTransaction, PostedTransaction.Details>;
 
-export type Session = Partial<{
-    user: User;
-    token: string;
-    clientSecret: string;
-    billingCompany: Company;
-    userCompany: Company;
-    cards: Card[];
-    payments: Payment[];
-    drivers: Driver[];
-    pendingTransactions: PendingTransaction[];
-    postedTransactions: PostedTransaction[];
-    postedTransactionsInfo: PostedTransactionList;
-    makePaymentAvailability: MakePaymentAvailability;
-    invoiceSummary: InvoiceSummary;
-    bankAccounts: BankAccount[];
-}>;
+export interface Session {
+  user: User;
+  token: string;
+  clientSecret: string;
+  billingCompany: Company;
+  userCompany: Company;
+  cards: Card[];
+  payments: Payment[];
+  drivers: Driver[];
+  pendingTransactions: PendingTransaction[];
+  postedTransactions: PostedTransaction[];
+  postedTransactionsInfo: PostedTransactionList;
+  makePaymentAvailability: MakePaymentAvailability;
+  invoiceSummary: InvoiceSummary;
+  bankAccounts: BankAccount[];
+}
 
 export namespace Session {
     export type Field = keyof Session;

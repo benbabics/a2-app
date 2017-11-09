@@ -455,6 +455,14 @@ angular-2-local-storage@^1.0.1:
   version "1.0.1"
   resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/angular-2-local-storage/-/angular-2-local-storage-1.0.1.tgz#3b846c90b2fffc9124f7bacc347f22d043a1e3a4"
 
+angular-rxjs-extensions-ionic@^1.0.0-beta.2:
+  version "1.0.0-beta.2"
+  resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/angular-rxjs-extensions-ionic/-/angular-rxjs-extensions-ionic-1.0.0-beta.2.tgz#612e263e664f51a876a33d54e5aeb6e4220dbc08"
+
+angular-rxjs-extensions@^1.0.0-rc.6:
+  version "1.0.0-rc.6"
+  resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/angular-rxjs-extensions/-/angular-rxjs-extensions-1.0.0-rc.6.tgz#b3cebb1cb6332c23053c458f795eaa8e0befee2d"
+
 ansi-escapes@^3.0.0:
   version "3.0.0"
   resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/ansi-escapes/-/ansi-escapes-3.0.0.tgz#ec3e8b4e9f8064fc02c3ac9b65f1c275bda8ef92"

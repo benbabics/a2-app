@@ -3,7 +3,7 @@ import { NavParams, NavController, App } from "ionic-angular";
 import { Component, Injector } from "@angular/core";
 import { DetailsPage } from "../../details-page";
 import { Payment } from "@angular-wex/models";
-import { WexPlatform, SessionCache } from "../../../providers";
+import { WexPlatform } from "../../../providers";
 import { AddPaymentPage } from "../add/add-payment";
 import { PaymentProvider } from "@angular-wex/api-providers";
 import { WexAlertController } from "../../../components/wex-alert-controller/wex-alert-controller";
@@ -68,7 +68,8 @@ export class PaymentsDetailsPage extends DetailsPage {
       this.isCanceling = true;
 
       this.paymentProvider.cancelPayment(this.session.user.billingCompany.details.accountId, this.payment.details.id)
-        .map(() => _.remove(SessionCache.cachedValues.payments, payment => payment.details.id === this.payment.details.id))
+        .flatMap(() => this.sessionCache.getField$<Payment[]>(Session.Field.Payments))
+        .map(payments => this.sessionCache.updateValue(Session.Field.Payments, _.remove(payments, payment => payment.details.id === this.payment.details.id)))
         .map(() => this.isCanceling = false)
         .subscribe(() => this.navCtrl.pop());
 

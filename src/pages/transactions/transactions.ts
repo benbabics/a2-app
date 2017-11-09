@@ -1,4 +1,4 @@
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import * as _ from "lodash";
 import * as moment from "moment";
 import { Component, Injector } from "@angular/core";
@@ -14,6 +14,7 @@ import { TabPage } from "../../decorators/tab-page";
 import { Value } from "../../decorators/value";
 import { LocalStorageService } from "angular-2-local-storage/dist";
 import { NameUtils } from "../../utils/name-utils";
+import { Reactive, StateEmitter } from "angular-rxjs-extensions";
 
 export type BaseTransactionT = BaseTransaction<BaseTransaction.Details>;
 export type TransactionListModelType = Card | Driver | BaseTransactionT;
@@ -62,16 +63,17 @@ export namespace FetchOptions {
 // --------------------------------------------------
 abstract class TransactionsPageListView<T extends Model<DetailsT>, DetailsT> {
 
-  constructor(public readonly type: TransactionListType) { }
+  constructor(public readonly type: TransactionListType, public readonly field: Session.Field) { }
 
   public abstract get greekingData(): WexGreeking.Rect[];
   public abstract get listLabels(): string[];
-  public abstract fetch(options?: StaticListPage.FetchOptions): Observable<T[]>;
   public abstract goToDetailPage(item: T): Promise<any>;
   public abstract sortItems(items: T[]): T[];
 
-  public hasMoreItems(): boolean {
-    return false;
+  public fetch?(options?: StaticListPage.FetchOptions): Observable<T[]>;
+
+  public get hasMoreItems$(): Observable<boolean> {
+    return Observable.of(false);
   }
 }
 
@@ -80,7 +82,7 @@ abstract class TransactionsPageListView<T extends Model<DetailsT>, DetailsT> {
 class TransactionsPageDateView extends TransactionsPageListView<BaseTransactionT, BaseTransaction.Details> {
 
   constructor(protected transactionsPage: TransactionsPage) {
-    super(TransactionListType.Date);
+    super(TransactionListType.Date, undefined);
   }
 
   public get greekingData(): WexGreeking.Rect[] {
@@ -110,8 +112,9 @@ class TransactionsPageDateView extends TransactionsPageListView<BaseTransactionT
     }
   }
 
-  public hasMoreItems(): boolean {
-    return this.transactionsPage.items.length < _.get(SessionCache.cachedValues, "postedTransactionsInfo.details.totalResults", 0);
+  public get hasMoreItems$(): Observable<boolean> {
+    return this.transactionsPage.sessionCache.getField$<PostedTransactionList>(Session.Field.PostedTransactionsInfo)
+      .map(info => info.details.totalResults > 0);
   }
 
   public sortItems(objects: BaseTransactionT[]): BaseTransactionT[] {
@@ -123,15 +126,30 @@ class TransactionsPageDateView extends TransactionsPageListView<BaseTransactionT
     options = _.clone(options);
     options.forceRequest = options.forceRequest && options.clearItems;
 
-    return this.transactionsPage.sessionCache.getSessionDetail(Session.Field.PendingTransactions, options);
+    return (function () {
+      if (options.forceRequest) {
+        return this.transactionsPage.sessionCache.update$(Session.Field.PendingTransactions, options);
+      }
+      else {
+        return this.transactionsPage.sessionCache.require$(Session.Field.PendingTransactions);
+      }
+    })().map(session => session.pendingTransactions);
   }
 
   protected fetchPosted(options?: StaticListPage.FetchOptions): Observable<PostedTransaction[]> {
-    if (options.clearItems && options.forceRequest && !!SessionCache.cachedValues.postedTransactionsInfo) {
-      SessionCache.cachedValues.postedTransactionsInfo.details.currentPage = 0;
-    }
-
-    return this.transactionsPage.sessionCache.getSessionDetail(Session.Field.PostedTransactions, options);
+    return (function () {
+      if (options.forceRequest) {
+        return Observable.if(() => options.clearItems,
+          this.transactionsPage.sessionCache.getSessionField$(Session.Field.PostedTransactionsInfo)
+            .take(1)
+            .map(info => info.details.currentPage = 0),
+          Observable.empty())
+          .flatMap(() => this.transactionsPage.sessionCache.update$(Session.Field.PostedTransactions, options));
+      }
+      else {
+        return this.transactionsPage.sessionCache.require$(Session.Field.PostedTransactions);
+      }
+    })().map(session => session.postedTransactions);
   }
 }
 
@@ -140,7 +158,7 @@ class TransactionsPageDateView extends TransactionsPageListView<BaseTransactionT
 class TransactionsPageDriverView extends TransactionsPageListView<Driver, Driver.Details> {
 
   constructor(protected transactionsPage: TransactionsPage) {
-    super(TransactionListType.DriverName);
+    super(TransactionListType.DriverName, Session.Field.Drivers);
   }
 
   public get greekingData(): WexGreeking.Rect[] {
@@ -149,10 +167,6 @@ class TransactionsPageDriverView extends TransactionsPageListView<Driver, Driver
 
   public get listLabels(): string[] {
     return this.transactionsPage.CONSTANTS.DRIVER_NAME.listLabels;
-  }
-
-  public fetch(options?: StaticListPage.FetchOptions): Observable<Driver[]> {
-    return this.transactionsPage.sessionCache.getSessionDetail(Session.Field.Drivers, options);
   }
 
   public goToDetailPage(item: Driver): Promise<any> {
@@ -172,7 +186,7 @@ class TransactionsPageDriverView extends TransactionsPageListView<Driver, Driver
 class TransactionsPageCardView extends TransactionsPageListView<Card, Card.Details> {
 
   constructor(protected transactionsPage: TransactionsPage) {
-    super(TransactionListType.CardNumber);
+    super(TransactionListType.CardNumber, Session.Field.Cards);
   }
 
   public get greekingData(): WexGreeking.Rect[] {
@@ -181,10 +195,6 @@ class TransactionsPageCardView extends TransactionsPageListView<Card, Card.Detai
 
   public get listLabels(): string[] {
     return this.transactionsPage.CONSTANTS.CARD_NUMBER.listLabels;
-  }
-
-  public fetch(options?: StaticListPage.FetchOptions): Observable<Card[]> {
-    return this.transactionsPage.sessionCache.getSessionDetail(Session.Field.Cards, options);
   }
 
   public goToDetailPage(item: Card): Promise<any> {
@@ -219,8 +229,9 @@ class TransactionsPageFilteredListView extends TransactionsPageDateView {
     this.postedRequestor = new PostedTransactionRequestor(this.transactionProvider, this.postedTransactions);
   }
 
-  public hasMoreItems(): boolean {
-    return _.isNil(this.totalResultsPosted) || _.isNil(this.fetchedPostedItems) || this.fetchedPostedItems.length < this.totalResultsPosted;
+  public get hasMoreItems$(): Observable<boolean> {
+    return Observable.of(_.isNil(this.totalResultsPosted)
+      || _.isNil(this.fetchedPostedItems) || this.fetchedPostedItems.length < this.totalResultsPosted);
   }
 
   protected fetchPosted(options?: StaticListPage.FetchOptions): Observable<PostedTransaction[]> {
@@ -270,11 +281,12 @@ class TransactionsPageFilteredListView extends TransactionsPageDateView {
 
 //# TransactionsPage
 // --------------------------------------------------
-@TabPage()
 @Component({
   selector: "page-transactions",
   templateUrl: "transactions.html"
 })
+@Reactive()
+@TabPage()
 export class TransactionsPage extends StaticListPage<TransactionListModelType, TransactionListModelTypeDetails> {
   @Value("STORAGE.KEYS.LAST_TRANSACTION_VIEW") private readonly LAST_TRANSACTION_VIEW_KEY: string;
 
@@ -288,13 +300,15 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
     return listView;
   })();
 
+  @StateEmitter() private hasMoreItems$: Subject<boolean>;
+
   public readonly filter: TransactionListFilter;
   public selectedListView: AbstractTransactionsPageListView;
   public session: Session;
   public sessionCache: SessionCache;
 
   constructor(private localStorageService: LocalStorageService, public navCtrl: NavController, public navParams: NavParams, public injector: Injector) {
-    super("Transactions", injector);
+    super("Transactions", undefined, injector);
 
     this.listGroupDisplayOrder = [];
     this.filter = this.navParams.get(TransactionsParams.Filter);
@@ -371,7 +385,21 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
   }
 
   protected fetch(options?: StaticListPage.FetchOptions): Observable<any[]> {
-    return this.selectedListView.fetch(options);
+    let fetch = (() => {
+      if (this.selectedListView.fetch) {
+        return this.selectedListView.fetch(options);
+      }
+      else {
+        this.listDataField = this.selectedListView.field;
+        return super.fetch(options);
+      }
+    })();
+
+    fetch
+      .flatMap(() => this.selectedListView.hasMoreItems$)
+      .map(hasMoreItems => this.hasMoreItems$.next(hasMoreItems))
+      .subscribe();
+    return fetch;
   }
 
   protected groupItems(transactions: BaseTransactionT[]): GroupedList<BaseTransactionT> {
@@ -423,10 +451,6 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
   }
 
   public set greekingData(data) { data; }
-
-  public get hasMoreItems(): boolean {
-    return this.selectedListView.hasMoreItems();
-  }
 
   public get isCardView(): boolean {
     return this.selectedListView.type === TransactionListType.CardNumber;

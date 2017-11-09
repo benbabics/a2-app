@@ -282,7 +282,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     {
       provide: PaymentService,
       useClass: PaymentService,
-      deps: [SessionManager, SessionCache]
+      deps: [SessionCache]
     },
     UserIdle.PROVIDER_DEFINITION,
     SessionManager,
