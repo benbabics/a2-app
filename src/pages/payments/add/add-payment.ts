@@ -21,6 +21,7 @@ import { WexAlertController } from "../../../components/wex-alert-controller/wex
 import { NavBarController } from "../../../providers/nav-bar-controller";
 import { Events } from "ionic-angular";
 import { PaymentsPage } from "../payments";
+import { WexAppBackButtonController } from "../../../providers/index";
 
 export type AddPaymentNavParams = keyof {
   payment
@@ -56,7 +57,8 @@ export class AddPaymentPage extends SecurePage {
     public wexAlertController: WexAlertController,
     private paymentProvider: PaymentProvider,
     public navBarCtrl: NavBarController,
-    private events: Events
+    private events: Events,
+    private wexAppBackButtonController: WexAppBackButtonController
   ) {
     super({ pageName: "Payments.Add", trackView: false }, injector);
   }
@@ -164,7 +166,7 @@ export class AddPaymentPage extends SecurePage {
         this.navCtrl.push(AddPaymentConfirmationPage, { payment })
           .then(() => this.navCtrl.removeView(this.viewController))
           .then(() => this.events.publish(PaymentsPage.REFRESH_EVENT))
-          .then(() => this.clearCustomAmount());
+          .finally(() => this.clearCustomAmount());
         this.trackAnalyticsPageView(this.isEditingPayment ? "confirmationUpdated" : "confirmationScheduled");
       }, (error) => {
         /* TODO - What do we do here? */
@@ -202,5 +204,14 @@ export class AddPaymentPage extends SecurePage {
       this.populatePayment();
       this.trackAnalyticsPageView(this.isEditingPayment ? "makePaymentEdit" : "makePaymentInitial");
     }
+
+    this.wexAppBackButtonController.registerAction(() => {
+      this.wexAppBackButtonController.defaultBack();
+      this.clearCustomAmount();
+    });
+  }
+
+  ionViewWillLeave() {
+    this.wexAppBackButtonController.deregisterAction();
   }
 }
