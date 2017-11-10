@@ -455,17 +455,6 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
 
   public set listLabels(listLabels) { listLabels; }
 
-  public getTransactionAmount(transaction: BaseTransactionT): number {
-    if (transaction instanceof PendingTransaction) {
-      return transaction.details.authorizationAmount;
-    }
-    else if (transaction instanceof PostedTransaction) {
-      return transaction.details.netCost;
-    }
-
-    return 0;
-  }
-
   public goToDetailPage(item: TransactionListModelType) {
     return this.selectedListView.goToDetailPage(item);
   }
