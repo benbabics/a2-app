@@ -1,16 +1,16 @@
-<ion-header>
+<ion-header *ngIf="!contentOnly">
   <wex-static-list-page-header [page]="this">
   </wex-static-list-page-header>
 </ion-header>
 
-<ion-content>
+<ion-content #content>
   <ion-refresher (ionRefresh)="onRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
   <wex-static-list-page-content [page]="this">
     <ng-template #itemTemplate let-item>
-      <span  content-expand>{{ getFullName(item) }}</span>
+      <driver-list-item [driver]="item"></driver-list-item>
       <span class="driver-id">{{ item.details.promptId }}</span>
     </ng-template>
   </wex-static-list-page-content>

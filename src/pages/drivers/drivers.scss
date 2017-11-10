@@ -1,23 +1,8 @@
 @import "../../styles/driver";
 
 page-drivers {
-
-  wex-list-header .field-driver.id {
-    text-align: right;
-  }
-
-  #items-list { 
-    ion-item-divider {
-      &.active {
-        color: color($colors, success-dark);
-        background-color: color($colors, success);
-      }
-
-      &.terminated {
-        color: color($colors, danger-dark);
-        background-color: color($colors, danger);
-      }
-    }
+  .driver-id {
+    opacity: .6;
   }
 
   wex-list-item {
