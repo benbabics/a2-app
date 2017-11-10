@@ -6,7 +6,7 @@ import { NavController, NavParams, SegmentButton } from "ionic-angular";
 import { StaticListPage, GroupedList } from "../static-list-page";
 import { Session, PostedTransactionList, DynamicList } from "../../models";
 import { WexGreeking } from "../../components";
-import { SessionCache, PostedTransactionRequestor, DynamicSessionListInfoRequestor, SessionInfoRequestors } from "../../providers";
+import { SessionCache, PostedTransactionRequestor, DynamicSessionListInfoRequestor, SessionInfoRequestors, WexAppBackButtonController } from "../../providers";
 import { TransactionDetailsPage } from "./details/transaction-details";
 import { BaseTransaction, PostedTransaction, Driver, Card, Model, PendingTransaction } from "@angular-wex/models";
 import { TransactionProvider, TransactionSearchFilterBy } from "@angular-wex/api-providers";
@@ -293,7 +293,7 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
   public session: Session;
   public sessionCache: SessionCache;
 
-  constructor(private localStorageService: LocalStorageService, public navCtrl: NavController, public navParams: NavParams, public injector: Injector) {
+  constructor(private localStorageService: LocalStorageService, private wexAppBackButtonController: WexAppBackButtonController, public navCtrl: NavController, public navParams: NavParams, public injector: Injector) {
     super("Transactions", injector);
 
     this.listGroupDisplayOrder = [];
@@ -499,5 +499,11 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
 
       this.selectList(transactionListType || TransactionListType.Date);
     });
+  }
+
+  public ionViewDidEnter() {
+    if (this.filter) {
+      this.wexAppBackButtonController.deregisterAction();
+    }
   }
 }

@@ -4,16 +4,15 @@ import { MyApp } from "./../app/app.component";
 import { GenericConstructor } from "./generic-constructor";
 
 const ionViewDidEnter = "ionViewDidEnter", ionViewWillLeave = "ionViewWillLeave";
+const wexAppBackButtonController: () => WexAppBackButtonController = () => { return MyApp.injector.get(WexAppBackButtonController); };
+const navBarController: () => NavBarController = () => { return MyApp.injector.get(NavBarController); };
 
 export function TabPage<T extends GenericConstructor>(): Function {
   return (constructor: T) => {
     return class extends constructor {
-      private get wexAppBackButtonController(): WexAppBackButtonController { return MyApp.injector.get(WexAppBackButtonController); }
-      private get navBarController(): NavBarController { return MyApp.injector.get(NavBarController); }
-
       public ionViewDidEnter() {
         // Tab [0] is the landing page.
-        this.wexAppBackButtonController.registerAction(() => this.navBarController.ionTabs.select(0));
+        wexAppBackButtonController().registerAction(() => navBarController().ionTabs.select(0));
 
         if (super[ionViewDidEnter]) {
           super[ionViewDidEnter]();
@@ -21,7 +20,7 @@ export function TabPage<T extends GenericConstructor>(): Function {
       }
 
       public ionViewWillLeave() {
-        this.wexAppBackButtonController.deregisterAction();
+        wexAppBackButtonController().deregisterAction();
 
         if (super[ionViewWillLeave]) {
           super[ionViewWillLeave]();
