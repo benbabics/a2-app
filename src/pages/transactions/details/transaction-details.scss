@@ -1,0 +1,60 @@
+page-transaction-details {
+  @include page-background-white;
+
+  .details-header {
+    @include flexbox();
+    padding: $content-padding;
+
+    h1, p { margin: 0; }
+
+    @at-root .md & {
+      @include flex-direction(column-reverse);
+
+      p {
+        font-size: 2.2rem;
+        margin-bottom: .5rem;
+      }
+      h1 {
+        font-size: 3.2rem;
+        font-weight: 600;
+      }
+    }
+
+    @at-root .ios & {
+      @include flex-direction(column);
+      text-align: center;
+
+      h1 {
+        font-size: 3rem;
+        margin-bottom: .5rem;
+      }
+      p {
+        font-size: 1.6rem;
+      }
+    }
+  }
+
+  .details-list {
+    border-bottom: none;
+
+    .item {
+      @mixin item-inner-border($border-color: border) {
+        &:first-of-type .item-inner {
+          border-top: 0.55px solid color($colors, $border-color);
+        }
+        &:last-of-type .item-inner {
+          border-bottom: 0.55px solid color($colors, $border-color);
+        }
+      }
+
+      &.item-ios {
+        @include item-inner-border(border);
+      }
+
+      &.item-md {
+        @include item-inner-border(light-border);
+        [item-end] { font-weight: 500; }
+      }
+    }
+  }
+}
