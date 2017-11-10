@@ -1,6 +1,3 @@
-@import "../../../styles/card";
-@import "../../../styles/driver";
-
 transactions-date-view {
 
   wex-static-list-page-header:not(.active) {
@@ -12,14 +9,6 @@ transactions-date-view {
 
   .content {
     @extend %wex-list-item-content;
-
-    &.driver-content {
-      @extend %wex-list-item-driver;
-    }
-
-    &.card-content {
-      @extend %wex-list-item-card;
-    }
   }
 
   .transaction-amount {
