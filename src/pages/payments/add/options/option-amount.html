@@ -16,7 +16,7 @@
 <ion-item class="custom-input-item">
   <div id="custom-input-label"> {{ label }} </div>
   <input id="custom-input"
-         Autofocus
+         [Autofocus]="inFocus"
          type="tel"
          currencyMask [options]="{ prefix: '$', thousands: '', decimal: '.' }"
          [(ngModel)]="otherAmount"
