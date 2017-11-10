@@ -2,7 +2,7 @@
 
   <span class="grouped" *ngIf="isGrouped">
     <span *ngFor="let divider of dividers; let i = index">
-      <ion-item-divider class="centered" *ngIf="getListForDivider(i)?.length" sticky>
+      <ion-item-divider *ngIf="getListForDivider(i)?.length" sticky>
         {{ divider }}
       </ion-item-divider>
       <span *ngFor="let item of getListForDivider(i)">
