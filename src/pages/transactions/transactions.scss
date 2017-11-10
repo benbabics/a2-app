@@ -2,14 +2,6 @@
 @import "../../styles/driver";
 
 page-transactions {
-
-  wex-static-list-page-header:not(.active) {
-    wex-list-header ion-list-header.item.list-header {
-      background-color: #eee;
-      color: color($colors, gray);
-    }
-  }
-
   .content {
     @extend %wex-list-item-content;
 
