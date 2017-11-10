@@ -3,11 +3,11 @@
 
 page-transactions {
   ion-toolbar.toolbar-md {
-    padding: 0 0 0 0;
+    padding: 0;
     min-height: auto;
   }
   ion-header {
-    padding: 0 0 0 0;
+    padding: 0;
     &.header-md::after {
       display: none;
     }
