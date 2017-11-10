@@ -2,7 +2,7 @@ import * as _ from "lodash";
 import * as moment from "moment";
 import { Observable } from "rxjs";
 import { Component, Injector } from "@angular/core";
-import { NavParams, NavController, App } from "ionic-angular";
+import { NavParams, NavController, App, Events } from "ionic-angular";
 import { StaticListPage, GroupedList, FetchOptions } from "../static-list-page";
 import { Payment, PaymentStatus, MakePaymentAvailability } from "@angular-wex/models";
 import { PaymentsDetailsPage } from "./details/payments-details";
@@ -19,6 +19,7 @@ import { WexAlertController } from "../../components/wex-alert-controller/wex-al
 })
 export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   private static readonly PAYMENT_STATUSES: PaymentStatus[] = [PaymentStatus.SCHEDULED, PaymentStatus.COMPLETE];
+  public static readonly REFRESH_EVENT: string = "REFRESH_PAYMENTS";
 
   public checkingMakePaymentAvailability: boolean = false;
 
@@ -30,9 +31,17 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
     public navParams: NavParams,
     private app: App,
     private alertController: WexAlertController,
+    events: Events,
     injector: Injector
   ) {
     super("Payments", injector);
+
+    events.subscribe(PaymentsPage.REFRESH_EVENT, () => {
+      this.fetchResults({
+        forceRequest: true,
+        clearCache: true
+      }).subscribe();
+    });
   }
 
   ionViewWillEnter() {

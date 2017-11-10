@@ -28,6 +28,7 @@ export namespace AddPaymentSelectionNavParams {
 export class AddPaymentSelectionPage extends SecurePage {
   public selectionType: string;
   private onSelection: (selection: PaymentSelectionOption) => void;
+  public inFocus: boolean = false;
   public selectedItem: PaymentSelectionOption;
   public initialSelection: PaymentSelectionOption;
   public options: PaymentSelectionOption[];
@@ -79,6 +80,13 @@ export class AddPaymentSelectionPage extends SecurePage {
     return (this.options as UserPaymentAmount[])[this.options.length - 1];
   }
 
+  public ionViewDidEnter() {
+    this.inFocus = true;
+  }
+
+  public ionViewWillLeave() {
+    this.inFocus = false;
+  }
 
   public handleSubmit() {
     this.onSelection(this.selectedItem);
