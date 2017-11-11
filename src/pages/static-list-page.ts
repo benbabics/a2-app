@@ -116,7 +116,7 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   }
 
   protected fetch(options?: FetchOptions): Observable<T[]> {
-    return (function (): Observable<Session> {
+    return ((): Observable<Session> => {
       if (options.forceRequest) {
         return this.sessionCache.update$(this.listDataField, options);
       }

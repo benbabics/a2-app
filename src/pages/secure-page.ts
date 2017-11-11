@@ -12,7 +12,7 @@ export abstract class SecurePage extends Page {
   @StateEmitter.Alias("sessionManager.cache.session$")
   protected session$: Observable<Session>;
 
-  protected session: Session = {} as Session;
+  protected session: Session/* = {} as Session*/;
   protected sessionCache: SessionCache;
   protected sessionManager: SessionManager;
 
@@ -26,7 +26,7 @@ export abstract class SecurePage extends Page {
 
   ionViewCanEnter(): Promise<any> {
     // Request all session info required for this page
-    return this.sessionCache.updateSome$(this.requiredSessionInfo)
+    return this.sessionCache.requireSome$(this.requiredSessionInfo)
       .map((session: Session) => this.session = session)
       .toPromise();
   }

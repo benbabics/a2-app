@@ -1,8 +1,8 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{ isEditingPayment ? CONSTANTS.EDIT.title : CONSTANTS.CREATE.title }}</ion-title>
+    <ion-title>{{ pageTitle }}</ion-title>
     <ion-buttons right>
-      <button ion-button icon-only (click)="cancel()">
+      <button ion-button icon-only (click)="onCancel()">
         <ion-icon name="md-close"></ion-icon>
       </button>
     </ion-buttons>
@@ -14,7 +14,7 @@
     <!-- Bank Account -->
     <ion-item-divider>{{ CONSTANTS.LABELS.bankAccount }}</ion-item-divider>
 
-    <button ion-item *ngIf="paymentBankAccount" (click)="updateBankAccount()">
+    <button ion-item *ngIf="paymentBankAccount" (click)="onUpdateBankAccount()">
       <ion-label>
         <h2>
           {{ paymentBankAccount.details.name }}
@@ -28,7 +28,7 @@
     <!-- Amount -->
     <ion-item-divider>{{ CONSTANTS.LABELS.paymentAmount }}</ion-item-divider>
 
-    <button ion-item *ngIf="payment.amount" (click)="updateAmount()">
+    <button ion-item *ngIf="payment.amount" (click)="onUpdateAmount()">
       <ion-label>
         <h2>{{ payment.amount.value | wexCurrency }}</h2>
         <p>{{ paymentLabel }}</p>
@@ -40,7 +40,7 @@
     <!-- Payment Date -->
     <ion-item-divider>{{ CONSTANTS.LABELS.paymentDate }}</ion-item-divider>
 
-    <button ion-item (click)="updateDate()">
+    <button ion-item (click)="onUpdateDate()">
       <ion-label>
         <h2>{{ paymentDate | wexDate:true:DATE_FORMAT }}</h2>
         <p *ngIf="paymentService.hasMinimumPaymentDue">{{ CONSTANTS.LABELS.due }} {{ paymentDueDate | wexDate:true:DATE_FORMAT }}</p>

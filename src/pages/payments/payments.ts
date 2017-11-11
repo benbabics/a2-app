@@ -29,7 +29,6 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   public checkingMakePaymentAvailability: boolean = false;
 
   public minPaymentDueDate: string;
-  public invoiceSummary: InvoiceSummary;
 
   constructor(
     public navCtrl: NavController,
@@ -42,11 +41,10 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   }
 
   ionViewWillEnter() {
-    this.invoiceSummary$.subscribe((invoiceSummary) => {
+    this.invoiceSummary$.take(1).subscribe((invoiceSummary) => {
       this.minPaymentDueDate = _.template(this.CONSTANTS.payNowSection.on)({
         dueDate: moment(invoiceSummary.paymentDueDate).format("MMMM Do, YYYY")
       });
-      this.invoiceSummary = invoiceSummary;
     });
     super.ionViewWillEnter();
   }

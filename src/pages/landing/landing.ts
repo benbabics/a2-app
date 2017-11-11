@@ -69,22 +69,20 @@ export class LandingPage extends SecurePage {
     const registerBackButtonAction = () => wexAppBackButtonController.registerAction(() => this.onHardwareBackButton$.next());
 
     this.session$
-      .take(1)
       .filter(Boolean)
+      .distinctUntilKeyChanged(Session.Field.User)
       .flatMap(session => brandProvider.logo(session.user.details.brand))
-      .subscribe((brandLogoData: string) => this.brandLogoData$.next(brandLogoData));
+      .subscribe((brandLogoData: string) => this.brandLogoData$.next(brandLogoData), () => this.brandLogoData$.next(""));
 
     this.billingCompany$
-      .take(1)
       .filter(Boolean)
       .subscribe(billingCompany => this.companyName$.next(NameUtils.PrintableName(billingCompany.details.name)));
 
     this.invoiceSummary$
-      .take(1)
       .filter(Boolean)
       .subscribe(invoiceSummary => {
         let paymentPercent = Math.min(invoiceSummary.details.currentBalance / invoiceSummary.details.creditLimit * 100, 100);
-        let progressBarColor = (function () {
+        let progressBarColor = (() => {
           if (paymentPercent <= 50) {
             return "green";
           } else if (paymentPercent <= 75) {
@@ -116,7 +114,7 @@ export class LandingPage extends SecurePage {
 
     this.viewWillLeave$.subscribe(() => wexAppBackButtonController.deregisterAction());
 
-    this.onHardwareBackButton$
+    this.onHardwareBackButton$.asObservable()
       .map(() => wexAppBackButtonController.deregisterAction())
       .subscribe(() => {
         // Show the exit prompt snackbar

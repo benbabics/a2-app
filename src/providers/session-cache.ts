@@ -53,7 +53,7 @@ export class SessionCache {
     SessionCache._session$.next({});
   }
 
-  public require$(field: Session.Field): Observable<Session> {
+  public require$(field: Session.Field, options?: SessionInfoOptions): Observable<Session> {
     return this.session$
       .take(1)
       .flatMap(session => {
@@ -61,18 +61,23 @@ export class SessionCache {
           return Observable.of(session);
         }
         else {
-          return this.update$(field);
+          return this.update$(field, options);
         }
       });
   }
 
-  public requireAll$(): Observable<Session> {
-    return this.requireSome$(Session.Field.All);
+  public requireAll$(options?: SessionInfoOptions): Observable<Session> {
+    return this.requireSome$(Session.Field.All, options);
   }
 
-  public requireSome$(fields: Session.Field[]): Observable<Session> {
-    return Observable.forkJoin(fields.map(field => this.require$(field)))
-      .flatMap(() => this.session$.take(1));
+  public requireSome$(fields: Session.Field[], options?: SessionInfoOptions): Observable<Session> {
+    if (fields.length === 0) {
+      return this.session$.take(1);
+    }
+    else {
+      return Observable.forkJoin(fields.map(field => this.require$(field, options)))
+        .flatMap(() => this.session$.take(1));
+    }
   }
 
   public update$(field: Session.Field, options?: SessionInfoOptions): Observable<Session> {
@@ -99,11 +104,12 @@ export class SessionCache {
     }
 
     // First request any dependencies on this field, then fetch the requested session field value
-    return this.pendingRequests[field] = this.updateSome$(requestorDetails.requiredFields || [], requestorDetails.dependentRequestor ? options : null)
+    return this.pendingRequests[field] = this.requireSome$(requestorDetails.requiredFields || [], requestorDetails.dependentRequestor ? options : null)
       .flatMap((requiredDetails: Session) => requestorDetails.requestor(requiredDetails, options.requestParams))
       .map((value: any) => this.updateValue(field, value)) // Update the session value
       .flatMap(() => this.session$.take(1)) // Get the newly updated Session
-      .finally(() => delete this.pendingRequests[field]); // Remove the pending request
+      .finally(() => delete this.pendingRequests[field]) // Remove the pending request
+      .share();
   }
 
   public updateAll$(options?: SessionInfoOptions): Observable<Session> {

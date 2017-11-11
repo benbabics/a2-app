@@ -11,13 +11,16 @@ import { SecurePage } from "../../secure-page";
 import { BankAccount, Payment } from "@angular-wex/models";
 import { PaymentService, PaymentSelectionOption } from "./../../../providers/payment-service";
 import { AddPaymentSelectionPage } from "./add-payment-selection";
-import { UserPayment } from "../../../models";
+import { UserPayment, UserPaymentAmount } from "../../../models";
 import { Value } from "../../../decorators/value";
 import { AddPaymentConfirmationPage } from "./confirmation/add-payment-confirmation";
 import { PaymentProvider, PaymentRequest } from "@angular-wex/api-providers";
 import { Calendar } from "../../../components/calendar/calendar";
 import { WexAlertController } from "../../../components/wex-alert-controller/wex-alert-controller";
 import { NavBarController } from "../../../providers/nav-bar-controller";
+import { Reactive, StateEmitter, EventSource } from "angular-rxjs-extensions";
+import { Subject } from "rxjs";
+import { ViewDidEnter } from "angular-rxjs-extensions-ionic";
 
 export type AddPaymentNavParams = keyof {
   payment
@@ -32,22 +35,47 @@ export namespace AddPaymentNavParams {
   selector: "page-add-payment",
   templateUrl: "add-payment.html"
 })
+@Reactive()
 export class AddPaymentPage extends SecurePage {
+
+  public readonly DATE_FORMAT: string = "MMMM D";
+
   @ViewChild("calendar") public calendar: Calendar;
 
   @Value("PAGES.PAYMENTS.ADD.LABELS") private readonly LABELS: any;
 
-  public readonly DATE_FORMAT: string = "MMMM D";
+  @ViewDidEnter() viewDidEnter$: Observable<void>;
+  @EventSource() onUpdateAmount$: Observable<any>;
+  @EventSource() onUpdateBankAccount$: Observable<any>;
+  @EventSource() onUpdateDate$: Observable<any>;
+  @EventSource() onCancel$: Observable<any>;
+  @EventSource() onSchedulePayment$: Observable<any>;
 
-  public payment: UserPayment = {} as UserPayment;
+  @StateEmitter() private payment$: Subject<UserPayment>;
+  @StateEmitter() private paymentDueDate$: Subject<Date>;
+  @StateEmitter() private paymentLabel$: Subject<string>;
+  @StateEmitter() private displayAmountWarning$: Subject<boolean>;
+  @StateEmitter() private displayDueDateWarning$: Subject<boolean>;
+  @StateEmitter() private submitButtonText$: Subject<string>;
+  @StateEmitter() private pageTitle$: Subject<string>;
+  @StateEmitter() private isLoading$: Subject<boolean>;
+
+  @StateEmitter.Alias("payment$.date")
+  private paymentDate$: Observable<Date>;
+
+  @StateEmitter.Alias("payment$.bankAccount")
+  public /** @template */ paymentBankAccount$: Observable<BankAccount>;
+
+  @StateEmitter.Alias("paymentService.hasMinimumPaymentDue$")
+  private hasMinimumPaymentDue$: Observable<boolean>;
+
   public minPaymentDate: Date = new Date();
   public maxPaymentDate: Date = moment().add(moment.duration(180, "days")).toDate();
-  public isLoading: boolean = false;
 
   constructor(
     injector: Injector,
+    navParams: NavParams,
     public navCtrl: NavController,
-    public navParams: NavParams,
     private viewController: ViewController,
     public paymentService: PaymentService,
     public wexAlertController: WexAlertController,
@@ -55,74 +83,88 @@ export class AddPaymentPage extends SecurePage {
     public navBarCtrl: NavBarController,
   ) {
     super({ pageName: "Payments.Add", trackView: false }, injector);
-  }
 
-  public get isEditingPayment(): boolean {
-    return !!this.navParams.get(AddPaymentNavParams.Payment);
-  }
+    let existingPayment = navParams.get(AddPaymentNavParams.Payment);
 
-  public get paymentBankAccount(): BankAccount {
-    return this.payment.bankAccount;
-  }
+    const schedulePayment = (paymentRequest: PaymentRequest, paymentId?: string) => {
+      this.isLoading$.next(true);
 
-  public get paymentDate(): Date {
-    return this.payment.date;
-  }
+      let accountId: string = this.session.user.billingCompany.details.accountId;
+      let paymentState: Observable<Payment>;
 
-  public get paymentDueDate(): Date {
-    return moment(this.paymentService.paymentDueDate).toDate();
-  }
+      if (paymentId) {
+        paymentState = this.paymentProvider.editPayment(accountId, paymentId, paymentRequest);
+      }
+      else {
+        paymentState = this.paymentProvider.addPayment(accountId, paymentRequest);
+      }
 
-  public get paymentLabel(): string {
-    return this.LABELS[this.payment.amount.type];
-  }
-
-  public get displayAmountWarning(): boolean {
-    return this.payment.amount.value < this.paymentService.minimumPaymentDue;
-  }
-
-  public get displayDueDateWarning(): boolean {
-    return moment(this.paymentDueDate).toDate() < this.paymentDate && this.paymentService.hasMinimumPaymentDue;
-  }
-
-  public get hasMinimumPaymentDue(): boolean {
-    return this.paymentService.hasMinimumPaymentDue;
-  }
-
-  public cancel(data?: any) {
-    this.viewController.dismiss(data);
-  }
-
-  public updateAmount() {
-    let options = this.paymentService.amountOptions,
-        selectedItem = _.first(_.filter(options, { type: this.payment.amount.type }));
-
-    this.navigateToSelectionPage("amount", options, selectedItem);
-  }
-
-  public updateDate() {
-    this.calendar.displayCalendar();
-  }
-
-  public get submitButtonText() {
-    return this.isEditingPayment ? this.CONSTANTS.LABELS.updatePayment : this.CONSTANTS.LABELS.schedulePayment;
-  }
-
-  public updateBankAccount() {
-    let options = this.paymentService.bankAccounts,
-        selectedItem = this.payment.bankAccount;
-
-    this.navigateToSelectionPage("bankAccount", options, selectedItem);
-  }
-
-  public handleSchedulePayment() {
-    let paymentRequest: PaymentRequest = {
-      amount: this.payment.amount.value,
-      scheduledDate: this.payment.date.toISOString(),
-      bankAccountId: this.payment.bankAccount.details.id
+      paymentState
+        .finally(() => this.isLoading$.next(false))
+        .subscribe((payment) => {
+          // Update the cache
+          //this.sessionCache.update$(Session.Field.Payments);
+          this.navCtrl.push(AddPaymentConfirmationPage, { payment })
+            .then(() => this.navCtrl.removeView(this.viewController));
+          this.trackAnalyticsPageView(paymentId ? "confirmationUpdated" : "confirmationScheduled");
+        }, (error) => {
+          console.error(error);
+          this.wexAlertController.alert(this.CONSTANTS.LABELS.changesFailed);
+          return Observable.throw(error);
+        });
     };
 
-    this.schedulePayment(paymentRequest);
+    this.pageTitle$.next(existingPayment ? this.CONSTANTS.EDIT.title : this.CONSTANTS.CREATE.title);
+
+    this.submitButtonText$.next(existingPayment ? this.CONSTANTS.LABELS.updatePayment : this.CONSTANTS.LABELS.schedulePayment);
+
+    this.createUserPayment$(existingPayment).subscribe(userPayment => this.payment$.next(userPayment));
+
+    this.paymentService.paymentDueDate$.subscribe(paymentDueDate => this.paymentDueDate$.next(moment(paymentDueDate).toDate()));
+
+    Observable.combineLatest(this.payment$, this.paymentService.minimumPaymentDue$).subscribe((args) => {
+      let [payment, minimumPaymentDue] = args;
+
+      this.paymentLabel$.next(this.LABELS[payment.amount.type]);
+      this.displayAmountWarning$.next(payment.amount.value < minimumPaymentDue);
+    });
+
+    Observable.combineLatest(this.paymentDate$, this.paymentDueDate$, this.hasMinimumPaymentDue$).subscribe((args) => {
+      let [paymentDate, paymentDueDate, hasMinimumPaymentDue] = args;
+
+      this.displayDueDateWarning$.next(paymentDueDate < paymentDate && hasMinimumPaymentDue);
+    });
+
+    this.viewDidEnter$.subscribe(() => this.trackAnalyticsPageView(existingPayment ? "makePaymentEdit" : "makePaymentInitial"));
+
+    this.onUpdateAmount$
+      .flatMap(() => Observable.zip(this.paymentService.amountOptions$, this.payment$).take(1))
+      .subscribe((args) => {
+        let [amountOptions, payment] = args;
+        let selectedItem = _.first(_.filter(amountOptions, { type: payment.amount.type }));
+
+        this.navigateToSelectionPage("amount", amountOptions, selectedItem);
+      });
+
+    this.onUpdateBankAccount$
+      .flatMap(() => Observable.zip(paymentService.bankAccounts$, this.payment$).take(1))
+      .subscribe((args) => {
+        let [bankAccounts, payment] = args;
+
+        this.navigateToSelectionPage("bankAccount", bankAccounts, payment.bankAccount);
+      });
+
+    this.onUpdateDate$.subscribe(() => this.calendar.displayCalendar());
+
+    this.onCancel$.subscribe(data => viewController.dismiss(data));
+
+    this.onSchedulePayment$
+      .flatMap(() => this.payment$.asObservable().take(1))
+      .subscribe((payment) => schedulePayment({
+        amount: payment.amount.value,
+        scheduledDate: payment.date.toISOString(),
+        bankAccountId: payment.bankAccount.details.id
+      }, existingPayment ? existingPayment.id : undefined));
   }
 
   private navigateToSelectionPage(selectionType: keyof UserPayment, options: PaymentSelectionOption[], selectedItem: PaymentSelectionOption) {
@@ -134,60 +176,30 @@ export class AddPaymentPage extends SecurePage {
     this.trackAnalyticsPageView(event);
   }
 
-  private schedulePayment(paymentRequest: PaymentRequest) {
-    this.isLoading = true;
-
-    let accountId: string = this.session.user.billingCompany.details.accountId;
-    let paymentState: Observable<Payment>;
-
-    if (this.isEditingPayment) {
-      paymentState = this.paymentProvider.editPayment(accountId, this.payment.id, paymentRequest);
+  private createUserPayment$(payment: Payment): Observable<UserPayment> {
+    if (payment) {
+      return this.paymentService.resolvePaymentAmountType$(payment.details.amount)
+        .map((paymentAmountType): UserPayment => ({
+          amount: {
+            type: paymentAmountType,
+            value: payment.details.amount
+          },
+          id: payment.details.id,
+          date: moment(payment.details.scheduledDate).toDate(),
+          bankAccount: payment.bankAccount
+        }));
     }
     else {
-      paymentState = this.paymentProvider.addPayment(accountId, paymentRequest);
-    }
-
-    paymentState
-      .finally(() => this.isLoading = false)
-      .catch((error) => {
-        this.wexAlertController.alert(this.CONSTANTS.LABELS.changesFailed);
-        return Observable.throw(error);
-      })
-      .subscribe((payment) => {
-        // Update the cache
-        //this.sessionCache.update$(Session.Field.Payments);
-        this.navCtrl.push(AddPaymentConfirmationPage, { payment })
-          .then(() => this.navCtrl.removeView(this.viewController));
-        this.trackAnalyticsPageView(this.isEditingPayment ? "confirmationUpdated" : "confirmationScheduled");
-      }, (error) => {
-        /* TODO - What do we do here? */
-        console.error(error);
-      });
-  }
-
-  private populatePayment(): void {
-    let existingPayment: Payment = this.navParams.get(AddPaymentNavParams.Payment);
-
-    if (existingPayment) {
-      this.payment.amount = {
-        type: this.paymentService.resolvePaymentAmountType(existingPayment.details.amount),
-        value: existingPayment.details.amount
-      };
-      this.payment.id = existingPayment.details.id;
-      this.payment.date = moment(existingPayment.details.scheduledDate).toDate();
-      this.payment.bankAccount = existingPayment.bankAccount;
-    }
-    else {
-      this.payment.amount = this.paymentService.defaultAmount;
-      this.payment.date = moment().toDate();
-      this.payment.bankAccount = this.paymentService.defaultBankAccount;
-    }
-  }
-
-  ionViewDidEnter() {
-    if (_.isEmpty(this.payment)) {
-      this.populatePayment();
-      this.trackAnalyticsPageView(this.isEditingPayment ? "makePaymentEdit" : "makePaymentInitial");
+      return Observable.zip(this.paymentService.defaultAmount$, this.paymentService.defaultBankAccount$)
+        .take(1)
+        .map((args: [UserPaymentAmount, BankAccount]) => {
+          let [defaultAmount, defaultBankAccount] = args;
+          return {
+            amount: defaultAmount,
+            date: new Date(),
+            bankAccount: defaultBankAccount
+          };
+        });
     }
   }
 }
