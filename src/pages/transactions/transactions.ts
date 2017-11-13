@@ -1,4 +1,4 @@
-import { Observable, Subject } from "rxjs";
+import { Observable } from "rxjs";
 import * as _ from "lodash";
 import * as moment from "moment";
 import { Component, Injector } from "@angular/core";
@@ -6,7 +6,7 @@ import { NavController, NavParams, SegmentButton } from "ionic-angular";
 import { StaticListPage, GroupedList } from "../static-list-page";
 import { Session, PostedTransactionList, DynamicList } from "../../models";
 import { WexGreeking } from "../../components";
-import { SessionCache, PostedTransactionRequestor, DynamicSessionListInfoRequestor, SessionInfoRequestors, WexAppBackButtonController } from "../../providers";
+import { SessionCache, PostedTransactionRequestor, DynamicSessionListInfoRequestor, SessionInfoRequestors, WexAppBackButtonController, SessionInfoOptions } from "../../providers";
 import { TransactionDetailsPage } from "./details/transaction-details";
 import { BaseTransaction, PostedTransaction, Driver, Card, Model, PendingTransaction } from "@angular-wex/models";
 import { TransactionProvider, TransactionSearchFilterBy } from "@angular-wex/api-providers";
@@ -14,7 +14,7 @@ import { TabPage } from "../../decorators/tab-page";
 import { Value } from "../../decorators/value";
 import { LocalStorageService } from "angular-2-local-storage/dist";
 import { NameUtils } from "../../utils/name-utils";
-import { Reactive, StateEmitter } from "angular-rxjs-extensions";
+import { Reactive } from "angular-rxjs-extensions";
 
 export type BaseTransactionT = BaseTransaction<BaseTransaction.Details>;
 export type TransactionListModelType = Card | Driver | BaseTransactionT;
@@ -49,16 +49,6 @@ export namespace TransactionsParams {
 export type AbstractTransactionsPageListView = TransactionsPageListView<TransactionListModelType, TransactionListModelTypeDetails>;
 export type AbstractTransactionsPageListViewConstructor = { new(page: TransactionsPage): AbstractTransactionsPageListView };
 
-export namespace FetchOptions {
-  export const Defaults = StaticListPage.FetchOptions.Defaults;
-
-  export const NextPage: StaticListPage.FetchOptions = Object.assign({}, Defaults, {
-    forceRequest: true,
-    clearItems: false,
-    checkListSize: false
-  });
-}
-
 //# TransactionsPageListView
 // --------------------------------------------------
 abstract class TransactionsPageListView<T extends Model<DetailsT>, DetailsT> {
@@ -70,7 +60,7 @@ abstract class TransactionsPageListView<T extends Model<DetailsT>, DetailsT> {
   public abstract goToDetailPage(item: T): Promise<any>;
   public abstract sortItems(items: T[]): T[];
 
-  public fetch?(options?: StaticListPage.FetchOptions): Observable<T[]>;
+  public fetch?(options?: SessionInfoOptions): Observable<T[]>;
 
   public get hasMoreItems$(): Observable<boolean> {
     return Observable.of(false);
@@ -93,7 +83,7 @@ class TransactionsPageDateView extends TransactionsPageListView<BaseTransactionT
     return this.transactionsPage.CONSTANTS.DATE.listLabels;
   }
 
-  public fetch(options?: StaticListPage.FetchOptions): Observable<BaseTransactionT[]> {
+  public fetch(options?: SessionInfoOptions): Observable<BaseTransactionT[]> {
     return Observable.forkJoin([
       this.fetchPending(options),
       this.fetchPosted(options)
@@ -121,13 +111,12 @@ class TransactionsPageDateView extends TransactionsPageListView<BaseTransactionT
     return StaticListPage.sortList<BaseTransactionT>(objects, "effectiveDate", "desc");
   }
 
-  protected fetchPending(options?: StaticListPage.FetchOptions): Observable<PendingTransaction[]> {
+  protected fetchPending(options?: SessionInfoOptions): Observable<PendingTransaction[]> {
     // Only re-fetch the pending transactions if we're clearing the cache as there is only a single page of pending transactions
     options = _.clone(options);
-    options.forceRequest = options.forceRequest && options.clearItems;
 
     return (function () {
-      if (options.forceRequest) {
+      if (options.clearCache) {
         return this.transactionsPage.sessionCache.update$(Session.Field.PendingTransactions, options);
       }
       else {
@@ -136,10 +125,10 @@ class TransactionsPageDateView extends TransactionsPageListView<BaseTransactionT
     })().map(session => session.pendingTransactions);
   }
 
-  protected fetchPosted(options?: StaticListPage.FetchOptions): Observable<PostedTransaction[]> {
+  protected fetchPosted(options?: SessionInfoOptions): Observable<PostedTransaction[]> {
     return (function () {
-      if (options.forceRequest) {
-        return Observable.if(() => options.clearItems,
+      if (options.clearCache) {
+        return Observable.if(() => options.clearCache,
           this.transactionsPage.sessionCache.getSessionField$(Session.Field.PostedTransactionsInfo)
             .take(1)
             .map(info => info.details.currentPage = 0),
@@ -234,8 +223,8 @@ class TransactionsPageFilteredListView extends TransactionsPageDateView {
       || _.isNil(this.fetchedPostedItems) || this.fetchedPostedItems.length < this.totalResultsPosted);
   }
 
-  protected fetchPosted(options?: StaticListPage.FetchOptions): Observable<PostedTransaction[]> {
-    let doRequest = options.clearCache || options.forceRequest || !this.postedTransactions.items;
+  protected fetchPosted(options?: SessionInfoOptions): Observable<PostedTransaction[]> {
+    let doRequest = options.clearCache || !this.postedTransactions.items;
 
     if (options.clearCache) {
       this.postedTransactions.clear();
@@ -252,8 +241,8 @@ class TransactionsPageFilteredListView extends TransactionsPageDateView {
     }
   }
 
-  protected fetchPending(options?: StaticListPage.FetchOptions): Observable<PendingTransaction[]> {
-    let doRequest = options.clearCache || options.forceRequest || !this.pendingTransactions;
+  protected fetchPending(options?: SessionInfoOptions): Observable<PendingTransaction[]> {
+    let doRequest = options.clearCache || !this.pendingTransactions;
 
     if (options.clearCache) {
       this.pendingTransactions = [];
@@ -300,7 +289,7 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
     return listView;
   })();
 
-  @StateEmitter() private hasMoreItems$: Subject<boolean>;
+  //@StateEmitter() private hasMoreItems$: Subject<boolean>;
 
   public readonly filter: TransactionListFilter;
   public selectedListView: AbstractTransactionsPageListView;
@@ -378,13 +367,15 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
       }
 
       this.selectedListView = new listViewType(this);
+
+      this.listDataField = this.selectedListView.field;
     }
 
     // Re-render the list
-    this.fetchResults().subscribe(null, err => console.error(err));
+    this.updateList();
   }
 
-  protected fetch(options?: StaticListPage.FetchOptions): Observable<any[]> {
+  /*protected fetch(options?: StaticListPage.FetchOptions): Observable<any[]> {
     let fetch = (() => {
       if (this.selectedListView.fetch) {
         return this.selectedListView.fetch(options);
@@ -400,7 +391,7 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
       .map(hasMoreItems => this.hasMoreItems$.next(hasMoreItems))
       .subscribe();
     return fetch;
-  }
+  }*/
 
   protected groupItems(transactions: BaseTransactionT[]): GroupedList<BaseTransactionT> {
     let group: string;
@@ -508,7 +499,7 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
   }
 
   public onInfinite(event: any): Promise<TransactionListModelType> {
-    return this.fetchResults(FetchOptions.NextPage)
+    return this.sessionCache.update$(this.listDataField)
       .toPromise()
       .then(() => event.complete());
   }

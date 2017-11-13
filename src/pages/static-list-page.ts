@@ -1,32 +1,13 @@
 import { Injector, ViewChild } from "@angular/core";
 import * as _ from "lodash";
-import { Observable } from "rxjs";
 import { ListPage, GroupedList } from "./list-page";
 import { Model } from "@angular-wex/models";
 import { Session } from "../models";
 
 export { GroupedList } from "./list-page";
 import { WexGreeking } from "../components";
-import { SessionInfoOptions } from "../providers";
 import { Content } from "ionic-angular";
 import { PageDetails } from "./page";
-
-export interface FetchOptions extends SessionInfoOptions {
-  forceRequest?: boolean;
-  clearItems?: boolean;
-  checkListSize?: boolean;
-}
-
-export namespace FetchOptions {
-  export const Defaults: Partial<FetchOptions> = {
-    forceRequest: false,
-    clearItems: true,
-    checkListSize: true
-  };
-}
-
-export const _FetchOptions = FetchOptions;
-export type _FetchOptions = FetchOptions;
 
 type milliseconds = number;
 
@@ -71,6 +52,16 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
     requiredSessionInfo?: Session.Field[]
   ) {
     super(pageDetails, injector, requiredSessionInfo);
+
+    //TODO - Fix this
+    this.sessionCache.isUpdatingField$(listDataField)
+      .subscribe(() => this._fetchingItems = true);
+
+    // Update the results when the session data changes
+    this.sessionCache.getField$<T[]>(listDataField)
+      .map(items => this._items = items)
+      .map(() => this.updateList())
+      .subscribe(() => this._fetchingItems = false);
   }
 
   public static defaultItemSort<T extends Model<DetailsT>, DetailsT>(items: T[], sortBy: keyof DetailsT, order: "asc" | "desc" = "asc"): T[] {
@@ -115,7 +106,7 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
     return new RegExp(_.escapeRegExp(searchFilter), "i");
   }
 
-  protected fetch(options?: FetchOptions): Observable<T[]> {
+  /*protected fetch(options?: FetchOptions): Observable<T[]> {
     return ((): Observable<Session> => {
       if (options.forceRequest) {
         return this.sessionCache.update$(this.listDataField, options);
@@ -149,7 +140,7 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
 
         return this.items;
       });
-  }
+  }*/
 
   protected filterItems(items: T[]): T[] {
     if (this.isSearchEnabled) {
@@ -189,7 +180,6 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
 
   ionViewWillEnter() {
     this.checkListSize();
-    this.fetchResults().subscribe();
   }
 
   ionViewDidEnter() {
@@ -237,16 +227,10 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   }
 
   public onRefresh(refresher) {
-    this.fetchResults({
-      forceRequest: true,
-      clearCache: true
-    })
+    this.clearList();
+
+    this.sessionCache.update$(this.listDataField, { clearCache: true })
       .finally(() => refresher.complete())
       .subscribe();
   }
-}
-
-export namespace StaticListPage {
-  export type FetchOptions = _FetchOptions;
-  export const FetchOptions = _FetchOptions;
 }
