@@ -15,6 +15,7 @@ import { SecurePage } from "../../secure-page";
 import { Dialogs } from "@ionic-native/dialogs";
 import { Value } from "../../../decorators/value";
 import { CardProvider, CardUpdateType } from "@angular-wex/api-providers";
+import { NavBarController } from "../../../providers/nav-bar-controller";
 
 @Component({
   selector: "page-cards-reissue",
@@ -38,6 +39,7 @@ export class CardsReissuePage extends SecurePage {
     private dialogs: Dialogs,
     private cardProvider: CardProvider,
     private app: App,
+    private navBarCtrl: NavBarController,
     injector: Injector
   ) {
     super("Cards.Reissue", injector, [
@@ -144,6 +146,14 @@ export class CardsReissuePage extends SecurePage {
 
   ionViewDidLoad() {
     this.selectedShippingMethod = this.defaultShippingMethod;
+  }
+
+  ionViewWillEnter() {
+    this.navBarCtrl.show(false);
+  }
+
+  ionViewWillLeave() {
+    this.navBarCtrl.show(true);
   }
 
   public onConfirmReissue() {

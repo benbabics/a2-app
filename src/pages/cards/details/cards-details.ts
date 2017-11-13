@@ -2,7 +2,7 @@ import { WexAlertController } from "./../../../components/wex-alert-controller/w
 import { CardProvider, TransactionSearchFilterBy } from "@angular-wex/api-providers";
 import { CardsReissuePage } from "./../reissue/cards-reissue";
 import { Component, Injector } from "@angular/core";
-import { NavParams, App, ActionSheetController, Events, ToastOptions, Platform, NavController } from "ionic-angular";
+import { NavParams, ActionSheetController, Events, ToastOptions, Platform, NavController } from "ionic-angular";
 import { ActionSheetOptions, ActionSheetButton } from "ionic-angular/components/action-sheet/action-sheet-options";
 import { DetailsPage } from "../../details-page";
 import { Card, CardStatus } from "@angular-wex/models";
@@ -45,7 +45,6 @@ export class CardsDetailsPage extends DetailsPage {
 
   constructor(
     public navParams: NavParams,
-    private app: App,
     private wexAppSnackbarController: WexAppSnackbarController,
     injector: Injector,
     private actionSheetController: ActionSheetController,
@@ -187,7 +186,7 @@ export class CardsDetailsPage extends DetailsPage {
 
   public goToReissuePage() {
     if (this.canReissue) {
-      this.app.getRootNav().push(CardsReissuePage, { card: this.card });
+      this.navController.push(CardsReissuePage, { card: this.card });
     }
   }
 
