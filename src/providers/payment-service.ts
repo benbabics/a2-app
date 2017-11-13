@@ -3,25 +3,21 @@ import { Injectable } from "@angular/core";
 import { Session, UserPaymentAmount, UserPaymentAmountType } from "../models";
 import { SessionCache } from "./session-cache";
 import { InvoiceSummary, BankAccount } from "@angular-wex/models";
-import { BehaviorSubject, Observable } from "rxjs";
+import { Observable } from "rxjs";
 
 export type PaymentSelectionOption = UserPaymentAmount | BankAccount;
 
 @Injectable()
 export class PaymentService {
 
-  private _amountOptions$ = new BehaviorSubject<UserPaymentAmount[]>([]);
+  constructor(private sessionCache: SessionCache) { }
 
-  constructor(private sessionCache: SessionCache) {
-    this.sessionCache.session$
-      .distinctUntilKeyChanged(Session.Field.User)
-      .subscribe((session: Session) => {
-        // Populate the payment amount options
-        this._amountOptions$.next(UserPaymentAmountType.values.map((paymentAmountType) => ({
-          type: paymentAmountType,
-          value: _.get(session.invoiceSummary.details, paymentAmountType, 0)
-        })));
-      });
+  public get amountOptions$(): Observable<UserPaymentAmount[]> {
+    return this.invoiceSummary$
+      .map(invoiceSummary => UserPaymentAmountType.values.map((paymentAmountType) => ({
+        type: paymentAmountType,
+        value: _.get(invoiceSummary.details, paymentAmountType, 0)
+      })));
   }
 
   public get bankAccounts$(): Observable<BankAccount[]> {
@@ -46,10 +42,6 @@ export class PaymentService {
 
   public get hasMinimumPaymentDue$(): Observable<boolean> {
     return this.minimumPaymentDue$.map(Boolean);
-  }
-
-  public get amountOptions$(): Observable<UserPaymentAmount[]> {
-    return this._amountOptions$.asObservable();
   }
 
   public get defaultAmount$(): Observable<UserPaymentAmount> {

@@ -1,3 +1,4 @@
+import * as _ from "lodash";
 import { Component, Injector } from "@angular/core";
 import { NavParams, NavController } from "ionic-angular";
 import { SecurePage } from "../../secure-page";
@@ -5,22 +6,21 @@ import { PaymentSelectionOption } from "./../../../providers/payment-service";
 import { UserPaymentAmount, UserPaymentAmountType, UserPayment } from "../../../models/user-payment";
 import { WexPlatform } from "../../../providers";
 import { BankAccount } from "@angular-wex/models";
-import * as _ from "lodash";
 import { StateEmitter, Reactive, EventSource } from "angular-rxjs-extensions";
 import { Subject, Observable } from "rxjs";
 import { Value } from "../../../decorators/value";
 
 export type AddPaymentSelectionNavParams = keyof {
+  listType,
   items,
-  selectedItem,
-  userPayment$
+  selectedItem$
 };
 
 export namespace AddPaymentSelectionNavParams {
 
+  export const ListType: AddPaymentSelectionNavParams = "listType";
   export const Items: AddPaymentSelectionNavParams = "items";
-  export const SelectedItem: AddPaymentSelectionNavParams = "selectedItem";
-  export const UserPayment$: AddPaymentSelectionNavParams = "userPayment$";
+  export const SelectedItem$: AddPaymentSelectionNavParams = "selectedItem$";
 }
 
 @Component({
@@ -35,72 +35,68 @@ export class AddPaymentSelectionPage extends SecurePage {
   @EventSource() private onSubmit$: Observable<any>;
 
   @StateEmitter() private pageTitle$: Subject<string>;
-  @StateEmitter({ initialValue: false }) public /** @template */ isSubmitEnabled$: Subject<boolean>;
-  @StateEmitter() public /** @template */  isOtherAmountSelected$: Subject<boolean>;
-  @StateEmitter() private items$: Subject<PaymentSelectionOption[]>;
-  @StateEmitter() private selectedItem$: Subject<PaymentSelectionOption>;
+  @StateEmitter() private isSubmitEnabled$: Subject<boolean>;
+  @StateEmitter() private isOtherAmountSelected$: Subject<boolean>;
+  @StateEmitter() private isBankAccount$: Subject<boolean>;
+  @StateEmitter() private isPaymentAmount$: Subject<boolean>;
 
-  @StateEmitter.Alias(`navParams.data.${AddPaymentSelectionNavParams.UserPayment$}`)
-  private userPayment$: Subject<UserPaymentAmount>;
+  @StateEmitter.From(`navParams.data.${AddPaymentSelectionNavParams.SelectedItem$}`)
+  private selectedItem$: Subject<PaymentSelectionOption>;
 
   @StateEmitter.Alias({ path: "selectedItem$.value", mergeUpdates: true })
   public /** @template */ selectedItemValue$: Observable<number>;
 
+  @StateEmitter.Alias(`navParams.data.${AddPaymentSelectionNavParams.SelectedItem$}`)
+  private chosenItem$: Subject<PaymentSelectionOption>;
+
+  @StateEmitter.Alias(`navParams.data.${AddPaymentSelectionNavParams.ListType}`)
   private listType$: Observable<keyof UserPayment>;
-  private initialItem$: Observable<PaymentSelectionOption>;
+
+  @StateEmitter.Alias(`navParams.data.${AddPaymentSelectionNavParams.Items}`)
+  private items$: Observable<PaymentSelectionOption[]>;
 
   constructor(injector: Injector, navCtrl: NavController, public navParams: NavParams, public platform: WexPlatform) {
     super({ pageName: "Payments.Add.Selection", trackView: false }, injector);
 
-    // Set the initial item
-    this.initialItem$ = Observable.of(navParams.get(AddPaymentSelectionNavParams.SelectedItem)).shareReplay(1);
+    this.listType$.subscribe(listType => {
+      this.isBankAccount$.next(listType === "bankAccount");
+      this.isPaymentAmount$.next(listType === "amount");
 
-    // Create an observable for the list type
-    this.listType$ = this.initialItem$
-      .map((initialItem) => {
-        if (this.isPaymentAmount(initialItem)) {
-          return "amount";
-        }
-        else if (this.isBankAccount(initialItem)) {
-          return "bankAccount";
-        }
-
-        return undefined;
-      }).shareReplay(1);
-
-    // Clone all of the items
-    this.items$.next(this.initialItems.map(item => _.clone(item)));
-
-    // Set the selected item
-    this.items$.asObservable()
-      .take(1)
-      .subscribe(items => this.selectedItem$.next(_.first(items)));
-
-    // Set the page title
-    this.listType$.subscribe(listType => this.pageTitle$.next(this.CONSTANTS.LABELS[listType]));
-
-    Observable.combineLatest(this.selectedItem$, this.initialItem$).subscribe((args) => {
-      let [selectedItem, initialItem] = args;
-      let isSubmitEnabled: boolean = true;
-
-      if (this.isPaymentAmount(selectedItem)) {
-        isSubmitEnabled = selectedItem.value !== (<UserPaymentAmount>initialItem).value;
-      }
-      else if (this.isBankAccount(selectedItem)) {
-        isSubmitEnabled = selectedItem.details.id !== (<BankAccount>initialItem).details.id;
-      }
-
-      this.isSubmitEnabled$.next(isSubmitEnabled);
-      this.isOtherAmountSelected$.next(this.isCustomPaymentAmount(selectedItem));
+      // Set the page title
+      this.pageTitle$.next(this.CONSTANTS.LABELS[listType]);
     });
 
-    this.onSubmit$
-      .flatMap(() => Observable.combineLatest(this.selectedItem$, this.userPayment$, this.listType$).take(1))
-      .subscribe((args) => {
-        let [selectedItem, userPayment, listType] = args;
+    // Make sure that the selected item is one of the items in the list if this is a payment selection
+    this.isPaymentAmount$.asObservable()
+      .filter(Boolean)
+      .flatMap(() => Observable.combineLatest(this.items$, this.selectedItem$))
+      .take(1)
+      .subscribe((args: [UserPaymentAmount[], UserPaymentAmount]) => {
+        let [items, selectedItem] = args;
+        this.selectedItem$.next(Object.assign(_.find(items, { type: selectedItem.type }), selectedItem));
+      });
 
-        // Update the UserPayment with the selected item
-        this.userPayment$.next(Object.assign(userPayment, { [listType]: selectedItem }));
+    this.isBankAccount$.asObservable()
+      .filter(Boolean)
+      .flatMap(() => Observable.combineLatest(this.selectedItem$, this.chosenItem$))
+      .subscribe((args: [BankAccount, BankAccount]) => {
+        let [selectedItem, initialItem] = args;
+        this.isSubmitEnabled$.next(selectedItem.details.id !== initialItem.details.id);
+      });
+
+    this.isPaymentAmount$.asObservable()
+      .filter(Boolean)
+      .flatMap(() => Observable.combineLatest(this.selectedItem$, this.chosenItem$))
+      .subscribe((args: [UserPaymentAmount, UserPaymentAmount]) => {
+        let [selectedItem, initialItem] = args;
+        this.isSubmitEnabled$.next(selectedItem.value !== initialItem.value);
+        this.isOtherAmountSelected$.next(this.isOtherAmount(selectedItem));
+      });
+
+    this.onSubmit$
+      .flatMap(() => this.selectedItem$.asObservable().take(1))
+      .subscribe((selectedItem) => {
+        this.chosenItem$.next(selectedItem);
 
         navCtrl.pop();
       });
@@ -110,23 +106,7 @@ export class AddPaymentSelectionPage extends SecurePage {
     return this.PAYMENT_LABELS[item.type];
   }
 
-  public isBankAccount(selectedItem: PaymentSelectionOption): selectedItem is BankAccount {
-    return selectedItem instanceof BankAccount;
-  }
-
-  public isPaymentAmount(selectedItem: PaymentSelectionOption): selectedItem is UserPaymentAmount {
-    return !(selectedItem instanceof BankAccount);
-  }
-
-  public isCustomPaymentAmount(selectedItem: PaymentSelectionOption): selectedItem is UserPaymentAmount {
-    return this.isPaymentAmount(selectedItem) && selectedItem.type === UserPaymentAmountType.OtherAmount;
-  }
-
-  private get initialItems(): PaymentSelectionOption[] {
-    return this.navParams.get(AddPaymentSelectionNavParams.Items);
-  }
-
-  private getInitialItem(listItem: PaymentSelectionOption): PaymentSelectionOption {
-    
+  public isOtherAmount(amount: UserPaymentAmount): boolean {
+    return amount.type === UserPaymentAmountType.OtherAmount;
   }
 }

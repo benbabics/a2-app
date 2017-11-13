@@ -9,13 +9,13 @@
     <ion-list radio-group [(ngModel)]="selectedItem" [ngClass]="{ 'inset-items': platform.isIos }">
       <ng-template ngFor [ngForOf]="items" let-item>
         
-        <ion-item *ngIf="!(isCustomPaymentAmount(item) && isOtherAmountSelected)">
-          <ion-label *ngIf="isPaymentAmount(item)">
+        <ion-item *ngIf="!(isOtherAmount(item) && isOtherAmountSelected)">
+          <ion-label *ngIf="isPaymentAmount">
             <h2>{{ getPaymentAmountLabel(item) }}</h2>
             <p>{{ item.value | wexCurrency }}</p>
           </ion-label>
 
-          <ion-label *ngIf="isBankAccount(item)">
+          <ion-label *ngIf="isBankAccount">
             <h2>{{ item.details.name }}</h2>
             <p>...{{ item.details.lastFourDigits }}</p>
           </ion-label>
@@ -23,7 +23,7 @@
           <ion-radio [value]="item"></ion-radio>
         </ion-item>
 
-        <ion-item *ngIf="isCustomPaymentAmount(item) && isOtherAmountSelected" class="custom-input-item">
+        <ion-item *ngIf="isOtherAmount(item) && isOtherAmountSelected" class="custom-input-item">
           <label>
             <h2>{{ getPaymentAmountLabel(item) }}</h2>
           </label>
