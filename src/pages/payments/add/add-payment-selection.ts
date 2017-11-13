@@ -40,19 +40,19 @@ export class AddPaymentSelectionPage extends SecurePage {
   @StateEmitter() private isBankAccount$: Subject<boolean>;
   @StateEmitter() private isPaymentAmount$: Subject<boolean>;
 
-  @StateEmitter.From(`navParams.data.${AddPaymentSelectionNavParams.SelectedItem$}`)
+  @StateEmitter.From("navParams.data." + AddPaymentSelectionNavParams.SelectedItem$)
   private selectedItem$: Subject<PaymentSelectionOption>;
 
   @StateEmitter.Alias({ path: "selectedItem$.value", mergeUpdates: true })
   public /** @template */ selectedItemValue$: Observable<number>;
 
-  @StateEmitter.Alias(`navParams.data.${AddPaymentSelectionNavParams.SelectedItem$}`)
+  @StateEmitter.Alias("navParams.data." + AddPaymentSelectionNavParams.SelectedItem$)
   private chosenItem$: Subject<PaymentSelectionOption>;
 
-  @StateEmitter.Alias(`navParams.data.${AddPaymentSelectionNavParams.ListType}`)
+  @StateEmitter.Alias("navParams.data." + AddPaymentSelectionNavParams.ListType)
   private listType$: Observable<keyof UserPayment>;
 
-  @StateEmitter.Alias(`navParams.data.${AddPaymentSelectionNavParams.Items}`)
+  @StateEmitter.Alias("navParams.data." + AddPaymentSelectionNavParams.Items)
   private items$: Observable<PaymentSelectionOption[]>;
 
   constructor(injector: Injector, navCtrl: NavController, public navParams: NavParams, public platform: WexPlatform) {
