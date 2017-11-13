@@ -1,6 +1,6 @@
 import { Injectable, Pipe } from "@angular/core";
 import { PostedTransaction, PendingTransaction } from "@angular-wex/models";
-import { BaseTransactionT } from "./../pages/transactions/transactions";
+import { BaseTransactionT } from "./../pages/transactions/transactions-date-view/transactions-date-view";
 
 @Pipe({
   name: "transactionAmount"

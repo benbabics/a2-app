@@ -19,7 +19,7 @@
           <div text-wrap>{{ item.details.productDescription }}</div>
         </span>
 
-        <span class="transaction-amount">{{ getTransactionAmount(item) | wexCurrency }}</span>
+        <span class="transaction-amount">{{ item | transactionAmount | wexCurrency }}</span>
       </div>
     </ng-template>
   </wex-static-list-page-content>

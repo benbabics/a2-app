@@ -222,17 +222,6 @@ export class TransactionDateSublist extends StaticListPage<BaseTransactionT, Bas
 
   public set listLabels(listLabels) { listLabels; }
 
-  public getTransactionAmount(transaction: BaseTransactionT): number {
-    if (transaction instanceof PendingTransaction) {
-      return transaction.details.authorizationAmount;
-    }
-    else if (transaction instanceof PostedTransaction) {
-      return transaction.details.netCost;
-    }
-
-    return 0;
-  }
-
   public goToDetailPage(item: BaseTransactionT): Promise<any> {
     if (item instanceof PostedTransaction) {
       return this.navCtrl.push(TransactionDetailsPage, { item });
