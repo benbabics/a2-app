@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { NavParams, NavController, App } from "ionic-angular";
+import { NavParams, NavController, App, ViewController } from "ionic-angular";
 import { Component, Injector } from "@angular/core";
 import { DetailsPage } from "../../details-page";
 import { Payment } from "@angular-wex/models";
@@ -37,6 +37,7 @@ export class PaymentsDetailsPage extends DetailsPage {
     public paymentProvider: PaymentProvider,
     public wexAlertController: WexAlertController,
     public navCtrl: NavController,
+    public viewCtrl: ViewController,
     public app: App,
     injector: Injector
   ) {
@@ -80,7 +81,8 @@ export class PaymentsDetailsPage extends DetailsPage {
   }
 
   public editPayment() {
-    this.app.getRootNav().push(AddPaymentPage, { payment: this.payment });
+    this.navCtrl.push(AddPaymentPage, { payment: this.payment })
+      .then(() => this.navCtrl.removeView(this.viewCtrl));
     this.trackAnalyticsEvent("paymentEdit");
   }
 }

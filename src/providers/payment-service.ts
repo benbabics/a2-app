@@ -14,10 +14,13 @@ export class PaymentService {
 
   public get amountOptions$(): Observable<UserPaymentAmount[]> {
     return this.invoiceSummary$
-      .map(invoiceSummary => UserPaymentAmountType.values.map((paymentAmountType) => ({
-        type: paymentAmountType,
-        value: _.get(invoiceSummary.details, paymentAmountType, 0)
-      })));
+      .map(invoiceSummary => UserPaymentAmountType.values.reduce((list, type) => {
+        let value = _.get(invoiceSummary.details, type, 0);
+        if (type === UserPaymentAmountType.OtherAmount || value > 0) {
+          list.push({ type, value });
+        }
+        return list;
+      }, []));
   }
 
   public get bankAccounts$(): Observable<BankAccount[]> {

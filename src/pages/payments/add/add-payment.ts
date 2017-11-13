@@ -183,7 +183,12 @@ export class AddPaymentPage extends SecurePage {
     }
 
     return paymentState
-      .finally(() => this.isLoading$.next(false))
+      .finally(() => {
+        this.isLoading$.next(false);
+
+        // Update the cached payments
+        this.sessionCache.update$(Session.Field.Payments).subscribe();
+      })
       .map((payment) => {
         this.navCtrl.push(AddPaymentConfirmationPage, { payment })
           .then(() => this.navCtrl.removeView(this.viewController));

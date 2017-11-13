@@ -1,6 +1,6 @@
 import { Component, Injector } from "@angular/core";
 import { Page } from "../page";
-import { Value } from "../../decorators/value";
+import { WexAppVersionCheck } from "./../../providers/wex-app-version-check";
 
 @Component({
   selector: "page-terms-of-use",
@@ -8,12 +8,13 @@ import { Value } from "../../decorators/value";
 })
 export class TermsOfUsePage extends Page {
 
-  @Value("VERSION_NUMBER") private versionNumber: string;
+  private versionNumber: string;
   public get closing(): string {
     return this.CONSTANTS.closing.replace("$VERSION_NUMBER$", this.versionNumber);
   }
 
-  constructor(injector: Injector) {
+  constructor(injector: Injector, private wexAppVersionCheck: WexAppVersionCheck) {
     super("Terms of Use", injector);
+    this.versionNumber = this.wexAppVersionCheck.versionNumber;
   }
 }
