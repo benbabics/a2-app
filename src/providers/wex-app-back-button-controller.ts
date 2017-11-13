@@ -11,11 +11,13 @@ export class WexAppBackButtonController {
     }
 
     private registerDefault() {
-        this.action = () => {
-            try {
-                this.app.goBack();
-            } catch (e) { }
-        };
+        this.action = this.defaultBack;
+    }
+
+    public readonly defaultBack = () => {
+        try {
+            this.app.goBack();
+        } catch (e) { }
     }
 
     public registerAction(action: Function) {

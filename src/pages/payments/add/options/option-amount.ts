@@ -10,6 +10,7 @@ import { Value } from "../../../../decorators/value";
 export class OptionAmount implements OnInit {
 
   @Input() option: UserPaymentAmount;
+  @Input("inFocus") inFocus: boolean = false;
   @Output() otherAmountEmit: EventEmitter<number> = new EventEmitter<number>();
   @ViewChild("radio") radio: RadioButton;
   @Value("PAGES.PAYMENTS.ADD.LABELS") public readonly LABELS: any;
