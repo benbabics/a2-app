@@ -163,7 +163,7 @@ export class AddPaymentPage extends SecurePage {
       .subscribe((payment) => {
         // Update the cache
         this.sessionCache.requestSessionDetail(Session.Field.Payments);
-        this.navCtrl.push(AddPaymentConfirmationPage, { payment })
+        this.navCtrl.push(AddPaymentConfirmationPage, { payment, isEditingPayment: this.isEditingPayment })
           .then(() => this.navCtrl.removeView(this.viewController))
           .then(() => this.events.publish(PaymentsPage.REFRESH_EVENT))
           .finally(() => this.clearCustomAmount());
