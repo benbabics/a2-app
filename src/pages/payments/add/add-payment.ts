@@ -12,13 +12,16 @@ import { Session } from "../../../models/session";
 import { BankAccount, Payment } from "@angular-wex/models";
 import { PaymentService, PaymentSelectionOption } from "./../../../providers/payment-service";
 import { AddPaymentSelectionPage } from "./add-payment-selection";
-import { UserPayment } from "../../../models";
+import { UserPayment, UserPaymentAmountType } from "../../../models";
 import { Value } from "../../../decorators/value";
 import { AddPaymentConfirmationPage } from "./confirmation/add-payment-confirmation";
 import { PaymentProvider, PaymentRequest } from "@angular-wex/api-providers";
 import { Calendar } from "../../../components/calendar/calendar";
 import { WexAlertController } from "../../../components/wex-alert-controller/wex-alert-controller";
 import { NavBarController } from "../../../providers/nav-bar-controller";
+import { Events } from "ionic-angular";
+import { PaymentsPage } from "../payments";
+import { WexAppBackButtonController } from "../../../providers/index";
 
 export type AddPaymentNavParams = keyof {
   payment
@@ -54,6 +57,8 @@ export class AddPaymentPage extends SecurePage {
     public wexAlertController: WexAlertController,
     private paymentProvider: PaymentProvider,
     public navBarCtrl: NavBarController,
+    private events: Events,
+    private wexAppBackButtonController: WexAppBackButtonController
   ) {
     super({ pageName: "Payments.Add", trackView: false }, injector);
   }
@@ -91,6 +96,7 @@ export class AddPaymentPage extends SecurePage {
   }
 
   public cancel(data?: any) {
+    this.clearCustomAmount();
     this.viewController.dismiss(data);
   }
 
@@ -158,12 +164,20 @@ export class AddPaymentPage extends SecurePage {
         // Update the cache
         this.sessionCache.requestSessionDetail(Session.Field.Payments);
         this.navCtrl.push(AddPaymentConfirmationPage, { payment })
-          .then(() => this.navCtrl.removeView(this.viewController));
+          .then(() => this.navCtrl.removeView(this.viewController))
+          .then(() => this.events.publish(PaymentsPage.REFRESH_EVENT))
+          .finally(() => this.clearCustomAmount());
         this.trackAnalyticsPageView(this.isEditingPayment ? "confirmationUpdated" : "confirmationScheduled");
       }, (error) => {
         /* TODO - What do we do here? */
         console.error(error);
       });
+  }
+
+  private clearCustomAmount() {
+    if (this.payment.amount.type === UserPaymentAmountType.OtherAmount) {
+      this.payment.amount.value = 0;
+    }
   }
 
   private populatePayment(): void {
@@ -190,5 +204,14 @@ export class AddPaymentPage extends SecurePage {
       this.populatePayment();
       this.trackAnalyticsPageView(this.isEditingPayment ? "makePaymentEdit" : "makePaymentInitial");
     }
+
+    this.wexAppBackButtonController.registerAction(() => {
+      this.wexAppBackButtonController.defaultBack();
+      this.clearCustomAmount();
+    });
+  }
+
+  ionViewWillLeave() {
+    this.wexAppBackButtonController.deregisterAction();
   }
 }
