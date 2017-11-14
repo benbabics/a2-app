@@ -15,6 +15,7 @@ import { WexGreeking } from "../../../components/index";
 import { SessionInfoRequestors } from "../../../providers/session-info-requestor/session-info-requestor";
 import { DynamicList } from "../../../models/index";
 import { PostedTransactionRequestor } from "../../../providers/index";
+import { TabPage } from "../../../decorators/tab-page";
 
 export type TransactionDateViewParams = keyof {
   filter?: TransactionListFilter;
@@ -250,6 +251,7 @@ export class TransactionDateSublist extends StaticListPage<BaseTransactionT, Bas
   }
 }
 
+@TabPage()
 export class TransactionDateView extends TransactionDateSublist implements DoCheck {
   private heightHasBeenSet: boolean;
   public readonly contentOnly: boolean = true;

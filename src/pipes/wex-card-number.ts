@@ -6,7 +6,7 @@ import { Injectable, Pipe } from "@angular/core";
 @Injectable()
 export class WexCardNumberPipe {
 
-  private static readonly CARD_MASK = "****";
+  private static readonly CARD_MASK = "••••";
   private static readonly NUM_DIGITS = 5;
 
   public transform(value: any) {
