@@ -8,20 +8,27 @@ export { GroupedList } from "./list-page";
 import { WexGreeking } from "../components";
 import { Content } from "ionic-angular";
 import { PageDetails } from "./page";
+import { Subject, Observable, BehaviorSubject } from "rxjs";
+import { StateEmitter } from "angular-rxjs-extensions";
 
 type milliseconds = number;
 
 export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extends ListPage {
-  @ViewChild(Content) content: Content;
 
   // The threshold size that a list is considered large enough to automatically enable a loading facade
   private static readonly LARGE_LIST_SIZE = 75;
   private static readonly LARGE_LIST_FACADE_DURATION: milliseconds = 100;
 
-  private _fetchingItems: boolean = false;
-  private _items: T[] = [];
-  private _displayedItems: T[] = [];
-  private _displayedItemGroups: GroupedList<T> = {};
+  @ViewChild(Content) public content: Content;
+
+  @StateEmitter() private fetchingItems$: Subject<boolean>;
+  @StateEmitter({ initialValue: [] }) private items$: Subject<T[]>;
+  @StateEmitter() private itemLists$: Subject<T[][]>;
+
+  private displayedItems$: Observable<T[]>;
+  private isGrouped$: Observable<boolean>;
+  private totalDisplayedItemCount$ = new BehaviorSubject<number>(0);
+
   public scrollLocation: number = 0;
 
   // Set this to specify the order that groups should appear in grouped list mode
@@ -42,8 +49,6 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   //Enables a loading facade. This forces the greeking state of the list to be shown instead of the actual items.
   public loadingFacade?: boolean = false;
 
-  public abstract goToDetailPage(element: T);
-
   constructor(
     pageDetails: PageDetails,
     protected listDataField: Session.Field,
@@ -53,15 +58,40 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   ) {
     super(pageDetails, injector, requiredSessionInfo);
 
-    //TODO - Fix this
-    this.sessionCache.isUpdatingField$(listDataField)
-      .subscribe(() => this._fetchingItems = true);
+    this.isGrouped$ = Observable.of(!!this.dividerLabels).shareReplay(1);
+
+    this.displayedItems$ = this.sessionCache.getField$<T[]>(listDataField)
+      .map((items) => {
+        this.fetchingItems$.next(false);
+        return this.filterItems(items);
+      });
 
     // Update the results when the session data changes
-    this.sessionCache.getField$<T[]>(listDataField)
-      .map(items => this._items = items)
-      .map(() => this.updateList())
-      .subscribe(() => this._fetchingItems = false);
+    this.isGrouped$
+      .filter(grouped => grouped)
+      .flatMap(() => this.displayedItems$)
+      .map(items => this.sortItemGroups(this.groupItems(items)))
+      .map(groupedList => this.listGroupDisplayOrder.reduce<T[][]>((sortedList: T[][], group: string) => {
+        sortedList.push(groupedList[group]);
+        return sortedList;
+      }, []))
+      .subscribe((itemLists) => {
+        this.totalDisplayedItemCount$.next(itemLists.reduce((count, list) => count + _.size(list), 0));
+        this.itemLists$.next(itemLists);
+      });
+
+    this.isGrouped$
+      .filter(grouped => !grouped)
+      .flatMap(() => this.displayedItems$)
+      .map(items => this.sortItems(items))
+      .subscribe((items) => {
+        this.totalDisplayedItemCount$.next(items.length);
+        this.items$.next(items);
+      });
+
+    this.sessionCache.onFieldUpdating$(listDataField)
+      .map(() => this.clearList())
+      .subscribe(() => this.fetchingItems$.next(true));
   }
 
   public static defaultItemSort<T extends Model<DetailsT>, DetailsT>(items: T[], sortBy: keyof DetailsT, order: "asc" | "desc" = "asc"): T[] {
@@ -72,75 +102,33 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
     return ListPage.groupByDetails<T, DetailsT>(items, groupBy, groups);
   }
 
-  protected abstract sortItems(items: T[]): T[];
+  public abstract goToDetailPage(element: T);
 
-  protected get displayedItemGroups(): GroupedList<T> {
-    return this._displayedItemGroups;
-  }
+  protected abstract sortItems(items: T[]): T[];
 
   protected get isSearchEnabled(): boolean {
     return !!this.searchFilterFields;
   }
 
-  /** @internal */
-  public get items(): T[] {
-    return this._items;
-  }
-
   protected checkListSize() {
-    // If this is a large list, enable a loading facade to defer list rendering until the view has been entered
-    if (this.totalDisplayedItemCount > StaticListPage.LARGE_LIST_SIZE) {
-      this.loadingFacade = true;
-      window.setTimeout(() => this.loadingFacade = false, StaticListPage.LARGE_LIST_FACADE_DURATION);
-    }
+    this.totalDisplayedItemCount$.asObservable().take(1).subscribe((totalDisplayedItemCount) => {
+      // If this is a large list, enable a loading facade to defer list rendering until the view has been entered
+      if (totalDisplayedItemCount > StaticListPage.LARGE_LIST_SIZE) {
+        this.loadingFacade = true;
+        window.setTimeout(() => this.loadingFacade = false, StaticListPage.LARGE_LIST_FACADE_DURATION);
+      }
+    });
   }
 
   protected clearList() {
-    this._items = [];
-    this._displayedItems = [];
-    this._displayedItemGroups = {};
+    this.items$.next([]);
+    this.itemLists$.next([]);
   }
 
   protected createSearchRegex(searchFilter: string) {
     //do a case-insensitive search
     return new RegExp(_.escapeRegExp(searchFilter), "i");
   }
-
-  /*protected fetch(options?: FetchOptions): Observable<T[]> {
-    return ((): Observable<Session> => {
-      if (options.forceRequest) {
-        return this.sessionCache.update$(this.listDataField, options);
-      }
-      else {
-        return this.sessionCache.require$(this.listDataField);
-      }
-    })().map(session => session[this.listDataField] as any);
-  }
-
-  protected fetchResults(options?: FetchOptions): Observable<T[]> {
-    options = _.merge({}, FetchOptions.Defaults, options);
-
-    if (options.clearItems) {
-      this.clearList(); //Clear the results for a new search
-    }
-
-    this._fetchingItems = true;
-    // get the session info required to display the list
-    return this.fetch(options)
-      .finally(() => this._fetchingItems = false)
-      .map((items: T[]): T[] => {
-        this._items = items;
-
-        // build the display lists
-        this.updateList();
-
-        if (options.checkListSize) {
-          this.checkListSize();
-        }
-
-        return this.items;
-      });
-  }*/
 
   protected filterItems(items: T[]): T[] {
     if (this.isSearchEnabled) {
@@ -150,9 +138,8 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
         return String(item.details[searchField]).search(searchRegex) !== -1;
       }));
     }
-    else {
-      return this._items;
-    }
+
+    return items;
   }
 
   protected groupItems(items: T[]): GroupedList<T> {
@@ -167,17 +154,6 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
     }, {});
   }
 
-  protected updateList() {
-    this._displayedItems = this.filterItems(this._items);
-
-    if (this.isGrouped) {
-      this._displayedItemGroups = this.sortItemGroups(this.groupItems(this._displayedItems));
-    }
-    else {
-      this._displayedItems = this.sortItems(this._displayedItems);
-    }
-  }
-
   ionViewWillEnter() {
     this.checkListSize();
   }
@@ -190,45 +166,11 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
     this.scrollLocation = this.content.getScrollElement().scrollTop;
   }
 
-  public get displayedItems(): T[] {
-    return this.isGrouped ? null : this._displayedItems;
-  }
-
-  public get displayedItemLists(): T[][] {
-    if (this.isGrouped) {
-      //returns a list containing lists of items, ordered by the specified group display order
-      return this.listGroupDisplayOrder.reduce<T[][]>((sortedList: T[][], group: string) => {
-
-        sortedList.push(this._displayedItemGroups[group]);
-        return sortedList;
-      }, []);
-    }
-
-    return null;
-  }
-
-  public get fetchingItems(): boolean {
-    return this._fetchingItems;
-  }
-
-  public get isGrouped(): boolean {
-    return !!this.dividerLabels;
-  }
-
-  public get totalDisplayedItemCount(): number {
-    return this.isGrouped ? _.reduce<T[], number>(this._displayedItemGroups, (accumulator: number, list: T[]) => {
-      accumulator += _.size(list);
-      return accumulator;
-    }, 0) : _.size(this._displayedItems);
-  }
-
   public isItemActive(item: T): boolean {
     return !!item;
   }
 
   public onRefresh(refresher) {
-    this.clearList();
-
     this.sessionCache.update$(this.listDataField, { clearCache: true })
       .finally(() => refresher.complete())
       .subscribe();

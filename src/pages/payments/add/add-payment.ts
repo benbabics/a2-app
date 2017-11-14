@@ -145,7 +145,15 @@ export class AddPaymentPage extends SecurePage {
           bankAccountId: payment.bankAccount.details.id
         });
       })
-      .subscribe();
+      .subscribe((payment) => {
+        this.navCtrl.push(AddPaymentConfirmationPage, { payment })
+          .then(() => this.navCtrl.removeView(this.viewController));
+
+        this.trackAnalyticsPageView(this.existingPayment ? "confirmationUpdated" : "confirmationScheduled");
+      }, (error) => {
+        console.error(error);
+        this.wexAlertController.alert(this.CONSTANTS.LABELS.changesFailed);
+      });
   }
 
   private get existingPayment(): Payment {
@@ -182,23 +190,12 @@ export class AddPaymentPage extends SecurePage {
       paymentState = this.paymentProvider.addPayment(accountId, paymentRequest);
     }
 
-    return paymentState
-      .finally(() => {
-        this.isLoading$.next(false);
+    return paymentState.finally(() => {
+      this.isLoading$.next(false);
 
-        // Update the cached payments
-        this.sessionCache.update$(Session.Field.Payments).subscribe();
-      })
-      .map((payment) => {
-        this.navCtrl.push(AddPaymentConfirmationPage, { payment })
-          .then(() => this.navCtrl.removeView(this.viewController));
-
-        this.trackAnalyticsPageView(this.existingPayment ? "confirmationUpdated" : "confirmationScheduled");
-        return payment;
-      }, (error) => {
-        console.error(error);
-        this.wexAlertController.alert(this.CONSTANTS.LABELS.changesFailed);
-      });
+      // Update the cached payments
+      this.sessionCache.update$(Session.Field.Payments).subscribe();
+    });
   }
 
   private createUserPayment$(existingPayment?: Payment): Observable<UserPayment> {

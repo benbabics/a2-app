@@ -51,8 +51,7 @@ export class LandingPage extends SecurePage {
 
   private readonly REQUIRED_SESSION_FIELDS: Session.Field[] = [
     Session.Field.User,
-    Session.Field.InvoiceSummary,
-    Session.Field.Payments
+    Session.Field.InvoiceSummary
   ];
 
   constructor(
