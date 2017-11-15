@@ -102,11 +102,13 @@ export class AddPaymentSelectionPage extends SecurePage {
     // If this is a new custom amount, enable the button (as long as the custom amount is not 0).
     if (this.isPaymentAmount) {
     if (this.isCustomPaymentAmount) {
-      if (this.otherAmount === 0) {
+      if (this.otherAmount === 0 || _.isNaN(this.otherAmount)) {
         return true;
       } else if ((this.selectedItem as UserPaymentAmount).value === this.otherAmount) {
         return (this.selectedItem === this.initialSelection);
         }
+      } else {
+        return this.selectedItem === this.initialSelection;
       }
     }
     // Otherwise, if the selected item is the same, disable the button.
