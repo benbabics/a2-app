@@ -790,7 +790,7 @@ export namespace ConstantsInfo {
             driverName: "Driver",
             assetId: "Asset ID",
             odometer: "Odometer",
-            location: "Locaion"
+            location: "Location"
           }
         }
       }
