@@ -1,14 +1,14 @@
 <wex-list id="items-list"
           [items]="page.items"
           [itemLists]="page.itemLists"
-          [dividers]="page.dividerLabels"
+          [dividers]="page.params.dividerLabels"
           [loading]="page.fetchingItems"
           [greekingData]="page.greekingData"
           [greekedElementCount]="page.greekedElementCount"
           [forceGreeking]="page.loadingFacade">
 
   <ng-template #listItemTemplate let-item>
-    <wex-list-item (click)="page.goToDetailPage(item)" [attr.data-active]="page.isItemActive(item)">
+    <wex-list-item (click)="page.onItemSelected(item)" [attr.data-active]="page.isItemActive(item)">
       <ng-template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{$implicit: item}"></ng-template>
     </wex-list-item>
   </ng-template>

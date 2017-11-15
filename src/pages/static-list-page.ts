@@ -7,11 +7,26 @@ import { Session } from "../models";
 export { GroupedList } from "./list-page";
 import { WexGreeking } from "../components";
 import { Content } from "ionic-angular";
-import { PageDetails } from "./page";
+import { PageDetails, PageParams } from "./page";
 import { Subject, Observable, BehaviorSubject } from "rxjs";
-import { StateEmitter } from "angular-rxjs-extensions";
+import { StateEmitter, EventSource } from "angular-rxjs-extensions";
+import { ViewWillEnter, ViewWillLeave, ViewDidEnter } from "angular-rxjs-extensions-ionic";
 
 type milliseconds = number;
+
+export namespace StaticListPage {
+
+  export interface Params<DetailsT> extends PageParams {
+    // The session field to display in the list
+    listDataField: Session.Field;
+    // Set this to specify the order that groups should appear in grouped list mode
+    listGroupDisplayOrder?: string[];
+    // Set this to add header dividers and enable grouped list mode
+    dividerLabels?: string[];
+    // The fields to filter on when the user is searching
+    searchFilterFields?: (keyof DetailsT)[];
+  }
+}
 
 export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extends ListPage {
 
@@ -21,49 +36,50 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
 
   @ViewChild(Content) public content: Content;
 
+  @ViewWillEnter() protected onViewWillEnter$: Observable<void>;
+  @ViewWillLeave() protected onViewWillLeave$: Observable<void>;
+  @ViewDidEnter() protected onViewDidEnter$: Observable<void>;
+  @EventSource() protected onRefresh$: Observable<any>;
+  @EventSource() protected onItemSelected$: Observable<T>;
+
   @StateEmitter() private fetchingItems$: Subject<boolean>;
   @StateEmitter({ initialValue: [] }) private items$: Subject<T[]>;
   @StateEmitter() private itemLists$: Subject<T[][]>;
+  @StateEmitter({ initialValue: 0 }) private scrollLocation$: Subject<number>;
+  @StateEmitter({ initialValue: "" }) private searchFilter$: Subject<string>;
+  //Enables a loading facade. This forces the greeking state of the list to be shown instead of the actual items.
+  @StateEmitter() private loadingFacade$: Subject<boolean>;
+  // Search field label
+  @StateEmitter.Alias("CONSTANTS.searchLabel")
+  public /** @template */ searchLabel$: Observable<string>;
+  // The greeking data displayed for each element
+  @StateEmitter.Alias("CONSTANTS.greekingData")
+  public /** @template */ greekingData$: Observable<WexGreeking.Rect[]>;
+  // The number of default elements to display
+  @StateEmitter.Alias("CONSTANTS.greekedElementCount")
+  public /** @template */ greekedElementCount$: Observable<number>;
+
+  protected params: StaticListPage.Params<DetailsT>;
 
   private displayedItems$: Observable<T[]>;
   private isGrouped$: Observable<boolean>;
   private totalDisplayedItemCount$ = new BehaviorSubject<number>(0);
 
-  public scrollLocation: number = 0;
-
-  // Set this to specify the order that groups should appear in grouped list mode
-  protected listGroupDisplayOrder: string[] = null;
-
-  public searchFilter: string = "";
-
-  // Set this to add header dividers and enable grouped list mode
-  public dividerLabels?: string[];
-  // Labels for the list header
-  public listLabels?: string[] = _.get<string[]>(this.CONSTANTS, "listLabels");
-  // Search field label
-  public searchLabel?: string = _.get<string>(this.CONSTANTS, "searchLabel");
-  //The greeking data displayed for each element
-  public greekingData?: WexGreeking.Rect[] = _.get<WexGreeking.Rect[]>(this.CONSTANTS, "greekingData");
-  //The number of default elements to display
-  public greekedElementCount?: number = _.get<number>(this.CONSTANTS, "greekedElementCount");
-  //Enables a loading facade. This forces the greeking state of the list to be shown instead of the actual items.
-  public loadingFacade?: boolean = false;
+  protected abstract sortItems(items: T[]): T[];
 
   constructor(
-    pageDetails: PageDetails,
-    protected listDataField: Session.Field,
+    params: StaticListPage.Params<DetailsT> & PageDetails,
     public injector: Injector,
-    protected searchFilterFields?: (keyof DetailsT)[],
     requiredSessionInfo?: Session.Field[]
   ) {
-    super(pageDetails, injector, requiredSessionInfo);
+    super(params, injector, requiredSessionInfo);
 
-    this.isGrouped$ = Observable.of(!!this.dividerLabels).shareReplay(1);
+    this.isGrouped$ = Observable.of(!!params.dividerLabels).shareReplay(1);
 
-    this.displayedItems$ = this.sessionCache.getField$<T[]>(listDataField)
-      .map((items) => {
-        this.fetchingItems$.next(false);
-        return this.filterItems(items);
+    this.displayedItems$ = Observable.combineLatest(this.sessionCache.getField$<T[]>(params.listDataField), this.searchFilter$)
+      .map((args) => {
+        let [items, searchFilter] = args;
+        return this.filterItems(items, searchFilter);
       });
 
     // Update the results when the session data changes
@@ -71,7 +87,7 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
       .filter(grouped => grouped)
       .flatMap(() => this.displayedItems$)
       .map(items => this.sortItemGroups(this.groupItems(items)))
-      .map(groupedList => this.listGroupDisplayOrder.reduce<T[][]>((sortedList: T[][], group: string) => {
+      .map(groupedList => params.listGroupDisplayOrder.reduce<T[][]>((sortedList: T[][], group: string) => {
         sortedList.push(groupedList[group]);
         return sortedList;
       }, []))
@@ -89,9 +105,24 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
         this.items$.next(items);
       });
 
-    this.sessionCache.onFieldUpdating$(listDataField)
+    this.sessionCache.onFieldUpdating$(params.listDataField)
       .map(() => this.clearList())
       .subscribe(() => this.fetchingItems$.next(true));
+
+    this.sessionCache.onFieldUpdated$(params.listDataField)
+      .subscribe(() => this.fetchingItems$.next(false));
+
+    this.onViewWillEnter$.subscribe(() => this.checkListSize());
+
+    this.onViewDidEnter$
+      .flatMap(() => this.scrollLocation$.asObservable().take(1))
+      .subscribe(scrollLocation => this.content.scrollTo(0, scrollLocation, 0));
+
+    this.onViewWillLeave$.subscribe(() => this.scrollLocation$.next(this.content.getScrollElement().scrollTop));
+
+    this.onRefresh$.flatMap((refresher) => {
+      return this.sessionCache.update$(params.listDataField, { clearCache: true }).finally(() => refresher.complete());
+    }).subscribe();
   }
 
   public static defaultItemSort<T extends Model<DetailsT>, DetailsT>(items: T[], sortBy: keyof DetailsT, order: "asc" | "desc" = "asc"): T[] {
@@ -102,20 +133,12 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
     return ListPage.groupByDetails<T, DetailsT>(items, groupBy, groups);
   }
 
-  public abstract goToDetailPage(element: T);
-
-  protected abstract sortItems(items: T[]): T[];
-
-  protected get isSearchEnabled(): boolean {
-    return !!this.searchFilterFields;
-  }
-
   protected checkListSize() {
     this.totalDisplayedItemCount$.asObservable().take(1).subscribe((totalDisplayedItemCount) => {
       // If this is a large list, enable a loading facade to defer list rendering until the view has been entered
       if (totalDisplayedItemCount > StaticListPage.LARGE_LIST_SIZE) {
-        this.loadingFacade = true;
-        window.setTimeout(() => this.loadingFacade = false, StaticListPage.LARGE_LIST_FACADE_DURATION);
+        this.loadingFacade$.next(true);
+        window.setTimeout(() => this.loadingFacade$.next(false), StaticListPage.LARGE_LIST_FACADE_DURATION);
       }
     });
   }
@@ -125,16 +148,21 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
     this.itemLists$.next([]);
   }
 
-  protected createSearchRegex(searchFilter: string) {
+  protected groupItems(items: T[]): GroupedList<T> {
+    console.error("StaticListPage.groupItems must be defined when using a grouped list.");
+    return { items };
+  }
+
+  private createSearchRegex(searchFilter: string) {
     //do a case-insensitive search
     return new RegExp(_.escapeRegExp(searchFilter), "i");
   }
 
-  protected filterItems(items: T[]): T[] {
-    if (this.isSearchEnabled) {
-      let searchRegex = this.createSearchRegex(this.searchFilter);
+  private filterItems(items: T[], searchFilter: string): T[] {
+    if (searchFilter) {
+      let searchRegex = this.createSearchRegex(searchFilter);
 
-      return items.filter((item: T) => this.searchFilterFields.some((searchField) => {
+      return items.filter((item: T) => this.params.searchFilterFields.some((searchField) => {
         return String(item.details[searchField]).search(searchRegex) !== -1;
       }));
     }
@@ -142,37 +170,14 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
     return items;
   }
 
-  protected groupItems(items: T[]): GroupedList<T> {
-    console.error("StaticListPage.groupItems must be defined when using a grouped list.");
-    return { items };
-  }
-
-  protected sortItemGroups(groupedItems: GroupedList<T>): GroupedList<T> {
+  private sortItemGroups(groupedItems: GroupedList<T>): GroupedList<T> {
     return _.transform(groupedItems, (sortedGroups: GroupedList<T>, items: T[], group: string) => {
       //sort each grouped list individually
       return sortedGroups[group] = this.sortItems(items);
     }, {});
   }
 
-  ionViewWillEnter() {
-    this.checkListSize();
-  }
-
-  ionViewDidEnter() {
-    this.content.scrollTo(0, this.scrollLocation, 0);
-  }
-
-  ionViewWillLeave() {
-    this.scrollLocation = this.content.getScrollElement().scrollTop;
-  }
-
   public isItemActive(item: T): boolean {
     return !!item;
-  }
-
-  public onRefresh(refresher) {
-    this.sessionCache.update$(this.listDataField, { clearCache: true })
-      .finally(() => refresher.complete())
-      .subscribe();
   }
 }

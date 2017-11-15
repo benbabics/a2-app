@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import * as moment from "moment";
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { Component, Injector } from "@angular/core";
 import { NavParams, NavController, App } from "ionic-angular";
 import { StaticListPage, GroupedList } from "../static-list-page";
@@ -11,7 +11,7 @@ import { AddPaymentPage } from "./add/add-payment";
 import { TabPage } from "../../decorators/tab-page";
 import { InvoiceSummary } from "@angular-wex/models";
 import { WexAlertController } from "../../components/wex-alert-controller/wex-alert-controller";
-import { Reactive, StateEmitter } from "angular-rxjs-extensions";
+import { Reactive, StateEmitter, EventSource } from "angular-rxjs-extensions";
 
 @Component({
   selector: "page-payments",
@@ -23,12 +23,13 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
 
   private static readonly PAYMENT_STATUSES: PaymentStatus[] = [PaymentStatus.SCHEDULED, PaymentStatus.COMPLETE];
 
+  @EventSource() onAddPayment$: Observable<any>;
+
+  @StateEmitter() private checkingMakePaymentAvailability$: Subject<boolean>;
+  @StateEmitter() private minPaymentDueDate$: Subject<string>;
+
   @StateEmitter.Alias("session$.invoiceSummary")
   private invoiceSummary$: Observable<InvoiceSummary>;
-
-  public checkingMakePaymentAvailability: boolean = false;
-
-  public minPaymentDueDate: string;
 
   constructor(
     public navCtrl: NavController,
@@ -37,30 +38,45 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
     private alertController: WexAlertController,
     injector: Injector
   ) {
-    super("Payments", Session.Field.Payments, injector, null, [Session.Field.InvoiceSummary]);
-  }
+    super({ pageName: "Payments", listDataField: Session.Field.Payments }, injector, [Session.Field.InvoiceSummary]);
 
-  ionViewWillEnter() {
-    this.invoiceSummary$.take(1).subscribe((invoiceSummary) => {
-      this.minPaymentDueDate = _.template(this.CONSTANTS.payNowSection.on)({
-        dueDate: moment(invoiceSummary.paymentDueDate).format("MMMM Do, YYYY")
+    this.onViewWillEnter$
+      .flatMap(() => this.invoiceSummary$.take(1))
+      .subscribe((invoiceSummary) => {
+        this.minPaymentDueDate$.next(_.template(this.CONSTANTS.payNowSection.on)({
+          dueDate: moment(invoiceSummary.paymentDueDate).format("MMMM Do, YYYY")
+        }));
       });
-    });
-    super.ionViewWillEnter();
+
+    this.onAddPayment$
+      .flatMap(() => this.canMakePayment())
+      .subscribe(() => this.app.getRootNav().push(AddPaymentPage), (availability: MakePaymentAvailability) => {
+        // get the reason that the user can't make a payment
+        let unavailabilityReason = _.reduce<any, string>(availability.details, (acc, isReason, reason) => isReason ? reason : acc, "");
+        let unavailabilityReasonMessage = _.get<string>(this.CONSTANTS.UNAVAILABILITY_REASONS, unavailabilityReason, this.CONSTANTS.UNAVAILABILITY_REASONS.default);
+
+        this.alertController.alert(unavailabilityReasonMessage);
+        this.trackAnalyticsEvent(unavailabilityReason);
+
+        this.trackAnalyticsEvent("addPayment");
+      });
+
+    this.onItemSelected$.subscribe(payment => this.navCtrl.push(PaymentsDetailsPage, { payment }));
   }
 
-  private canMakePayment(): Promise<MakePaymentAvailability | undefined> {
-    this.checkingMakePaymentAvailability = true;
+  private canMakePayment(): Observable<MakePaymentAvailability> {
+    this.checkingMakePaymentAvailability$.next(true);
 
-    return this.sessionCache.update$(Session.Field.MakePaymentAvailability)
-      .map(session => session.makePaymentAvailability)
-      .toPromise()
-      .then((availability: MakePaymentAvailability) => {
+    return this.sessionCache.getUpdatedField$(Session.Field.MakePaymentAvailability)
+      .flatMap((availability: MakePaymentAvailability) => {
         if (!availability.details.makePaymentAllowed) {
-          return Promise.reject(availability);
+          return Observable.throw(availability);
+        }
+        else {
+          return Observable.of(availability);
         }
       })
-      .finally(() => this.checkingMakePaymentAvailability = false);
+      .finally(() => this.checkingMakePaymentAvailability$.next(false));
   }
 
   protected groupItems(payments: Payment[]): GroupedList<Payment> {
@@ -73,26 +89,5 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
 
   public getStatus(payment: Payment): string {
     return payment.details.status === PaymentStatus.COMPLETE ? this.CONSTANTS.itemStatus.completed : this.CONSTANTS.itemStatus.scheduled;
-  }
-
-  public goToDetailPage(payment: Payment) {
-    this.navCtrl.push(PaymentsDetailsPage, { payment });
-  }
-
-  public addPayment() {
-    this.canMakePayment()
-      .then(() => {
-        this.app.getRootNav().push(AddPaymentPage);
-      })
-      .catch((availability: MakePaymentAvailability) => {
-        // get the reason that the user can't make a payment
-        let unavailabilityReason = _.reduce<any, string>(availability.details, (acc, isReason, reason) => isReason ? reason : acc, "");
-        let unavailabilityReasonMessage = _.get<string>(this.CONSTANTS.UNAVAILABILITY_REASONS, unavailabilityReason, this.CONSTANTS.UNAVAILABILITY_REASONS.default);
-
-        this.alertController.alert(unavailabilityReasonMessage);
-        this.trackAnalyticsEvent(unavailabilityReason);
-      });
-
-    this.trackAnalyticsEvent("addPayment");
   }
 }

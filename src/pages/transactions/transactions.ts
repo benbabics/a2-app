@@ -297,9 +297,8 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
   public sessionCache: SessionCache;
 
   constructor(private localStorageService: LocalStorageService, public navCtrl: NavController, public navParams: NavParams, public injector: Injector, private wexAppBackButtonController: WexAppBackButtonController) {
-    super("Transactions", undefined, injector);
+    super({ pageName: "Transactions", listDataField: undefined, listGroupDisplayOrder: [] }, injector);
 
-    this.listGroupDisplayOrder = [];
     this.filter = this.navParams.get(TransactionsParams.Filter);
   }
 
@@ -368,11 +367,11 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
 
       this.selectedListView = new listViewType(this);
 
-      this.listDataField = this.selectedListView.field;
+      this.params.listDataField = this.selectedListView.field;
     }
 
     // Re-render the list
-    this.updateList();
+    //this.updateList();
   }
 
   /*protected fetch(options?: StaticListPage.FetchOptions): Observable<any[]> {
@@ -414,7 +413,7 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
     }, {});
 
     // Calculate the list group display order
-    this.listGroupDisplayOrder = _.keys(groupedList).sort((groupA, groupB) => {
+    this.params.listGroupDisplayOrder = _.keys(groupedList).sort((groupA, groupB) => {
       return moment(this.calculateDateByLabelGroup(groupA)).isAfter(this.calculateDateByLabelGroup(groupB)) ? -1 : 1;
     });
 
@@ -426,7 +425,7 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
   }
 
   public get dividerLabels(): string[] {
-    return this.isGrouped ? this.listGroupDisplayOrder : undefined;
+    return this.isGrouped ? this.params.listGroupDisplayOrder : undefined;
   }
 
   public get filterBy(): TransactionSearchFilterBy {
@@ -499,7 +498,7 @@ export class TransactionsPage extends StaticListPage<TransactionListModelType, T
   }
 
   public onInfinite(event: any): Promise<TransactionListModelType> {
-    return this.sessionCache.update$(this.listDataField)
+    return this.sessionCache.update$(this.params.listDataField)
       .toPromise()
       .then(() => event.complete());
   }

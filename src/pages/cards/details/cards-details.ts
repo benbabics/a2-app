@@ -2,13 +2,14 @@ import { WexAlertController } from "./../../../components/wex-alert-controller/w
 import { CardProvider, TransactionSearchFilterBy } from "@angular-wex/api-providers";
 import { CardsReissuePage } from "./../reissue/cards-reissue";
 import { Component, Injector } from "@angular/core";
-import { NavParams, App, ActionSheetController, Events, ToastOptions, Platform, NavController } from "ionic-angular";
+import { NavParams, App, ActionSheetController, ToastOptions, Platform, NavController } from "ionic-angular";
 import { ActionSheetOptions, ActionSheetButton } from "ionic-angular/components/action-sheet/action-sheet-options";
 import { DetailsPage } from "../../details-page";
 import { Card, CardStatus } from "@angular-wex/models";
 import { WexAppSnackbarController } from "../../../components";
 import * as _ from "lodash";
 import { TransactionsPage, TransactionListType } from "../../transactions/transactions";
+import { Session } from "../../../models";
 
 export type CardsDetailsNavParams = keyof {
   card,
@@ -50,7 +51,6 @@ export class CardsDetailsPage extends DetailsPage {
     injector: Injector,
     private actionSheetController: ActionSheetController,
     private cardProvider: CardProvider,
-    private events: Events,
     private wexAlertController: WexAlertController,
     private navController: NavController,
     private platform: Platform
@@ -153,7 +153,8 @@ export class CardsDetailsPage extends DetailsPage {
       (card: Card) => {
         this.card.details.status = card.details.status;
         this.isChangingStatus = false;
-        this.events.publish("cards:statusUpdate");
+
+        this.sessionCache.update$(Session.Field.Cards).subscribe();
 
         toastOptions.message = this.CONSTANTS.bannerStatusChangeSuccess;
         this.wexAppSnackbarController.createQueued(toastOptions).present();

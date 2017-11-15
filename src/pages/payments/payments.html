@@ -18,7 +18,7 @@
             ion-button 
             block 
             [disabled]="checkingMakePaymentAvailability" 
-            (click)="addPayment()">
+            (click)="onAddPayment()">
       <action-indicator [when]="checkingMakePaymentAvailability"> 
           {{ CONSTANTS.payNowSection.payNowButton }} 
       </action-indicator>

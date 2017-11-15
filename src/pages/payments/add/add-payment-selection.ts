@@ -89,7 +89,7 @@ export class AddPaymentSelectionPage extends SecurePage {
       .flatMap(() => Observable.combineLatest(this.selectedItem$, this.chosenItem$))
       .subscribe((args: [UserPaymentAmount, UserPaymentAmount]) => {
         let [selectedItem, initialItem] = args;
-        this.isSubmitEnabled$.next(selectedItem.value !== initialItem.value);
+        this.isSubmitEnabled$.next(selectedItem.value !== 0 && selectedItem.value !== initialItem.value);
         this.isOtherAmountSelected$.next(this.isOtherAmount(selectedItem));
       });
 

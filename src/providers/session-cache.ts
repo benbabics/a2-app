@@ -61,8 +61,12 @@ export class SessionCache {
     return this.getFieldUpdater$(field).map(Boolean).distinctUntilChanged();
   }
 
-  public onFieldUpdating$(field: Session.Field): Observable<void> {
+  public onFieldUpdating$(field: Session.Field): Observable<any> {
     return this.isUpdatingField$(field).filter(Boolean);
+  }
+
+  public onFieldUpdated$(field: Session.Field): Observable<any> {
+    return this.isUpdatingField$(field).filter(updating => !updating);
   }
 
   public require$(field: Session.Field, options?: SessionInfoOptions): Observable<Session> {

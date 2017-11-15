@@ -1,6 +1,6 @@
 import { WexAppSnackbarController } from "./../../../components/wex-app-snackbar-controller/wex-app-snackbar-controller";
 import { ActionSheetButton } from "ionic-angular/components/action-sheet/action-sheet-options";
-import { ActionSheetController, Events, ToastOptions, Platform, NavController } from "ionic-angular";
+import { ActionSheetController, ToastOptions, Platform, NavController } from "ionic-angular";
 import * as _ from "lodash";
 import { Component, Injector } from "@angular/core";
 import { NavParams } from "ionic-angular";
@@ -10,6 +10,7 @@ import { DetailsPage } from "../../details-page";
 import { ActionSheetOptions } from "ionic-angular/components/action-sheet/action-sheet-options";
 import { TransactionsPage, TransactionListType } from "../../transactions/transactions";
 import { NameUtils } from "../../../utils/name-utils";
+import { Session } from "../../../models";
 
 interface DriverStatusDetails {
   id: DriverStatus;
@@ -31,7 +32,6 @@ export class DriversDetailsPage extends DetailsPage {
     private actionSheetController: ActionSheetController,
     private driverProvider: DriverProvider,
     private wexAppSnackbarController: WexAppSnackbarController,
-    private events: Events,
     private platform: Platform,
     private navController: NavController,
     injector: Injector
@@ -104,7 +104,8 @@ export class DriversDetailsPage extends DetailsPage {
       (driver: Driver) => {
         this.driver.details.status = driver.details.status;
         this.isChangingStatus = false;
-        this.events.publish("drivers:statusUpdate");
+
+        this.sessionCache.update$(Session.Field.Drivers).subscribe();
 
         toastOptions.message = this.CONSTANTS.bannerStatusChangeSuccess;
         this.wexAppSnackbarController.createQueued(toastOptions).present();
