@@ -511,7 +511,11 @@ export namespace ConstantsInfo {
                 confirmationOk: ["Payment", "OKConfirmationLink"]
               }
             },
-            title: "Successfully scheduled",
+            title: {
+              template : "Successfully <%= scheduledOrUpdated %>",
+              scheduled: "scheduled",
+              updated: "updated"
+            },
             LABELS: {
               amount: "Amount",
               bankAccount: "Bank Account",
