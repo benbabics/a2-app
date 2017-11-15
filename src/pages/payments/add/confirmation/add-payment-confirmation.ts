@@ -10,12 +10,12 @@ import * as _ from "lodash";
 
 export type AddPaymentConfirmationNavParams = keyof {
   payment: Payment,
-  confirmationType: boolean
+  isEditingPayment: boolean
 };
 
 export namespace AddPaymentConfirmationNavParams {
   export const Payment: AddPaymentConfirmationNavParams = "payment";
-  export const IsEditingPayment = "isEditingPayment";
+  export const IsEditingPayment: AddPaymentConfirmationNavParams = "isEditingPayment";
 }
 
 @Component({
