@@ -1,4 +1,7 @@
 <span content-expand>
   <div class="driver-icon" [ngClass]="driver.details.status"></div>
-  <span class="driver-name">{{ getFullName(driver) }}</span>
+  <span class="driver-details">
+    <div>{{ getFullName(driver) }}</div>
+    <div class="driver-id">{{ driver.details.driverId }}</div>
+  </span>
 </span>
