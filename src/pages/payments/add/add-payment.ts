@@ -58,6 +58,7 @@ export class AddPaymentPage extends SecurePage {
     private paymentProvider: PaymentProvider,
     public navBarCtrl: NavBarController,
     private events: Events,
+    private navBarController: NavBarController,
     private wexAppBackButtonController: WexAppBackButtonController
   ) {
     super({ pageName: "Payments.Add", trackView: false }, injector);
@@ -211,7 +212,12 @@ export class AddPaymentPage extends SecurePage {
     });
   }
 
+  ionViewWillEnter() {
+    this.navBarController.show(false);
+  }
+
   ionViewWillLeave() {
+    this.navBarController.show(true);
     this.wexAppBackButtonController.deregisterAction();
   }
 }

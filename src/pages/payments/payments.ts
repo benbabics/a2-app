@@ -2,7 +2,7 @@ import * as _ from "lodash";
 import * as moment from "moment";
 import { Observable } from "rxjs";
 import { Component, Injector } from "@angular/core";
-import { NavParams, NavController, App, Events } from "ionic-angular";
+import { NavParams, NavController, Events } from "ionic-angular";
 import { StaticListPage, GroupedList, FetchOptions } from "../static-list-page";
 import { Payment, PaymentStatus, MakePaymentAvailability } from "@angular-wex/models";
 import { PaymentsDetailsPage } from "./details/payments-details";
@@ -29,7 +29,6 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private app: App,
     private alertController: WexAlertController,
     events: Events,
     injector: Injector
@@ -91,7 +90,7 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   public addPayment() {
     this.canMakePayment()
       .then(() => {
-        this.app.getRootNav().push(AddPaymentPage);
+        this.navCtrl.push(AddPaymentPage);
       })
       .catch((availability: MakePaymentAvailability) => {
         // get the reason that the user can't make a payment
