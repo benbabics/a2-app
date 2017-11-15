@@ -18,7 +18,7 @@
         </span>
 
         <span class="right">
-          <div class="amount"> {{ getTransactionAmount(item) | wexCurrency }} </div>
+          <div class="amount"> {{ item | transactionAmount | wexCurrency }} </div>
           <div class="sub-text"> {{ item.details.embossedCardNumber | wexCardNumber }} </div>
         </span>
       </div>
