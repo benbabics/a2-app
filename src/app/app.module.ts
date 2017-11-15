@@ -62,7 +62,7 @@ import {
   WexNavigationController,
   PaymentService
 } from "../providers";
-import { WexCurrency, WexDate, WexDateTime, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
+import { TransactionAmountPipe, WexCurrency, WexDate, WexDateTime, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
 import { PaymentsDetailsPage } from "../pages/payments/details/payments-details";
 import { LocalStorageModule } from "angular-2-local-storage";
@@ -157,6 +157,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     AddPaymentConfirmationPage,
     TransactionDetailsPage,
     ActionIndicator,
+    TransactionAmountPipe,
     WexCurrency,
     WexDate,
     WexDateTime,

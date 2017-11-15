@@ -780,19 +780,17 @@ export namespace ConstantsInfo {
           title:   "Transaction Details",
 
           LABELS: {
-            cardNumber: "Card Number",
-            postDate:   "Post Date",
-            transDateTime: "Trans Date/Time",
-            transId:       "Trans ID",
-            grossCost:     "Gross Cost",
-            netCost:       "Net Cost",
-            productDesc:   "Product Description",
-            driverFirstName: "Driver First Name",
-            driverLastName:  "Driver Last Name",
-            assetId:         "Asset ID",
-            odometer:        "Odometer",
-            merchantName:    "Merchant Name",
-            merchantLocation: "Merchant City, ST"
+            cardNumber: "Card",
+            postDate: "Post Date",
+            transDate: "Trans Date",
+            transId: "Trans ID",
+            grossCost: "Gross Cost",
+            netCost: "Net Cost",
+            productDesc: "Product",
+            driverName: "Driver",
+            assetId: "Asset ID",
+            odometer: "Odometer",
+            location: "Location"
           }
         }
       }
