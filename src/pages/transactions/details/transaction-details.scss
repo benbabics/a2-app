@@ -33,28 +33,4 @@ page-transaction-details {
       }
     }
   }
-
-  .details-list {
-    border-bottom: none;
-
-    .item {
-      @mixin item-inner-border($border-color: border) {
-        &:first-of-type .item-inner {
-          border-top: 0.55px solid color($colors, $border-color);
-        }
-        &:last-of-type .item-inner {
-          border-bottom: 0.55px solid color($colors, $border-color);
-        }
-      }
-
-      &.item-ios {
-        @include item-inner-border(border);
-      }
-
-      &.item-md {
-        @include item-inner-border(light-border);
-        [item-end] { font-weight: 500; }
-      }
-    }
-  }
 }
