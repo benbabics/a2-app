@@ -67,7 +67,8 @@ export class TransactionCardView extends CardsPage implements DoCheck {
 
   public goToDetailPage(item: Card): Promise<any> {
     return this.navCtrl.parent.push(TransactionDateSublist, {
-      filter: [TransactionSearchFilterBy.Card, item.details.cardId ]
+      filter: [TransactionSearchFilterBy.Card, item.details.cardId ],
+      item
     });
   }
 }

@@ -12,3 +12,4 @@ export * from "./wex-static-list-page-header/wex-static-list-page-header";
 export * from "./resizable-svg/resizable-svg";
 export * from "./driver-list-item/driver-list-item";
 export * from "./card-list-item/card-list-item";
+export * from "./wex-title-with-subheader/wex-title-with-subheader";

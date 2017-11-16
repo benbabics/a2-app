@@ -6,10 +6,12 @@ page-transactions {
     padding: 0;
     min-height: auto;
   }
+
   ion-header {
     padding: 0;
-    &.header-md::after {
-      display: none;
+
+    .segment-md-primary .segment-button:not(.segment-activated) {
+      border: none;
     }
   }
 }

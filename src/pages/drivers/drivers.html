@@ -11,7 +11,6 @@
   <wex-static-list-page-content [page]="this">
     <ng-template #itemTemplate let-item>
       <driver-list-item [driver]="item"></driver-list-item>
-      <span class="driver-id">{{ item.details.promptId }}</span>
     </ng-template>
   </wex-static-list-page-content>
 </ion-content>

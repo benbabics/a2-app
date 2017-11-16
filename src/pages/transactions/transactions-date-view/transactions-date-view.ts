@@ -1,5 +1,5 @@
 import { TransactionsPage } from "../transactions";
-import { BaseTransaction, PendingTransaction, PostedTransaction } from "@angular-wex/models";
+import { BaseTransaction, PendingTransaction, PostedTransaction, Card, Driver } from "@angular-wex/models";
 import { StaticListPage } from "../../static-list-page";
 import * as moment from "moment";
 import { Component, Injector, DoCheck } from "@angular/core";
@@ -16,13 +16,17 @@ import { SessionInfoRequestors } from "../../../providers/session-info-requestor
 import { DynamicList } from "../../../models/index";
 import { PostedTransactionRequestor } from "../../../providers/index";
 import { TabPage } from "../../../decorators/tab-page";
+import { WexCardNumberPipe } from "../../../pipes/index";
+import { NameUtils } from "../../../utils/name-utils";
 
 export type TransactionDateViewParams = keyof {
   filter?: TransactionListFilter;
+  item?: Driver | Card;
 };
 
 export namespace TransactionDateViewParams {
   export const Filter: TransactionDateViewParams = "filter";
+  export const Item: TransactionDateViewParams = "item";
 }
 
 export namespace FetchOptions {
@@ -46,6 +50,7 @@ export class TransactionDateSublist extends StaticListPage<BaseTransactionT, Bas
   public readonly filter: TransactionListFilter;
   public session: Session;
   public sessionCache: SessionCache;
+  public filterSubheader: string;
   private pendingTransactions: PendingTransaction[] = [];
   private postedTransactions: PostedTransactionList = DynamicList.create(PostedTransaction);
   private postedRequestor = new PostedTransactionRequestor(this.transactionProvider, this.postedTransactions);
@@ -59,6 +64,16 @@ export class TransactionDateSublist extends StaticListPage<BaseTransactionT, Bas
 
     this.listGroupDisplayOrder = [];
     this.filter = this.navParams.get(TransactionDateViewParams.Filter);
+    let item = this.navParams.get(TransactionDateViewParams.Item);
+
+    if (!!this.filter) {
+      if (this.filter[0]  === TransactionSearchFilterBy.Card) {
+        this.filterSubheader = new WexCardNumberPipe().transform((item as Card).details.embossedCardNumber);
+      } else {
+        let details = (item as Driver).details;
+        this.filterSubheader = NameUtils.PrintableName(details.firstName, details.lastName);
+      }
+    }
   }
 
   private calculateLabelGroupByDate(date: Date): string {
