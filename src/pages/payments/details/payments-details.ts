@@ -2,12 +2,14 @@ import * as _ from "lodash";
 import { NavParams, NavController, App, ViewController } from "ionic-angular";
 import { Component, Injector } from "@angular/core";
 import { DetailsPage } from "../../details-page";
-import { Payment } from "@angular-wex/models";
+import { Payment, User } from "@angular-wex/models";
 import { WexPlatform } from "../../../providers";
 import { AddPaymentPage } from "../add/add-payment";
 import { PaymentProvider } from "@angular-wex/api-providers";
 import { WexAlertController } from "../../../components/wex-alert-controller/wex-alert-controller";
 import { Session } from "../../../models/session";
+import { Reactive, StateEmitter, EventSource } from "angular-rxjs-extensions";
+import { Observable, Subject } from "rxjs";
 
 export type PaymentsDetailsNavParams = keyof {
   payment,
@@ -23,13 +25,27 @@ export namespace PaymentsDetailsNavParams {
   selector: "page-payments-details",
   templateUrl: "payments-details.html"
 })
+@Reactive()
 export class PaymentsDetailsPage extends DetailsPage {
 
   public readonly DATE_FORMAT: string = "MMM D, YYYY";
 
-  public payment: Payment;
+  @EventSource() private onCancelPayment$: Observable<void>;
+  @EventSource() private onEditPayment$: Observable<void>;
+
+  @StateEmitter() private headerLabel$: Subject<string>;
+  @StateEmitter() private multiplePending$: Subject<boolean>;
+
+  @StateEmitter.Alias("navParams.data." + PaymentsDetailsNavParams.Payment)
+  private payment$: Observable<Payment>;
+
+  @StateEmitter.Alias("payment$.isComplete")
+  private isCompleted$: Observable<boolean>;
+
+  @StateEmitter.Alias("payment$.isScheduled")
+  private isScheduled$: Observable<boolean>;
+
   public isCanceling: boolean;
-  public multiplePending: boolean;
 
   constructor(
     public navParams: NavParams,
@@ -42,47 +58,38 @@ export class PaymentsDetailsPage extends DetailsPage {
     injector: Injector
   ) {
     super("Payments.Details", injector, [Session.Field.Payments]);
-    this.payment = this.navParams.get(PaymentsDetailsNavParams.Payment);
-  }
 
-  public get headerLabel(): string {
-    return this.isScheduled ? this.CONSTANTS.header.scheduled : this.CONSTANTS.header.completed;
-  }
+    this.isScheduled$
+      .filter(Boolean)
+      .subscribe(() => this.headerLabel$.next(this.CONSTANTS.header.scheduled));
 
-  public get isCompleted(): boolean {
-    return this.payment.isComplete;
-  }
+    this.isCompleted$
+      .filter(Boolean)
+      .subscribe(() => this.headerLabel$.next(this.CONSTANTS.header.completed));
 
-  public get isScheduled(): boolean {
-    return this.payment.isScheduled;
-  }
+    this.sessionCache.getField$<Payment[]>(Session.Field.Payments)
+      .subscribe(payments => this.multiplePending$.next(payments.filter(payment => payment.isScheduled).length > 1));
 
-  public ionViewCanEnter(): Promise<any> {
-    return super.ionViewCanEnter()
-      .then(() => {
-        this.multiplePending = this.session.payments.filter(payment => payment.isScheduled).length > 1;
-      });
-  }
+    this.onCancelPayment$
+      .flatMap(() => this.wexAlertController.confirmation(this.CONSTANTS.cancelPaymentConfirmation))
+      .map(() => this.isCanceling = true)
+      .flatMap(() => Observable.combineLatest(this.payment$, this.sessionCache.getField$<User>(Session.Field.User)).take(1))
+      .flatMap((args) => {
+        let [payment, user] = args;
+        return paymentProvider.cancelPayment(user.billingCompany.details.accountId, payment.details.id);
+      })
+      .flatMap(() => this.sessionCache.getField$<Payment[]>(Session.Field.Payments).take(1))
+      .map(payments => this.sessionCache.updateValue(Session.Field.Payments, _.remove(payments, payment => payment.details.id === payment.details.id)))
+      .finally(() => this.isCanceling = false)
+      .subscribe(() => {
+        navCtrl.pop();
+        this.trackAnalyticsEvent("paymentCancelYes");
+      }, () => this.trackAnalyticsEvent("paymentCancelPrompt"));
 
-  public cancelPayment() {
-    this.wexAlertController.confirmation(this.CONSTANTS.cancelPaymentConfirmation, () => {
-      this.isCanceling = true;
-
-      this.paymentProvider.cancelPayment(this.session.user.billingCompany.details.accountId, this.payment.details.id)
-        .flatMap(() => this.sessionCache.getField$<Payment[]>(Session.Field.Payments))
-        .map(payments => this.sessionCache.updateValue(Session.Field.Payments, _.remove(payments, payment => payment.details.id === this.payment.details.id)))
-        .map(() => this.isCanceling = false)
-        .subscribe(() => this.navCtrl.pop());
-
-      this.trackAnalyticsEvent("paymentCancelYes");
+    this.onEditPayment$.subscribe(() => {
+      this.navCtrl.push(AddPaymentPage, { payment: this.payment })
+        .then(() => this.navCtrl.removeView(this.viewCtrl));
+      this.trackAnalyticsEvent("paymentEdit");
     });
-
-    this.trackAnalyticsEvent("paymentCancelPrompt");
-  }
-
-  public editPayment() {
-    this.navCtrl.push(AddPaymentPage, { payment: this.payment })
-      .then(() => this.navCtrl.removeView(this.viewCtrl));
-    this.trackAnalyticsEvent("paymentEdit");
   }
 }
