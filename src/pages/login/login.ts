@@ -17,6 +17,7 @@ import { VersionCheck } from "./version-check/version-check";
 import { NameUtils } from "../../utils/name-utils";
 import { WexPlatform } from "../../providers/platform";
 import { StatusBarStyle, PageTheme } from "../../decorators/status-bar";
+import { WexAppBackButtonController } from "../../providers/wex-app-back-button-controller";
 
 export type LoginPageNavParams = keyof {
   fromLogOut,
@@ -100,6 +101,7 @@ export class LoginPage extends Page {
     private appSnackbarController: WexAppSnackbarController,
     private wexAppVersionCheck: WexAppVersionCheck,
     private modalController: ModalController,
+    private wexAppBackButtonController: WexAppBackButtonController,
     private renderer: Renderer2,
     injector: Injector
   ) {
@@ -345,6 +347,7 @@ export class LoginPage extends Page {
 
 
   ionViewDidEnter() {
+    this.wexAppBackButtonController.deregisterAction();
     this.wexAppVersionCheck.isSupported
       .subscribe(isSupported => {
         if (isSupported) {
