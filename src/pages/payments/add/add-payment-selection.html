@@ -27,6 +27,6 @@
     <button [disabled]="disableSubmit" ion-button block class="button-gradient" (click)="handleSubmit($event)">
       {{ CONSTANTS.LABELS.select }}
     </button>
-    <p class="text-instructions" [innerHTML]="instructionalText"></p>
+    <p *ngIf="instructionalText" class="text-instructions" [innerHTML]="instructionalText"></p>
   </div>
 </ion-content>
