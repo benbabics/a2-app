@@ -43,11 +43,11 @@ export class WexAlertController {
                 buttons: [
                     {
                         text: this.BUTTONS.YES,
-                        handler: () => observer.next()
+                        handler: () => observer.next(true)
                     },
                     {
                         text: this.BUTTONS.NO,
-                        handler: () => observer.error()
+                        handler: () => observer.next(false)
                     }
                 ]
             }).present();
@@ -61,7 +61,7 @@ export class WexAlertController {
                 buttons: [
                     {
                         text: this.platform.constant(this.BUTTONS.ALERT_RESPONSE),
-                        handler: () => observer.next()
+                        handler: () => observer.next(true)
                     }
                 ]
             }).present();

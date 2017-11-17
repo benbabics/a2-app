@@ -1,9 +1,8 @@
 import * as _ from "lodash";
-import { NavParams, NavController, App, ViewController } from "ionic-angular";
+import { NavParams, NavController, ViewController } from "ionic-angular";
 import { Component, Injector } from "@angular/core";
 import { DetailsPage } from "../../details-page";
 import { Payment, User } from "@angular-wex/models";
-import { WexPlatform } from "../../../providers";
 import { AddPaymentPage } from "../add/add-payment";
 import { PaymentProvider } from "@angular-wex/api-providers";
 import { WexAlertController } from "../../../components/wex-alert-controller/wex-alert-controller";
@@ -48,12 +47,10 @@ export class PaymentsDetailsPage extends DetailsPage {
 
   constructor(
     public navParams: NavParams,
-    public platform: WexPlatform,
-    public paymentProvider: PaymentProvider,
-    public wexAlertController: WexAlertController,
-    public navCtrl: NavController,
-    public viewCtrl: ViewController,
-    public app: App,
+    paymentProvider: PaymentProvider,
+    wexAlertController: WexAlertController,
+    navCtrl: NavController,
+    viewCtrl: ViewController,
     injector: Injector
   ) {
     super("Payments.Details", injector, [Session.Field.Payments]);
@@ -70,14 +67,18 @@ export class PaymentsDetailsPage extends DetailsPage {
       .subscribe(payments => this.multiplePending$.next(_.filter(payments, payment => payment.isScheduled).length > 1));
 
     this.onCancelPayment$
-      .flatMap(() => {
-        return this.wexAlertController.confirmation$(this.CONSTANTS.cancelPaymentConfirmation)
-          .catch(() => {
-            this.trackAnalyticsEvent("paymentCancelPrompt");
-            return Observable.empty();
-          });
+      .flatMap(() => wexAlertController.confirmation$(this.CONSTANTS.cancelPaymentConfirmation))
+      .filter((confirmed) => {
+        if (confirmed) {
+          this.trackAnalyticsEvent("paymentCancelYes");
+          this.isCanceling$.next(true);
+        }
+        else {
+          this.trackAnalyticsEvent("paymentCancelPrompt");
+        }
+
+        return confirmed;
       })
-      .map(() => this.isCanceling$.next(true))
       .flatMap(() => Observable.combineLatest(this.payment$, this.sessionCache.getField$<User>(Session.Field.User)).take(1))
       .flatMap((args) => {
         let [payment, user] = args;
@@ -88,16 +89,14 @@ export class PaymentsDetailsPage extends DetailsPage {
       .finally(() => this.isCanceling$.next(false))
       .subscribe((args) => {
         let [payment, payments] = args;
-
         this.sessionCache.updateValue(Session.Field.Payments, _.filter(payments, curPayment => curPayment.details.id !== payment.details.id));
-        this.trackAnalyticsEvent("paymentCancelYes");
         navCtrl.pop();
       });
 
     this.onEditPayment$
       .flatMap(() => this.payment$.take(1))
-      .flatMap(payment => this.navCtrl.push(AddPaymentPage, { payment }))
-      .map(() => this.navCtrl.removeView(this.viewCtrl))
+      .flatMap(payment => navCtrl.push(AddPaymentPage, { payment }))
+      .map(() => navCtrl.removeView(viewCtrl))
       .subscribe(() => this.trackAnalyticsEvent("paymentEdit"));
   }
 }
