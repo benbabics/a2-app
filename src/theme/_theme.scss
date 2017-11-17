@@ -221,6 +221,14 @@ ion-icon.icon-ios.tab-button-icon[aria-label*="fa"] {
   }
 }
 
+.md .button-md.button-gradient {
+  &:not(.is-loading)[disabled] {
+    color: rgba(0, 0, 0, 0.26);
+    background: rgba(79, 79, 79, 0.26);
+    box-shadow: none;
+  }
+}
+
 
 
 //// App Material Design Styles
