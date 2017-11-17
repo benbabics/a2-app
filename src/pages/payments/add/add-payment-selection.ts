@@ -63,6 +63,10 @@ export class AddPaymentSelectionPage extends SecurePage {
     return this.CONSTANTS.LABELS[this.selectionType];
   }
 
+  public get instructionalText(): string {
+    return _.get<string>(this.CONSTANTS.INSTRUCTIONAL_TEXT, this.selectionType, "");
+  }
+
   public otherAmount: number = 0;
   public get isPaymentAmount(): boolean {
     return !(this.selectedItem instanceof BankAccount);

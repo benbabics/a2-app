@@ -6,7 +6,7 @@
 
 <ion-content>
   <div id="options-list" [ngSwitch]="selectionType">
-    <ion-list radio-group 
+    <ion-list radio-group
               *ngSwitchCase="'amount'"
               [(ngModel)]="selectedItem"
               [ngSwitch]="selectionType"
@@ -14,7 +14,7 @@
       <option-amount *ngFor="let option of options" [option]="option" [inFocus]="inFocus" (otherAmountEmit)="otherAmount = $event"></option-amount>
     </ion-list>
 
-    <ion-list radio-group 
+    <ion-list radio-group
               *ngSwitchCase="'bankAccount'"
               [(ngModel)]="selectedItem"
               [ngSwitch]="selectionType"
@@ -27,5 +27,6 @@
     <button [disabled]="disableSubmit" ion-button block class="button-gradient" (click)="handleSubmit($event)">
       {{ CONSTANTS.LABELS.select }}
     </button>
+    <p class="text-instructions" [innerHTML]="instructionalText"></p>
   </div>
 </ion-content>
