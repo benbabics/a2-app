@@ -10,36 +10,61 @@ export class WexAlertController {
 
     constructor(private alertController: AlertController, private platform: WexPlatform) { }
 
-    public confirmation(message: string): Observable<any> {
+    public confirmation(message: string, yesHandler: () => void): Promise<any> {
+        return this.alertController.create({
+            message,
+            buttons: [
+                {
+                    text: this.BUTTONS.YES,
+                    handler: yesHandler
+                },
+                {
+                    text: this.BUTTONS.NO
+                }
+            ]
+        }).present();
+    }
+
+    public alert(message: string): Promise<any> {
+        return this.alertController.create({
+            message,
+            buttons: [
+                {
+                    text: this.platform.constant(this.BUTTONS.ALERT_RESPONSE)
+                }
+            ]
+        }).present();
+    }
+
+    public confirmation$(message: string): Observable<any> {
         return new Observable<any>(observer => {
             this.alertController.create({
                 message: message,
                 buttons: [
                     {
                         text: this.BUTTONS.YES,
-                        handler: (...args) => observer.next(...args)
+                        handler: () => observer.next()
                     },
                     {
                         text: this.BUTTONS.NO,
-                        handler: (...args) => observer.error(...args)
+                        handler: () => observer.error()
                     }
                 ]
             }).present();
-        }).shareReplay(1);
+        }).take(1);
     }
 
-    public alert(message: string): Observable<any> {
+    public alert$(message: string): Observable<any> {
         return new Observable<any>(observer => {
             this.alertController.create({
                 message: message,
                 buttons: [
                     {
                         text: this.platform.constant(this.BUTTONS.ALERT_RESPONSE),
-                        handler: (...args) => observer.next(...args)
+                        handler: () => observer.next()
                     }
                 ]
             }).present();
-        }).shareReplay(1);
-        
+        }).take(1);
     }
 }

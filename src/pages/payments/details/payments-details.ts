@@ -35,6 +35,7 @@ export class PaymentsDetailsPage extends DetailsPage {
 
   @StateEmitter() private headerLabel$: Subject<string>;
   @StateEmitter() private multiplePending$: Subject<boolean>;
+  @StateEmitter() private isCanceling$: Subject<boolean>;
 
   @StateEmitter.Alias("navParams.data." + PaymentsDetailsNavParams.Payment)
   private payment$: Observable<Payment>;
@@ -44,8 +45,6 @@ export class PaymentsDetailsPage extends DetailsPage {
 
   @StateEmitter.Alias("payment$.isScheduled")
   private isScheduled$: Observable<boolean>;
-
-  public isCanceling: boolean;
 
   constructor(
     public navParams: NavParams,
@@ -68,28 +67,37 @@ export class PaymentsDetailsPage extends DetailsPage {
       .subscribe(() => this.headerLabel$.next(this.CONSTANTS.header.completed));
 
     this.sessionCache.getField$<Payment[]>(Session.Field.Payments)
-      .subscribe(payments => this.multiplePending$.next(payments.filter(payment => payment.isScheduled).length > 1));
+      .subscribe(payments => this.multiplePending$.next(_.filter(payments, payment => payment.isScheduled).length > 1));
 
     this.onCancelPayment$
-      .flatMap(() => this.wexAlertController.confirmation(this.CONSTANTS.cancelPaymentConfirmation))
-      .map(() => this.isCanceling = true)
+      .flatMap(() => {
+        return this.wexAlertController.confirmation$(this.CONSTANTS.cancelPaymentConfirmation)
+          .catch(() => {
+            this.trackAnalyticsEvent("paymentCancelPrompt");
+            return Observable.empty();
+          });
+      })
+      .map(() => this.isCanceling$.next(true))
       .flatMap(() => Observable.combineLatest(this.payment$, this.sessionCache.getField$<User>(Session.Field.User)).take(1))
       .flatMap((args) => {
         let [payment, user] = args;
-        return paymentProvider.cancelPayment(user.billingCompany.details.accountId, payment.details.id);
+        return paymentProvider.cancelPayment(user.billingCompany.details.accountId, payment.details.id)
+          .catch(() => Observable.empty());
       })
-      .flatMap(() => this.sessionCache.getField$<Payment[]>(Session.Field.Payments).take(1))
-      .map(payments => this.sessionCache.updateValue(Session.Field.Payments, _.remove(payments, payment => payment.details.id === payment.details.id)))
-      .finally(() => this.isCanceling = false)
-      .subscribe(() => {
-        navCtrl.pop();
-        this.trackAnalyticsEvent("paymentCancelYes");
-      }, () => this.trackAnalyticsEvent("paymentCancelPrompt"));
+      .flatMap(() => Observable.combineLatest(this.payment$, this.sessionCache.getField$<Payment[]>(Session.Field.Payments)).take(1))
+      .finally(() => this.isCanceling$.next(false))
+      .subscribe((args) => {
+        let [payment, payments] = args;
 
-    this.onEditPayment$.subscribe(() => {
-      this.navCtrl.push(AddPaymentPage, { payment: this.payment })
-        .then(() => this.navCtrl.removeView(this.viewCtrl));
-      this.trackAnalyticsEvent("paymentEdit");
-    });
+        this.sessionCache.updateValue(Session.Field.Payments, _.filter(payments, curPayment => curPayment.details.id !== payment.details.id));
+        this.trackAnalyticsEvent("paymentCancelYes");
+        navCtrl.pop();
+      });
+
+    this.onEditPayment$
+      .flatMap(() => this.payment$.take(1))
+      .flatMap(payment => this.navCtrl.push(AddPaymentPage, { payment }))
+      .map(() => this.navCtrl.removeView(this.viewCtrl))
+      .subscribe(() => this.trackAnalyticsEvent("paymentEdit"));
   }
 }
