@@ -9,6 +9,7 @@ import { TabPage } from "../../decorators/tab-page";
 import { TransactionsPage } from "../transactions/transactions";
 import { TransactionDateSublist } from "../transactions/transactions-date-view/transactions-date-view";
 import { TransactionSearchFilterBy } from "@angular-wex/api-providers";
+import { PageParams } from "../page";
 
 @TabPage()
 @Component({
@@ -59,6 +60,10 @@ export class DriversPage extends StaticListPage<Driver, Driver.Details> {
 export class TransactionDriverView extends DriversPage implements DoCheck {
   public readonly contentOnly: boolean = true;
   private heightHasBeenSet: boolean;
+  public params: PageParams = {
+    pageName: this.pageName,
+    trackView: false
+  };
 
   public ngDoCheck() {
     this.heightHasBeenSet = TransactionsPage.ResizeContentForTransactionHeader(this.content, this.heightHasBeenSet);

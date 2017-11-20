@@ -20,7 +20,7 @@ export class TransactionDetailsPage extends DetailsPage {
     public navParams: NavParams,
     public platform: WexPlatform
   ) {
-    super( "Transactions.Details", injector );
+    super({ pageName: "Transactions.Details", trackingName: "TransactionDetails" }, injector );
     this.transaction = this.navParams.get("item");
   }
 

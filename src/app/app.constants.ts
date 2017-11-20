@@ -755,12 +755,24 @@ export namespace ConstantsInfo {
 
       //# Transactions page
       TRANSACTIONS: {
+        ANALYTICS: {
+          EVENTS: {
+            Card: ["Transaction", "Card"],
+            Driver: ["Transaction", "Driver"],
+            Date: ["Transaction", "Date"]
+          }
+        },
         SEGMENTS: {
           DRIVER: "Driver",
           DATE: "Date",
           CARD: "Card"
         },
         DATE: {
+          ANALYTICS: {
+            EVENTS: {
+              InfiniteScroll : ["Transaction", "InfiniteScroll"],
+            }
+          },
           title: "Transactions",
           listLabels: ["Transactions"],
           LABELS: {
