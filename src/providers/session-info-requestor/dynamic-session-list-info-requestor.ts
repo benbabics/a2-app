@@ -1,5 +1,4 @@
 import * as _ from "lodash";
-import * as moment from "moment";
 import { Observable } from "rxjs";
 import {
   DynamicList,
@@ -64,9 +63,6 @@ export abstract class DynamicSessionListInfoRequestor<T extends Model<DetailsT>,
     let currentPage = _.get<number>(this.dynamicList, "details.currentPage", 0);
 
     // Default search parameters (may be overriden by input params)
-    searchParams.fromDate = (<any>moment)(requestDate) //TODO: Remove <any>moment cast when the .d.ts is fixed
-      .subtract(...this.INFINITE_LIST.DEFAULT_SEARCH_PERIOD)
-      .toDate();
     searchParams.toDate = requestDate;
     searchParams.pageNumber = currentPage;
     searchParams.pageSize = this.INFINITE_LIST.DEFAULT_PAGE_SIZE;

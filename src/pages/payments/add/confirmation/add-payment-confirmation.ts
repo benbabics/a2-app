@@ -6,13 +6,16 @@ import {
 import { SecurePage } from "../../../secure-page";
 import { NavBarController } from "../../../../providers";
 import { Payment } from "@angular-wex/models";
+import * as _ from "lodash";
 
 export type AddPaymentConfirmationNavParams = keyof {
-  payment: Payment
+  payment: Payment,
+  isEditingPayment: boolean
 };
 
 export namespace AddPaymentConfirmationNavParams {
   export const Payment: AddPaymentConfirmationNavParams = "payment";
+  export const IsEditingPayment: AddPaymentConfirmationNavParams = "isEditingPayment";
 }
 
 @Component({
@@ -23,6 +26,8 @@ export class AddPaymentConfirmationPage extends SecurePage {
 
   public payment: Payment;
   public readonly DATE_FORMAT: string = "MMMM D, YYYY";
+  public isEditingPayment: boolean;
+  public pageTitle: string;
 
   constructor(
     injector: Injector,
@@ -33,10 +38,18 @@ export class AddPaymentConfirmationPage extends SecurePage {
     super({ pageName: "Payments.Add.Confirmation", trackView: false }, injector);
 
     this.payment = this.navParams.get(AddPaymentConfirmationNavParams.Payment);
+    this.isEditingPayment = this.navParams.get(AddPaymentConfirmationNavParams.IsEditingPayment);
+
+    this.pageTitle = this.buildTitle();
   }
 
   public finish() {
     this.navCtrl.pop({ direction: "forward" });
     this.trackAnalyticsEvent("confirmationOk");
+  }
+
+  private buildTitle(): string {
+    let scheduledOrUpdated = this.isEditingPayment ? this.CONSTANTS.title.updated : this.CONSTANTS.title.scheduled;
+    return _.template(this.CONSTANTS.title.template)({ scheduledOrUpdated });
   }
 }

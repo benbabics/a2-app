@@ -92,7 +92,6 @@ export namespace ConstantsInfo {
       LOCALE: "en-US"
     },
     INFINITE_LIST: {
-      DEFAULT_SEARCH_PERIOD: [INT_MAX_32, "y"],
       DEFAULT_PAGE_SIZE: 100
     },
     //# App Navigation
@@ -511,7 +510,11 @@ export namespace ConstantsInfo {
                 confirmationOk: ["Payment", "OKConfirmationLink"]
               }
             },
-            title: "Successfully scheduled",
+            title: {
+              template : "Successfully <%= scheduledOrUpdated %>",
+              scheduled: "scheduled",
+              updated: "updated"
+            },
             LABELS: {
               amount: "Amount",
               bankAccount: "Bank Account",

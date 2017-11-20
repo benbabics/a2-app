@@ -58,6 +58,7 @@ export class AddPaymentPage extends SecurePage {
     private paymentProvider: PaymentProvider,
     public navBarCtrl: NavBarController,
     private events: Events,
+    private navBarController: NavBarController,
     private wexAppBackButtonController: WexAppBackButtonController
   ) {
     super({ pageName: "Payments.Add", trackView: false }, injector);
@@ -163,7 +164,7 @@ export class AddPaymentPage extends SecurePage {
       .subscribe((payment) => {
         // Update the cache
         this.sessionCache.requestSessionDetail(Session.Field.Payments);
-        this.navCtrl.push(AddPaymentConfirmationPage, { payment })
+        this.navCtrl.push(AddPaymentConfirmationPage, { payment, isEditingPayment: this.isEditingPayment })
           .then(() => this.navCtrl.removeView(this.viewController))
           .then(() => this.events.publish(PaymentsPage.REFRESH_EVENT))
           .finally(() => this.clearCustomAmount());
@@ -211,7 +212,12 @@ export class AddPaymentPage extends SecurePage {
     });
   }
 
+  ionViewWillEnter() {
+    this.navBarController.show(false);
+  }
+
   ionViewWillLeave() {
+    this.navBarController.show(true);
     this.wexAppBackButtonController.deregisterAction();
   }
 }
