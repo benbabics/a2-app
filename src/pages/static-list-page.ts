@@ -165,7 +165,7 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
     }, {});
   }
 
-  protected updateList() {
+  public updateList() {
     this._displayedItems = this.filterItems(this._items);
 
     if (this.isGrouped) {

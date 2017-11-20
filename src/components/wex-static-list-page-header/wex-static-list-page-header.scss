@@ -1,5 +1,18 @@
-.ios wex-static-list-page-header {
-  #static-list-toolbar {
+wex-static-list-page-header {
+  .ios & #static-list-toolbar {
     padding-top: 24px;
+  }
+  
+  .md & {
+
+    .toolbar .searchbar-md {
+      padding: 0;
+      background: none;
+
+      .searchbar-input {
+        box-shadow: none;
+        background: transparent;
+      }
+    }
   }
 }
