@@ -18,6 +18,7 @@ import { PostedTransactionRequestor } from "../../../providers/index";
 import { TabPage } from "../../../decorators/tab-page";
 import { WexCardNumberPipe } from "../../../pipes/index";
 import { NameUtils } from "../../../utils/name-utils";
+import { PageParams } from "../../page";
 
 export type TransactionDateViewParams = keyof {
   filter?: TransactionListFilter;
@@ -60,7 +61,7 @@ export class TransactionDateSublist extends StaticListPage<BaseTransactionT, Bas
     public injector: Injector,
     protected requestors: SessionInfoRequestors,
     protected transactionProvider: TransactionProvider) {
-    super("Transactions.Date", injector);
+    super( { pageName: "Transactions.Date" }, injector);
 
     this.listGroupDisplayOrder = [];
     this.filter = this.navParams.get(TransactionDateViewParams.Filter);
@@ -68,8 +69,10 @@ export class TransactionDateSublist extends StaticListPage<BaseTransactionT, Bas
 
     if (!!this.filter) {
       if (this.filter[0]  === TransactionSearchFilterBy.Card) {
+        this.params.trackingName = "TransactionCard";
         this.filterSubheader = new WexCardNumberPipe().transform((item as Card).details.embossedCardNumber);
       } else {
+        this.params.trackingName = "TransactionDriver";
         let details = (item as Driver).details;
         this.filterSubheader = NameUtils.PrintableName(details.firstName, details.lastName);
       }
@@ -249,6 +252,7 @@ export class TransactionDateSublist extends StaticListPage<BaseTransactionT, Bas
   }
 
   public onInfinite(event: any): Promise<BaseTransactionT[]> {
+    this.trackAnalyticsEvent("InfiniteScroll");
     return this.fetchResults(FetchOptions.NextPage)
       .toPromise()
       .then(() => event.complete());
@@ -259,6 +263,10 @@ export class TransactionDateSublist extends StaticListPage<BaseTransactionT, Bas
 export class TransactionDateView extends TransactionDateSublist implements DoCheck {
   private heightHasBeenSet: boolean;
   public readonly contentOnly: boolean = true;
+  public params: PageParams = {
+    pageName: this.pageName,
+    trackView: false
+  };
 
   protected fetchPending(options?: StaticListPage.FetchOptions): Observable<PendingTransaction[]> {
     // Only re-fetch the pending transactions if we're clearing the cache as there is only a single page of pending transactions

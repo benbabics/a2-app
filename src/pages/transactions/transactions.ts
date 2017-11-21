@@ -10,14 +10,14 @@ import { TransactionDateView } from "./transactions-date-view/transactions-date-
 
 export type TransactionListType = keyof {
   Date,
-  DriverName,
-  CardNumber
+  Driver,
+  Card
 };
 
 export namespace TransactionListType {
   export const Date: TransactionListType = "Date";
-  export const DriverName: TransactionListType = "DriverName";
-  export const CardNumber: TransactionListType = "CardNumber";
+  export const Driver: TransactionListType = "Driver";
+  export const Card: TransactionListType = "Card";
 }
 
 @TabPage()
@@ -32,14 +32,14 @@ export class TransactionsPage extends Page implements DoCheck {
 
   public readonly TransactionListType = {
     Date: TransactionListType.Date,
-    DriverName: TransactionListType.DriverName,
-    CardNumber: TransactionListType.CardNumber
+    DriverName: TransactionListType.Driver,
+    CardNumber: TransactionListType.Card
   };
 
   public get rootListType(): any {
-    if (this.lastViewSegment === TransactionListType.DriverName) {
+    if (this.lastViewSegment === TransactionListType.Driver) {
       return TransactionDriverView;
-    } else if (this.lastViewSegment === TransactionListType.CardNumber) {
+    } else if (this.lastViewSegment === TransactionListType.Card) {
       return TransactionCardView;
     } else {
       return TransactionDateView;
@@ -58,7 +58,7 @@ export class TransactionsPage extends Page implements DoCheck {
   }
 
   constructor(private localStorageService: LocalStorageService, public navCtrl: NavController, public navParams: NavParams, public injector: Injector) {
-    super("Transactions", injector);
+    super({ pageName: "Transactions", trackingName: "TransactionsList" }, injector);
     this.lastViewSegment = this.localStorageService.get(this.LAST_TRANSACTION_VIEW_KEY) as TransactionListType;
     if (!this.lastViewSegment) {
       this.lastViewSegment = TransactionListType.Date;
@@ -67,6 +67,7 @@ export class TransactionsPage extends Page implements DoCheck {
   }
 
   public selectList(listType: TransactionListType): Promise<any> {
+    this.trackAnalyticsEvent(listType);
     this.localStorageService.set(this.LAST_TRANSACTION_VIEW_KEY, listType);
     this.lastViewSegment = listType;
     return this.listNav.setRoot(this.rootListType, {  }, { animate: false });

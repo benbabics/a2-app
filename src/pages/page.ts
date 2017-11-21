@@ -18,8 +18,8 @@ export abstract class Page implements OnInit {
   public readonly CONSTANTS: any;
   public googleAnalytics: GoogleAnalytics;
 
-  protected pageName: string;
-  protected params: PageParams;
+  public pageName: string;
+  public params: PageParams;
 
   constructor(pageDetails: PageDetails, public injector: Injector) {
     if (_.isObject(pageDetails)) {
