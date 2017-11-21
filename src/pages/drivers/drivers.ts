@@ -1,12 +1,15 @@
 import { NavController, NavParams, Events } from "ionic-angular";
 import { Observable } from "rxjs/Observable";
-import { Component, Injector } from "@angular/core";
+import { Component, Injector, DoCheck } from "@angular/core";
 import { Driver, DriverStatus } from "@angular-wex/models";
 import { DriversDetailsPage } from "./details/drivers-details";
 import { StaticListPage, FetchOptions, GroupedList } from "../static-list-page";
 import { Session } from "../../models";
 import { TabPage } from "../../decorators/tab-page";
-import { NameUtils } from "../../utils/name-utils";
+import { TransactionsPage } from "../transactions/transactions";
+import { TransactionDateSublist } from "../transactions/transactions-date-view/transactions-date-view";
+import { TransactionSearchFilterBy } from "@angular-wex/api-providers";
+import { PageParams } from "../page";
 
 @TabPage()
 @Component({
@@ -24,6 +27,7 @@ export class DriversPage extends StaticListPage<Driver, Driver.Details> {
 
   protected readonly listGroupDisplayOrder: string[] = DriversPage.DRIVER_STATUSES;
   public readonly dividerLabels: string[] = DriversPage.DRIVER_STATUSES.map(DriverStatus.displayName);
+  public readonly contentOnly: boolean = false;
 
   constructor(
     public navCtrl: NavController,
@@ -51,8 +55,24 @@ export class DriversPage extends StaticListPage<Driver, Driver.Details> {
   public goToDetailPage(driver: Driver): void {
     this.navCtrl.push( DriversDetailsPage, { driver } );
   }
+}
 
-  public getFullName(driver: Driver): string {
-    return NameUtils.PrintableName(driver.details.lastName, driver.details.firstName);
+export class TransactionDriverView extends DriversPage implements DoCheck {
+  public readonly contentOnly: boolean = true;
+  private heightHasBeenSet: boolean;
+  public params: PageParams = {
+    pageName: this.pageName,
+    trackView: false
+  };
+
+  public ngDoCheck() {
+    this.heightHasBeenSet = TransactionsPage.ResizeContentForTransactionHeader(this.content, this.heightHasBeenSet);
+  }
+
+  public goToDetailPage(item: Driver): Promise<any> {
+    return this.navCtrl.parent.push(TransactionDateSublist, {
+      filter: [TransactionSearchFilterBy.Driver, item.details.promptId],
+      item
+    });
   }
 }

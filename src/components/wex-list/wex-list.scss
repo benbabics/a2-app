@@ -1,5 +1,9 @@
 wex-list {
 
+  @at-root .ios & ion-item-divider {
+    @extend .centered;
+  }
+
   ion-list {
     margin-bottom: 24px !important;
     

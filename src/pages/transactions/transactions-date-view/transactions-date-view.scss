@@ -1,0 +1,31 @@
+transactions-date-view {
+
+  wex-static-list-page-header:not(.active) {
+    wex-list-header ion-list-header.item.list-header {
+      background-color: #eee;
+      color: color($colors, gray);
+    }
+  }
+
+  .transaction-content {
+    padding: 1rem 0;
+  }
+
+  .content {
+    @extend %wex-list-item-content;
+  }
+
+  .right {
+    padding-right: 1rem;
+    text-align: right;
+
+    .amount {
+      font-weight: bold;
+    }
+  }
+
+  .sub-text {
+    font-size: 14px;
+    opacity: .6;
+  }
+}

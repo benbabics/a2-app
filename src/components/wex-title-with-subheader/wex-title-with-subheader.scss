@@ -1,0 +1,47 @@
+wex-title-with-subheader {
+  $header-height-md: 1rem;
+  $header-height-ios: .5rem;
+  $margin-right-ios: 1.7rem;
+
+  @at-root .ios & ion-title {
+    position: static;
+
+    .toolbar-title-ios {
+      margin-right: $margin-right-ios;
+    }
+  }
+
+  .back-button {
+    align-self: flex-start;
+
+    // Back-button margin accounts for being taller than text
+    @at-root .md & {
+      margin-top: $header-height-md - .1rem;
+    } @at-root .ios & {
+      margin-top: $header-height-ios - .1rem;
+    }
+  }
+  
+  ion-title {
+    & div.title {
+      @at-root .ios & {
+        padding-top: $header-height-ios;
+        padding-bottom: .5rem;
+      } @at-root .md & {
+        padding-top: $header-height-md;
+        padding-bottom: .5rem;
+      }
+    }
+
+    & div.subheader {
+      opacity: .9;
+      @at-root .ios & {
+        font-size: 1.3rem;
+        font-weight: normal;
+      } @at-root .md & {
+        font-size: 1.5rem;
+        padding-bottom: $header-height-md;
+      }
+    }
+  }
+}
