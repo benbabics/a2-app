@@ -455,13 +455,13 @@ angular-2-local-storage@^1.0.1:
   version "1.0.1"
   resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/angular-2-local-storage/-/angular-2-local-storage-1.0.1.tgz#3b846c90b2fffc9124f7bacc347f22d043a1e3a4"
 
-angular-rxjs-extensions-ionic@^1.0.0-beta.2:
-  version "1.0.0-beta.2"
-  resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/angular-rxjs-extensions-ionic/-/angular-rxjs-extensions-ionic-1.0.0-beta.2.tgz#612e263e664f51a876a33d54e5aeb6e4220dbc08"
+angular-rxjs-extensions-ionic@^1.0.0:
+  version "1.0.0"
+  resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/angular-rxjs-extensions-ionic/-/angular-rxjs-extensions-ionic-1.0.0.tgz#1d61d2d45df7bb7954c744347c4cd8d033f9739c"
 
-angular-rxjs-extensions@^1.0.0-rc.7:
-  version "1.0.0-rc.7"
-  resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/angular-rxjs-extensions/-/angular-rxjs-extensions-1.0.0-rc.7.tgz#092631181d1a24a29dbf21c021f3d66dc034736a"
+angular-rxjs-extensions@^1.0.0:
+  version "1.0.0"
+  resolved "http://nexus.int.wrightexpress.com/nexus/content/groups/npm-public/angular-rxjs-extensions/-/angular-rxjs-extensions-1.0.0.tgz#8601f1ad8f6238cfd4551d7997c5e26d83b790f6"
 
 ansi-escapes@^3.0.0:
   version "3.0.0"

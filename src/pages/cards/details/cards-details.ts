@@ -10,6 +10,8 @@ import { WexAppSnackbarController } from "../../../components";
 import * as _ from "lodash";
 import { TransactionsPage, TransactionListType } from "../../transactions/transactions";
 import { Session } from "../../../models";
+import { Reactive, StateEmitter, EventSource } from "angular-rxjs-extensions";
+import { Subject, Observable, BehaviorSubject } from "rxjs";
 
 export type CardsDetailsNavParams = keyof {
   card,
@@ -31,18 +33,22 @@ export namespace CardsDetailsNavParams {
   selector: "page-cards-details",
   templateUrl: "cards-details.html"
 })
+@Reactive()
 export class CardsDetailsPage extends DetailsPage {
 
-  public card: Card;
-  private _reissued: boolean;
-  public set reissued(reissued: boolean) {
-    this._reissued = reissued;
-    this.reissuedSnackbar(reissued);
-  }
-  public get reissued(): boolean {
-    return this._reissued;
-  }
-  public isChangingStatus: boolean = false;
+  @EventSource() private onChangeStatus$: Observable<void>;
+
+  @StateEmitter.Alias("navParams.data." + CardsDetailsNavParams.Card)
+  private card$: Observable<Card>;
+
+  @StateEmitter.From("navParams.data." + CardsDetailsNavParams.Reissued)
+  private reissued$: Subject<boolean>;
+
+  @StateEmitter() private isChangingStatus$: Subject<boolean>;
+  @StateEmitter() private canChangeStatus$: Subject<boolean>;
+  @StateEmitter() private canReissue$: Subject<boolean>;
+
+  private availableCardStatuses$ = new BehaviorSubject<CardStatusDetails[]>([]);
 
   constructor(
     public navParams: NavParams,
@@ -57,8 +63,37 @@ export class CardsDetailsPage extends DetailsPage {
   ) {
     super("Cards.Details", injector);
 
-    this.card = this.navParams.get(CardsDetailsNavParams.Card);
-    this.reissued = this.navParams.get(CardsDetailsNavParams.Reissued);
+    Observable.combineLatest(this.card$, this.sessionCache.session$)
+      .subscribe((args) => {
+        let [card, session] = args;
+        let cardNumber = card.details.embossedCardNumber;
+        let cardNumberSuffix = parseInt(cardNumber.substr(cardNumber.length - 1));
+        // Only WOL_NP with "Active" status can "Suspended" Cards
+        let rejectionAttrs = (!session.user.isWolNp && card.isActive) ? { id: "SUSPENDED" } : false;
+
+        // Distributor users can only reissue active cards. All others can reissue any non-terminated cards.
+        this.canChangeStatus$.next(session.user.isDistributor ? card.isActive : !card.isTerminated);
+
+        this.canReissue$.next(!session.user.isClassic || cardNumberSuffix < 9);
+
+        // will not reject an iteratee when rejectionAttrs is false
+        this.availableCardStatuses$.next(_.reject(this.CONSTANTS.statusOptions, rejectionAttrs));
+      });
+
+    this.reissued$.subscribe(reissued => this.reissuedSnackbar(reissued));
+
+    this.onChangeStatus$
+      .flatMap(() => Observable.combineLatest(this.canChangeStatus$, this.availableCardStatuses$).take(1))
+      .subscribe((args) => {
+        let [canChangeStatus, cardStatuses] = args;
+
+        if (canChangeStatus) {
+          this.changeStatus(cardStatuses);
+        }
+        else {
+          this.cannotChangeStatusMessage();
+        }
+      });
   }
 
   private reissuedSnackbar(reissued: boolean) {
@@ -72,26 +107,9 @@ export class CardsDetailsPage extends DetailsPage {
     }
   }
 
-  public get canChangeStatus(): boolean {
-    // Rules in MOBACCTMGT-1135 AC #1
-    if (this.session.user.isDistributor) { return this.card.isActive; }
-    return !this.card.isTerminated;
-  }
-
-  public get canReissue(): boolean {
-    let isClassic = this.session.user.isClassic,
-      cardNo = this.card.details.embossedCardNumber,
-      cardNoSuffix = parseInt(cardNo.substr(cardNo.length - 1));
-
-    return !isClassic || (isClassic && cardNoSuffix < 9);
-  }
-
-  public changeStatus() {
-    if (this.canChangeStatus) {
-      let actions = this.availableCardStatuses;
-      if (!actions || _.isEmpty(actions)) { return; }
-
-      this.actionSheetController.create(this.buildActionSheet(actions)).present();
+  public changeStatus(cardStatuses: CardStatusDetails[]) {
+    if (!_.isEmpty(cardStatuses)) {
+      this.actionSheetController.create(this.buildActionSheet(cardStatuses)).present();
     }
   }
 
@@ -100,7 +118,6 @@ export class CardsDetailsPage extends DetailsPage {
   }
 
   private buildActionSheet(actions: CardStatusDetails[]): ActionSheetOptions {
-
     let buttons: ActionSheetButton[] = actions.map((action) => ({
       text: action.label,
       icon: !this.platform.is("ios") ? action.icon : null,
@@ -111,8 +128,7 @@ export class CardsDetailsPage extends DetailsPage {
           this.updateCardStatus(action.id);
         }
       }
-    })
-    );
+    }));
 
     return {
       title: this.CONSTANTS.actionStatusTitle,
@@ -163,19 +179,6 @@ export class CardsDetailsPage extends DetailsPage {
         toastOptions.message = this.CONSTANTS.bannerStatusChangeFailure;
         this.wexAppSnackbarController.createQueued(toastOptions).present();
       });
-  }
-
-  private get availableCardStatuses(): Array<CardStatusDetails> {
-    let statuses: CardStatusDetails[] = this.CONSTANTS.statusOptions;
-    let isWOLNP = this.session.user.isWolNp;
-    let rejectionAttrs;
-    // Only WOL_NP with "Active" status can "Suspended" Cards
-    if (!isWOLNP && this.card.isActive) {
-      rejectionAttrs = { id: "SUSPENDED" };
-    }
-
-    // will not reject an iteratee when rejectionAttrs is false
-    return _.reject(statuses, rejectionAttrs || false);
   }
 
   public get statusColor(): string {
