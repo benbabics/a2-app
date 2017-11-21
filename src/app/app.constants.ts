@@ -500,6 +500,9 @@ export namespace ConstantsInfo {
               amount: "Amount",
               select: "Select",
               bankAccount: "Bank Account"
+            },
+            INSTRUCTIONAL_TEXT: {
+              bankAccount: "To add or remove bank accounts <br> login to your web portal"
             }
           },
 
