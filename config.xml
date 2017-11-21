@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="904" id="com.wex.fleetsmarthub" ios-CFBundleVersion="904" version="5.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="906" id="com.wex.fleetsmarthub" ios-CFBundleVersion="906" version="5.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Fleet SmartHub</name>
     <description>Manage your fleet accounts directly from your phone.</description>
     <author email="MobileDevelopment@wexinc.com" href="http://www.wexinc.com">WEX Mobile Development Team</author>
@@ -92,7 +92,6 @@
     <plugin name="cordova-plugin-app-version" spec="~0.1.9" />
     <plugin name="cordova-plugin-device" spec="1.1.4" />
     <plugin name="cordova-plugin-dialogs" spec="~1.3.2" />
-    <plugin name="cordova-plugin-google-analytics" spec="^1.8.3" />
     <plugin name="cordova-plugin-inappbrowser" spec="1.8.1" />
     <plugin name="cordova-plugin-ionic-webview" spec="^1.1.8" />
     <plugin name="cordova-plugin-market" spec="^1.1.3" />
@@ -104,4 +103,5 @@
     <plugin name="cordova-plugin-whitelist" spec="1.3.1" />
     <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
     <plugin name="wex-cordova-open-native-settings" spec="1.0.1" />
+    <plugin name="wex-google-analytics-cordova-plugin" spec="^1.9.4" />
 </widget>
