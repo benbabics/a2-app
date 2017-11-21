@@ -1,6 +1,11 @@
 wex-static-list-page-header {
-  .ios & #static-list-toolbar {
-    padding-top: 24px;
+  .ios & { 
+    #static-list-toolbar {
+      padding-top: 24px;
+    }
+    .searchbar-ios .searchbar-input {
+      font-size: 1.6rem;
+    }
   }
   
   .md & {
