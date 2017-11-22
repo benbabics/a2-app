@@ -2,19 +2,15 @@ import { Injector } from "@angular/core";
 import { Page, PageDetails } from "./page";
 import { Session } from "../models";
 import { SessionCache, SessionManager } from "../providers";
-import { StateEmitter } from "angular-rxjs-extensions";
-import { Observable } from "rxjs";
 
 export abstract class SecurePage extends Page {
 
   private static readonly DEFAULT_REQUIRED_SESSION_DETAILS = [Session.Field.User];
 
-  @StateEmitter.Alias("sessionManager.cache.session$")
-  protected session$: Observable<Session>;
-
-  protected session: Session/* = {} as Session*/;
   protected sessionCache: SessionCache;
   protected sessionManager: SessionManager;
+
+  protected session: Session = {} as Session; //TODO - Remove this when refactoring is complete
 
   constructor(pageDetails: PageDetails, injector: Injector, protected requiredSessionInfo?: Session.Field[]) {
     super(pageDetails, injector);
@@ -27,7 +23,7 @@ export abstract class SecurePage extends Page {
   ionViewCanEnter(): Promise<any> {
     // Request all session info required for this page
     return this.sessionCache.requireSome$(this.requiredSessionInfo)
-      .map((session: Session) => this.session = session)
+      .map(session => this.session = session)
       .toPromise();
   }
 }

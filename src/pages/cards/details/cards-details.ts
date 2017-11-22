@@ -133,9 +133,9 @@ export class CardsDetailsPage extends DetailsPage {
 
         return Observable.of(cardStatus);
       })
-      .withLatestFrom(this.card$)
+      .withLatestFrom(this.card$, this.sessionCache.session$)
       .flatMap((args) => {
-        let [cardStatus, card] = args;
+        let [cardStatus, card, session] = args;
 
         if (cardStatus === card.details.status) {
           return Observable.of(card);
@@ -146,7 +146,7 @@ export class CardsDetailsPage extends DetailsPage {
           duration: this.CONSTANTS.reissueMessageDuration,
           position: "top"
         };
-        let accountId = this.session.user.billingCompany.details.accountId;
+        let accountId = session.user.billingCompany.details.accountId;
         let cardId = card.details.cardId;
 
         this.isChangingStatus$.next(true);

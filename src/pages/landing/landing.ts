@@ -31,10 +31,10 @@ export class LandingPage extends SecurePage {
   @ViewDidEnter() private viewDidEnter$: Observable<void>;
   @EventSource() private onShowOptions$: Observable<any>;
 
-  @StateEmitter.Alias("session$.user.billingCompany")
+  @StateEmitter.Alias("sessionCache.session$.user.billingCompany")
   private billingCompany$: Observable<CompanyStub>;
 
-  @StateEmitter.Alias("session$.invoiceSummary")
+  @StateEmitter.Alias("sessionCache.session$.invoiceSummary")
   private invoiceSummary$: Observable<InvoiceSummary>;
 
   @StateEmitter() private companyName$: Subject<string>;
@@ -67,8 +67,7 @@ export class LandingPage extends SecurePage {
 
     const registerBackButtonAction = () => wexAppBackButtonController.registerAction(() => this.onHardwareBackButton$.next());
 
-    this.session$
-      .filter(Boolean)
+    this.sessionCache.session$
       .distinctUntilKeyChanged(Session.Field.User)
       .flatMap(session => brandProvider.logo(session.user.details.brand))
       .subscribe((brandLogoData: string) => this.brandLogoData$.next(brandLogoData), () => this.brandLogoData$.next(""));

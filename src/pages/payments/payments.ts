@@ -28,7 +28,7 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   @StateEmitter() private checkingMakePaymentAvailability$: Subject<boolean>;
   @StateEmitter() private minPaymentDueDate$: Subject<string>;
 
-  @StateEmitter.Alias("session$.invoiceSummary")
+  @StateEmitter.Alias("sessionCache.session$.invoiceSummary")
   private invoiceSummary$: Observable<InvoiceSummary>;
 
   constructor(
