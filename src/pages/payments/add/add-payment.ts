@@ -19,7 +19,7 @@ import { WexAlertController } from "../../../components/wex-alert-controller/wex
 import { NavBarController } from "../../../providers/nav-bar-controller";
 import { Reactive, StateEmitter, EventSource } from "angular-rxjs-extensions";
 import { Subject, BehaviorSubject } from "rxjs";
-import { ViewDidEnter } from "angular-rxjs-extensions-ionic";
+import { ViewDidEnter, ViewDidLeave } from "angular-rxjs-extensions-ionic";
 
 export type AddPaymentNavParams = keyof {
   payment
@@ -46,6 +46,7 @@ export class AddPaymentPage extends SecurePage {
   @Value("PAGES.PAYMENTS.ADD.LABELS") private readonly LABELS: any;
 
   @ViewDidEnter() viewDidEnter$: Observable<void>;
+  @ViewDidLeave() viewDidLeave$: Observable<void>;
   @EventSource() onUpdateAmount$: Observable<any>;
   @EventSource() onUpdateBankAccount$: Observable<any>;
   @EventSource() onUpdateDate$: Observable<any>;
@@ -79,6 +80,7 @@ export class AddPaymentPage extends SecurePage {
     public wexAlertController: WexAlertController,
     private paymentProvider: PaymentProvider,
     public navBarCtrl: NavBarController,
+    private navBarController: NavBarController
   ) {
     super({ pageName: "Payments.Add", trackView: false }, injector, [
       Session.Field.BankAccounts,
@@ -111,7 +113,13 @@ export class AddPaymentPage extends SecurePage {
     });
 
     this.viewDidEnter$
-      .subscribe(() => this.trackAnalyticsPageView(this.existingPayment ? "makePaymentEdit" : "makePaymentInitial"));
+      .subscribe(() => {
+        this.navBarController.show(false);
+        this.trackAnalyticsPageView(this.existingPayment ? "makePaymentEdit" : "makePaymentInitial");
+      });
+
+    this.viewDidLeave$
+      .subscribe(() => this.navBarController.show(true));
 
     this.onUpdateAmount$
       .flatMap(() => this.payment$.asObservable().take(1))
@@ -146,7 +154,7 @@ export class AddPaymentPage extends SecurePage {
         });
       })
       .subscribe((payment) => {
-        this.navCtrl.push(AddPaymentConfirmationPage, { payment })
+        this.navCtrl.push(AddPaymentConfirmationPage, { payment, isEditingPayment: !!this.existingPayment })
           .then(() => this.navCtrl.removeView(this.viewController));
 
         this.trackAnalyticsPageView(this.existingPayment ? "confirmationUpdated" : "confirmationScheduled");

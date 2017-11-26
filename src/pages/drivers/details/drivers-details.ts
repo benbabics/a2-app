@@ -1,16 +1,16 @@
 import { WexAppSnackbarController } from "./../../../components/wex-app-snackbar-controller/wex-app-snackbar-controller";
-import { ActionSheetController, ToastOptions, Platform, NavController } from "ionic-angular";
+import { ActionSheetController, ToastOptions, NavController } from "ionic-angular";
 import * as _ from "lodash";
 import { Component, Injector } from "@angular/core";
 import { NavParams } from "ionic-angular";
 import { Driver, DriverStatus, OnlineApplication } from "@angular-wex/models";
-import { DriverProvider, TransactionSearchFilterBy } from "@angular-wex/api-providers";
+import { DriverProvider } from "@angular-wex/api-providers";
 import { DetailsPage } from "../../details-page";
-import { TransactionsPage, TransactionListType } from "../../transactions/transactions";
 import { NameUtils } from "../../../utils/name-utils";
 import { Session } from "../../../models";
 import { Reactive, StateEmitter, EventSource } from "angular-rxjs-extensions";
 import { Subject, Observable } from "rxjs";
+import { TransactionsDateView } from "../../transactions/transactions-date-view/transactions-date-view";
 
 interface DriverStatusDetails {
   id: DriverStatus;
@@ -47,7 +47,6 @@ export class DriversDetailsPage extends DetailsPage {
     private actionSheetController: ActionSheetController,
     private driverProvider: DriverProvider,
     private wexAppSnackbarController: WexAppSnackbarController,
-    private platform: Platform,
     navController: NavController,
     injector: Injector
   ) {
@@ -73,12 +72,7 @@ export class DriversDetailsPage extends DetailsPage {
 
     this.onViewTransactions$
       .flatMap(() => this.driver$.asObservable().take(1))
-      .subscribe((driver) => {
-        navController.push(TransactionsPage, {
-          selectedList: TransactionListType.Date,
-          filter: [TransactionSearchFilterBy.Driver, driver.details.promptId]
-        });
-      });
+      .subscribe(driver => navController.push(TransactionsDateView, { filterItem: driver }));
   }
 
   private changeStatus$(driverStatuses: DriverStatusDetails[]): Observable<Driver> {

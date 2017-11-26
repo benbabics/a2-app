@@ -31,24 +31,24 @@ ion-fab {
 
 ion-list, ion-item-group {
   $padding-width: 16px;
-  
+
   &.inset-items {
-      
+
     .item.item-block {
       padding-left: $padding-width;
-        
+
       > .item-inner {
         padding-left: 0;
         padding-right: $padding-width;
       }
     }
   }
-  
+
   &:not(.inset-items) {
-  
+
     .item.item-block {
       padding-left: 0;
-    
+
       > .item-inner {
         padding-left: $padding-width;
         padding-right: $padding-width;
@@ -84,6 +84,17 @@ ion-icon.icon-ios.tab-button-icon[aria-label*="fa"] {
 .ion-ios-fa-credit-card-alt,
 .ion-ios-fa-credit-card-alt-outline {
   @extend .fa-credit-card-alt;
+}
+
+//# Text
+// --------------------------------------------------
+.text-instructions {
+  opacity: .5;
+  margin: auto;
+  padding-top: 1rem;
+  width: 90%;
+  text-align: center;
+  font-size: 13px;
 }
 
 //# Buttons
@@ -122,7 +133,7 @@ ion-icon.icon-ios.tab-button-icon[aria-label*="fa"] {
   ion-list, ion-item-group {
     @extend %ios-item-border;
     border-width: 1px; // Needed to fix border rendering glitch in some builds of Chrome
-    
+
     > .item.item-ios {
 
       &.item-divider {
@@ -145,34 +156,34 @@ ion-icon.icon-ios.tab-button-icon[aria-label*="fa"] {
   ion-list {
     @extend %ios-list-top-border;
   }
-  
+
   ion-item-group {
     // .list-header collapsabled
     ion-list-header.list-header-collapsed:not(.list-header-ios) {
       min-height: 0;
       ion-label { margin: 0; }
     }
-    
+
     ion-list-header.list-header-md {
       padding-top: 1.5rem;
     }
     .item-md + .list-header-md {
       margin-top: 1.5rem;
     }
-    
+
     // .list-header borders
     .item-ios.list-header-ios {
       &:not(:last-of-type) {
         @extend %ios-item-border;
       }
     }
-    
+
     .item:not(.list-header) {
       // icons
       ion-icon[ios="ios-arrow-forward"] {
         font-size: 2.2rem;
         margin-right: 0;
-    
+
         &::before {
           vertical-align: middle;
         }
@@ -191,7 +202,7 @@ ion-icon.icon-ios.tab-button-icon[aria-label*="fa"] {
 }
 
 /**
- * Makes button-gradient class available to whole app.  Transition is built from adding a 
+ * Makes button-gradient class available to whole app.  Transition is built from adding a
  * pseudo layer with a darkened version of the original element with transitioning opacity.
  * Higher opacity hides content of button (text), so it uses a combination of 30% opacity
  * 30% darkening to the color of the background.
@@ -256,8 +267,14 @@ ion-header {
     background: #ddd;
   }
 
-  &.header-ios .toolbar-background-ios {
-    border-bottom-color: #d9d8d8;
+  &.header-ios {
+    .toolbar-background-ios {
+      border-bottom-color: #d9d8d8;
+    }
+
+    .toolbar-title-ios {
+      font-weight: 500;
+    }
   }
 }
 

@@ -1,6 +1,7 @@
 import { Component, Input, Output, ViewChild, EventEmitter } from "@angular/core";
 import { MbscCalendarOptions } from "mbsc-calendar";
 import { WexPlatform } from "../../providers/platform";
+import { WexAppBackButtonController } from "../../providers/index";
 
 export type CalendarTheme = keyof {
   material,
@@ -35,7 +36,7 @@ export namespace CalendarTheme {
 
   public options: MbscCalendarOptions;
 
-  public constructor(platform: WexPlatform) {
+  public constructor(platform: WexPlatform, private wexAppBackButtonController: WexAppBackButtonController) {
     let theme, display;
     if (platform.isIos) {
       theme = CalendarTheme.Ios;
@@ -45,7 +46,12 @@ export namespace CalendarTheme {
       display = "center";
     }
 
-    this.options = { theme, display };
+    this.options = {
+      theme,
+      display,
+      onBeforeShow: this.onBeforeShow,
+      onBeforeClose: this.onBeforeClose
+    };
   }
 
   public displayCalendar() {
@@ -57,4 +63,8 @@ export namespace CalendarTheme {
 
     this.mbscCalendar.show();
   }
+
+  private readonly onBeforeShow = () => this.wexAppBackButtonController.registerAction(() => this.mbscCalendar.hide());
+
+  private readonly onBeforeClose = () => this.wexAppBackButtonController.deregisterAction();
 }

@@ -1,7 +1,7 @@
 import { Observable } from "rxjs";
 import { Session } from "../../models";
 
-export type SessionInfoRequestor<T> = (requiredDetails?: Session, params?: any) => Observable<T>;
+export type SessionInfoRequestor<T, ParamsT = any> = (requiredDetails?: Session, options?: SessionInfoOptions<ParamsT>) => Observable<T>;
 
 export interface SessionInfoRequestorDetails {
   requestor: SessionInfoRequestor<any>;
@@ -12,6 +12,15 @@ export interface SessionInfoRequestorDetails {
 export type SessionInfoRequestorDictionary = {
   [sessionField: string]: SessionInfoRequestorDetails;
 };
+
+export interface SessionInfoOptions<ParamsT> {
+  requestParams?: ParamsT;
+  clearCache?: boolean;
+}
+
+export namespace SessionInfoOptions {
+  export const Defaults: SessionInfoOptions<any> = { };
+}
 
 export abstract class SessionInfoRequestors {
 

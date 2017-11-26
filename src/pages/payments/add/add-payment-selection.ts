@@ -35,6 +35,7 @@ export class AddPaymentSelectionPage extends SecurePage {
   @EventSource() private onSubmit$: Observable<any>;
 
   @StateEmitter() private pageTitle$: Subject<string>;
+  @StateEmitter() private instructionalText$: Subject<string>;
   @StateEmitter() private isSubmitEnabled$: Subject<boolean>;
   @StateEmitter() private isOtherAmountSelected$: Subject<boolean>;
   @StateEmitter() private isBankAccount$: Subject<boolean>;
@@ -62,8 +63,9 @@ export class AddPaymentSelectionPage extends SecurePage {
       this.isBankAccount$.next(listType === "bankAccount");
       this.isPaymentAmount$.next(listType === "amount");
 
-      // Set the page title
+      // Set the page title and instructional test
       this.pageTitle$.next(this.CONSTANTS.LABELS[listType]);
+      this.instructionalText$.next(_.get<string>(this.CONSTANTS.INSTRUCTIONAL_TEXT, listType, ""));
     });
 
     // Make sure that the selected item is one of the items in the list if this is a payment selection
@@ -89,7 +91,7 @@ export class AddPaymentSelectionPage extends SecurePage {
       .flatMap(() => Observable.combineLatest(this.selectedItem$, this.chosenItem$))
       .subscribe((args: [UserPaymentAmount, UserPaymentAmount]) => {
         let [selectedItem, initialItem] = args;
-        this.isSubmitEnabled$.next(selectedItem.value !== 0 && selectedItem.value !== initialItem.value);
+        this.isSubmitEnabled$.next(!_.isNaN(selectedItem.value) && selectedItem.value !== 0 && selectedItem.value !== initialItem.value);
         this.isOtherAmountSelected$.next(this.isOtherAmount(selectedItem));
       });
 

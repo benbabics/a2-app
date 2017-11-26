@@ -1,11 +1,22 @@
-import { CardsDetailsPage } from "./details/cards-details";
 import { Component, Injector } from "@angular/core";
 import { NavParams, NavController } from "ionic-angular";
 import { StaticListPage, GroupedList } from "../static-list-page";
 import { Card, CardStatus } from "@angular-wex/models";
 import { Session } from "../../models";
 import { TabPage } from "../../decorators/tab-page";
-import { Reactive } from "angular-rxjs-extensions";
+import { Reactive, StateEmitter } from "angular-rxjs-extensions";
+import { Observable } from "rxjs";
+import { TransactionsDateView } from "../transactions/transactions-date-view/transactions-date-view";
+import { CardsDetailsPage } from "./details/cards-details";
+
+export type CardsPageNavParams = keyof {
+  transactionListMode
+};
+
+export namespace CardsPageNavParams {
+
+  export const TransactionListMode: CardsPageNavParams = "transactionListMode";
+}
 
 @Component({
   selector: "page-cards",
@@ -22,20 +33,39 @@ export class CardsPage extends StaticListPage<Card, Card.Details> {
     "embossedCardNumber"
   ];
 
+  @StateEmitter.Alias("navParams.data." + CardsPageNavParams.TransactionListMode)
+  private transactionListMode$: Observable<boolean>;
+
   constructor(
-    public navCtrl: NavController,
     injector: Injector,
+    public navCtrl: NavController,
     public navParams: NavParams
   ) {
     super({
       pageName: "Cards",
-      listDataField: Session.Field.Cards,
+      listData: Session.Field.Cards,
       listGroupDisplayOrder: CardsPage.CARD_STATUSES,
       dividerLabels: CardsPage.CARD_STATUSES.map(CardStatus.displayName),
       searchFilterFields: CardsPage.SEARCH_FILTER_FIELDS
     }, injector);
 
-    this.onItemSelected$.subscribe(card => this.navCtrl.push(CardsDetailsPage, { card }));
+    this.transactionListMode$
+      .take(1)
+      .filter(Boolean)
+      .subscribe(() => this.params.trackView = false);
+
+    this.onItemSelected$
+      .withLatestFrom(this.transactionListMode$)
+      .subscribe((args) => {
+        let [card, transactionListMode] = args;
+
+        if (transactionListMode) {
+          navCtrl.parent.push(TransactionsDateView, { filterItem: card });
+        }
+        else {
+          navCtrl.push(CardsDetailsPage, { card });
+        }
+      });
   }
 
   protected groupItems(cards: Card[]): GroupedList<Card> {

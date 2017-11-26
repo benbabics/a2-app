@@ -12,9 +12,10 @@ import {
 } from "@angular-wex/models";
 import { Session } from "../../../models";
 import { SecurePage } from "../../secure-page";
-import { Dialogs } from "@ionic-native/dialogs";
 import { Value } from "../../../decorators/value";
 import { CardProvider, CardUpdateType } from "@angular-wex/api-providers";
+import { NavBarController } from "../../../providers/nav-bar-controller";
+import { WexAlertController } from "../../../components/wex-alert-controller/wex-alert-controller";
 
 @Component({
   selector: "page-cards-reissue",
@@ -35,9 +36,10 @@ export class CardsReissuePage extends SecurePage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private actionSheetCtrl: ActionSheetController,
-    private dialogs: Dialogs,
+    private wexAlertCtrl: WexAlertController,
     private cardProvider: CardProvider,
     private app: App,
+    private navBarCtrl: NavBarController,
     injector: Injector
   ) {
     super("Cards.Reissue", injector, [
@@ -115,12 +117,13 @@ export class CardsReissuePage extends SecurePage {
         // Force async update to the cards list
         this.sessionCache.update$(Session.Field.Cards).subscribe();
 
-        //Show the new details page
-        cardsNav.push(CardsDetailsPage, { card: updatedCard, reissued: true })
-          .then(() => cardsNav.removeView(this.app.getActiveNav().getPrevious())); //Remove the old details view
+        // Push a new CardDetailsPage on top
+        cardsNav.push(CardsDetailsPage, { card: updatedCard, reissued: true }, { direction: "back" })
+          // Remove this page
+          .then(() => cardsNav.removeView(this.app.getActiveNav().getPrevious()))
+          // Remove the old card details page
+          .then(() => cardsNav.removeView(this.app.getActiveNav().getPrevious()));
 
-        //Close the reissue flow
-        this.navCtrl.popToRoot({ animate: false });
       }, (errorResponse) => {
 
         console.error("Failed to reissue card: " + errorResponse);
@@ -146,19 +149,16 @@ export class CardsReissuePage extends SecurePage {
     this.selectedShippingMethod = this.defaultShippingMethod;
   }
 
+  ionViewWillEnter() {
+    this.navBarCtrl.show(false);
+  }
+
+  ionViewWillLeave() {
+    this.navBarCtrl.show(true);
+  }
+
   public onConfirmReissue() {
-    this.dialogs.confirm(
-      this.CONSTANTS.reissueConfirmationMessage,
-      this.CONSTANTS.reissueConfirmationTitle,
-      [
-        this.BUTTONS.YES,
-        this.BUTTONS.NO
-      ])
-      .then((result: number) => {
-        if (result === 1) {
-          this.reissue();
-        }
-      });
+    this.wexAlertCtrl.confirmation(this.CONSTANTS.reissueConfirmationMessage, () => this.reissue());
   }
 
   public onSelectReissueReason() {

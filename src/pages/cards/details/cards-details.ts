@@ -1,13 +1,13 @@
 import { WexAlertController } from "./../../../components/wex-alert-controller/wex-alert-controller";
-import { CardProvider, TransactionSearchFilterBy } from "@angular-wex/api-providers";
+import { CardProvider } from "@angular-wex/api-providers";
 import { CardsReissuePage } from "./../reissue/cards-reissue";
 import { Component, Injector } from "@angular/core";
-import { NavParams, App, ActionSheetController, ToastOptions, Platform, NavController } from "ionic-angular";
+import { NavParams, ActionSheetController, ToastOptions, NavController } from "ionic-angular";
 import { DetailsPage } from "../../details-page";
 import { Card, CardStatus } from "@angular-wex/models";
 import { WexAppSnackbarController } from "../../../components";
 import * as _ from "lodash";
-import { TransactionsPage, TransactionListType } from "../../transactions/transactions";
+import { TransactionsDateView } from "../../transactions/transactions-date-view/transactions-date-view";
 import { Session } from "../../../models";
 import { Reactive, StateEmitter, EventSource } from "angular-rxjs-extensions";
 import { Subject, Observable, BehaviorSubject } from "rxjs";
@@ -51,15 +51,13 @@ export class CardsDetailsPage extends DetailsPage {
   private canReissue$ = new BehaviorSubject<boolean>(false);
 
   constructor(
-    app: App,
     injector: Injector,
     navController: NavController,
     public navParams: NavParams,
     private wexAppSnackbarController: WexAppSnackbarController,
     private actionSheetController: ActionSheetController,
     private cardProvider: CardProvider,
-    private wexAlertController: WexAlertController,
-    private platform: Platform
+    private wexAlertController: WexAlertController
   ) {
     super("Cards.Details", injector);
 
@@ -110,16 +108,11 @@ export class CardsDetailsPage extends DetailsPage {
       .flatMap(() => this.canReissue$.asObservable().take(1))
       .filter(Boolean)
       .flatMap(() => this.card$.asObservable().take(1))
-      .subscribe((card) => app.getRootNav().push(CardsReissuePage, { card }));
+      .subscribe((card) => navController.push(CardsReissuePage, { card }));
 
     this.onViewTransactions$
       .flatMap(() => this.card$.asObservable().take(1))
-      .subscribe((card) => {
-        navController.push(TransactionsPage, {
-          selectedList: TransactionListType.Date,
-          filter: [TransactionSearchFilterBy.Card, card.details.cardId]
-        });
-      });
+      .subscribe((card) => navController.push(TransactionsDateView, { filterItem: card }));
   }
 
   private changeStatus$(cardStatuses: CardStatusDetails[]): Observable<Card> {

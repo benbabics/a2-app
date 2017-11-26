@@ -29,6 +29,11 @@ export interface Session {
   makePaymentAvailability: MakePaymentAvailability;
   invoiceSummary: InvoiceSummary;
   bankAccounts: BankAccount[];
+
+  // Volatile fields
+  filteredPendingTransactions: PendingTransaction[];
+  filteredPostedTransactions: PostedTransaction[];
+  filteredPostedTransactionsInfo: PostedTransactionList;
 }
 
 export namespace Session {
@@ -45,12 +50,15 @@ export namespace Session {
       export const PendingTransactions: Field = "pendingTransactions";
       export const PostedTransactions: Field = "postedTransactions";
       export const PostedTransactionsInfo: Field = "postedTransactionsInfo";
+      export const FilteredPendingTransactions: Field = "filteredPendingTransactions";
+      export const FilteredPostedTransactions: Field = "filteredPostedTransactions";
+      export const FilteredPostedTransactionsInfo: Field = "filteredPostedTransactionsInfo";
       export const Token: Field = "token";
       export const ClientSecret: Field = "clientSecret";
       export const User: Field = "user";
       export const UserCompany: Field = "userCompany";
 
-      export const All: Field[] = [
+      export const Static: Field[] = [
         Token,
         ClientSecret,
         User,
@@ -66,5 +74,13 @@ export namespace Session {
         UserCompany,
         BankAccounts
       ];
+
+      export const Volatile: Field[] = [
+        FilteredPendingTransactions,
+        FilteredPostedTransactions,
+        FilteredPostedTransactionsInfo
+      ];
+
+      export const All: Field[] = [...Static, ...Volatile];
     }
 }

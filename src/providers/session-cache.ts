@@ -2,17 +2,7 @@ import * as _ from "lodash";
 import { Observable, BehaviorSubject, Subject } from "rxjs";
 import { Injectable } from "@angular/core";
 import { Session } from "../models";
-import { SessionInfoRequestors } from "./session-info-requestor";
-
-export interface SessionInfoOptions {
-  requestParams?: object;
-  clearCache?: boolean;
-}
-
-export namespace SessionInfoOptions {
-  export const Defaults: SessionInfoOptions = { };
-}
-
+import { SessionInfoRequestors, SessionInfoOptions } from "./session-info-requestor";
 @Injectable()
 export class SessionCache {
 
@@ -61,15 +51,35 @@ export class SessionCache {
     return this.getFieldUpdater$(field).map(Boolean).distinctUntilChanged();
   }
 
-  public onFieldUpdating$(field: Session.Field): Observable<any> {
-    return this.isUpdatingField$(field).filter(Boolean);
+  public onFieldUpdating$(field: Session.Field): Observable<Session.Field> {
+    return this.isUpdatingField$(field)
+      .filter(Boolean)
+      .map(() => field);
   }
 
-  public onFieldUpdated$(field: Session.Field): Observable<any> {
-    return this.isUpdatingField$(field).filter(updating => !updating);
+  public onFieldUpdated$(field: Session.Field): Observable<Session.Field> {
+    return this.isUpdatingField$(field)
+      .filter(updating => !updating)
+      .map(() => field);
   }
 
-  public require$(field: Session.Field, options?: SessionInfoOptions): Observable<Session> {
+  public onAllFieldsUpdating$(fields: Session.Field[]): Observable<Session.Field[]> {
+    return Observable.zip(...fields.map(field => this.onFieldUpdating$(field)));
+  }
+
+  public onAllFieldsUpdated$(fields: Session.Field[]): Observable<Session.Field[]> {
+    return Observable.zip(...fields.map(field => this.onFieldUpdated$(field)));
+  }
+
+  public onAnyFieldsUpdating$(fields: Session.Field[]): Observable<Session.Field> {
+    return Observable.merge(...fields.map(field => this.onFieldUpdating$(field)));
+  }
+
+  public onAnyFieldsUpdated$(fields: Session.Field[]): Observable<Session.Field> {
+    return Observable.merge(...fields.map(field => this.onFieldUpdated$(field)));
+  }
+
+  public require$(field: Session.Field, options?: SessionInfoOptions<any>): Observable<Session> {
     return this.session$
       .take(1)
       .flatMap(session => {
@@ -82,11 +92,11 @@ export class SessionCache {
       });
   }
 
-  public requireAll$(options?: SessionInfoOptions): Observable<Session> {
+  public requireAll$(options?: SessionInfoOptions<any>): Observable<Session> {
     return this.requireSome$(Session.Field.All, options);
   }
 
-  public requireSome$(fields: Session.Field[], options?: SessionInfoOptions): Observable<Session> {
+  public requireSome$(fields: Session.Field[], options?: SessionInfoOptions<any>): Observable<Session> {
     if (fields.length === 0) {
       return this.session$.take(1);
     }
@@ -96,7 +106,7 @@ export class SessionCache {
     }
   }
 
-  public update$(field: Session.Field, options?: SessionInfoOptions): Observable<Session> {
+  public update$(field: Session.Field, options?: SessionInfoOptions<any>): Observable<Session> {
     options = _.merge({}, SessionInfoOptions.Defaults, options);
     const errorPrefix = "Error: Cannot update session info:";
 
@@ -116,16 +126,24 @@ export class SessionCache {
     return this.pendingRequests$.asObservable().take(1).flatMap((pendingRequests) => {
       let pendingRequest$ = pendingRequests[field];
 
-      if (pendingRequest$) {
+      if (pendingRequest$ && !options.clearCache) {
         // Use the existing request if this value is currently being requested
         return pendingRequest$;
       }
       else {
-        // First request any dependencies on this field, then fetch the requested session field value
-        pendingRequest$ = this.requireSome$(requestorDetails.requiredFields || [], requestorDetails.dependentRequestor ? options : null)
-          .flatMap((requiredDetails: Session) => requestorDetails.requestor(requiredDetails, options.requestParams))
+        // First request any required fields needed to fetch the field
+        if (requestorDetails.dependentRequestor) {
+          pendingRequest$ = this.updateSome$(requestorDetails.requiredFields, options);
+        }
+        else {
+          pendingRequest$ = this.requireSome$(requestorDetails.requiredFields || []);
+        }
+
+        // Then fetch the field
+        pendingRequest$ = pendingRequest$
+          .flatMap((requiredDetails: Session) => requestorDetails.requestor(requiredDetails, options))
           .map((value: any) => this.updateValue(field, value)) // Update the session value
-          .map(() => this.clearFieldUpdater(field)) // Remove the pending request
+          .map(() => this.clearFieldUpdater(field, pendingRequest$)) // Remove the pending request
           .flatMap(() => this.session$.take(1)) // Get the newly updated Session
           .shareReplay(1);
 
@@ -135,11 +153,11 @@ export class SessionCache {
     });
   }
 
-  public updateAll$(options?: SessionInfoOptions): Observable<Session> {
+  public updateAll$(options?: SessionInfoOptions<any>): Observable<Session> {
     return this.updateSome$(Session.Field.All, options);
   }
 
-  public updateSome$(requiredFields: Session.Field[], options?: SessionInfoOptions): Observable<Session> {
+  public updateSome$(requiredFields: Session.Field[], options?: SessionInfoOptions<any>): Observable<Session> {
     options = _.merge({}, SessionInfoOptions.Defaults, options);
 
     if (requiredFields.length === 0) {
@@ -159,9 +177,10 @@ export class SessionCache {
     return value;
   }
 
-  private clearFieldUpdater(field: Session.Field) {
-    return this.pendingRequests$.asObservable().take(1).subscribe(pendingRequests => {
-      this.pendingRequests$.next(Object.assign(pendingRequests, { [field]: undefined }));
-    });
+  private clearFieldUpdater(field: Session.Field, request: Observable<any>) {
+    this.pendingRequests$.asObservable()
+      .take(1)
+      .filter(pendingRequests => pendingRequests[field] === request)
+      .subscribe(pendingRequests => this.pendingRequests$.next(Object.assign(pendingRequests, { [field]: undefined })));
   }
 }

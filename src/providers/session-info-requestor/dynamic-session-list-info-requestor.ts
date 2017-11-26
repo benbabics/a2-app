@@ -1,6 +1,5 @@
 import * as _ from "lodash";
-import * as moment from "moment";
-import { Observable } from "rxjs";
+import { Observable, BehaviorSubject } from "rxjs";
 import {
   DynamicList,
   Session
@@ -9,7 +8,7 @@ import {
   ListResponse,
   Model
 } from "@angular-wex/models";
-import { SessionInfoRequestorDetails } from "./session-info-requestor";
+import { SessionInfoRequestorDetails, SessionInfoOptions } from "./session-info-requestor";
 import { Value } from "../../decorators/value";
 
 export abstract class DynamicSessionListInfoRequestor<T extends Model<DetailsT>, DetailsT> implements SessionInfoRequestorDetails {
@@ -17,16 +16,16 @@ export abstract class DynamicSessionListInfoRequestor<T extends Model<DetailsT>,
   @Value("INFINITE_LIST")
   private readonly INFINITE_LIST: any;
 
-  // The field to use for merging list results
-  protected abstract listMergeId: keyof DetailsT;
+  private dynamicList$ = new BehaviorSubject<DynamicList<T, DetailsT>>(DynamicList.create(this.class$));
 
-  public readonly requestor = (session: Session, params: object) => this.request(session, params);
+  protected abstract search$(session: Session, params: any): Observable<ListResponse<T>>;
 
-  constructor(public requiredFields?: Session.Field[]) { }
-
-  protected abstract get dynamicList$(): Observable<DynamicList<T, DetailsT>>;
-
-  protected abstract search(session: Session, params: any): Observable<ListResponse<T>>;
+  /**
+   * @param class$ The model class.
+   * @param listMergeId The field to use for merging list results.
+   * @param requiredFields Any required fields needed to do the request.
+   */
+  constructor(private class$: new(details: DetailsT) => T, private listMergeId: keyof DetailsT, public requiredFields?: Session.Field[]) { }
 
   private mergeList(object: T[], source: T[], uniqueId?: keyof DetailsT): T[] {
     if (_.isNil(object)) {
@@ -55,32 +54,32 @@ export abstract class DynamicSessionListInfoRequestor<T extends Model<DetailsT>,
     return object;
   }
 
-  public request(session: Session, params: any): Observable<DynamicList<T, DetailsT>> {
-    return this.dynamicList$.take(1).flatMap((dynamicList: DynamicList<T, DetailsT>) => {
-      let searchParams: any = {};
-      let requestDate = _.get<Date>(dynamicList, "requestDate", new Date());
-      let currentPage = _.get<number>(dynamicList, "details.currentPage", 0);
+  public requestor(session: Session, params: SessionInfoOptions<any>): Observable<DynamicList<T, DetailsT>> {
+    let searchParams: any = Object.assign({}, params.requestParams);
+    let newSearch: boolean = params.clearCache;
 
-      // Default search parameters (may be overriden by input params)
-      searchParams.fromDate = (<any>moment)(requestDate) //TODO: Remove <any>moment cast when the .d.ts is fixed
-        .subtract(...this.INFINITE_LIST.DEFAULT_SEARCH_PERIOD)
-        .toDate();
-      searchParams.toDate = requestDate;
-      searchParams.pageNumber = currentPage;
-      searchParams.pageSize = this.INFINITE_LIST.DEFAULT_PAGE_SIZE;
+    if (newSearch) {
+      // Create a new dynamic list
+      this.dynamicList$.next(DynamicList.create(this.class$));
+    }
 
-      // Merge default params with input params
-      params = _.merge(searchParams, params);
-      return this.search(session, params)
+    return this.dynamicList$.asObservable().take(1).flatMap((dynamicList: DynamicList<T, DetailsT>) => {
+      // If continuing a previous search, use the existing properties from the dynamic list
+      if (!newSearch) {
+        searchParams.toDate = dynamicList.requestDate;
+        searchParams.pageNumber = dynamicList.details.currentPage;
+      }
+
+      // Assign defaults to any values that weren't provided
+      searchParams.toDate = searchParams.toDate || new Date();
+      searchParams.pageNumber = searchParams.pageNumber || 0;
+      searchParams.pageSize = searchParams.pageSize || this.INFINITE_LIST.DEFAULT_PAGE_SIZE;
+
+      return this.search$(session, searchParams)
         .map((response: ListResponse<T>) => {
-          // If the dynamic list doesn't exist in the cache yet, initialize it
-          /*if (!this.dynamicList) {
-            this.dynamicList = DynamicList.create(this.$class);
-          }*/
-
           // If an initial request date hasn't been recorded yet, create a new one
           if (!dynamicList.requestDate) {
-            dynamicList.requestDate = requestDate;
+            dynamicList.requestDate = searchParams.toDate;
           }
 
           //Adjust the total result count and page

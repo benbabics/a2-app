@@ -2,7 +2,7 @@ import * as _ from "lodash";
 import * as moment from "moment";
 import { Observable, Subject } from "rxjs";
 import { Component, Injector } from "@angular/core";
-import { NavParams, NavController, App } from "ionic-angular";
+import { NavParams, NavController } from "ionic-angular";
 import { StaticListPage, GroupedList } from "../static-list-page";
 import { Payment, PaymentStatus, MakePaymentAvailability } from "@angular-wex/models";
 import { PaymentsDetailsPage } from "./details/payments-details";
@@ -34,11 +34,10 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private app: App,
     private alertController: WexAlertController,
     injector: Injector
   ) {
-    super({ pageName: "Payments", listDataField: Session.Field.Payments }, injector, [Session.Field.InvoiceSummary]);
+    super({ pageName: "Payments", listData: Session.Field.Payments }, injector, [Session.Field.InvoiceSummary]);
 
     this.onViewWillEnter$
       .flatMap(() => this.invoiceSummary$.take(1))
@@ -50,7 +49,7 @@ export class PaymentsPage extends StaticListPage<Payment, Payment.Details> {
 
     this.onAddPayment$
       .flatMap(() => this.canMakePayment())
-      .subscribe(() => this.app.getRootNav().push(AddPaymentPage), (availability: MakePaymentAvailability) => {
+      .subscribe(() => this.navCtrl.push(AddPaymentPage), (availability: MakePaymentAvailability) => {
         // get the reason that the user can't make a payment
         let unavailabilityReason = _.reduce<any, string>(availability.details, (acc, isReason, reason) => isReason ? reason : acc, "");
         let unavailabilityReasonMessage = _.get<string>(this.CONSTANTS.UNAVAILABILITY_REASONS, unavailabilityReason, this.CONSTANTS.UNAVAILABILITY_REASONS.default);

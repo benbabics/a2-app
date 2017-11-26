@@ -43,7 +43,8 @@ export class SessionManager {
 
     // Request a new token
     return this.authenticationManager.authenticate(userCredentials, options.authenticationMethod)
-      .finally(() => this.sessionCache.updateAll$().subscribe()); // Pre-fetch remaining session details in the background asynchronously
+      // Pre-fetch remaining session details in the background asynchronously
+      .finally(() => this.sessionCache.updateSome$(Session.Field.Static).subscribe());
   }
 
   public invalidateSession() {

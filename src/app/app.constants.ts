@@ -92,7 +92,6 @@ export namespace ConstantsInfo {
       LOCALE: "en-US"
     },
     INFINITE_LIST: {
-      DEFAULT_SEARCH_PERIOD: [INT_MAX_32, "y"],
       DEFAULT_PAGE_SIZE: 100
     },
     //# App Navigation
@@ -501,6 +500,9 @@ export namespace ConstantsInfo {
               amount: "Amount",
               select: "Select",
               bankAccount: "Bank Account"
+            },
+            INSTRUCTIONAL_TEXT: {
+              bankAccount: "To add or remove bank accounts <br> login to your web portal"
             }
           },
 
@@ -511,7 +513,11 @@ export namespace ConstantsInfo {
                 confirmationOk: ["Payment", "OKConfirmationLink"]
               }
             },
-            title: "Successfully scheduled",
+            title: {
+              template : "Successfully <%= scheduledOrUpdated %>",
+              scheduled: "scheduled",
+              updated: "updated"
+            },
             LABELS: {
               amount: "Amount",
               bankAccount: "Bank Account",
@@ -752,8 +758,31 @@ export namespace ConstantsInfo {
 
       //# Transactions page
       TRANSACTIONS: {
+        ANALYTICS: {
+          EVENTS: {
+            Card: ["Transaction", "Card"],
+            Driver: ["Transaction", "Driver"],
+            Date: ["Transaction", "Date"]
+          }
+        },
+        SEGMENTS: {
+          DRIVER: "Driver",
+          DATE: "Date",
+          CARD: "Card"
+        },
         DATE: {
+          ANALYTICS: {
+            EVENTS: {
+              InfiniteScroll : ["Transaction", "InfiniteScroll"],
+            }
+          },
+          title: "Transactions",
           listLabels: ["Transactions"],
+          LABELS: {
+            pending: "Pending",
+            today: "Today",
+            yesterday: "Yesterday"
+          },
           greekingData: [
             { left: 3, top: 10, right: 33, bottom: 22 },
             { left: 3, top: 32, right: 33, bottom: 44 },
@@ -763,49 +792,23 @@ export namespace ConstantsInfo {
           ],
           greekedElementCount: 15
         },
-        DRIVER_NAME: {
-          listLabels: ["Driver Name"],
-          greekingData: [
-            { left: 3, top: 30, right: 25, bottom: 55 },
-          ],
-          greekedElementCount: 15
-        },
-        CARD_NUMBER: {
-          listLabels: ["Card Number", "Embossing"],
-          greekingData: [
-            { left: 3, top: 10, right: 15, bottom: 35 },
-            { left: 3, top: 55, right: 15, bottom: 80 },
-            { left: 20, top: 20, right: 86, bottom: 32 },
-            { left: 20, top: 47, right: 86, bottom: 59 },
-            { left: 20, top: 74, right: 86, bottom: 86 }
-          ],
-          greekedElementCount: 15
-        },
-        LABELS: {
-          pending: "Pending",
-          today: "Today",
-          yesterday: "Yesterday"
-        },
-        title: "Transactions",
 
         //# Transaction Details page
         DETAILS: {
           title:   "Transaction Details",
 
           LABELS: {
-            cardNumber: "Card Number",
-            postDate:   "Post Date",
-            transDateTime: "Trans Date/Time",
-            transId:       "Trans ID",
-            grossCost:     "Gross Cost",
-            netCost:       "Net Cost",
-            productDesc:   "Product Description",
-            driverFirstName: "Driver First Name",
-            driverLastName:  "Driver Last Name",
-            assetId:         "Asset ID",
-            odometer:        "Odometer",
-            merchantName:    "Merchant Name",
-            merchantLocation: "Merchant City, ST"
+            cardNumber: "Card",
+            postDate: "Post Date",
+            transDate: "Trans Date",
+            transId: "Trans ID",
+            grossCost: "Gross Cost",
+            netCost: "Net Cost",
+            productDesc: "Product",
+            driverName: "Driver",
+            assetId: "Asset ID",
+            odometer: "Odometer",
+            location: "Location"
           }
         }
       }
