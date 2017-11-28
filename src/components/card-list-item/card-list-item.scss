@@ -1,0 +1,35 @@
+card-list-item > span {
+  @include flexbox();
+
+  .card-icon {
+    height: 22px;
+    width: 22px;
+    margin: 1.5rem 1.5rem 1.5rem 0;
+
+    &.TERMINATED {
+      background: url('../assets/pages/cards/card-terminated.svg') no-repeat;
+      background-size: contain;
+    }
+
+    &.SUSPENDED {
+      background: url('../assets/pages/cards/card-suspended.svg') no-repeat;
+      background-size: contain;
+    }
+    
+    &.ACTIVE {
+      background: url('../assets/pages/cards/card-active.svg') no-repeat;
+      background-size: contain;
+    }
+  }
+
+  .card-id {
+    align-self: center;
+    @include flexbox();
+    @include flex-direction(column);
+
+    .embossing-line-2 {
+      opacity: .5;
+    }
+  }
+
+}

@@ -1,0 +1,7 @@
+<span content-expand>
+  <div class="card-icon" [ngClass]="card.details.status"></div>
+  <span class="card-id">
+    <span> {{ card.details.embossedCardNumber | wexCardNumber }} </span>
+    <span *ngIf="card.details.embossingValue2" class="embossing-line-2">{{ card.details.embossingValue2 }}</span>
+  </span>
+</span>

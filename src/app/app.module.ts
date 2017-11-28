@@ -12,16 +12,16 @@ import { LoginPage } from "../pages/login/login";
 import { OptionsPage } from "../pages/options/options";
 import { FingerprintAuthenticationTermsPage } from "../pages/login/fingerprint-auth-terms/fingerprint-auth-terms";
 import { LandingPage } from "../pages/landing/landing";
-import { CardsPage } from "../pages/cards/cards";
+import { CardsPage, TransactionCardView } from "../pages/cards/cards";
+import { TransactionDateView, TransactionDateSublist } from "../pages/transactions/transactions-date-view/transactions-date-view";
 import { CardsDetailsPage } from "./../pages/cards/details/cards-details";
-import { DriversPage } from "./../pages/drivers/drivers";
+import { DriversPage, TransactionDriverView } from "./../pages/drivers/drivers";
 import { DriversDetailsPage } from "./../pages/drivers/details/drivers-details";
 import { UserEnrollmentFlow } from "../pages/login/user-enrollment-flow/user-enrollment-flow";
 import {
   ActionIndicator,
   WexList,
   WexListItem,
-  WexListHeader,
   WexNavBar,
   WexGreeking,
   WexDetailsView,
@@ -30,7 +30,10 @@ import {
   WexStaticListPageHeader,
   WexStaticListPageContent,
   WexInvoiceDisplay,
-  ResizableSvg
+  ResizableSvg,
+  DriverListItem,
+  CardListItem,
+  WexTitleWithSubheader
 } from "../components";
 
 import { StatusBar } from "@ionic-native/status-bar";
@@ -60,7 +63,7 @@ import {
   WexNavigationController,
   PaymentService
 } from "../providers";
-import { WexCurrency, WexDate, WexDateTime, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
+import { TransactionAmountPipe, WexCurrency, WexDate, WexDateTime, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
 import { PaymentsDetailsPage } from "../pages/payments/details/payments-details";
 import { LocalStorageModule } from "angular-2-local-storage";
@@ -136,6 +139,8 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     LandingPage,
     UserEnrollmentFlow,
     CardsPage,
+    TransactionDateView,
+    TransactionDateSublist,
     CardsDetailsPage,
     CardsReissuePage,
     DriversPage,
@@ -145,6 +150,8 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     TermsOfUsePage,
     PrivacyPolicyPage,
     TransactionsPage,
+    TransactionDriverView,
+    TransactionCardView,
     AddPaymentPage,
     AddPaymentSelectionPage,
     OptionAmount,
@@ -152,13 +159,13 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     AddPaymentConfirmationPage,
     TransactionDetailsPage,
     ActionIndicator,
+    TransactionAmountPipe,
     WexCurrency,
     WexDate,
     WexDateTime,
     WexNavBar,
     WexList,
     WexListItem,
-    WexListHeader,
     WexStaticListPageHeader,
     WexStaticListPageContent,
     WexGreeking,
@@ -178,6 +185,9 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     WexClear,
     AutofocusDirective,
     ResizableSvg,
+    DriverListItem,
+    CardListItem,
+    WexTitleWithSubheader,
     Calendar
   ],
   imports: [
@@ -213,6 +223,8 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     LandingPage,
     UserEnrollmentFlow,
     CardsPage,
+    TransactionDateView,
+    TransactionDateSublist,
     CardsDetailsPage,
     CardsReissuePage,
     DriversPage,
@@ -223,10 +235,11 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     WexNavBar,
     TermsOfUsePage,
     TransactionsPage,
+    TransactionDriverView,
+    TransactionCardView,
     TransactionDetailsPage,
     ContactUsPage,
     PrivacyPolicyPage,
-    TransactionsPage,
     AddPaymentPage,
     AddPaymentSelectionPage,
     OptionAmount,

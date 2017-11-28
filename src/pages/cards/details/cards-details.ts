@@ -8,7 +8,7 @@ import { DetailsPage } from "../../details-page";
 import { Card, CardStatus } from "@angular-wex/models";
 import { WexAppSnackbarController } from "../../../components";
 import * as _ from "lodash";
-import { TransactionsPage, TransactionListType } from "../../transactions/transactions";
+import { TransactionDateSublist } from "../../transactions/transactions-date-view/transactions-date-view";
 
 export type CardsDetailsNavParams = keyof {
   card,
@@ -191,8 +191,7 @@ export class CardsDetailsPage extends DetailsPage {
   }
 
   public viewTransactions() {
-    this.navController.push(TransactionsPage, {
-      selectedList: TransactionListType.Date,
+    this.navController.push(TransactionDateSublist, {
       filter: [TransactionSearchFilterBy.Card, this.card.details.cardId]
     });
   }

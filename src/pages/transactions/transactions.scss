@@ -2,31 +2,16 @@
 @import "../../styles/driver";
 
 page-transactions {
-
-  wex-static-list-page-header:not(.active) {
-    wex-list-header ion-list-header.item.list-header {
-      background-color: #eee;
-      color: color($colors, gray);
-    }
+  ion-toolbar.toolbar-md {
+    padding: 0;
+    min-height: auto;
   }
 
-  .content {
-    @extend %wex-list-item-content;
+  ion-header {
+    padding: 0;
 
-    &.driver-content {
-      @extend %wex-list-item-driver;
+    .segment-md-primary .segment-button:not(.segment-activated) {
+      border: none;
     }
-
-    &.card-content {
-      @extend %wex-list-item-card;
-    }
-  }
-
-  .transaction-amount {
-    padding-right: 1rem;
-    text-align: right;
-    font-size: $h2-font-size;
-    font-weight: bold;
-    color: color($colors, dark-gray);
   }
 }

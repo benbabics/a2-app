@@ -1,11 +1,9 @@
 <ion-list class="wex-list" [ngClass]="{ 'inset-items': platform.isIos }">
-  <wex-list-header *ngIf="headerFields" [fields]="headerFields">
-  </wex-list-header>
 
   <span class="grouped" *ngIf="isGrouped">
     <span *ngFor="let divider of dividers; let i = index">
       <ion-item-group [ngClass]="{ 'inset-items': platform.isIos }">
-        <ion-item-divider *ngIf="getListForDivider(i)?.length" sticky [ngClass]="divider.toLowerCase()">
+        <ion-item-divider *ngIf="getListForDivider(i)?.length" sticky>
           {{ divider }}
         </ion-item-divider>
         <span *ngFor="let item of getListForDivider(i)">

@@ -1,0 +1,37 @@
+driver-list-item > span {
+  @include flexbox();
+
+  .driver-icon {
+    @at-root .ios & {
+      height: 30px;
+      width: 30px;
+      margin: 1rem 1rem 1rem 0;
+    } @at-root .md & {
+      height: 35px;
+      width: 35px;
+      margin: 1.2rem 1rem 1.2rem 0;
+    }
+    &.TERMINATED {
+      background: url('../assets/pages/drivers/driver-terminated.svg') no-repeat;
+      background-size: contain;
+    }
+    
+    &.ACTIVE {
+      background: url('../assets/pages/drivers/driver-active.svg') no-repeat;
+      background-size: contain;
+    }
+  }
+
+  .driver-details {
+    align-self: center;
+    @include flexbox();
+    @include flex-direction(column);
+
+    .driver-id {
+      font-size: 14px;
+      opacity: .6;
+      @include align-self(left);
+    }
+  }
+
+}

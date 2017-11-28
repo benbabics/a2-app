@@ -1,0 +1,30 @@
+<ion-header *ngIf="!contentOnly" #header>
+  <wex-title-with-subheader [title]="CONSTANTS.title" [subheader]="filterSubheader"></wex-title-with-subheader>
+</ion-header>
+
+<ion-content #content>
+  <ion-refresher (ionRefresh)="onRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <wex-static-list-page-content [page]="this">
+    <ng-template #itemTemplate let-item>
+      <div class="content transaction-content">
+        <span class="details">
+          <div text-wrap>{{ item.details.merchantName }}</div>
+          <div text-wrap class="sub-text">{{ item.details.productDescription }}</div>
+        </span>
+
+        <span class="right">
+          <div class="amount"> {{ item | transactionAmount | wexCurrency }} </div>
+          <div class="sub-text"> {{ item.details.embossedCardNumber | wexCardNumber }} </div>
+        </span>
+      </div>
+    </ng-template>
+  </wex-static-list-page-content>
+
+  <ion-infinite-scroll *ngIf="hasMoreItems" threshold="25%" (ionInfinite)="onInfinite($event)">
+    <ion-infinite-scroll-content>
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
