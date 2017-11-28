@@ -6,7 +6,7 @@ import { Spinner } from "ionic-angular";
   selector: "[actionIndicator]"
 })
 export class ActionIndicatorDirective {
-  private buttonContents = [];
+  private containerContents = [];
   private spinnerRef;
 
   constructor(
@@ -19,7 +19,7 @@ export class ActionIndicatorDirective {
   @Input() public actionIndicator;
   @Input("when") set showIndicator(hasIndicator: boolean) {
     this.toggleIsLoading(hasIndicator);
-    this.toggleButtonContents(hasIndicator);
+    this.toggleContainerContents(hasIndicator);
     this.toggleSpinner(hasIndicator);
   }
 
@@ -43,20 +43,22 @@ export class ActionIndicatorDirective {
     }
   }
 
-  private toggleButtonContents(isVisible: boolean) {
+  private toggleContainerContents(isVisible: boolean) {
     if (isVisible) {
-      let buttonContentsCache = _.extend([], this.buttonContents); // clone as .removeChild pops
+      let containerContentsCache = _.extend([], this.containerContents); // clone as .removeChild pops
 
-      do {
-        this.renderer.removeChild(this.element, this.buttonContents[0]);
+      if (this.containerContents.length) {
+        do {
+          this.renderer.removeChild(this.element, this.containerContents[0]);
+        }
+        while (this.containerContents.length);
       }
-      while (this.buttonContents.length);
 
-      this.buttonContents = buttonContentsCache;
+      this.containerContents = containerContentsCache;
     }
     else {
-      this.buttonContents.forEach(child => this.renderer.appendChild(this.element, child));
-      this.buttonContents = this.element.childNodes;
+      this.containerContents.forEach(child => this.renderer.appendChild(this.element, child));
+      this.containerContents = this.element.childNodes;
     }
   }
 }
