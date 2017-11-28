@@ -43,8 +43,8 @@ export class ActionIndicatorDirective {
     }
   }
 
-  private toggleContainerContents(isVisible: boolean) {
-    if (isVisible) {
+  private toggleContainerContents(isHidden: boolean) {
+    if (isHidden) {
       let containerContentsCache = _.extend([], this.containerContents); // clone as .removeChild pops
 
       if (this.containerContents.length) {
