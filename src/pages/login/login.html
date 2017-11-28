@@ -59,8 +59,8 @@
         </ion-item-group>
 
         <div id="form-actions">
-          <button ion-button block type="submit" [disabled]="!form.valid">
-            <action-indicator [when]="isLoggingIn">{{ CONSTANTS.submitButton }}</action-indicator>
+          <button ion-button block type="submit" [disabled]="!form.valid" actionIndicator [when]="isLoggingIn">
+             {{ CONSTANTS.submitButton }}
           </button>
         </div>
       </form>
