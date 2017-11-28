@@ -13,6 +13,7 @@ import { WexCardNumberPipe } from "../../../pipes/index";
 import { NameUtils } from "../../../utils/name-utils";
 import { Reactive, StateEmitter, EventSource, OnDestroy } from "angular-rxjs-extensions";
 import { Subject, Observable } from "rxjs";
+import { WexAppBackButtonController } from "../../../providers/index";
 
 export type TransactionsDateViewParams = keyof {
   filterItem
@@ -42,7 +43,7 @@ export class TransactionsDateView extends StaticListPage<BaseTransactionT, BaseT
   @StateEmitter() private filterSubheader$: Subject<string>;
   @StateEmitter() private filteredMode$: Subject<boolean>;
 
-  constructor(navCtrl: NavController, navParams: NavParams, injector: Injector) {
+  constructor(navCtrl: NavController, navParams: NavParams, injector: Injector, wexAppBackButtonController: WexAppBackButtonController) {
     const filterItem = navParams.get(TransactionsDateViewParams.FilterItem);
     const filter = filterItem ? TransactionsDateView.CreateFilterParams(filterItem) : undefined;
     // Use different session data depending on whether or not we're filtering transactions
@@ -83,6 +84,8 @@ export class TransactionsDateView extends StaticListPage<BaseTransactionT, BaseT
 
       // Cancel the subscription if the page is destroyed
       this.onDestroy$.subscribe(() => updateSubscription.unsubscribe());
+
+      this.onViewDidEnter$.subscribe(() => wexAppBackButtonController.deregisterAction());
     }
     else {
       // Don't track page view if this is a non-filtered list
