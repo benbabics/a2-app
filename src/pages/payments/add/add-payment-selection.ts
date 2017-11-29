@@ -9,6 +9,7 @@ import { BankAccount } from "@angular-wex/models";
 import { StateEmitter, Reactive, EventSource } from "angular-rxjs-extensions";
 import { Subject, Observable } from "rxjs";
 import { Value } from "../../../decorators/value";
+import { ViewDidEnter, ViewWillLeave } from "angular-rxjs-extensions-ionic";
 
 export type AddPaymentSelectionNavParams = keyof {
   listType,
@@ -38,8 +39,11 @@ export class AddPaymentSelectionPage extends SecurePage {
   @StateEmitter() private instructionalText$: Subject<string>;
   @StateEmitter() private isSubmitEnabled$: Subject<boolean>;
   @StateEmitter() private isOtherAmountSelected$: Subject<boolean>;
+  @StateEmitter({ initialValue: false }) private focusOnOtherAmount$: Subject<boolean>;
   @StateEmitter() private isBankAccount$: Subject<boolean>;
   @StateEmitter() private isPaymentAmount$: Subject<boolean>;
+  @ViewDidEnter() private onViewDidEnter$: Observable<void>;
+  @ViewWillLeave() private onViewWillLeave$: Observable<void>;
 
   @StateEmitter.From("navParams.data." + AddPaymentSelectionNavParams.SelectedItem$)
   private selectedItem$: Subject<PaymentSelectionOption>;
@@ -78,7 +82,7 @@ export class AddPaymentSelectionPage extends SecurePage {
         this.selectedItem$.next(Object.assign(_.find(items, { type: selectedItem.type }), selectedItem));
       });
 
-    this.isBankAccount$.asObservable()
+    this.isBankAccount$.asObservable().take(1)
       .filter(Boolean)
       .flatMap(() => Observable.combineLatest(this.selectedItem$, this.chosenItem$))
       .subscribe((args: [BankAccount, BankAccount]) => {
@@ -86,15 +90,20 @@ export class AddPaymentSelectionPage extends SecurePage {
         this.isSubmitEnabled$.next(selectedItem.details.id !== initialItem.details.id);
       });
 
-    this.isPaymentAmount$.asObservable()
+    this.isPaymentAmount$.asObservable().take(1)
       .filter(Boolean)
       .flatMap(() => Observable.combineLatest(this.selectedItem$, this.chosenItem$))
-      .subscribe((args: [UserPaymentAmount, UserPaymentAmount]) => {
+      .flatMap((args: [UserPaymentAmount, UserPaymentAmount]) => {
         let [selectedItem, initialItem] = args;
         this.isSubmitEnabled$.next(!_.isNaN(selectedItem.value) && selectedItem.value !== 0 && selectedItem.value !== initialItem.value);
         this.isOtherAmountSelected$.next(this.isOtherAmount(selectedItem));
-      });
-
+        return this.onViewDidEnter$;
+      })
+      .flatMapTo(this.isOtherAmountSelected$)
+      .delay(500)
+      .subscribe((isOtherAmountSelected) => this.focusOnOtherAmount$.next(isOtherAmountSelected));
+    this.onViewWillLeave$
+      .subscribe(() => this.isOtherAmountSelected$.next(false));
     this.onSubmit$
       .flatMap(() => this.selectedItem$.asObservable().take(1))
       .subscribe((selectedItem) => {
@@ -110,5 +119,9 @@ export class AddPaymentSelectionPage extends SecurePage {
 
   public isOtherAmount(amount: UserPaymentAmount): boolean {
     return amount.type === UserPaymentAmountType.OtherAmount;
+  }
+
+  public select(item) {
+    this.selectedItem$.next(item);
   }
 }
