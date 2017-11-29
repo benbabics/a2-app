@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { Directive, Input, ElementRef, ViewContainerRef, Renderer2, ComponentFactoryResolver } from "@angular/core";
+import { Directive, Input, ElementRef, ViewContainerRef, Renderer2, ComponentFactoryResolver, ComponentRef } from "@angular/core";
 import { Spinner } from "ionic-angular";
 
 @Directive({
@@ -7,7 +7,7 @@ import { Spinner } from "ionic-angular";
 })
 export class ActionIndicatorDirective {
   private containerContents = [];
-  private spinnerRef;
+  private spinnerRef: ComponentRef<Spinner>;
 
   constructor(
     private el: ElementRef,
@@ -38,14 +38,16 @@ export class ActionIndicatorDirective {
 
   private toggleSpinner(isVisible: boolean) {
     if (isVisible) {
+      const spinnerContainer = this.renderer.createElement("div");
+      spinnerContainer.classList.add("action-indicator");
+
       const factory = this.componentFactoryResolver.resolveComponentFactory(Spinner);
       this.spinnerRef = this.viewContainer.createComponent(factory);
-      let spinnerContainer = this.renderer.createElement("div");
-      spinnerContainer.classList.add("action-indicator");
       let spinnerElement = this.spinnerRef.injector.get(Spinner)._elementRef.nativeElement;
       spinnerElement.classList.add("action-spinner");
-      spinnerContainer.appendChild(spinnerElement);
+
       this.renderer.appendChild(this.element, spinnerContainer);
+      spinnerContainer.appendChild(spinnerElement);
     }
     else if (this.spinnerRef) {
       this.spinnerRef.destroy();
