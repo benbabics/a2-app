@@ -28,15 +28,24 @@ export class ActionIndicatorDirective {
   }
 
   private toggleIsLoading(isVisible: boolean) {
-    this.renderer[isVisible ? "addClass" : "removeClass"](this.element, "is-loading");
+    if (isVisible) {
+      this.renderer.addClass(this.element, "is-loading");
+    }
+    else {
+      this.renderer.removeClass(this.element, "is-loading");
+    }
   }
 
   private toggleSpinner(isVisible: boolean) {
     if (isVisible) {
       const factory = this.componentFactoryResolver.resolveComponentFactory(Spinner);
       this.spinnerRef = this.viewContainer.createComponent(factory);
+      let spinnerContainer = this.renderer.createElement("div");
+      spinnerContainer.classList.add("action-indicator");
       let spinnerElement = this.spinnerRef.injector.get(Spinner)._elementRef.nativeElement;
-      this.renderer.appendChild(this.element, spinnerElement);
+      spinnerElement.classList.add("action-spinner");
+      spinnerContainer.appendChild(spinnerElement);
+      this.renderer.appendChild(this.element, spinnerContainer);
     }
     else if (this.spinnerRef) {
       this.spinnerRef.destroy();
