@@ -1,4 +1,3 @@
-export * from "./action-indicator/action-indicator";
 export * from "./wex-app-snackbar-controller/wex-app-snackbar-controller";
 export * from "./wex-details-view/wex-details-view";
 export * from "./wex-greeking/wex-greeking";

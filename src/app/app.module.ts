@@ -19,7 +19,6 @@ import { DriversPage, TransactionDriverView } from "./../pages/drivers/drivers";
 import { DriversDetailsPage } from "./../pages/drivers/details/drivers-details";
 import { UserEnrollmentFlow } from "../pages/login/user-enrollment-flow/user-enrollment-flow";
 import {
-  ActionIndicator,
   WexList,
   WexListItem,
   WexNavBar,
@@ -158,7 +157,6 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     OptionBankAccount,
     AddPaymentConfirmationPage,
     TransactionDetailsPage,
-    ActionIndicator,
     TransactionAmountPipe,
     WexCurrency,
     WexDate,
