@@ -1,9 +1,10 @@
-<ion-toolbar *ngIf="page.searchLabel" id="static-list-toolbar">
+<ion-toolbar [hidden]="!page.searchLabel" id="static-list-toolbar">
   <ion-searchbar debounce="0"
                  [hidden]="page.searchHidden"
                  [placeholder]="page.searchLabel"
                  [(ngModel)]="page.searchFilter"
-                 (ionBlur)="page.onSearchBlur()">
+                 (ionBlur)="page.onSearchBlur()"
+                 (keypress)="keyboardEvent = $event">
   </ion-searchbar>
 
   <ion-buttons *ngIf="!page.searchHidden && page.platform.isAndroid" left>

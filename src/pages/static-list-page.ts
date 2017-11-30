@@ -10,6 +10,7 @@ import { Subject, Observable, BehaviorSubject } from "rxjs";
 import { StateEmitter, EventSource } from "angular-rxjs-extensions";
 import { ViewWillEnter, ViewWillLeave, ViewDidEnter } from "angular-rxjs-extensions-ionic";
 import { WexPlatform } from "../providers";
+import { Searchbar } from "ionic-angular/components/searchbar/searchbar";
 
 export { GroupedList } from "./list-page";
 
@@ -39,7 +40,7 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   public readonly params: StaticListPage.Params<DetailsT>;
 
   @ViewChild(Content) private content: Content;
-  @ViewChild(forwardRef(() => WexStaticListPageHeader)) private header: WexStaticListPageHeader;
+  @StateEmitter(ViewChild(forwardRef(() => WexStaticListPageHeader))) private header$: Subject<WexStaticListPageHeader>;
 
   @ViewWillEnter() protected onViewWillEnter$: Observable<void>;
   @ViewWillLeave() protected onViewWillLeave$: Observable<void>;
@@ -156,10 +157,23 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
       }).finally(() => refresher.complete());
     }).subscribe();
 
+    this.header$.asObservable()
+      .filter(header => !!header)
+      .subscribe(header =>
+        header.keyboardEvent$.asObservable()
+          .filter(event => !!event)
+          .filter(event => event.keyCode === header.RETURN_KEYCODE)
+          .flatMapTo(header.searchbar$)
+          .filter(searchbar => !!searchbar)
+          .flatMap(searchbar => Observable.of(searchbar).take(1))
+          .subscribe(searchbar => searchbar._searchbarInput.nativeElement.blur()));
+
     this.onShowSearch$
       .map(() => this.searchHidden$.next(false))
       .delay(500)
-      .subscribe(() => this.header.searchbar.setFocus());
+      .flatMapTo(this.header$)
+      .flatMap((header: WexStaticListPageHeader) => header.searchbar$)
+      .subscribe((searchbar: Searchbar) => searchbar.setFocus());
 
     this.onHideSearch$
       .subscribe(() => this.searchHidden$.next(true));
