@@ -28,12 +28,15 @@
           </ion-label>
         </ion-item>
 
-        <ion-item *ngIf="showCellPhoneNumber">
+        <ion-item *ngIf="showCellPhoneNumber" (click)="contactDriver()">
           <ion-label>
             <span class="property-name">{{ CONSTANTS.LABELS.cellPhoneNumber }}</span>
             <span text-wrap class="property-value">{{ driver.details.cellPhoneNumber }}</span>
           </ion-label>
         </ion-item>
+        <!-- Invisible elements which are clicked by the script in response to action sheet events. -->
+        <a #sms hidden [href]="cleanPhone('sms:', driver.details.cellPhoneNumber)" ></a>
+        <a #tel hidden [href]="cleanPhone('tel:', driver.details.cellPhoneNumber)" ></a>
 
         <ion-item *ngIf="showEmailAddress">
           <ion-label>
