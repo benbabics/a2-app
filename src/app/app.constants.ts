@@ -64,7 +64,7 @@ export namespace ConstantsInfo {
     },
     //# Global error notifications
     GLOBAL_NOTIFICATIONS: {
-      serverConnectionError: "Could not connect to server. Please try again later.",
+      serverConnectionError: "We are unable to complete your request at this time. Please try again later.",
       networkError         : "Lost internet connection.",
       fingerprintSuccess   : {
         message: "<%= platformBiometric %> is now setup for your username <%= username %>",
@@ -898,16 +898,16 @@ ConstantsInfo.Env.set("stage-wex", {
   },
   APIS: {
     AMREST: {
-      BASE_URL: "https://uat.account.wexmobile.com/maintenance"
+      BASE_URL: "https://bgfsdthftyhgr.com"
     },
     GATEKEEPER: {
-      BASE_URL: "https://uat.account.wexmobile.com/configurationAPI"
+      BASE_URL: "https://sdagergrd.com"
     },
     KEYMASTER: {
-      BASE_URL: "https://uat.account.wexmobile.com/authAPI"
+      BASE_URL: "https://asgrrs.com"
     },
     ONLINE_ENROLLMENT: {
-      BASE_URL: "https://uat-wex.wexinc.com/enrollment/"
+      BASE_URL: "https://sardgrdgrdg.com"
     }
   }
 });
