@@ -9,6 +9,7 @@ import { WexAlertController } from "../../../components/wex-alert-controller/wex
 import { Session } from "../../../models/session";
 import { Reactive, StateEmitter, EventSource } from "angular-rxjs-extensions";
 import { Observable, Subject } from "rxjs";
+import { WexAppSnackbarController } from "../../../components";
 
 export type PaymentsDetailsNavParams = keyof {
   payment,
@@ -49,6 +50,7 @@ export class PaymentsDetailsPage extends DetailsPage {
     public navParams: NavParams,
     paymentProvider: PaymentProvider,
     wexAlertController: WexAlertController,
+    wexAppSnackbarController: WexAppSnackbarController,
     navCtrl: NavController,
     viewCtrl: ViewController,
     injector: Injector
@@ -83,6 +85,7 @@ export class PaymentsDetailsPage extends DetailsPage {
       .flatMap((args) => {
         let [payment, user] = args;
         return paymentProvider.cancelPayment(user.billingCompany.details.accountId, payment.details.id)
+          .flatMapTo(wexAppSnackbarController.createQueued(this.CONSTANTS.cancelConfirmSnackbar).present())
           .catch(() => Observable.empty());
       })
       .flatMap(() => Observable.combineLatest(this.payment$, this.sessionCache.getField$<Payment[]>(Session.Field.Payments)).take(1))

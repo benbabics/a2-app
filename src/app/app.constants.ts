@@ -444,6 +444,12 @@ export namespace ConstantsInfo {
               paymentEdit: ["Payment", "EditPaymentLink"]
             }
           },
+          cancelConfirmSnackbar: {
+            message: "Scheduled payment has been cancelled",
+            important: true,
+            duration: 3000
+          },
+
           title:         "Payment Details",
           amount:        "Amount",
           bankAccount:   "Bank Account",
