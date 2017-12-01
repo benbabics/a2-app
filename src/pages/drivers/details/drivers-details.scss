@@ -2,7 +2,6 @@
 
 page-drivers-details {
   @extend %ui-management-details;
-
   @include action-indicator-color(white);
 }
 

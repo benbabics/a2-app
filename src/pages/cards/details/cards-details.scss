@@ -1,6 +1,6 @@
 page-cards-details {
-  @extend %ui-management-details;
-  
+  @extend %ui-management-details-old;
+
   @include action-indicator-color(white);
 }
 
