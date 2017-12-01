@@ -181,13 +181,21 @@ ion-icon.icon-ios.tab-button-icon[aria-label*="fa"] {
     .item:not(.list-header) {
       // icons
       ion-icon[ios="ios-arrow-forward"] {
-        font-size: 2.2rem;
         margin-right: 0;
+        min-height: auto;
+        font-size: 2.2rem;
 
         &::before {
           vertical-align: middle;
         }
       }
+    }
+  }
+
+  .list,
+  ion-item-group {
+    ion-icon[ios="ios-arrow-forward"] {
+      opacity: .15;
     }
   }
 }
@@ -307,7 +315,7 @@ ion-item-divider {
     font-weight: 500;
     font-size: 1.2rem;
 
-    background-color: color($colors, eggshell);
+    background-color: color($colors, background-ios);
 
     border-style: solid;
     border-color: color($colors, border);
