@@ -898,16 +898,16 @@ ConstantsInfo.Env.set("stage-wex", {
   },
   APIS: {
     AMREST: {
-      BASE_URL: "https://bgfsdthftyhgr.com"
+      BASE_URL: "https://uat.account.wexmobile.com/maintenance"
     },
     GATEKEEPER: {
-      BASE_URL: "https://sdagergrd.com"
+      BASE_URL: "https://uat.account.wexmobile.com/configurationAPI"
     },
     KEYMASTER: {
-      BASE_URL: "https://asgrrs.com"
+      BASE_URL: "https://uat.account.wexmobile.com/authAPI"
     },
     ONLINE_ENROLLMENT: {
-      BASE_URL: "https://sardgrdgrdg.com"
+      BASE_URL: "https://uat-wex.wexinc.com/enrollment/"
     }
   }
 });
