@@ -80,7 +80,7 @@ export class CardsDetailsPage extends DetailsPage {
         this.canChangeStatus$.next(session.user.isDistributor ? card.isActive : !card.isTerminated);
 
         // Classic users cannot reissue cards ending with '9'
-        this.canReissue$.next(!session.user.isClassic || cardNumberSuffix < 9);
+        this.canReissue$.next(cardNumberSuffix < 9);
 
         // Non-WOLNP users cannot suspend cards
         let cardStatusFilter = session.user.isWolNp ? Boolean : (details: CardStatusDetails) => details.id !== CardStatus.SUSPENDED;
