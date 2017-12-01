@@ -1,6 +1,6 @@
 import { WexAppSnackbarController } from "./../../../components/wex-app-snackbar-controller/wex-app-snackbar-controller";
 import { ActionSheetButton } from "ionic-angular/components/action-sheet/action-sheet-options";
-import { ActionSheetController, Events, ToastOptions, Platform, NavController } from "ionic-angular";
+import { ActionSheetController, Events, ToastOptions, NavController } from "ionic-angular";
 import * as _ from "lodash";
 import { Component, Injector } from "@angular/core";
 import { NavParams } from "ionic-angular";
@@ -10,6 +10,7 @@ import { DetailsPage } from "../../details-page";
 import { ActionSheetOptions } from "ionic-angular/components/action-sheet/action-sheet-options";
 import { NameUtils } from "../../../utils/name-utils";
 import { TransactionDateSublist } from "../../transactions/transactions-date-view/transactions-date-view";
+import { WexPlatform } from "../../../providers";
 
 interface DriverStatusDetails {
   id: DriverStatus;
@@ -32,7 +33,7 @@ export class DriversDetailsPage extends DetailsPage {
     private driverProvider: DriverProvider,
     private wexAppSnackbarController: WexAppSnackbarController,
     private events: Events,
-    private platform: Platform,
+    public platform: WexPlatform,
     private navController: NavController,
     injector: Injector
   ) {

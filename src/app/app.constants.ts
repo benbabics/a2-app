@@ -262,6 +262,7 @@ export namespace ConstantsInfo {
           },
 
           LABELS: {
+            changeStatus:    "Change Status",
             promptId:        "Driver ID",
             cellPhoneNumber: "Mobile Phone",
             emailAddress:    "Email Address"
