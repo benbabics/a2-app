@@ -98,7 +98,11 @@ export namespace ConstantsInfo {
     NAVIGATION: {
       ANALYTICS: {
         EVENTS: {
-          "Payments": ["Payment", "PaymentOption"]
+          "Home": ["Home", "HomeOption"],
+          "Payments": ["Payment", "PaymentOption"],
+          "Transactions": ["Transaction", "TransactionOption"],
+          "Cards": ["Card", "CardOption"],
+          "Drivers": ["Driver", "DriverOption"]
         },
       },
       LABELS: {
