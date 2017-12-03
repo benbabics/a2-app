@@ -275,11 +275,12 @@ export namespace ConstantsInfo {
             ACTIVE: "ACTIVE",
             TERMINATED: "TERMINATED"
           },
-          actionStatusTitle:         "Select Driver Status",
-          actionStatusCancel:        "Cancel",
-          bannerStatusChangeSuccess: "Status change successful.",
+        },
+
+        //# Driver Change Status page
+        CHANGE_STATUS: {
+          bannerStatusChangeSuccess: "Status successfully changed",
           bannerStatusChangeFailure: "Status change failed. Please try again.",
-          confirmMessageTerminate:   "Are you sure you want to terminate this driver?",
           statusUpdateMessageDuration: 5000
         }
       },

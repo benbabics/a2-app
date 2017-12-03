@@ -12,14 +12,14 @@
   </section>
 
   <ion-item-group class="details-list" [ngClass]="{ 'inset-items': platform.isIos }">
-    <button ion-item>
+    <button ion-item (click)="changeStatus()">
       <ion-icon *wexIfPlatformAndroid item-left name="person"></ion-icon>
       <ion-label>{{ CONSTANTS.LABELS.changeStatus }}</ion-label>
       <div item-content>{{ driver.statusDisplayName }}</div>
       <ion-icon item-right ios="ios-arrow-forward" md=""></ion-icon>
     </button>
 
-    <button ion-item>
+    <button ion-item *ngIf="areFieldsAccessible">
       <ion-icon *wexIfPlatformAndroid item-left name="call"></ion-icon>
 
       <ion-label *wexIfPlatformAndroid>{{ driver.details.cellPhoneNumber }}</ion-label>
@@ -29,7 +29,7 @@
       <div item-content *wexIfPlatformIos>{{ driver.details.cellPhoneNumber }}</div>
     </button>
 
-    <button ion-item>
+    <button ion-item *ngIf="areFieldsAccessible">
       <ion-icon *wexIfPlatformAndroid item-left name="mail"></ion-icon>
 
       <ion-label *wexIfPlatformAndroid>{{ driver.details.emailAddress }}</ion-label>
