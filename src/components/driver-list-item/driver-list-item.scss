@@ -2,6 +2,8 @@ driver-list-item > span {
   @include flexbox();
 
   .driver-icon {
+    @extend %driver-icon;
+
     @at-root .ios & {
       height: 30px;
       width: 30px;
@@ -10,15 +12,6 @@ driver-list-item > span {
       height: 35px;
       width: 35px;
       margin: 1.2rem 1rem 1.2rem 0;
-    }
-    &.TERMINATED {
-      background: url('../assets/pages/drivers/driver-terminated.svg') no-repeat;
-      background-size: contain;
-    }
-    
-    &.ACTIVE {
-      background: url('../assets/pages/drivers/driver-active.svg') no-repeat;
-      background-size: contain;
     }
   }
 

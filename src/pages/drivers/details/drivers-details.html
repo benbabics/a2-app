@@ -6,7 +6,7 @@
 
 <ion-content>
   <section class="details-header">
-    <img src="assets/pages/drivers/driver-active.svg" class="header-icon">
+    <div class="header-icon" [ngClass]="driver.details.status"></div>
     <h1>{{ fullName }}</h1>
     <p>{{ CONSTANTS.LABELS.promptId }}: {{ driver.details.promptId }}</p>
   </section>

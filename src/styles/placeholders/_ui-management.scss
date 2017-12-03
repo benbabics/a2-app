@@ -29,7 +29,9 @@
       }
 
       .header-icon {
-        width: 9rem;
+        display: inline-block;
+        width:  9rem;
+        height: 9rem;
       }
 
       h1 {
@@ -46,7 +48,8 @@
       padding-bottom: 4rem;
 
       .header-icon {
-        width: 5rem;
+        width:  5rem;
+        height: 5rem;
       }
 
       h1 {

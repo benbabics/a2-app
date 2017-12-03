@@ -3,3 +3,15 @@
     text-align: right;
   }
 }
+
+%driver-icon {
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  &.ACTIVE {
+    background-image: url('../assets/pages/drivers/driver-active.svg');
+  }
+  &.TERMINATED {
+    background-image: url('../assets/pages/drivers/driver-terminated.svg');
+  }
+}
