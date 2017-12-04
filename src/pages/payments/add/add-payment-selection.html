@@ -9,7 +9,10 @@
     <ion-list radio-group [(ngModel)]="selectedItem" [ngClass]="{ 'inset-items': platform.isIos }">
       <ng-template ngFor [ngForOf]="items" let-item>
         
-        <ion-item *ngIf="!(isOtherAmount(item) && isOtherAmountSelected)">
+        <button 
+          ion-item
+          (tap)="select(item)"
+          [hidden]="isOtherAmount(item) && isOtherAmountSelected">
           <ion-label *ngIf="isPaymentAmount">
             <h2>{{ getPaymentAmountLabel(item) }}</h2>
             <p>{{ item.value | wexCurrency }}</p>
@@ -20,16 +23,16 @@
             <p>...{{ item.details.lastFourDigits }}</p>
           </ion-label>
 
-          <ion-radio [value]="item"></ion-radio>
-        </ion-item>
+          <ion-radio [hidden]="true" [value]="item"></ion-radio>
+        </button>
 
-        <ion-item *ngIf="isOtherAmount(item) && isOtherAmountSelected" class="custom-input-item">
+        <ion-item *ngIf="isOtherAmount(item) && isOtherAmountSelected" id="custom-input-item">
           <label>
             <h2>{{ getPaymentAmountLabel(item) }}</h2>
           </label>
 
-          <input Autofocus
-            id="custom-input"
+          <input id="custom-input"
+            [Autofocus]="focusOnOtherAmount"
             type="tel"
             currencyMask [options]="{ prefix: '$', thousands: '', decimal: '.' }"
             [(ngModel)]="selectedItemValue">
