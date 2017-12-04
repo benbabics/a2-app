@@ -31,7 +31,7 @@ export class NetworkStatus {
         console.warn("Connection type onResume: " + this.network.type);
         if (this.noConnectionAvailable) {
           if (!this.networkErrorToast) {
-            this.networkErrorToast = this.createErrorToast(this.networkError, false, true);
+            this.networkErrorToast = this.createErrorToast(this.networkError, true);
             this.networkErrorToast.present();
           }
         } else {
@@ -43,17 +43,17 @@ export class NetworkStatus {
       });
     }
 
-    private createErrorToast(message: string, showCloseButton: boolean, important?: boolean): QueuedToast {
+    private createErrorToast(message: string, important?: boolean): QueuedToast {
       const cssClass = "red";
 
-      return this.wexAppSnackbarController.createQueued({ message, cssClass, showCloseButton, important });
+      return this.wexAppSnackbarController.createQueued({ message, cssClass, showCloseButton: true, important });
     }
 
     private watchConnectionErrors() {
       this.network.onDisconnect().subscribe(() => {
         console.warn("Connection type onDisconnect: " + this.network.type);
         if (!this.networkErrorToast && (this.noConnectionAvailable || this.platform.isIos)) {
-          this.networkErrorToast = this.createErrorToast(this.networkError, false, true);
+          this.networkErrorToast = this.createErrorToast(this.networkError, true);
           this.networkErrorToast.present();
         }
       });
@@ -73,7 +73,7 @@ export class NetworkStatus {
 
     public displayError(response: Response) {
         if (this.isServerConnectionError(response)) {
-            this.createErrorToast(this.serverError, true).present();
+            this.createErrorToast(this.serverError).present();
         }
     }
 }
