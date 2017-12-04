@@ -7,7 +7,7 @@ import { WexPlatform } from "../../../../providers/platform";
 import { WexAppSnackbarController } from "../../../../components";
 
 @Component({
-  selector: "page-change-status",
+  selector: "page-driver-change-status",
   templateUrl: "change-status.html"
 })
 export class DriverChangeStatusPage extends SecurePage {
