@@ -248,6 +248,17 @@ export namespace ConstantsInfo {
           actions: "Actions",
           viewTransactions: "View Transactions",
 
+          CONTACT: {
+            contact: "Contact ",
+            call: "Call",
+            textMessage: "Text Message",
+            cancel: "Cancel",
+
+            callIcon: "md-call",
+            textIcon: "md-text",
+            cancelIcon: "md-close"
+          },
+
           STATUS: {
             COLOR: {
               ACTIVE:     "success",

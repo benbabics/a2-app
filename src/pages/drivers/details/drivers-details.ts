@@ -1,7 +1,7 @@
 import { WexAppSnackbarController } from "./../../../components/wex-app-snackbar-controller/wex-app-snackbar-controller";
 import { ActionSheetController, ToastOptions, NavController } from "ionic-angular";
 import * as _ from "lodash";
-import { Component, Injector } from "@angular/core";
+import { Component, Injector, ViewChild, ElementRef } from "@angular/core";
 import { NavParams } from "ionic-angular";
 import { Driver, DriverStatus, OnlineApplication } from "@angular-wex/models";
 import { DriverProvider } from "@angular-wex/api-providers";
@@ -11,6 +11,7 @@ import { Session } from "../../../models";
 import { Reactive, StateEmitter, EventSource } from "angular-rxjs-extensions";
 import { Subject, Observable } from "rxjs";
 import { TransactionsDateView } from "../../transactions/transactions-date-view/transactions-date-view";
+import { DomSanitizer } from "@angular/platform-browser/";
 
 interface DriverStatusDetails {
   id: DriverStatus;
@@ -31,6 +32,7 @@ export class DriversDetailsPage extends DetailsPage {
 
   @EventSource() private onChangeStatus$: Observable<void>;
   @EventSource() private onViewTransactions$: Observable<void>;
+  @EventSource() private contactDriver$: Observable<void>;
 
   @StateEmitter.From("navParams.data.driver")
   private driver$: Subject<Driver>;
@@ -42,11 +44,15 @@ export class DriversDetailsPage extends DetailsPage {
   @StateEmitter() private showEmailAddress$: Subject<boolean>;
   @StateEmitter() private fullName$: Subject<string>;
 
+  @StateEmitter(ViewChild("sms")) smsDriver$: Subject<ElementRef>;
+  @StateEmitter(ViewChild("tel")) telDriver$: Subject<ElementRef>;
+
   constructor(
     public navParams: NavParams,
     private actionSheetController: ActionSheetController,
     private driverProvider: DriverProvider,
     private wexAppSnackbarController: WexAppSnackbarController,
+    private domSanitizer: DomSanitizer,
     navController: NavController,
     injector: Injector
   ) {
@@ -73,7 +79,31 @@ export class DriversDetailsPage extends DetailsPage {
     this.onViewTransactions$
       .flatMap(() => this.driver$.asObservable().take(1))
       .subscribe(driver => navController.push(TransactionsDateView, { filterItem: driver }));
-  }
+
+    this.contactDriver$
+      .flatMapTo(this.driver$)
+      .flatMap((driver: Driver) => new Observable<any>((observer) => {
+        actionSheetController.create({
+          title: this.CONSTANTS.CONTACT.contact + driver.fullName,
+          buttons: [
+            {
+              text: this.CONSTANTS.CONTACT.call,
+              icon: this.platform.isIos ? "" : this.CONSTANTS.CONTACT.callIcon,
+              handler: () => { this.telDriver$.subscribe(observer); }
+            }, {
+              text: this.CONSTANTS.CONTACT.textMessage,
+              icon: this.platform.isIos ? "" : this.CONSTANTS.CONTACT.textIcon,
+              handler: () => { this.smsDriver$.subscribe(observer); }
+            }, {
+              text: "Cancel",
+              icon: this.platform.isIos ? "" : this.CONSTANTS.CONTACT.cancelIcon,
+              role: "cancel"
+            }
+          ]
+        }).present();
+      }).take(1))
+      .subscribe(element => element.nativeElement.click());
+    }
 
   private changeStatus$(driverStatuses: DriverStatusDetails[]): Observable<Driver> {
     return this.showStatusSelector$(driverStatuses)
@@ -123,17 +153,21 @@ export class DriversDetailsPage extends DetailsPage {
       buttons: [
         ...driverStatuses.map((action) => ({
           text: action.label,
-          icon: !this.platform.is("ios") ? action.icon : null,
+          icon: !this.platform.isIos ? action.icon : null,
           handler: () => driverStatusSubject.next(action.id)
         })),
         {
           text: this.CONSTANTS.actionStatusCancel,
           role: "cancel",
-          icon: !this.platform.is("ios") ? "close" : null,
+          icon: !this.platform.isIos ? "close" : null,
         }
       ]
     }).present();
 
     return driverStatusSubject.asObservable();
+  }
+
+  public cleanPhone(contactType: string, phoneNumber: string) {
+    return this.domSanitizer.bypassSecurityTrustUrl(contactType + phoneNumber.replace(/[^0-9]/g, ""));
   }
 }
