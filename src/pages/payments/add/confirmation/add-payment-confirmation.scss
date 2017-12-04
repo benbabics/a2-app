@@ -24,24 +24,9 @@ page-add-payment-confirmation {
     .list {
       margin-bottom: 0;
 
-      @at-root .md & {
-        .item-inner {
-          margin-left: 2rem;
-          padding-left: 0;
-        }
-
-        .input-wrapper {
-          @include flex-direction(column);
-          @include align-items(flex-start);
-        }
-
-        .label {
-          margin-bottom: 0;
-          font-size: 1.2rem;
-          color: color($colors, gray);
-        }
-        [item-content] {
-          margin-bottom: 1rem;
+      .md & {
+        ion-item div[item-content] {
+          font-weight: 500;
         }
       }
     }

@@ -1,33 +1,20 @@
 .detail-list ion-item.item > .item-inner {
-
-  @at-root .md & {
-    padding-left: 0;
-  }
-
-  ion-label {
-
-    @at-root .md & > .property-name {
-      color: color($colors, dark-gray);
-      font-size: 1.4rem;
-      line-height: 1.58;
-      display: block;
-    }
-  
-    @at-root .ios & {
-      @include flexbox();
-      @include flex-direction(row);
-      @include justify-content(space-between);
-  
+  ion-label {  
+    @include flexbox();
+    @include flex-direction(row);
+    @include justify-content(space-between);
       > * {
-  
         &.property-name {
-          text-align: left;
-          font-size: 1.6rem;
-        }
+        text-align: left;
+        font-size: 1.6rem;
+      }
     
-        &.property-value {
-          text-align: right;
+      &.property-value {
+        text-align: right;
+        .ios & {
           color: color($colors, gray);
+        } .md & {
+          font-weight: 500;
         }
       }
     }
