@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ CONSTANTS.title }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div id="options-list">
+    <ion-list radio-group [(ngModel)]="driverStatus" [ngClass]="{ 'inset-items': platform.isIos }">
+
+      <ion-item *ngFor="let option of statusOptions">
+        <ion-label>
+          <h2>{{ displayOptionLabel(option) }}</h2>
+        </ion-label>
+        <ion-radio [value]="option"></ion-radio>
+      </ion-item>
+
+    </ion-list>
+  </div>
+
+  <div id="action-list" padding>
+    <button id="submit-button" [disabled]="disableChangeStatus" class="button-gradient" ion-button block (click)="handleSelectStatus()">
+      <action-indicator large [when]="isChangingStatus">{{ CONSTANTS.LABELS.select }}</action-indicator>
+    </button>
+  </div>
+</ion-content>

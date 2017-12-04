@@ -17,6 +17,7 @@ import { TransactionDateView, TransactionDateSublist } from "../pages/transactio
 import { CardsDetailsPage } from "./../pages/cards/details/cards-details";
 import { DriversPage, TransactionDriverView } from "./../pages/drivers/drivers";
 import { DriversDetailsPage } from "./../pages/drivers/details/drivers-details";
+import { DriverChangeStatusPage } from "./../pages/drivers/details/change-status/change-status";
 import { UserEnrollmentFlow } from "../pages/login/user-enrollment-flow/user-enrollment-flow";
 import {
   ActionIndicator,
@@ -144,6 +145,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     CardsReissuePage,
     DriversPage,
     DriversDetailsPage,
+    DriverChangeStatusPage,
     PaymentsPage,
     PaymentsDetailsPage,
     TermsOfUsePage,
@@ -227,6 +229,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     CardsReissuePage,
     DriversPage,
     DriversDetailsPage,
+    DriverChangeStatusPage,
     PaymentsPage,
     PaymentsDetailsPage,
     OptionsPage,

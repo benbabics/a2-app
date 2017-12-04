@@ -2,20 +2,9 @@
 
 page-drivers-details {
   @extend %ui-management-details;
-
   @include action-indicator-color(white);
-}
 
-.action-sheet-icon {
-  &.ion-md-checkmark-circle {
-    color: color($colors, success-dark);
-  }
-
-  &.ion-md-close-circle {
-    color: color($colors, danger-dark);
-  }
-
-  &.ion-md-close {
-    color: #757575;
+  .header-icon {
+    @extend %driver-icon;
   }
 }

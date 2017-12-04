@@ -1,22 +1,14 @@
-import { WexAppSnackbarController } from "./../../../components/wex-app-snackbar-controller/wex-app-snackbar-controller";
-import { ActionSheetButton } from "ionic-angular/components/action-sheet/action-sheet-options";
-import { ActionSheetController, Events, ToastOptions, Platform, NavController } from "ionic-angular";
+import { NavController } from "ionic-angular";
 import * as _ from "lodash";
 import { Component, Injector } from "@angular/core";
 import { NavParams } from "ionic-angular";
-import { Driver, DriverStatus, OnlineApplication } from "@angular-wex/models";
-import { DriverProvider, TransactionSearchFilterBy } from "@angular-wex/api-providers";
+import { Driver, OnlineApplication } from "@angular-wex/models";
+import { TransactionSearchFilterBy } from "@angular-wex/api-providers";
 import { DetailsPage } from "../../details-page";
-import { ActionSheetOptions } from "ionic-angular/components/action-sheet/action-sheet-options";
 import { NameUtils } from "../../../utils/name-utils";
 import { TransactionDateSublist } from "../../transactions/transactions-date-view/transactions-date-view";
-
-interface DriverStatusDetails {
-  id: DriverStatus;
-  label: string;
-  trackingId: string;
-  icon: string;
-}
+import { WexPlatform } from "../../../providers";
+import { DriverChangeStatusPage } from "./change-status/change-status";
 
 @Component({
   selector: "page-drivers-details",
@@ -28,24 +20,12 @@ export class DriversDetailsPage extends DetailsPage {
 
   constructor(
     public navParams: NavParams,
-    private actionSheetController: ActionSheetController,
-    private driverProvider: DriverProvider,
-    private wexAppSnackbarController: WexAppSnackbarController,
-    private events: Events,
-    private platform: Platform,
+    public platform: WexPlatform,
     private navController: NavController,
     injector: Injector
   ) {
     super( "Drivers.Details", injector );
     this.driver = this.navParams.get( "driver" );
-  }
-
-  public get statusColor(): string {
-    return this.CONSTANTS.STATUS.COLOR[ this.driver.details.status ] || "warning";
-  }
-
-  public get statusIcon(): string {
-    return this.CONSTANTS.STATUS.ICON[ this.driver.details.status ] || "information-circled";
   }
 
   public get areFieldsAccessible(): boolean {
@@ -55,64 +35,13 @@ export class DriversDetailsPage extends DetailsPage {
     return _.includes( accessibleFields, userPlatform );
   }
 
-  public changeStatus() {
-    let actions = this.CONSTANTS.statusOptions as DriverStatusDetails[];
-    this.actionSheetController.create(this.buildActionSheet(actions)).present();
-  }
-
   public get fullName(): string {
     return NameUtils.PrintableName(this.driver.details.firstName, this.driver.details.lastName);
   }
 
-  private buildActionSheet(actions: DriverStatusDetails[]): ActionSheetOptions {
-    let buttons: ActionSheetButton[] = actions.map(action => ({
-      text: action.label,
-      icon: !this.platform.is("ios") ? action.icon : null,
-      handler: () => this.updateDriverStatus(action.id)
-    }));
-    return {
-      title: this.CONSTANTS.actionStatusTitle,
-      buttons: [
-        ...buttons,
-        {
-          text: this.CONSTANTS.actionStatusCancel,
-          role: "cancel",
-          icon: !this.platform.is("ios") ? "close" : null
-        }
-      ]
-    };
-  }
-
-  private updateDriverStatus(newStatus: DriverStatus) {
-    if (newStatus === this.driver.details.status) {
-      return;
-    }
-
-    this.isChangingStatus = true;
-
-    let accountId = this.session.user.billingCompany.details.accountId;
-    let driverId = this.driver.details.driverId;
-    let promptId = this.driver.details.promptId;
-
-    let toastOptions: ToastOptions = {
-      message: null,
-      duration: this.CONSTANTS.statusUpdateMessageDuration,
-      position: "top",
-    };
-
-    this.driverProvider.updateStatus(accountId, driverId, newStatus, promptId).subscribe(
-      (driver: Driver) => {
-        this.driver.details.status = driver.details.status;
-        this.isChangingStatus = false;
-        this.events.publish("drivers:statusUpdate");
-
-        toastOptions.message = this.CONSTANTS.bannerStatusChangeSuccess;
-        this.wexAppSnackbarController.createQueued(toastOptions).present();
-      }, () => {
-        this.isChangingStatus = false;
-        toastOptions.message = this.CONSTANTS.bannerStatusChangeFailure;
-        this.wexAppSnackbarController.createQueued(toastOptions).present();
-      });
+  public changeStatus() {
+    const driver = this.driver;
+    this.navController.push(DriverChangeStatusPage, { driver });
   }
 
   public viewTransactions() {

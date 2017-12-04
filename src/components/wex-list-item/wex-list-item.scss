@@ -22,11 +22,6 @@ wex-list-item {
     padding: 1rem 0;
   }
 
-  //chevron icon
-  ion-icon {
-    opacity: .15;
-  }
-
   &:not([data-active]), &[data-active=false] {
 
     .ion-icon {

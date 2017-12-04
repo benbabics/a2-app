@@ -1,4 +1,115 @@
 %ui-management-details {
+  @include page-background(white, md);
+  @include page-background(background-ios, ios);
+
+  .header-md::after {
+    display: none;
+  }
+
+  .details-header {
+    text-align: center;
+
+    h1, p {
+      margin: 0;
+    }
+
+    .header-icon {
+      display: inline-block;
+      margin-bottom: 1.4rem;
+    }
+
+    @at-root .md & {
+      background-color: color($colors, background-md);
+
+      &::after {
+        display: block;
+        margin: $content-margin 0 5px;
+        height: 5px;
+        box-shadow: 0 2px 3px rgba(0,0,0,0.2);
+        content: "";
+      }
+
+      .header-icon {
+        width:  9rem;
+        height: 9rem;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+        font-weight: 400;
+      }
+      p {
+        font-size: 1.2rem;
+      }
+    }
+
+    @at-root .ios & {
+      padding-top:    4rem;
+      padding-bottom: 4rem;
+
+      .header-icon {
+        width:  5rem;
+        height: 5rem;
+      }
+
+      h1 {
+        font-size: 3rem;
+      }
+      p {
+        font-size: 1.6rem;
+      }
+    }
+  }
+
+  .details-list {
+    margin-bottom: 0;
+
+    @at-root .md & {
+      .icon {
+        margin-left: $content-margin;
+        margin-right: 0;
+
+        &::before {
+          font-size: 2.2rem;
+          color: color($colors, gray);
+        }
+      }
+
+      .item-inner {
+        margin-left: 0;
+        padding-left: 0;
+        border-bottom: none;
+      }
+
+      .input-wrapper {
+        @include flex-direction(column);
+        @include align-items(flex-start);
+      }
+
+      .label {
+        margin-bottom: 0;
+        color: color($colors, dark);
+      }
+      [item-content] {
+        margin-bottom: 1rem;
+        font-size: 1.4rem;
+        color: color($colors, gray);
+      }
+    }
+
+    @at-root .ios & {
+      .label {
+        margin-top:    2rem;
+        margin-bottom: 1.9rem;
+      }
+      [item-content] {
+        margin-right: 1rem;
+      }
+    }
+  }
+}
+
+%ui-management-details-old {
   ion-card-header {
     font-weight: bold;
   }

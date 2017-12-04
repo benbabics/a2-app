@@ -1,58 +1,49 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>{{ CONSTANTS.title }}</ion-title>
+    <ion-title *wexIfPlatformIos>{{ CONSTANTS.title }}</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-card id="card-details">
-    <ion-card-header>{{ CONSTANTS.details }}</ion-card-header>
+  <section class="details-header">
+    <div class="header-icon" [ngClass]="driver.details.status"></div>
+    <h1>{{ fullName }}</h1>
+    <p>{{ CONSTANTS.LABELS.promptId }}: {{ driver.details.promptId }}</p>
+  </section>
 
-    <div id="controls" *ngIf="!driver.details.shared">
-      <h1 id="driver-name"> {{ fullName }} </h1>
+  <ion-item-group class="details-list" [ngClass]="{ 'inset-items': platform.isIos }">
+    <button ion-item (click)="changeStatus()">
+      <ion-icon *wexIfPlatformAndroid item-left name="person"></ion-icon>
+      <ion-label>{{ CONSTANTS.LABELS.changeStatus }}</ion-label>
+      <div item-content>{{ driver.statusDisplayName }}</div>
+      <ion-icon item-right ios="ios-arrow-forward" md=""></ion-icon>
+    </button>
 
-      <button ion-button icon-left round large id="driver-status" [color]="statusColor + '-dark'" (click)="changeStatus()">
-        <action-indicator [when]="isChangingStatus">
-          <ion-icon [name]="statusIcon" [color]="statusColor"></ion-icon>
-          {{ driver.statusDisplayName }}
-        </action-indicator>
-      </button>
-    </div>
+    <button ion-item *ngIf="areFieldsAccessible">
+      <ion-icon *wexIfPlatformAndroid item-left name="call"></ion-icon>
 
-    <ion-card-content>
-      <ion-list class="detail detail-list">
-        <ion-item>
-          <ion-label>
-            <span class="property-name">{{ CONSTANTS.LABELS.promptId }}</span>
-            <span text-wrap class="property-value">{{ driver.details.promptId }}</span>
-          </ion-label>
-        </ion-item>
+      <ion-label *wexIfPlatformAndroid>{{ driver.details.cellPhoneNumber }}</ion-label>
+      <div item-content *wexIfPlatformAndroid>{{ CONSTANTS.LABELS.cellPhoneNumber }}</div>
 
-        <ion-item *ngIf="areFieldsAccessible">
-          <ion-label>
-            <span class="property-name">{{ CONSTANTS.LABELS.cellPhoneNumber }}</span>
-            <span text-wrap class="property-value">{{ driver.details.cellPhoneNumber }}</span>
-          </ion-label>
-        </ion-item>
+      <ion-label *wexIfPlatformIos>{{ CONSTANTS.LABELS.cellPhoneNumber }}</ion-label>
+      <div item-content *wexIfPlatformIos>{{ driver.details.cellPhoneNumber }}</div>
+    </button>
 
-        <ion-item *ngIf="areFieldsAccessible">
-          <ion-label>
-            <span class="property-name">{{ CONSTANTS.LABELS.emailAddress }}</span>
-            <span text-wrap class="property-value">{{ driver.details.emailAddress }}</span>
-          </ion-label>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
+    <button ion-item *ngIf="areFieldsAccessible">
+      <ion-icon *wexIfPlatformAndroid item-left name="mail"></ion-icon>
 
-  <ion-card id="card-actions">
-    <ion-card-header>{{ CONSTANTS.actions }}</ion-card-header>
+      <ion-label *wexIfPlatformAndroid>{{ driver.details.emailAddress }}</ion-label>
+      <div item-content *wexIfPlatformAndroid>{{ CONSTANTS.LABELS.emailAddress }}</div>
 
-    <ion-list id="action-list" padding>
-      <button ion-button icon-left block (click)="viewTransactions()">
-        <ion-icon class="fa fa-exchange"></ion-icon>
-        {{ CONSTANTS.viewTransactions }}
-      </button>
-    </ion-list>
-  </ion-card>
+      <ion-label *wexIfPlatformIos>{{ CONSTANTS.LABELS.emailAddress }}</ion-label>
+      <div item-content *wexIfPlatformIos>{{ driver.details.emailAddress }}</div>
+    </button>
+
+    <button ion-item (click)="viewTransactions()">
+      <ion-icon *wexIfPlatformAndroid item-left name="ios-list"></ion-icon>
+      <ion-label>{{ CONSTANTS.viewTransactions }}</ion-label>
+      <ion-icon item-right ios="ios-arrow-forward" md=""></ion-icon>
+    </button>
+  </ion-item-group>
+
 </ion-content>
