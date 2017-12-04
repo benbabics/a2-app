@@ -279,9 +279,13 @@ export namespace ConstantsInfo {
 
         //# Driver Change Status page
         CHANGE_STATUS: {
+          title: "Change Driver Status",
           bannerStatusChangeSuccess: "Status successfully changed",
           bannerStatusChangeFailure: "Status change failed. Please try again.",
-          statusUpdateMessageDuration: 5000
+          statusUpdateMessageDuration: 5000,
+          LABELS: {
+            select: "Select"
+          }
         }
       },
 

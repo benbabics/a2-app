@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Change Driver Status</ion-title>
+    <ion-title>{{ CONSTANTS.title }}</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -20,7 +20,7 @@
 
   <div id="action-list" padding>
     <button id="submit-button" [disabled]="disableChangeStatus" class="button-gradient" ion-button block (click)="handleSelectStatus()">
-      <action-indicator large [when]="isChangingStatus">Select</action-indicator>
+      <action-indicator large [when]="isChangingStatus">{{ CONSTANTS.LABELS.select }}</action-indicator>
     </button>
   </div>
 </ion-content>
