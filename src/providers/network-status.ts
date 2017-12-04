@@ -10,7 +10,7 @@ import { WexPlatform } from "./platform";
 
 @Injectable()
 export class NetworkStatus {
-    public static readonly SERVER_ERROR_CODES = [404, 500, 503];
+    public static readonly SERVER_ERROR_CODES = [0, 404, 500, 503];
 
     @Value("GLOBAL_NOTIFICATIONS.serverConnectionError") private serverError: string;
     @Value("GLOBAL_NOTIFICATIONS.networkError") private networkError: string;
