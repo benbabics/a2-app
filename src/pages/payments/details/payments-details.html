@@ -14,7 +14,7 @@
 
 <ion-content>
   <div id="header-container" padding-vertical>
-    <span id="payment-header" 
+    <span id="payment-header"
           [ngClass]="{ scheduled: this.isScheduled, completed: this.isCompleted }">
       {{ headerLabel }}
     </span>
@@ -53,14 +53,14 @@
 
   <div *ngIf="isScheduled" padding-top>
     <ion-list *wexIfPlatformIos>
-      <a ion-item id="button-cancel-payment" (click)="cancelPayment()">
-        <action-indicator [when]="isCanceling">{{ CONSTANTS.cancelButton }}</action-indicator>
+      <a ion-item id="button-cancel-payment" (click)="cancelPayment()" [actionIndicator]="isCanceling">
+        {{ CONSTANTS.cancelButton }}
       </a>
     </ion-list>
 
     <div *wexIfPlatformAndroid id="md-button-container">
-      <button ion-button block id="button-cancel-payment" color="white"  (click)="cancelPayment()">
-        <action-indicator [when]="isCanceling">{{ CONSTANTS.cancelButton }}</action-indicator>
+      <button ion-button block id="button-cancel-payment" color="white"  (click)="cancelPayment()" [actionIndicator]="isCanceling">
+        {{ CONSTANTS.cancelButton }}
       </button>
     </div>
   </div>

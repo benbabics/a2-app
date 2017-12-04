@@ -5,7 +5,7 @@ import * as _ from "lodash";
   selector: "resizable-svg",
   template: `
   <div *ngIf="imageReady" style="width: 100%; height: 100%" [ngStyle]="{ 'background' : imageDataUrl }"></div>
-  <action-indicator style="text-align: right;" [when]="!imageReady"></action-indicator>
+  <div style="text-align: right;" [actionIndicator]="!imageReady"></div>
 `
 }) export class ResizableSvg {
   @Input() imageData: any;

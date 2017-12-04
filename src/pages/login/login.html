@@ -22,7 +22,7 @@
                   [maxlength]="CONSTANTS.userName.maxLength"></ion-input>
             <ion-input *ngIf="fingerprintProfileAvailable" [value]="maskableUsername" disabled name="userName" type="text"></ion-input>
           </ion-item>
-          
+
           <ion-item id="password-field">
               <ion-label floating> {{ CONSTANTS.password.label }} </ion-label>
               <ion-input [(ngModel)]="user.password"
@@ -38,10 +38,10 @@
                   [maxlength]="CONSTANTS.password.maxLength"></ion-input>
               <ion-icon ion-button
                   *ngIf="fingerprintProfileAvailable && user.password.length === 0"
-                  color="white" 
-                  (click)="onLogin($event, true)" 
-                  item-right 
-                  class="fingerprint-indicator" 
+                  color="white"
+                  (click)="onLogin($event, true)"
+                  item-right
+                  class="fingerprint-indicator"
                   name="finger-print"></ion-icon>
           </ion-item>
         </ion-list>
@@ -59,8 +59,8 @@
         </ion-item-group>
 
         <div id="form-actions">
-          <button ion-button block type="submit" [disabled]="!form.valid">
-            <action-indicator [when]="isLoggingIn">{{ CONSTANTS.submitButton }}</action-indicator>
+          <button ion-button block type="submit" [disabled]="!form.valid" [actionIndicator]="isLoggingIn">
+             {{ CONSTANTS.submitButton }}
           </button>
         </div>
       </form>

@@ -6,7 +6,7 @@ import { Dialogs } from "@ionic-native/dialogs";
 import { WexCardNumberPipe } from "./../pipes/wex-card-number";
 import { Http, XHRBackend, RequestOptions, HttpModule } from "@angular/http";
 import { NgModule, ErrorHandler, APP_INITIALIZER } from "@angular/core";
-import { IonicApp, IonicModule, IonicErrorHandler } from "ionic-angular";
+import { IonicApp, IonicModule, IonicErrorHandler, Spinner } from "ionic-angular";
 import { MyApp } from "./app.component";
 import { LoginPage } from "../pages/login/login";
 import { OptionsPage } from "../pages/options/options";
@@ -19,7 +19,6 @@ import { DriversPage, TransactionDriverView } from "./../pages/drivers/drivers";
 import { DriversDetailsPage } from "./../pages/drivers/details/drivers-details";
 import { UserEnrollmentFlow } from "../pages/login/user-enrollment-flow/user-enrollment-flow";
 import {
-  ActionIndicator,
   WexList,
   WexListItem,
   WexNavBar,
@@ -77,6 +76,7 @@ import { ApiProviders } from "@angular-wex/api-providers";
 import { GetCurrentEnvironmentConstants } from "./app.constants";
 import { ContactUsPage } from "../pages/contact-us/contact-us";
 import {
+  ActionIndicatorDirective,
   WexIfPlatformDirective,
   WexIfPlatformAndroidDirective,
   WexIfPlatformIosDirective,
@@ -157,7 +157,6 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     OptionBankAccount,
     AddPaymentConfirmationPage,
     TransactionDetailsPage,
-    ActionIndicator,
     TransactionAmountPipe,
     WexCurrency,
     WexDate,
@@ -174,6 +173,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     WexInfoCard,
     WexSvgPipe,
     WexTrustedHtmlPipe,
+    ActionIndicatorDirective,
     WexIfPlatformDirective,
     WexIfPlatformAndroidDirective,
     WexIfPlatformIosDirective,
@@ -243,7 +243,8 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     OptionAmount,
     OptionBankAccount,
     AddPaymentConfirmationPage,
-    PrivacyPolicyPage
+    PrivacyPolicyPage,
+    Spinner
   ],
   providers: [
     //# angular
