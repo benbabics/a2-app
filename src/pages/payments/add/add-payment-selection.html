@@ -42,7 +42,7 @@
   </div>
 
   <div id="action-list" padding>
-    <button [disabled]="!isSubmitEnabled" ion-button block class="button-gradient" (tap)="onSubmit()">
+    <button [disabled]="!isSubmitEnabled" ion-button block class="button-gradient" (click)="onSubmit()">
       {{ CONSTANTS.LABELS.select }}
     </button>
     <p *ngIf="instructionalText" class="text-instructions" [innerHTML]="instructionalText"></p>
