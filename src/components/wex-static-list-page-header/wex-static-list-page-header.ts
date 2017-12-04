@@ -11,9 +11,6 @@ import { Subject } from "rxjs/Subject";
 })
 @Reactive()
 export class WexStaticListPageHeader {
-  public readonly RETURN_KEYCODE: number = 13;
-
   @StateEmitter(ViewChild(Searchbar)) public searchbar$: Subject<Searchbar>;
-  @StateEmitter() public keyboardEvent$: Subject<KeyboardEvent>;
   @Input() public page: StaticListPage<any, any>;
 }

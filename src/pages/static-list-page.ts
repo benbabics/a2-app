@@ -36,6 +36,7 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   // The threshold size that a list is considered large enough to automatically enable a loading facade
   private static readonly LARGE_LIST_SIZE = 75;
   private static readonly LARGE_LIST_FACADE_DURATION_MS: number = 100;
+  public static readonly RETURN_KEYCODE: number = 13;
 
   public readonly params: StaticListPage.Params<DetailsT>;
 
@@ -56,6 +57,7 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
   @StateEmitter({ initialValue: [] }) private itemLists$: Subject<T[][]>;
   @StateEmitter({ initialValue: 0 }) private scrollLocation$: Subject<number>;
   @StateEmitter({ initialValue: "" }) private searchFilter$: Subject<string>;
+  @StateEmitter() public keyboardEvent$: Subject<KeyboardEvent>;
   @StateEmitter() private searchHidden$: Subject<boolean>;
   //Enables a loading facade. This forces the greeking state of the list to be shown instead of the actual items.
   @StateEmitter() private loadingFacade$: Subject<boolean>;
@@ -157,16 +159,11 @@ export abstract class StaticListPage<T extends Model<DetailsT>, DetailsT> extend
       }).finally(() => refresher.complete());
     }).subscribe();
 
-    this.header$.asObservable()
-      .filter(header => !!header)
-      .subscribe(header =>
-        header.keyboardEvent$.asObservable()
-          .filter(event => !!event)
-          .filter(event => event.keyCode === header.RETURN_KEYCODE)
-          .flatMapTo(header.searchbar$)
-          .filter(searchbar => !!searchbar)
-          .flatMap(searchbar => Observable.of(searchbar).take(1))
-          .subscribe(searchbar => searchbar._searchbarInput.nativeElement.blur()));
+    this.keyboardEvent$.asObservable()
+      .filter(event => !!event && event.keyCode === StaticListPage.RETURN_KEYCODE)
+      .flatMapTo(this.header$)
+      .flatMap(header => header.searchbar$.asObservable().take(1))
+      .subscribe(searchbar => searchbar._searchbarInput.nativeElement.blur());
 
     this.onShowSearch$
       .map(() => this.searchHidden$.next(false))

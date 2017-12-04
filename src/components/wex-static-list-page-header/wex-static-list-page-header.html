@@ -4,7 +4,7 @@
                  [placeholder]="page.searchLabel"
                  [(ngModel)]="page.searchFilter"
                  (ionBlur)="page.onSearchBlur()"
-                 (keypress)="keyboardEvent = $event">
+                 (keypress)="page.keyboardEvent = $event">
   </ion-searchbar>
 
   <ion-buttons *ngIf="!page.searchHidden && page.platform.isAndroid" left>
