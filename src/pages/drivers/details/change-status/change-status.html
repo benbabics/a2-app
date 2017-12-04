@@ -5,16 +5,18 @@
 </ion-header>
 
 <ion-content>
-  <ion-list radio-group [(ngModel)]="driverStatus" [ngClass]="{ 'inset-items': platform.isIos }">
+  <div id="options-list">
+    <ion-list radio-group [(ngModel)]="driverStatus" [ngClass]="{ 'inset-items': platform.isIos }">
 
-    <ion-item *ngFor="let option of statusOptions">
-      <ion-label>
-        <h2>{{ displayOptionLabel(option) }}</h2>
-      </ion-label>
-      <ion-radio [value]="option"></ion-radio>
-    </ion-item>
+      <ion-item *ngFor="let option of statusOptions">
+        <ion-label>
+          <h2>{{ displayOptionLabel(option) }}</h2>
+        </ion-label>
+        <ion-radio [value]="option"></ion-radio>
+      </ion-item>
 
-  </ion-list>
+    </ion-list>
+  </div>
 
   <div id="action-list" padding>
     <button id="submit-button" [disabled]="disableChangeStatus" class="button-gradient" ion-button block (click)="handleSelectStatus()">
