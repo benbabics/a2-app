@@ -3,7 +3,6 @@ import { Value } from "../decorators/value";
 import { Injectable } from "@angular/core";
 import { SessionManager } from "./session-manager";
 import { Session } from "../models";
-import { User } from "@angular-wex/models";
 import { PlatformReady } from "../decorators/platform-ready";
 import { WexPlatform } from "./platform";
 import { Provider } from "@angular/core";
@@ -30,13 +29,10 @@ export class WexGoogleAnalyticsEvents extends GoogleAnalytics {
     }
 
     // Track the user via username when logged in
-    sessionManager.sessionStateObserver.subscribe((loggedIn: boolean) => {
-      if (loggedIn) {
-        sessionManager.cache
-          .getSessionDetail(Session.Field.User)
-          .subscribe((user: User) => this.setUserId(user.details.username));
-      }
-    });
+    sessionManager.cache.session$
+      .distinctUntilKeyChanged(Session.Field.User)
+      .filter(session => !!session.user)
+      .subscribe(session => this.setUserId(session.user.details.username));
   }
 
   @PlatformReady(GoogleAnalytics)

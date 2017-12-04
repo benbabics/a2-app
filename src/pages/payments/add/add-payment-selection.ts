@@ -1,125 +1,114 @@
+import * as _ from "lodash";
 import { Component, Injector } from "@angular/core";
 import { NavParams, NavController } from "ionic-angular";
 import { SecurePage } from "../../secure-page";
 import { PaymentSelectionOption } from "./../../../providers/payment-service";
-import { UserPaymentAmount, UserPaymentAmountType } from "../../../models/user-payment";
+import { UserPaymentAmount, UserPaymentAmountType, UserPayment } from "../../../models/user-payment";
 import { WexPlatform } from "../../../providers";
 import { BankAccount } from "@angular-wex/models";
-import * as _ from "lodash";
+import { StateEmitter, Reactive, EventSource } from "angular-rxjs-extensions";
+import { Subject, Observable } from "rxjs";
+import { Value } from "../../../decorators/value";
 
 export type AddPaymentSelectionNavParams = keyof {
-  selectionType
-  options
-  selectedItem
-  onSelection
+  listType,
+  items,
+  selectedItem$
 };
 
 export namespace AddPaymentSelectionNavParams {
-  export const SelectionType: AddPaymentSelectionNavParams = "selectionType";
-  export const Options: AddPaymentSelectionNavParams = "options";
-  export const SelectedItem: AddPaymentSelectionNavParams = "selectedItem";
-  export const OnSelection: AddPaymentSelectionNavParams = "onSelection";
+
+  export const ListType: AddPaymentSelectionNavParams = "listType";
+  export const Items: AddPaymentSelectionNavParams = "items";
+  export const SelectedItem$: AddPaymentSelectionNavParams = "selectedItem$";
 }
 
 @Component({
   selector: "page-add-payment-selection",
   templateUrl: "add-payment-selection.html"
 })
+@Reactive()
 export class AddPaymentSelectionPage extends SecurePage {
-  public selectionType: string;
-  private onSelection: (selection: PaymentSelectionOption) => void;
-  public inFocus: boolean = false;
-  public selectedItem: PaymentSelectionOption;
-  public initialSelection: PaymentSelectionOption;
-  public options: PaymentSelectionOption[];
 
-  constructor(
-    injector: Injector,
-    navParams: NavParams,
-    public navCtrl: NavController,
-    public platform: WexPlatform
-  ) {
+  @Value("PAGES.PAYMENTS.ADD.LABELS") private readonly PAYMENT_LABELS: any;
+
+  @EventSource() private onSubmit$: Observable<any>;
+
+  @StateEmitter() private pageTitle$: Subject<string>;
+  @StateEmitter() private instructionalText$: Subject<string>;
+  @StateEmitter() private isSubmitEnabled$: Subject<boolean>;
+  @StateEmitter() private isOtherAmountSelected$: Subject<boolean>;
+  @StateEmitter() private isBankAccount$: Subject<boolean>;
+  @StateEmitter() private isPaymentAmount$: Subject<boolean>;
+
+  @StateEmitter.From("navParams.data." + AddPaymentSelectionNavParams.SelectedItem$)
+  private selectedItem$: Subject<PaymentSelectionOption>;
+
+  @StateEmitter.Alias({ path: "selectedItem$.value", mergeUpdates: true })
+  public /** @template */ selectedItemValue$: Observable<number>;
+
+  @StateEmitter.Alias("navParams.data." + AddPaymentSelectionNavParams.SelectedItem$)
+  private chosenItem$: Subject<PaymentSelectionOption>;
+
+  @StateEmitter.Alias("navParams.data." + AddPaymentSelectionNavParams.ListType)
+  private listType$: Observable<keyof UserPayment>;
+
+  @StateEmitter.Alias("navParams.data." + AddPaymentSelectionNavParams.Items)
+  private items$: Observable<PaymentSelectionOption[]>;
+
+  constructor(injector: Injector, navCtrl: NavController, public navParams: NavParams, public platform: WexPlatform) {
     super({ pageName: "Payments.Add.Selection", trackView: false }, injector);
 
-    this.selectionType = navParams.get(AddPaymentSelectionNavParams.SelectionType);
-    this.options = navParams.get(AddPaymentSelectionNavParams.Options);
-    this.selectedItem = navParams.get(AddPaymentSelectionNavParams.SelectedItem);
-    if (this.isBankAccount) {
-      this.identifyBankAccountFromOptions();
-    }
-    this.initialSelection = this.selectedItem;
-    this.onSelection = navParams.get(AddPaymentSelectionNavParams.OnSelection);
-    if (this.isPaymentAmount) {
-      this.otherAmount = this.customAmount.value;
-    }
+    this.listType$.subscribe(listType => {
+      this.isBankAccount$.next(listType === "bankAccount");
+      this.isPaymentAmount$.next(listType === "amount");
+
+      // Set the page title and instructional test
+      this.pageTitle$.next(this.CONSTANTS.LABELS[listType]);
+      this.instructionalText$.next(_.get<string>(this.CONSTANTS.INSTRUCTIONAL_TEXT, listType, ""));
+    });
+
+    // Make sure that the selected item is one of the items in the list if this is a payment selection
+    this.isPaymentAmount$.asObservable()
+      .filter(Boolean)
+      .flatMap(() => Observable.combineLatest(this.items$, this.selectedItem$))
+      .take(1)
+      .subscribe((args: [UserPaymentAmount[], UserPaymentAmount]) => {
+        let [items, selectedItem] = args;
+        this.selectedItem$.next(Object.assign(_.find(items, { type: selectedItem.type }), selectedItem));
+      });
+
+    this.isBankAccount$.asObservable()
+      .filter(Boolean)
+      .flatMap(() => Observable.combineLatest(this.selectedItem$, this.chosenItem$))
+      .subscribe((args: [BankAccount, BankAccount]) => {
+        let [selectedItem, initialItem] = args;
+        this.isSubmitEnabled$.next(selectedItem.details.id !== initialItem.details.id);
+      });
+
+    this.isPaymentAmount$.asObservable()
+      .filter(Boolean)
+      .flatMap(() => Observable.combineLatest(this.selectedItem$, this.chosenItem$))
+      .subscribe((args: [UserPaymentAmount, UserPaymentAmount]) => {
+        let [selectedItem, initialItem] = args;
+        this.isSubmitEnabled$.next(!_.isNaN(selectedItem.value) && selectedItem.value !== 0 && selectedItem.value !== initialItem.value);
+        this.isOtherAmountSelected$.next(this.isOtherAmount(selectedItem));
+      });
+
+    this.onSubmit$
+      .flatMap(() => this.selectedItem$.asObservable().take(1))
+      .subscribe((selectedItem) => {
+        this.chosenItem$.next(selectedItem);
+
+        navCtrl.pop();
+      });
   }
 
-  private identifyBankAccountFromOptions() {
-    let selectedId = (this.selectedItem as BankAccount).details.id;
-    this.selectedItem = _.find((this.options as BankAccount[]), account => account.details.id === selectedId);
+  public getPaymentAmountLabel(item: UserPaymentAmount): string {
+    return this.PAYMENT_LABELS[item.type];
   }
 
-  public get pageTitle(): string {
-    return this.CONSTANTS.LABELS[this.selectionType];
-  }
-
-  public get instructionalText(): string {
-    return _.get<string>(this.CONSTANTS.INSTRUCTIONAL_TEXT, this.selectionType, "");
-  }
-
-  public otherAmount: number = 0;
-  public get isPaymentAmount(): boolean {
-    return !(this.selectedItem instanceof BankAccount);
-  }
-
-  public get isBankAccount(): boolean {
-    return this.selectedItem instanceof BankAccount;
-  }
-
-  public get isCustomPaymentAmount(): boolean {
-    return this.isPaymentAmount && (this.selectedItem as UserPaymentAmount).type === UserPaymentAmountType.OtherAmount;
-  }
-
-  public get customAmount(): UserPaymentAmount {
-    return (this.options as UserPaymentAmount[])[this.options.length - 1];
-  }
-
-  public ionViewDidEnter() {
-    this.inFocus = true;
-  }
-
-  public ionViewWillLeave() {
-    this.inFocus = false;
-  }
-
-  public handleSubmit() {
-    this.onSelection(this.selectedItem);
-    if (this.isCustomPaymentAmount) {
-      (this.selectedItem as UserPaymentAmount).value = this.otherAmount;
-    } else if (this.isPaymentAmount) {
-      this.customAmount.value = 0;
-    }
-    this.navCtrl.pop();
-  }
-
-  public get disableSubmit(): boolean {
-    // If this is a new custom amount, enable the button (as long as the custom amount is not 0).
-    if (this.isPaymentAmount) {
-    if (this.isCustomPaymentAmount) {
-      if (this.otherAmount === 0 || _.isNaN(this.otherAmount)) {
-        return true;
-      } else if ((this.selectedItem as UserPaymentAmount).value === this.otherAmount) {
-        return (this.selectedItem === this.initialSelection);
-        }
-      } else {
-        return this.selectedItem === this.initialSelection;
-      }
-    }
-    // Otherwise, if the selected item is the same, disable the button.
-    else if (this.selectedItem === this.initialSelection) {
-      return true;
-    }
-    // Otherwise, the selection must be new, so enable the button.
-    return false;
+  public isOtherAmount(amount: UserPaymentAmount): boolean {
+    return amount.type === UserPaymentAmountType.OtherAmount;
   }
 }

@@ -11,7 +11,7 @@
     <div id="controls">
       <h1 id="card-number">{{ CONSTANTS.cardNumber }} {{ card.details.embossedCardNumber | wexCardNumber }}</h1>
 
-      <button ion-button icon-left round large id="card-status" (click)="canChangeStatus ? changeStatus() : cannotChangeStatusMessage()" [color]="statusColor + '-dark'" [actionIndicator]="isChangingStatus">
+      <button ion-button icon-left round large id="card-status" (click)="onChangeStatus()" [color]="statusColor + '-dark'" [actionIndicator]="isChangingStatus">
         <ion-icon [name]="statusIcon" [color]="statusColor"></ion-icon>
         {{ card.statusDisplayName }}
       </button>
@@ -29,11 +29,11 @@
     <ion-card-header>{{ CONSTANTS.actions }}</ion-card-header>
 
     <ion-list id="action-list" padding>
-      <button ion-button icon-left block (click)="viewTransactions()">
+      <button ion-button icon-left block (click)="onViewTransactions()">
         <ion-icon class="fa fa-exchange"></ion-icon>
         {{ CONSTANTS.viewTransactions }}
       </button>
-      <button *ngIf="card.isActive" ion-button icon-left block (click)="goToReissuePage()">
+      <button *ngIf="card.isActive" ion-button icon-left block (click)="onReissue()">
         <ion-icon class="fa fa-refresh"></ion-icon>
         {{ CONSTANTS.reissueCard }}
       </button>

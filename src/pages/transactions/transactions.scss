@@ -2,6 +2,7 @@
 @import "../../styles/driver";
 
 page-transactions {
+
   ion-toolbar.toolbar-md {
     padding: 0;
     min-height: auto;
@@ -13,5 +14,9 @@ page-transactions {
     .segment-md-primary .segment-button:not(.segment-activated) {
       border: none;
     }
+  }
+
+  ion-nav ion-content > * {
+    margin-bottom: 0 !important;
   }
 }

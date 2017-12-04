@@ -1,10 +1,10 @@
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import * as _ from "lodash";
 import { Injectable } from "@angular/core";
 import { UserCredentials } from "@angular-wex/models";
 import { Observable } from "rxjs/Observable";
 import { SessionCache } from "./session-cache";
 import { AuthenticationMethod, AuthenticationManager } from "./authentication-manager";
+import { Session } from "../models";
 
 export interface SessionOptions {
   authenticationMethod?: AuthenticationMethod;
@@ -19,52 +19,36 @@ export namespace SessionOptions {
 @Injectable()
 export class SessionManager {
 
-  private _sessionStateObserver = new BehaviorSubject(null);
-
   constructor(
     private sessionCache: SessionCache,
     private authenticationManager: AuthenticationManager
   ) { }
-
-  public static get hasSession(): boolean {
-    return !!SessionCache.cachedValues.token;
-  }
-
-  public get sessionStateObserver(): Observable<boolean> {
-    return this._sessionStateObserver;
-  }
 
   public get cache(): SessionCache {
     return this.sessionCache;
   }
 
   public restoreFromDevAuthToken() {
-    SessionCache.cachedValues.token = this.authenticationManager.devAuthToken;
+    this.cache.updateValue(Session.Field.Token, this.authenticationManager.devAuthToken);
   }
 
   public initSession(userCredentials: UserCredentials, options?: SessionOptions): Observable<string> {
     options = _.merge({}, SessionOptions.Defaults, options);
 
-    if (SessionManager.hasSession) {
-      this.invalidateSession();
-    }
+    this.cache.sessionState$.take(1).subscribe((session: Session | {}) => {
+      if (session) {
+        this.invalidateSession();
+      }
+    });
 
     // Request a new token
     return this.authenticationManager.authenticate(userCredentials, options.authenticationMethod)
-      .map((token: string) => {
-        this._sessionStateObserver.next(true);
-
-        // Pre-fetch remaining session details in the background asynchronously
-        this.sessionCache.getAllSessionDetails().subscribe();
-
-        return token;
-      });
+      // Pre-fetch remaining session details in the background asynchronously
+      .finally(() => this.sessionCache.updateSome$(Session.Field.Static).subscribe());
   }
 
   public invalidateSession() {
     this.sessionCache.clear();
     this.authenticationManager.clearDevAuthToken();
-
-    this._sessionStateObserver.next(false);
   }
 }

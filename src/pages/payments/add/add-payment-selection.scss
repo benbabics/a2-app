@@ -24,6 +24,23 @@ page-add-payment-selection {
     }
   }
 
+  #custom-input {
+    text-align: left !important;
+  }
+
+  .custom-input-item {
+    .item-inner {
+      border-bottom: none !important;
+    }
+
+    input {
+      border: none;
+      padding: 0;
+    }
+
+    @extend .item-radio-checked;
+  }
+
   #action-list button {
     @at-root .md & {
       height: 5rem;

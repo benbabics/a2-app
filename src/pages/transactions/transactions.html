@@ -1,17 +1,19 @@
-<ion-header #header>
+<ion-header>
   <ion-toolbar>
-    <ion-segment [(ngModel)]="lastViewSegment" color="primary">
-      <ion-segment-button #date value="Date" (ionSelect)="selectList(TransactionListType.Date)">
+    <ion-segment [(ngModel)]="currentViewSegment" color="primary">
+      <ion-segment-button value="Date">
         {{ CONSTANTS.SEGMENTS.DATE }}
       </ion-segment-button>
-      <ion-segment-button #driverName value="DriverName" (ionSelect)="selectList(TransactionListType.DriverName)">
+      <ion-segment-button value="Driver">
         {{ CONSTANTS.SEGMENTS.DRIVER }}
       </ion-segment-button>
-      <ion-segment-button #cardNumber value="CardNumber" (ionSelect)="selectList(TransactionListType.CardNumber)">
+      <ion-segment-button value="Card">
         {{ CONSTANTS.SEGMENTS.CARD }}
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
 </ion-header>
 
-<ion-nav #listNav [root]="rootListType"></ion-nav>
+<ion-content fixed>
+  <ion-nav #listNav [root]="DEFAULT_PAGE"></ion-nav>
+</ion-content>

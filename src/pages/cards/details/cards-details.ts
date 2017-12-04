@@ -1,14 +1,16 @@
 import { WexAlertController } from "./../../../components/wex-alert-controller/wex-alert-controller";
-import { CardProvider, TransactionSearchFilterBy } from "@angular-wex/api-providers";
+import { CardProvider } from "@angular-wex/api-providers";
 import { CardsReissuePage } from "./../reissue/cards-reissue";
 import { Component, Injector } from "@angular/core";
-import { NavParams, ActionSheetController, Events, ToastOptions, Platform, NavController } from "ionic-angular";
-import { ActionSheetOptions, ActionSheetButton } from "ionic-angular/components/action-sheet/action-sheet-options";
+import { NavParams, ActionSheetController, ToastOptions, NavController } from "ionic-angular";
 import { DetailsPage } from "../../details-page";
 import { Card, CardStatus } from "@angular-wex/models";
 import { WexAppSnackbarController } from "../../../components";
 import * as _ from "lodash";
-import { TransactionDateSublist } from "../../transactions/transactions-date-view/transactions-date-view";
+import { TransactionsDateView } from "../../transactions/transactions-date-view/transactions-date-view";
+import { Session } from "../../../models";
+import { Reactive, StateEmitter, EventSource } from "angular-rxjs-extensions";
+import { Subject, Observable, BehaviorSubject } from "rxjs";
 
 export type CardsDetailsNavParams = keyof {
   card,
@@ -30,169 +32,164 @@ export namespace CardsDetailsNavParams {
   selector: "page-cards-details",
   templateUrl: "cards-details.html"
 })
+@Reactive()
 export class CardsDetailsPage extends DetailsPage {
 
-  public card: Card;
-  private _reissued: boolean;
-  public set reissued(reissued: boolean) {
-    this._reissued = reissued;
-    this.reissuedSnackbar(reissued);
-  }
-  public get reissued(): boolean {
-    return this._reissued;
-  }
-  public isChangingStatus: boolean = false;
+  @EventSource() private onChangeStatus$: Observable<void>;
+  @EventSource() private onReissue$: Observable<void>;
+  @EventSource() private onViewTransactions$: Observable<void>;
+
+  @StateEmitter.From("navParams.data." + CardsDetailsNavParams.Card)
+  private card$: Subject<Card>;
+
+  @StateEmitter() private isChangingStatus$: Subject<boolean>;
+  @StateEmitter() private statusColor$: Subject<string>;
+  @StateEmitter() private statusIcon$: Subject<string>;
+
+  private availableCardStatuses$ = new BehaviorSubject<CardStatusDetails[]>([]);
+  private canChangeStatus$ = new BehaviorSubject<boolean>(false);
+  private canReissue$ = new BehaviorSubject<boolean>(false);
 
   constructor(
+    injector: Injector,
+    navController: NavController,
     public navParams: NavParams,
     private wexAppSnackbarController: WexAppSnackbarController,
-    injector: Injector,
     private actionSheetController: ActionSheetController,
     private cardProvider: CardProvider,
-    private events: Events,
-    private wexAlertController: WexAlertController,
-    private navController: NavController,
-    private platform: Platform
+    private wexAlertController: WexAlertController
   ) {
     super("Cards.Details", injector);
 
-    this.card = this.navParams.get(CardsDetailsNavParams.Card);
-    this.reissued = this.navParams.get(CardsDetailsNavParams.Reissued);
-  }
-
-  private reissuedSnackbar(reissued: boolean) {
-    if (reissued) {
-      this.wexAppSnackbarController.createQueued({
+    if (navParams.get(CardsDetailsNavParams.Reissued)) {
+      wexAppSnackbarController.createQueued({
         important: true,
         message: this.CONSTANTS.reissueMessage,
         duration: this.CONSTANTS.reissueMessageDuration,
         position: "top",
       }).present();
     }
+
+    Observable.combineLatest(this.card$, this.sessionCache.session$)
+      .subscribe((args) => {
+        let [card, session] = args;
+        let cardNumber = card.details.embossedCardNumber;
+        let cardNumberSuffix = parseInt(cardNumber.substr(cardNumber.length - 1));
+
+        // Distributor users can only reissue active cards. All others can reissue any non-terminated cards.
+        this.canChangeStatus$.next(session.user.isDistributor ? card.isActive : !card.isTerminated);
+
+        // Classic users cannot reissue cards ending with '9'
+        this.canReissue$.next(cardNumberSuffix < 9);
+
+        // Non-WOLNP users cannot suspend cards
+        let cardStatusFilter = session.user.isWolNp ? Boolean : (details: CardStatusDetails) => details.id !== CardStatus.SUSPENDED;
+
+        this.availableCardStatuses$.next(_.filter<CardStatusDetails>(this.CONSTANTS.statusOptions, cardStatusFilter));
+
+        this.statusColor$.next(this.CONSTANTS.STATUS.COLOR[card.details.status] || "warning");
+        this.statusIcon$.next(this.CONSTANTS.STATUS.ICON[card.details.status] || "information-circled");
+      });
+
+    this.onChangeStatus$
+      .flatMap(() => this.canChangeStatus$.asObservable().take(1))
+      .filter(Boolean)
+      .flatMap(() => this.availableCardStatuses$.asObservable().take(1))
+      .flatMap(cardStatuses => this.changeStatus$(cardStatuses))
+      .subscribe(card => this.card$.next(card));
+
+    this.onChangeStatus$
+      .flatMap(() => this.canChangeStatus$.asObservable().take(1))
+      .filter(canChangeStatus => !canChangeStatus)
+      .flatMap(() => this.showChangeStatusAlert$())
+      .subscribe();
+
+    this.onReissue$
+      .flatMap(() => this.canReissue$.asObservable().take(1))
+      .filter(Boolean)
+      .flatMap(() => this.card$.asObservable().take(1))
+      .subscribe((card) => navController.push(CardsReissuePage, { card }));
+
+    this.onViewTransactions$
+      .flatMap(() => this.card$.asObservable().take(1))
+      .subscribe((card) => navController.push(TransactionsDateView, { filterItem: card }));
   }
 
-  public get canChangeStatus(): boolean {
-    // Rules in MOBACCTMGT-1135 AC #1
-    if (this.session.user.isDistributor) { return this.card.isActive; }
-    return !this.card.isTerminated;
-  }
-
-  public get canReissue(): boolean {
-    let isClassic = this.session.user.isClassic,
-      cardNo = this.card.details.embossedCardNumber,
-      cardNoSuffix = parseInt(cardNo.substr(cardNo.length - 1));
-
-    return !isClassic || (isClassic && cardNoSuffix < 9);
-  }
-
-  public changeStatus() {
-    if (this.canChangeStatus) {
-      let actions = this.availableCardStatuses;
-      if (!actions || _.isEmpty(actions)) { return; }
-
-      this.actionSheetController.create(this.buildActionSheet(actions)).present();
-    }
-  }
-
-  public cannotChangeStatusMessage() {
-    this.wexAlertController.alert(this.CONSTANTS.noReactivation);
-  }
-
-  private buildActionSheet(actions: CardStatusDetails[]): ActionSheetOptions {
-
-    let buttons: ActionSheetButton[] = actions.map((action) => ({
-      text: action.label,
-      icon: !this.platform.is("ios") ? action.icon : null,
-      handler: () => {
-        if (action.id === this.CONSTANTS.statuses.TERMINATED) {
-          this.confirmTermination();
-        } else {
-          this.updateCardStatus(action.id);
+  private changeStatus$(cardStatuses: CardStatusDetails[]): Observable<Card> {
+    return this.showStatusSelector$(cardStatuses)
+      .flatMap((cardStatus) => {
+        if (cardStatus === this.CONSTANTS.statuses.TERMINATED) {
+          return this.confirmTermination$()
+            .filter(Boolean)
+            .flatMap(() => Observable.of(cardStatus));
         }
-      }
-    })
-    );
 
-    return {
+        return Observable.of(cardStatus);
+      })
+      .withLatestFrom(this.card$, this.sessionCache.session$)
+      .flatMap((args) => {
+        let [cardStatus, card, session] = args;
+
+        if (cardStatus === card.details.status) {
+          return Observable.of(card);
+        }
+
+        let toastOptions: ToastOptions = {
+          message: null,
+          duration: this.CONSTANTS.reissueMessageDuration,
+          position: "top"
+        };
+        let accountId = session.user.billingCompany.details.accountId;
+        let cardId = card.details.cardId;
+
+        this.isChangingStatus$.next(true);
+
+        return this.cardProvider.updateStatus(accountId, cardId, cardStatus)
+          .map((card: Card) => {
+            // Update the cached cards
+            this.sessionCache.update$(Session.Field.Cards).subscribe();
+
+            toastOptions.message = this.CONSTANTS.bannerStatusChangeSuccess;
+            return card;
+          })
+          .catch(() => {
+            toastOptions.message = this.CONSTANTS.bannerStatusChangeFailure;
+            return Observable.empty<Card>();
+          })
+          .finally(() => {
+            this.isChangingStatus$.next(false);
+            this.wexAppSnackbarController.createQueued(toastOptions).present();
+          });
+      });
+  }
+
+  private confirmTermination$(): Observable<any> {
+    return this.wexAlertController.confirmation$(this.CONSTANTS.confirmMessageTerminate);
+  }
+
+  private showChangeStatusAlert$(): Observable<any> {
+    return this.wexAlertController.alert$(this.CONSTANTS.noReactivation);
+  }
+
+  private showStatusSelector$(cardStatuses: CardStatusDetails[]): Observable<CardStatus> {
+    let cardStatusSubject = new Subject<CardStatus>();
+
+    this.actionSheetController.create({
       title: this.CONSTANTS.actionStatusTitle,
       buttons: [
-        ...buttons,
+        ...cardStatuses.map((action) => ({
+          text: action.label,
+          icon: !this.platform.is("ios") ? action.icon : null,
+          handler: () => cardStatusSubject.next(action.id)
+        })),
         {
           text: this.CONSTANTS.actionStatusCancel,
           role: "cancel",
           icon: !this.platform.is("ios") ? "close" : null,
         }
       ]
-    };
-  }
+    }).present();
 
-  private confirmTermination() {
-    let message = this.CONSTANTS.confirmMessageTerminate;
-    let yesHandler = () => this.updateCardStatus(this.CONSTANTS.statuses.TERMINATED);
-    this.wexAlertController.confirmation(message, yesHandler);
-  }
-
-  private updateCardStatus(newStatus: CardStatus) {
-    if (newStatus === this.card.details.status) {
-      return;
-    }
-
-    this.isChangingStatus = true;
-
-    let accountId = this.session.user.billingCompany.details.accountId;
-    let cardId = this.card.details.cardId;
-
-    let toastOptions: ToastOptions = {
-      message: null,
-      duration: this.CONSTANTS.reissueMessageDuration,
-      position: "top",
-    };
-
-    this.cardProvider.updateStatus(accountId, cardId, newStatus).subscribe(
-      (card: Card) => {
-        this.card.details.status = card.details.status;
-        this.isChangingStatus = false;
-        this.events.publish("cards:statusUpdate");
-
-        toastOptions.message = this.CONSTANTS.bannerStatusChangeSuccess;
-        this.wexAppSnackbarController.createQueued(toastOptions).present();
-      }, () => {
-        this.isChangingStatus = false;
-        toastOptions.message = this.CONSTANTS.bannerStatusChangeFailure;
-        this.wexAppSnackbarController.createQueued(toastOptions).present();
-      });
-  }
-
-  private get availableCardStatuses(): Array<CardStatusDetails> {
-    let statuses: CardStatusDetails[] = this.CONSTANTS.statusOptions;
-    let isWOLNP = this.session.user.isWolNp;
-    let rejectionAttrs;
-    // Only WOL_NP with "Active" status can "Suspended" Cards
-    if (!isWOLNP && this.card.isActive) {
-      rejectionAttrs = { id: "SUSPENDED" };
-    }
-
-    // will not reject an iteratee when rejectionAttrs is false
-    return _.reject(statuses, rejectionAttrs || false);
-  }
-
-  public get statusColor(): string {
-    return this.CONSTANTS.STATUS.COLOR[this.card.details.status] || "warning";
-  }
-
-  public get statusIcon(): string {
-    return this.CONSTANTS.STATUS.ICON[this.card.details.status] || "information-circled";
-  }
-
-  public goToReissuePage() {
-    if (this.canReissue) {
-      this.navController.push(CardsReissuePage, { card: this.card });
-    }
-  }
-
-  public viewTransactions() {
-    this.navController.push(TransactionDateSublist, {
-      filter: [TransactionSearchFilterBy.Card, this.card.details.cardId]
-    });
+    return cardStatusSubject.asObservable();
   }
 }

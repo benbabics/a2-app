@@ -1,81 +1,153 @@
-import { TransactionsPage } from "../transactions";
 import { BaseTransaction, PendingTransaction, PostedTransaction, Card, Driver } from "@angular-wex/models";
 import { StaticListPage } from "../../static-list-page";
 import * as moment from "moment";
-import { Component, Injector, DoCheck } from "@angular/core";
+import { Component, Injector } from "@angular/core";
 import { NavController, NavParams } from "ionic-angular";
 import { Session, PostedTransactionList } from "../../../models/session";
-import { SessionCache } from "../../../providers/session-cache";
 import * as _ from "lodash";
-import { TransactionSearchFilterBy, TransactionProvider } from "@angular-wex/api-providers";
-import { Observable } from "rxjs";
+import { TransactionSearchFilterBy, TransactionSearchOptions } from "@angular-wex/api-providers";
 import { TransactionDetailsPage } from "../details/transaction-details";
 import { GroupedList } from "../../list-page";
-import { WexGreeking } from "../../../components/index";
-import { SessionInfoRequestors } from "../../../providers/session-info-requestor/session-info-requestor";
-import { DynamicList } from "../../../models/index";
-import { PostedTransactionRequestor } from "../../../providers/index";
 import { TabPage } from "../../../decorators/tab-page";
 import { WexCardNumberPipe } from "../../../pipes/index";
 import { NameUtils } from "../../../utils/name-utils";
-import { PageParams } from "../../page";
+import { Reactive, StateEmitter, EventSource, OnDestroy } from "angular-rxjs-extensions";
+import { Subject, Observable } from "rxjs";
 
-export type TransactionDateViewParams = keyof {
-  filter?: TransactionListFilter;
-  item?: Driver | Card;
+export type TransactionsDateViewParams = keyof {
+  filterItem
 };
 
-export namespace TransactionDateViewParams {
-  export const Filter: TransactionDateViewParams = "filter";
-  export const Item: TransactionDateViewParams = "item";
+export namespace TransactionsDateViewParams {
+
+  export const FilterItem: TransactionsDateViewParams = "filterItem";
 }
 
-export namespace FetchOptions {
-  export const Defaults = StaticListPage.FetchOptions.Defaults;
-
-  export const NextPage: StaticListPage.FetchOptions = Object.assign({}, Defaults, {
-    forceRequest: true,
-    clearItems: false,
-    checkListSize: false
-  });
-}
-
-export type TransactionListFilter = [TransactionSearchFilterBy, any];
 export type BaseTransactionT = BaseTransaction<BaseTransaction.Details>;
 
 @Component({
   selector: "transactions-date-view",
   templateUrl: "transactions-date-view.html"
 })
-export class TransactionDateSublist extends StaticListPage<BaseTransactionT, BaseTransaction.Details> {
-  public readonly filter: TransactionListFilter;
-  public session: Session;
-  public sessionCache: SessionCache;
-  public filterSubheader: string;
-  private pendingTransactions: PendingTransaction[] = [];
-  private postedTransactions: PostedTransactionList = DynamicList.create(PostedTransaction);
-  private postedRequestor = new PostedTransactionRequestor(this.transactionProvider, this.postedTransactions);
+@Reactive()
+@TabPage()
+export class TransactionsDateView extends StaticListPage<BaseTransactionT, BaseTransaction.Details> {
 
-  constructor(public navCtrl: NavController,
-    public navParams: NavParams,
-    public injector: Injector,
-    protected requestors: SessionInfoRequestors,
-    protected transactionProvider: TransactionProvider) {
-    super( { pageName: "Transactions.Date" }, injector);
+  public readonly params: StaticListPage.Params<BaseTransaction.Details> & { listData: Session.Field[] };
 
-    this.listGroupDisplayOrder = [];
-    this.filter = this.navParams.get(TransactionDateViewParams.Filter);
-    let item = this.navParams.get(TransactionDateViewParams.Item);
+  @EventSource() private onInfinite$: Observable<any>;
+  @OnDestroy() private onDestroy$: Observable<any>;
 
-    if (!!this.filter) {
-      if (this.filter[0]  === TransactionSearchFilterBy.Card) {
+  @StateEmitter() private hasMoreItems$: Subject<boolean>;
+  @StateEmitter() private filterSubheader$: Subject<string>;
+  @StateEmitter() private filteredMode$: Subject<boolean>;
+
+  constructor(navCtrl: NavController, navParams: NavParams, injector: Injector) {
+    const filterItem = navParams.get(TransactionsDateViewParams.FilterItem);
+    const filter = filterItem ? TransactionsDateView.CreateFilterParams(filterItem) : undefined;
+    // Use different session data depending on whether or not we're filtering transactions
+    const listDataFields = filter ?
+      [
+        Session.Field.FilteredPendingTransactions,
+        Session.Field.FilteredPostedTransactions
+      ] :
+      [
+        Session.Field.PendingTransactions,
+        Session.Field.PostedTransactions
+      ];
+    const postedTransactionsInfoField = filter ? Session.Field.FilteredPostedTransactionsInfo : Session.Field.PostedTransactionsInfo;
+
+    super({
+      pageName: "Transactions.Date",
+      listData: listDataFields,
+      listDataRequestParams: filter,
+      dividerLabels: [] // Enable grouping
+    }, injector);
+
+    if (filter) {
+      if (filterItem instanceof Card) {
         this.params.trackingName = "TransactionCard";
-        this.filterSubheader = new WexCardNumberPipe().transform((item as Card).details.embossedCardNumber);
-      } else {
-        this.params.trackingName = "TransactionDriver";
-        let details = (item as Driver).details;
-        this.filterSubheader = NameUtils.PrintableName(details.firstName, details.lastName);
+        this.filterSubheader$.next(new WexCardNumberPipe().transform(filterItem.details.embossedCardNumber));
       }
+
+      if (filterItem instanceof Driver) {
+        this.params.trackingName = "TransactionDriver";
+        this.filterSubheader$.next(NameUtils.PrintableName(filterItem.details.firstName, filterItem.details.lastName));
+      }
+
+      // Request the filtered transaction data
+      const updateSubscription = this.sessionCache.updateSome$(this.params.listData, {
+        clearCache: true,
+        requestParams: filter
+      }).subscribe();
+
+      // Cancel the subscription if the page is destroyed
+      this.onDestroy$.subscribe(() => updateSubscription.unsubscribe());
+    }
+    else {
+      // Don't track page view if this is a non-filtered list
+      this.params.trackView = false;
+    }
+
+    this.filteredMode$.next(!!filter);
+
+    // Calculate if there are more items to fetch
+    this.fetchedItems$
+      .flatMap((fetchedItems) => {
+        return this.sessionCache.getField$<PostedTransactionList>(postedTransactionsInfoField).take(1)
+          .filter(Boolean)
+          .map(postedTransactionsInfo => [fetchedItems, postedTransactionsInfo]);
+      })
+      .subscribe((args: [[PendingTransaction[], PostedTransaction[]], PostedTransactionList]) => {
+        const [[, postedTransactions], postedTransactionsInfo] = args;
+        this.hasMoreItems$.next(postedTransactions.length < postedTransactionsInfo.details.totalResults);
+      });
+
+    this.onItemSelected$
+      .filter(item => item instanceof PostedTransaction)
+      .withLatestFrom(this.filteredMode$)
+      .map((args): [NavController, BaseTransactionT] => {
+        const [item, filteredMode] = args;
+        if (filteredMode) {
+          return [navCtrl, item];
+        }
+        else {
+          return [navCtrl.parent, item];
+        }
+      })
+      .subscribe((args) => {
+        const [navCtrl, item] = args;
+        navCtrl.push(TransactionDetailsPage, { item });
+      });
+
+    this.onInfinite$
+      .flatMap((event) => {
+        return this.sessionCache.updateSome$(this.params.listData, { requestParams: filter })
+          .finally(() => event.complete());
+      })
+      .catch((error) => {
+        console.error(error);
+        return Observable.empty();
+      })
+      .finally(() => this.trackAnalyticsEvent("InfiniteScroll"))
+      .subscribe();
+  }
+
+  private static CreateFilterParams(filterItem: any): Partial<TransactionSearchOptions> {
+    if (filterItem instanceof Card) {
+      return {
+        filterBy: TransactionSearchFilterBy.Card,
+        filterValue: filterItem.details.cardId
+      };
+    }
+    else if (filterItem instanceof Driver) {
+      return {
+        filterBy: TransactionSearchFilterBy.Driver,
+        filterValue: filterItem.details.promptId
+      };
+    }
+    else {
+      throw new Error(`Unrecognized transaction filter type: ${filterItem.constructor.name}.`);
     }
   }
 
@@ -125,55 +197,6 @@ export class TransactionDateSublist extends StaticListPage<BaseTransactionT, Bas
     return null;
   }
 
-  public fetch(options?: StaticListPage.FetchOptions): Observable<BaseTransactionT[]> {
-    return Observable.forkJoin([
-      this.fetchPending(options),
-      this.fetchPosted(options)
-    ]).map((...values: any[]): BaseTransactionT[] => {
-      let transactions: [BaseTransactionT[], BaseTransactionT[]] = values[0];
-      let pendingTransactions = _.first(transactions) || [];
-      let postedTransactions = _.last(transactions) || [];
-      // Concat the pending and posted transactions together
-      return pendingTransactions.concat(postedTransactions);
-    });
-  }
-
-  protected fetchPending(options?: StaticListPage.FetchOptions): Observable<PendingTransaction[]> {
-    let doRequest = options.clearCache || options.forceRequest || !this.pendingTransactions;
-
-    if (options.clearCache) {
-      this.pendingTransactions = [];
-    }
-
-    if (doRequest) {
-      return this.requestors.getRequestor(Session.Field.PendingTransactions).requestor(this.session, {
-        filterBy: this.filter[0],
-        filterValue: this.filter[1]
-      }).map((response: PendingTransaction[]) => this.pendingTransactions = response);
-    }
-    else {
-      return Observable.of(this.pendingTransactions);
-    }
-  }
-
-  protected fetchPosted(options?: StaticListPage.FetchOptions): Observable<PostedTransaction[]> {
-    let doRequest = options.clearCache || options.forceRequest || !this.postedTransactions.items;
-
-    if (options.clearCache) {
-      this.postedTransactions.clear();
-    }
-
-    if (doRequest) {
-      return this.postedRequestor.request(this.session, {
-        filterBy: this.filter[0],
-        filterValue: this.filter[1]
-      }).map(response => response.items);
-    }
-    else {
-      return Observable.of(this.postedTransactions.items);
-    }
-  }
-
   protected groupItems(transactions: BaseTransactionT[]): GroupedList<BaseTransactionT> {
     let group: string;
     let groupedList = transactions.reduce<GroupedList<BaseTransactionT>>((groupedList, transaction) => {
@@ -195,102 +218,18 @@ export class TransactionDateSublist extends StaticListPage<BaseTransactionT, Bas
     }, {});
 
     // Calculate the list group display order
-    this.listGroupDisplayOrder = _.keys(groupedList).sort((groupA, groupB) => {
+    this.params.listGroupDisplayOrder = this.params.dividerLabels = _.keys(groupedList).sort((groupA, groupB) => {
       return moment(this.calculateDateByLabelGroup(groupA)).isAfter(this.calculateDateByLabelGroup(groupB)) ? -1 : 1;
     });
 
     return groupedList;
   }
 
-  public sortItems(objects: BaseTransactionT[]): BaseTransactionT[] {
+  protected sortItems(objects: BaseTransactionT[]): BaseTransactionT[] {
     return StaticListPage.sortList<BaseTransactionT>(objects, "effectiveDate", "desc");
-  }
-
-  public get dividerLabels(): string[] {
-    return this.listGroupDisplayOrder;
-  }
-
-  public get filterBy(): TransactionSearchFilterBy {
-    return this.filter ? this.filter[0] : undefined;
-  }
-
-  public get filterValue(): any {
-    return this.filter ? this.filter[1] : undefined;
-  }
-
-  public get greekingData(): WexGreeking.Rect[] {
-    return this.CONSTANTS.greekingData;
-  }
-
-  public set greekingData(data) { data; }
-
-  public hasMoreItems(): boolean {
-    return this.items.length < _.get(SessionCache.cachedValues, "postedTransactionsInfo.details.totalResults", 0);
-  }
-
-  public get isGrouped(): boolean {
-    return true;
-  }
-
-  public set isGrouped(isGrouped: boolean) { isGrouped; }
-
-
-  public get listLabels(): string[] {
-    return this.CONSTANTS.listLabels;
-  }
-
-  public set listLabels(listLabels) { listLabels; }
-
-  public goToDetailPage(item: BaseTransactionT): Promise<any> {
-    if (item instanceof PostedTransaction) {
-      return this.navCtrl.push(TransactionDetailsPage, { item });
-    }
   }
 
   public isItemActive(item: BaseTransactionT): boolean {
     return !(item instanceof PendingTransaction);
-  }
-
-  public onInfinite(event: any): Promise<BaseTransactionT[]> {
-    this.trackAnalyticsEvent("InfiniteScroll");
-    return this.fetchResults(FetchOptions.NextPage)
-      .toPromise()
-      .then(() => event.complete());
-  }
-}
-
-@TabPage()
-export class TransactionDateView extends TransactionDateSublist implements DoCheck {
-  private heightHasBeenSet: boolean;
-  public readonly contentOnly: boolean = true;
-  public params: PageParams = {
-    pageName: this.pageName,
-    trackView: false
-  };
-
-  protected fetchPending(options?: StaticListPage.FetchOptions): Observable<PendingTransaction[]> {
-    // Only re-fetch the pending transactions if we're clearing the cache as there is only a single page of pending transactions
-    options = _.clone(options);
-    options.forceRequest = options.forceRequest && options.clearItems;
-
-    return this.sessionCache.getSessionDetail(Session.Field.PendingTransactions, options);
-  }
-
-  protected fetchPosted(options?: StaticListPage.FetchOptions): Observable<PostedTransaction[]> {
-    if (options.clearItems && options.forceRequest && !!SessionCache.cachedValues.postedTransactionsInfo) {
-      SessionCache.cachedValues.postedTransactionsInfo.details.currentPage = 0;
-    }
-
-    return this.sessionCache.getSessionDetail(Session.Field.PostedTransactions, options);
-  }
-
-  public ngDoCheck() {
-    this.heightHasBeenSet = TransactionsPage.ResizeContentForTransactionHeader(this.content, this.heightHasBeenSet);
-  }
-
-  public goToDetailPage(item: BaseTransactionT): Promise<any> {
-    if (item instanceof PostedTransaction) {
-      return this.navCtrl.parent.push(TransactionDetailsPage, { item });
-    }
   }
 }

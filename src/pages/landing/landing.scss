@@ -111,10 +111,8 @@ page-landing {
   }
 
   #account-overview {
-    #balance-current, ion-list, .graph-data {
-      animation:         linksFade 2s 1 forwards;
-      -webkit-animation: linksFade 2s 1 forwards;
-    }
+    animation:         linksFade 2s 1 forwards;
+    -webkit-animation: linksFade 2s 1 forwards;
 
     #balance-current {
       padding-bottom: 2rem;

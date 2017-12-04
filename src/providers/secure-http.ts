@@ -1,4 +1,3 @@
-import { SessionManager } from "./session-manager";
 import { Injectable } from "@angular/core";
 import { Headers, Http, ConnectionBackend, RequestOptions, RequestOptionsArgs, Response } from "@angular/http";
 import { Observable } from "rxjs";
@@ -37,26 +36,30 @@ export class SecureHttp extends Http {
     return this.intercept((options: RequestOptionsArgs) => super.options(url, options), url, options);
   }
 
-  private addBearerHeader(options: RequestOptionsArgs): RequestOptionsArgs {
-    if (SessionManager.hasSession) {
-      if (!options.headers) {
-        options.headers = new Headers();
-      }
+  private addBearerHeader(options: RequestOptionsArgs): Observable<RequestOptionsArgs> {
+    return SessionCache.sessionState$
+      .take(1)
+      .filter(Boolean)
+      .map(session => {
+        if (!options.headers) {
+          options.headers = new Headers();
+        }
 
-      //options.withCredentials = true;
-      options.headers.append("Authorization", `Bearer ${SessionCache.cachedValues.token}`);
-    }
-    return options;
+        options.headers.append("Authorization", `Bearer ${session.token}`);
+
+        return options;
+      });
   }
 
-  private intercept(fn: Function, url: string, options?: RequestOptionsArgs) {
+  private intercept(fn: (options?: RequestOptionsArgs) => Observable<Response>, url: string, options?: RequestOptionsArgs) {
     options = options || {};
 
     if (url === this.TOKEN_URL) {
       return fn(options);
     }
     else {
-      return fn(this.addBearerHeader(options))
+      return this.addBearerHeader(options)
+        .flatMap(options => fn(options))
         .catch((error: Response | any) => {
           console.log(error);
           this.networkStatus.displayError(error);

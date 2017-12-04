@@ -24,11 +24,8 @@ import {
   InvoiceSummary,
   BankAccount
 } from "@angular-wex/models";
-import {
-  PostedTransactionList,
-  Session
-} from "../../models";
-import { SessionInfoRequestors, SessionInfoRequestorDetails } from "./session-info-requestor";
+import { Session } from "../../models";
+import { SessionInfoRequestors, SessionInfoRequestorDetails, SessionInfoOptions } from "./session-info-requestor";
 import { DynamicSessionListInfoRequestor } from "./dynamic-session-list-info-requestor";
 import { Value } from "../../decorators/value";
 
@@ -37,11 +34,15 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
   @Value("INT_MAX_32") private INT_MAX_32: number;
 
   private readonly tokenRequestor: SessionInfoRequestorDetails = {
-    requestor: (): Observable<string> => Observable.of(SessionCache.cachedValues.token) //Fetched independently
+    requestor: (): Observable<string> => SessionCache.sessionState$.asObservable()
+      .take(1)
+      .map(session => Session.Field.Token in session ? session[Session.Field.Token] : null) //Fetched independently
   };
 
   private readonly clientSecretRequestor: SessionInfoRequestorDetails = {
-    requestor: (): Observable<string> => Observable.of(SessionCache.cachedValues.clientSecret)
+    requestor: (): Observable<string> => SessionCache.sessionState$.asObservable()
+      .take(1)
+      .map(session => Session.Field.ClientSecret in session ? session[Session.Field.ClientSecret] : null) //Fetched independently
   };
 
   private readonly userRequestor: SessionInfoRequestorDetails = {
@@ -78,23 +79,31 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
 
   private readonly pendingTransactionsRequestor: SessionInfoRequestorDetails = {
     requiredFields: [Session.Field.User],
-    requestor: (session: Session, params: PendingTransactionSearchOptions): Observable<PendingTransaction[]> => {
+    requestor: (session: Session, params: SessionInfoOptions<PendingTransactionSearchOptions>): Observable<PendingTransaction[]> => {
       if (session.user.isClassic) {
         // Pending transactions aren't available in Classic.
         return Observable.of([]);
       }
       else {
-        return this.transactionProvider.searchPending(session.user.billingCompany.details.accountId, params).map(response => response.values);
+        return this.transactionProvider.searchPending(session.user.billingCompany.details.accountId, params.requestParams).map(response => response.values);
       }
     }
   };
 
-  private readonly postedTransactionsInfoRequestor: SessionInfoRequestorDetails = new SessionPostedTransactionRequestor(this.transactionProvider);
+  private readonly postedTransactionsInfoRequestor: PostedTransactionRequestor = new PostedTransactionRequestor(this.transactionProvider);
 
   private readonly postedTransactionsRequestor: SessionInfoRequestorDetails = {
     requiredFields: [Session.Field.PostedTransactionsInfo],
     dependentRequestor: true,
     requestor: (session: Session): Observable<PostedTransaction[]> => Observable.of(session.postedTransactionsInfo.items)
+  };
+
+  private readonly filteredPostedTransactionsInfoRequestor: PostedTransactionRequestor = new PostedTransactionRequestor(this.transactionProvider);
+
+  private readonly filteredPostedTransactionsRequestor: SessionInfoRequestorDetails = {
+    requiredFields: [Session.Field.FilteredPostedTransactionsInfo],
+    dependentRequestor: true,
+    requestor: (session: Session): Observable<PostedTransaction[]> => Observable.of(session.filteredPostedTransactionsInfo.items)
   };
 
   private readonly makePaymentAvailabilityRequestor: SessionInfoRequestorDetails = {
@@ -141,6 +150,10 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
     this._requestors[Session.Field.MakePaymentAvailability] = this.makePaymentAvailabilityRequestor;
     this._requestors[Session.Field.InvoiceSummary] = this.invoiceSummaryRequestor;
     this._requestors[Session.Field.BankAccounts] = this.bankAccountsRequestor;
+
+    this._requestors[Session.Field.FilteredPendingTransactions] = this.pendingTransactionsRequestor;
+    this._requestors[Session.Field.FilteredPostedTransactionsInfo] = this.filteredPostedTransactionsInfoRequestor;
+    this._requestors[Session.Field.FilteredPostedTransactions] = this.filteredPostedTransactionsRequestor;
   }
 }
 
@@ -148,28 +161,11 @@ export class DefaultSessionInfoRequestors extends SessionInfoRequestors {
 
 export class PostedTransactionRequestor extends DynamicSessionListInfoRequestor<PostedTransaction, PostedTransaction.Details> {
 
-  protected readonly listMergeId: keyof PostedTransaction.Details = "transactionId";
-
-  constructor(private transactionProvider: TransactionProvider, public dynamicList: PostedTransactionList) {
-    super(PostedTransaction, [Session.Field.User]);
+  constructor(private transactionProvider: TransactionProvider) {
+    super(PostedTransaction, "transactionId", [Session.Field.User]);
   }
 
-  protected search(session: Session, params: any): Observable<ListResponse<PostedTransaction>> {
+  protected search$(session: Session, params: any): Observable<ListResponse<PostedTransaction>> {
      return this.transactionProvider.searchPosted(session.user.billingCompany.details.accountId, params);
-  }
-}
-
-export class SessionPostedTransactionRequestor extends PostedTransactionRequestor {
-
-  constructor(transactionProvider: TransactionProvider) {
-    super(transactionProvider, undefined);
-  }
-
-  public get dynamicList(): PostedTransactionList {
-    return SessionCache.cachedValues.postedTransactionsInfo;
-  }
-
-  public set dynamicList(dynamicList: PostedTransactionList) {
-    SessionCache.cachedValues.postedTransactionsInfo = dynamicList;
   }
 }

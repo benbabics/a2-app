@@ -115,7 +115,7 @@ export class CardsReissuePage extends SecurePage {
         let cardsNav = this.app.getActiveNav();
 
         // Force async update to the cards list
-        this.sessionCache.requestSessionDetail(Session.Field.Cards).subscribe();
+        this.sessionCache.update$(Session.Field.Cards).subscribe();
 
         // Push a new CardDetailsPage on top
         cardsNav.push(CardsDetailsPage, { card: updatedCard, reissued: true }, { direction: "back" })

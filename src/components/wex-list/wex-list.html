@@ -1,6 +1,6 @@
 <ion-list class="wex-list" [ngClass]="{ 'inset-items': platform.isIos }">
 
-  <span class="grouped" *ngIf="isGrouped">
+  <span class="grouped" *ngIf="!isGreekingVisible && isGrouped">
     <span *ngFor="let divider of dividers; let i = index">
       <ion-item-group [ngClass]="{ 'inset-items': platform.isIos }">
         <ion-item-divider *ngIf="getListForDivider(i)?.length" sticky>
@@ -13,7 +13,7 @@
     </span>
   </span>
 
-  <span class="ungrouped" *ngIf="!isGrouped">
+  <span class="ungrouped" *ngIf="!isGreekingVisible && !isGrouped">
     <span *ngFor="let item of itemsRendered">
       <ng-template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{$implicit: item}"></ng-template>
     </span>
@@ -28,7 +28,7 @@
   </span>
 </ion-list>
 
-<ion-card *ngIf="hasNoItems && !forceGreeking" class="no-records">
+<ion-card *ngIf="hasNoItems && !isGreekingVisible" class="no-records">
   <ion-item>
     <ion-icon item-left name="information-circle" color="dark-gray"></ion-icon>
     {{ CONSTANTS.emptySearchLabel }}

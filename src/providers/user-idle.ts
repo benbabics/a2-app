@@ -1,17 +1,18 @@
 import { Injectable, Provider } from "@angular/core";
 import { Idle, DEFAULT_INTERRUPTSOURCES } from "@ng-idle/core";
 import { Value } from "../decorators/value";
-import { SessionManager } from "./session-manager";
 import { WexNavigationController } from "./wex-navigation-controller";
 import { WexPlatform } from "./platform";
 import * as moment from "moment";
+import { SessionCache } from "./session-cache";
+import { Session } from "../models";
 
 @Injectable()
 export class UserIdle {
   public static readonly PROVIDER_DEFINITION: Provider = {
     provide: UserIdle,
     useClass: UserIdle,
-    deps: [SessionManager, Idle, WexNavigationController, WexPlatform]
+    deps: [SessionCache, Idle, WexNavigationController, WexPlatform]
   };
 
   @Value("USER_IDLE") private readonly CONSTANTS;
@@ -26,7 +27,7 @@ export class UserIdle {
   }
 
   constructor(
-    sessionManager: SessionManager,
+    sessionCache: SessionCache,
     private idle: Idle,
     private wexNavigationController: WexNavigationController,
     private platform: WexPlatform
@@ -37,7 +38,15 @@ export class UserIdle {
         this.durationAtPause = moment.duration(this.idle.getIdle(), "seconds");
         this.timeAtPause = moment();
       }));
-    sessionManager.sessionStateObserver.subscribe(session => this.onSessionChange(session));
+
+    sessionCache.sessionState$.subscribe((session: Session) => {
+      if (session) {
+        this.startWatch();
+      }
+      else {
+        this.endWatch();
+      }
+    });
   }
 
   private configureTimeout() {
@@ -45,15 +54,6 @@ export class UserIdle {
     this.idle.setTimeout(this.CONSTANTS.TIMEOUT_DURATION);
     this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
     this.idle.onTimeout.subscribe(this.timeoutSession);
-  }
-
-  private onSessionChange(session: boolean) {
-    if (session) {
-      this.startWatch();
-    }
-    else {
-      this.endWatch();
-    }
   }
 
   public startWatch() {

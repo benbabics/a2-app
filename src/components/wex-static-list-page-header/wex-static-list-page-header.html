@@ -1,23 +1,23 @@
-<ion-toolbar  id="static-list-toolbar"
-              *ngIf="page.isSearchEnabled">
-  <ion-searchbar  [hidden]="!searchExists"
-                  #searchbar
-                  debounce="0"
-                  [placeholder]="page.searchLabel"
-                  [(ngModel)]="page.searchFilter"
-                  (ionBlur)="onSearchBlur()"
-                  (ionInput)="page.updateList()">
+<ion-toolbar *ngIf="page.searchLabel" id="static-list-toolbar">
+  <ion-searchbar debounce="0"
+                 [hidden]="page.searchHidden"
+                 [placeholder]="page.searchLabel"
+                 [(ngModel)]="page.searchFilter"
+                 (ionBlur)="page.onSearchBlur()">
   </ion-searchbar>
-  <ion-buttons *ngIf="searchExists && this.platform.isAndroid" left>
-    <button ion-button icon-only (click)="cancel()">
+
+  <ion-buttons *ngIf="!page.searchHidden && page.platform.isAndroid" left>
+    <button ion-button icon-only (click)="page.onHideSearch()">
       <ion-icon md="md-arrow-back"></ion-icon>
     </button>
   </ion-buttons>
-  <ion-title *ngIf="!searchExists">
-    {{ title }}
+
+  <ion-title *ngIf="page.searchHidden">
+    {{ page.pageName }}
   </ion-title>
-  <ion-buttons *ngIf="!searchExists" right>
-    <button ion-button icon-only (click)="search()">
+
+  <ion-buttons *ngIf="page.searchHidden" right>
+    <button ion-button icon-only (click)="page.onShowSearch()">
       <ion-icon md="md-search"></ion-icon>
     </button>
   </ion-buttons>

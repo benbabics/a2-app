@@ -1,15 +1,16 @@
 import { WexAppSnackbarController } from "./../../../components/wex-app-snackbar-controller/wex-app-snackbar-controller";
-import { ActionSheetButton } from "ionic-angular/components/action-sheet/action-sheet-options";
-import { ActionSheetController, Events, ToastOptions, Platform, NavController } from "ionic-angular";
+import { ActionSheetController, ToastOptions, NavController } from "ionic-angular";
 import * as _ from "lodash";
 import { Component, Injector } from "@angular/core";
 import { NavParams } from "ionic-angular";
 import { Driver, DriverStatus, OnlineApplication } from "@angular-wex/models";
-import { DriverProvider, TransactionSearchFilterBy } from "@angular-wex/api-providers";
+import { DriverProvider } from "@angular-wex/api-providers";
 import { DetailsPage } from "../../details-page";
-import { ActionSheetOptions } from "ionic-angular/components/action-sheet/action-sheet-options";
 import { NameUtils } from "../../../utils/name-utils";
-import { TransactionDateSublist } from "../../transactions/transactions-date-view/transactions-date-view";
+import { Session } from "../../../models";
+import { Reactive, StateEmitter, EventSource } from "angular-rxjs-extensions";
+import { Subject, Observable } from "rxjs";
+import { TransactionsDateView } from "../../transactions/transactions-date-view/transactions-date-view";
 
 interface DriverStatusDetails {
   id: DriverStatus;
@@ -22,102 +23,117 @@ interface DriverStatusDetails {
   selector: "page-drivers-details",
   templateUrl: "drivers-details.html"
 })
+@Reactive()
 export class DriversDetailsPage extends DetailsPage {
-  public driver: Driver;
-  public isChangingStatus: boolean = false;
+
+  private readonly EMAIL_SUPPORTED_PLATFORMS = [OnlineApplication.DISTRIBUTOR, OnlineApplication.WOL_NP];
+  private readonly PHONE_SUPPORTED_PLATFORMS = [OnlineApplication.DISTRIBUTOR, OnlineApplication.WOL_NP];
+
+  @EventSource() private onChangeStatus$: Observable<void>;
+  @EventSource() private onViewTransactions$: Observable<void>;
+
+  @StateEmitter.From("navParams.data.driver")
+  private driver$: Subject<Driver>;
+
+  @StateEmitter() private isChangingStatus$: Subject<boolean>;
+  @StateEmitter() private statusColor$: Subject<string>;
+  @StateEmitter() private statusIcon$: Subject<string>;
+  @StateEmitter() private showCellPhoneNumber$: Subject<boolean>;
+  @StateEmitter() private showEmailAddress$: Subject<boolean>;
+  @StateEmitter() private fullName$: Subject<string>;
 
   constructor(
     public navParams: NavParams,
     private actionSheetController: ActionSheetController,
     private driverProvider: DriverProvider,
     private wexAppSnackbarController: WexAppSnackbarController,
-    private events: Events,
-    private platform: Platform,
-    private navController: NavController,
+    navController: NavController,
     injector: Injector
   ) {
-    super( "Drivers.Details", injector );
-    this.driver = this.navParams.get( "driver" );
+    super("Drivers.Details", injector);
+
+    Observable.combineLatest(this.driver$, this.sessionCache.session$).subscribe((args) => {
+      let [driver, session] = args;
+      let onlineApplication = session.user.details.onlineApplication;
+
+      this.fullName$.next(NameUtils.PrintableName(driver.details.firstName, driver.details.lastName));
+
+      this.statusColor$.next(this.CONSTANTS.STATUS.COLOR[driver.details.status] || "warning");
+      this.statusIcon$.next(this.CONSTANTS.STATUS.ICON[driver.details.status] || "information-circled");
+
+      this.showCellPhoneNumber$.next(driver.details.cellPhoneNumber && _.includes(this.PHONE_SUPPORTED_PLATFORMS, onlineApplication));
+      // TODO - Add emailAddress field to DriverDetails
+      this.showEmailAddress$.next((<any>driver.details).emailAddress && _.includes(this.EMAIL_SUPPORTED_PLATFORMS, onlineApplication));
+    });
+
+    this.onChangeStatus$
+      .flatMap(() => this.changeStatus$(this.CONSTANTS.statusOptions))
+      .subscribe(driver => this.driver$.next(driver));
+
+    this.onViewTransactions$
+      .flatMap(() => this.driver$.asObservable().take(1))
+      .subscribe(driver => navController.push(TransactionsDateView, { filterItem: driver }));
   }
 
-  public get statusColor(): string {
-    return this.CONSTANTS.STATUS.COLOR[ this.driver.details.status ] || "warning";
-  }
+  private changeStatus$(driverStatuses: DriverStatusDetails[]): Observable<Driver> {
+    return this.showStatusSelector$(driverStatuses)
+      .withLatestFrom(this.driver$, this.sessionCache.session$)
+      .flatMap((args) => {
+        let [driverStatus, driver, session] = args;
 
-  public get statusIcon(): string {
-    return this.CONSTANTS.STATUS.ICON[ this.driver.details.status ] || "information-circled";
-  }
-
-  public get areFieldsAccessible(): boolean {
-    const userPlatform = this.session.user.details.onlineApplication;
-    const accessibleFields = [OnlineApplication.DISTRIBUTOR, OnlineApplication.WOL_NP];
-
-    return _.includes( accessibleFields, userPlatform );
-  }
-
-  public changeStatus() {
-    let actions = this.CONSTANTS.statusOptions as DriverStatusDetails[];
-    this.actionSheetController.create(this.buildActionSheet(actions)).present();
-  }
-
-  public get fullName(): string {
-    return NameUtils.PrintableName(this.driver.details.firstName, this.driver.details.lastName);
-  }
-
-  private buildActionSheet(actions: DriverStatusDetails[]): ActionSheetOptions {
-    let buttons: ActionSheetButton[] = actions.map(action => ({
-      text: action.label,
-      icon: !this.platform.is("ios") ? action.icon : null,
-      handler: () => this.updateDriverStatus(action.id)
-    }));
-    return {
-      title: this.CONSTANTS.actionStatusTitle,
-      buttons: [
-        ...buttons,
-        {
-          text: this.CONSTANTS.actionStatusCancel,
-          role: "cancel",
-          icon: !this.platform.is("ios") ? "close" : null
+        if (driverStatus === driver.details.status) {
+          return Observable.of(driver);
         }
-      ]
-    };
-  }
 
-  private updateDriverStatus(newStatus: DriverStatus) {
-    if (newStatus === this.driver.details.status) {
-      return;
-    }
+        let toastOptions: ToastOptions = {
+          message: null,
+          duration: this.CONSTANTS.statusUpdateMessageDuration,
+          position: "top"
+        };
+        let accountId = session.user.billingCompany.details.accountId;
+        let driverId = driver.details.driverId;
+        let promptId = driver.details.promptId;
 
-    this.isChangingStatus = true;
+        this.isChangingStatus$.next(true);
 
-    let accountId = this.session.user.billingCompany.details.accountId;
-    let driverId = this.driver.details.driverId;
-    let promptId = this.driver.details.promptId;
+        return this.driverProvider.updateStatus(accountId, driverId, driverStatus, promptId)
+          .map((driver: Driver) => {
+            // Update the cached drivers
+            this.sessionCache.update$(Session.Field.Drivers).subscribe();
 
-    let toastOptions: ToastOptions = {
-      message: null,
-      duration: this.CONSTANTS.statusUpdateMessageDuration,
-      position: "top",
-    };
-
-    this.driverProvider.updateStatus(accountId, driverId, newStatus, promptId).subscribe(
-      (driver: Driver) => {
-        this.driver.details.status = driver.details.status;
-        this.isChangingStatus = false;
-        this.events.publish("drivers:statusUpdate");
-
-        toastOptions.message = this.CONSTANTS.bannerStatusChangeSuccess;
-        this.wexAppSnackbarController.createQueued(toastOptions).present();
-      }, () => {
-        this.isChangingStatus = false;
-        toastOptions.message = this.CONSTANTS.bannerStatusChangeFailure;
-        this.wexAppSnackbarController.createQueued(toastOptions).present();
+            toastOptions.message = this.CONSTANTS.bannerStatusChangeSuccess;
+            return driver;
+          })
+          .catch(() => {
+            toastOptions.message = this.CONSTANTS.bannerStatusChangeFailure;
+            return Observable.empty<Driver>();
+          })
+          .finally(() => {
+            this.isChangingStatus$.next(false);
+            this.wexAppSnackbarController.createQueued(toastOptions).present();
+          });
       });
   }
 
-  public viewTransactions() {
-    this.navController.push(TransactionDateSublist, {
-      filter: [TransactionSearchFilterBy.Driver, this.driver.details.promptId]
-    });
+  private showStatusSelector$(driverStatuses: DriverStatusDetails[]): Observable<DriverStatus> {
+    let driverStatusSubject = new Subject<DriverStatus>();
+
+    this.actionSheetController.create({
+      title: this.CONSTANTS.actionStatusTitle,
+      buttons: [
+        ...driverStatuses.map((action) => ({
+          text: action.label,
+          icon: !this.platform.is("ios") ? action.icon : null,
+          handler: () => driverStatusSubject.next(action.id)
+        })),
+        {
+          text: this.CONSTANTS.actionStatusCancel,
+          role: "cancel",
+          icon: !this.platform.is("ios") ? "close" : null,
+        }
+      ]
+    }).present();
+
+    return driverStatusSubject.asObservable();
   }
 }
