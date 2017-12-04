@@ -310,7 +310,7 @@ export class LoginPage extends Page {
 
     // Check to see if the user timed out
     if (this.navParams.get(LoginPageNavParams.fromTimeout)) {
-      this.appSnackbarController.createQueued({ message: this.CONSTANTS.sessionTimeOut }).present();
+      this.appSnackbarController.createQueued({ message: this.CONSTANTS.sessionTimeOut, showCloseButton: true, cssClass: "red" }).present();
     }
 
     // Check the status of remember me

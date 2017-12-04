@@ -64,7 +64,7 @@ export namespace ConstantsInfo {
     },
     //# Global error notifications
     GLOBAL_NOTIFICATIONS: {
-      serverConnectionError: "Could not connect to server. Please try again later.",
+      serverConnectionError: "We are unable to complete your request at this time. Please try again later.",
       networkError         : "Lost internet connection.",
       fingerprintSuccess   : {
         message: "<%= platformBiometric %> is now setup for your username <%= username %>",
@@ -459,6 +459,12 @@ export namespace ConstantsInfo {
               paymentEdit: ["Payment", "EditPaymentLink"]
             }
           },
+          cancelConfirmSnackbar: {
+            message: "Scheduled payment has been cancelled",
+            important: true,
+            duration: 3000
+          },
+
           title:         "Payment Details",
           amount:        "Amount",
           bankAccount:   "Bank Account",
