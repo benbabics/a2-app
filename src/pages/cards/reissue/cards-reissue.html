@@ -43,7 +43,7 @@
 </ion-content>
 
 <ion-footer>
-  <button ion-button full large id="button-reissue" [disabled]="!canReissue" (click)="onConfirmReissue()" actionIndicator [when]="isReissuing">
+  <button ion-button full large id="button-reissue" [disabled]="!canReissue" (click)="onConfirmReissue()" [actionIndicator]="isReissuing">
     {{ CONSTANTS.reissueCard }}
   </button>
 </ion-footer>

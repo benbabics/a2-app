@@ -34,7 +34,7 @@
     </ion-item>
 
     <ion-item id="account-overview">
-      <div actionIndicator [when]="!invoiceSummary"></div>
+      <div [actionIndicator]="!invoiceSummary"></div>
       <div *ngIf="invoiceSummary">
         <div id="balance-current">
           <div class="section-heading">{{ CONSTANTS.currentBalance }}</div>
@@ -51,7 +51,7 @@
       </div>
     </ion-item>
     <ion-item>
-      <div actionIndicator [when]="!invoiceSummary"></div>
+      <div [actionIndicator]="!invoiceSummary"></div>
       <div class="ios" *ngIf="invoiceSummary">
         <div class="section-heading"> {{ CONSTANTS.summary }} </div>
         <ion-list class="summary-list detail-list">

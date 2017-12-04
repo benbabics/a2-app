@@ -16,8 +16,7 @@ export class ActionIndicatorDirective {
     private componentFactoryResolver: ComponentFactoryResolver
   ) {}
 
-  @Input() public actionIndicator;
-  @Input("when") set showIndicator(hasIndicator: boolean) {
+  @Input("actionIndicator") set showIndicator(hasIndicator: boolean) {
     this.toggleIsLoading(hasIndicator);
     this.toggleContainerContents(hasIndicator);
     this.toggleSpinner(hasIndicator);

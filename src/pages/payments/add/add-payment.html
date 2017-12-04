@@ -52,7 +52,7 @@
   </ion-item-group>
 
   <div id="action-list" padding>
-    <button id="submit-button" [disabled]="isLoading" class="button-gradient" ion-button block (click)="handleSchedulePayment()" actionIndicator [when]="isLoading">
+    <button id="submit-button" [disabled]="isLoading" class="button-gradient" ion-button block (click)="handleSchedulePayment()" [actionIndicator]="isLoading">
       {{ submitButtonText }}
     </button>
 

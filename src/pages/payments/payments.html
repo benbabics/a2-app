@@ -19,7 +19,7 @@
             block
             [disabled]="checkingMakePaymentAvailability"
             (click)="addPayment()"
-            actionIndicator [when]="checkingMakePaymentAvailability">
+            [actionIndicator]="checkingMakePaymentAvailability">
       {{ CONSTANTS.payNowSection.payNowButton }}
     </button>
 

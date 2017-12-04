@@ -11,7 +11,7 @@
     <div id="controls" *ngIf="!driver.details.shared">
       <h1 id="driver-name"> {{ fullName }} </h1>
 
-      <button ion-button icon-left round large id="driver-status" [color]="statusColor + '-dark'" (click)="changeStatus()" actionIndicator [when]="isChangingStatus">
+      <button ion-button icon-left round large id="driver-status" [color]="statusColor + '-dark'" (click)="changeStatus()" [actionIndicator]="isChangingStatus">
         <ion-icon [name]="statusIcon" [color]="statusColor"></ion-icon>
         {{ driver.statusDisplayName }}
       </button>
