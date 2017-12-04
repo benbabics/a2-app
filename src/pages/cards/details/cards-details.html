@@ -11,11 +11,9 @@
     <div id="controls">
       <h1 id="card-number">{{ CONSTANTS.cardNumber }} {{ card.details.embossedCardNumber | wexCardNumber }}</h1>
 
-      <button ion-button icon-left round large id="card-status" (click)="onChangeStatus()" [color]="statusColor + '-dark'">
-        <action-indicator [when]="isChangingStatus">
-          <ion-icon [name]="statusIcon" [color]="statusColor"></ion-icon>
-          {{ card.statusDisplayName }}
-        </action-indicator>
+      <button ion-button icon-left round large id="card-status" (click)="onChangeStatus()" [color]="statusColor + '-dark'" [actionIndicator]="isChangingStatus">
+        <ion-icon [name]="statusIcon" [color]="statusColor"></ion-icon>
+        {{ card.statusDisplayName }}
       </button>
     </div>
 

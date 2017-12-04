@@ -1,6 +1,4 @@
-<button ion-button block clear (click)="handleOpenEnrollmentWindow()">
-    <action-indicator [when]="isLoading">
-        <span class="text">{{ text1 }}</span>
-        <span class="link">{{ text2 }}</span>
-    </action-indicator>
+<button ion-button block clear (click)="handleOpenEnrollmentWindow()" [actionIndicator]="isLoading">
+  <span class="text">{{ text1 }}</span>
+  <span class="link">{{ text2 }}</span>
 </button>

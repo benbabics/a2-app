@@ -4,7 +4,7 @@ page-landing {
   .label-ios, .label-md {
     margin: 0 !important;
   }
-  
+
   @mixin faint {
     font-weight: 400;
     color: #9b99a9 !important;
@@ -20,11 +20,13 @@ page-landing {
 
   .page-list ion-item ion-label {
 
-    & > action-indicator [loading="true"] {
+    & > [actionIndicator].is-loading + .action-spinner {
       @include flexbox();
       @include align-items(center);
       @include justify-content(center);
+      width: 4vh;
       min-height: 15vh;
+      margin: 0 auto;
     }
 
     @at-root .ios & {
@@ -44,7 +46,7 @@ page-landing {
       ion-label {
         margin: 8px 0 8px 8px;
       }
-      
+
       .property-name {
         @include faint;
       }
@@ -76,7 +78,7 @@ page-landing {
       padding-bottom: 1rem;
     }
   }
-  
+
 
   ion-navbar ion-icon, .bar-button-ios {
     color: black;
@@ -88,7 +90,7 @@ page-landing {
     @include flexbox();
     @include justify-content(space-between);
     @include align-items(center);
-    
+
     #company-name {
       font-size: $h5-font-size;
       font-weight: 500;
@@ -114,7 +116,7 @@ page-landing {
 
     #balance-current {
       padding-bottom: 2rem;
-      
+
       .item-currency {
         font-size: 36px;
         font-weight: 500;
@@ -187,7 +189,7 @@ p-progressBar.wex-payment-bar {
   width: 100%;
   animation:         chartSlideFade 2s 1 forwards;
   -webkit-animation: chartSlideFade 2s 1 forwards;
-  
+
   .ui-widget-content, .ui-progressbar .ui-progressbar-value {
     border: none;
     border-radius: 3px;
