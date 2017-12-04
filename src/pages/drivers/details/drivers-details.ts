@@ -82,32 +82,28 @@ export class DriversDetailsPage extends DetailsPage {
 
     this.contactDriver$
       .flatMapTo(this.driver$)
-      .subscribe((driver: Driver) =>
+      .flatMap((driver: Driver) => new Observable<any>((observer) => {
         actionSheetController.create({
           title: this.CONSTANTS.CONTACT.contact + driver.fullName,
           buttons: [
             {
               text: this.CONSTANTS.CONTACT.call,
               icon: this.platform.isIos ? "" : this.CONSTANTS.CONTACT.callIcon,
-              handler: () => {
-                this.telDriver$.asObservable()
-                  .subscribe((telElement) => telElement.nativeElement.click());
-                }
+              handler: () => { this.telDriver$.subscribe(observer); }
             }, {
               text: this.CONSTANTS.CONTACT.textMessage,
               icon: this.platform.isIos ? "" : this.CONSTANTS.CONTACT.textIcon,
-              handler: () => {
-                this.smsDriver$.asObservable()
-                  .subscribe((smsElement) => smsElement.nativeElement.click());
-              }
+              handler: () => { this.smsDriver$.subscribe(observer); }
             }, {
               text: "Cancel",
               icon: this.platform.isIos ? "" : this.CONSTANTS.CONTACT.cancelIcon,
               role: "cancel"
             }
           ]
-        }).present());
-  }
+        }).present();
+      }).take(1))
+      .subscribe(element => element.nativeElement.click());
+    }
 
   private changeStatus$(driverStatuses: DriverStatusDetails[]): Observable<Driver> {
     return this.showStatusSelector$(driverStatuses)
