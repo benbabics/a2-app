@@ -192,7 +192,7 @@ export class LoginPage extends Page {
       this.user.username = this.user.username.toLowerCase().trim();
 
       this.sessionManager.initSession(this.user, { authenticationMethod })
-        .flatMap(() => this.sessionManager.cache.getSessionDetail(Session.Field.User)) //Pre-fetch the user object for the landing page
+        .flatMap(() => this.sessionManager.cache.update$(Session.Field.User)) //Pre-fetch the user object for the landing page
         .finally(() => this.isLoggingIn = false)
         .subscribe(() => {
           this.rememberUsername(this.rememberMe, this.user.username);
@@ -310,7 +310,7 @@ export class LoginPage extends Page {
 
     // Check to see if the user timed out
     if (this.navParams.get(LoginPageNavParams.fromTimeout)) {
-      this.appSnackbarController.createQueued({ message: this.CONSTANTS.sessionTimeOut }).present();
+      this.appSnackbarController.createQueued({ message: this.CONSTANTS.sessionTimeOut, showCloseButton: true, cssClass: "red" }).present();
     }
 
     // Check the status of remember me

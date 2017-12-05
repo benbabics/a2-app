@@ -1,6 +1,5 @@
 import { App, Tabs, NavOptions, Tab, NavControllerBase } from "ionic-angular";
 import { Injectable } from "@angular/core";
-import { SessionManager } from "./session-manager";
 
 @Injectable()
 export class NavBarController {
@@ -14,11 +13,7 @@ export class NavBarController {
     "DriversPage"
   ];
 
-  public paymentsBadgeText: string;
-
-  constructor(private app: App, private sessionManager: SessionManager) {
-    this.sessionManager.sessionStateObserver.subscribe(created => this.onSessionStateChanged(created));
-  }
+  constructor(private app: App) { }
 
   private searchForIonTabsController(navCtrls: NavControllerBase[]): Tabs {
     let tabsCtrls = navCtrls
@@ -60,13 +55,6 @@ export class NavBarController {
     }
     else {
       throw new Error("Tabs controller not found.");
-    }
-  }
-
-  private onSessionStateChanged(created: boolean) {
-    // Clear state when session is invalidated
-    if (!created) {
-      this.paymentsBadgeText = "";
     }
   }
 

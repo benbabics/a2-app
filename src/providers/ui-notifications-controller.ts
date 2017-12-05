@@ -38,7 +38,7 @@ export class UiNotificationsController {
 
   public presentFingerprintProfileSuccessMessage() {
     this.platform.ready(() => {
-      this.sessionCache.getSessionDetail(Session.Field.User).subscribe((user: User) => {
+      this.sessionCache.getRequiredField$(Session.Field.User).subscribe((user: User) => {
         this.fingerprint.hasProfile(user.details.username).then((hasProfile: boolean) => {
           if (hasProfile && !this.localStorageService.get(Fingerprint.hasShownFingerprintSetupMessageKey)) {
             let message = _.template(this.FINGERPRINT_SUCCESS)({

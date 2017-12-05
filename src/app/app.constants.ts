@@ -64,7 +64,7 @@ export namespace ConstantsInfo {
     },
     //# Global error notifications
     GLOBAL_NOTIFICATIONS: {
-      serverConnectionError: "Could not connect to server. Please try again later.",
+      serverConnectionError: "We are unable to complete your request at this time. Please try again later.",
       networkError         : "Lost internet connection.",
       fingerprintSuccess   : {
         message: "<%= platformBiometric %> is now setup for your username <%= username %>",
@@ -98,7 +98,11 @@ export namespace ConstantsInfo {
     NAVIGATION: {
       ANALYTICS: {
         EVENTS: {
-          "Payments": ["Payment", "PaymentOption"]
+          "Home": ["Home", "HomeOption"],
+          "Payments": ["Payment", "PaymentOption"],
+          "Transactions": ["Transaction", "TransactionOption"],
+          "Cards": ["Card", "CardOption"],
+          "Drivers": ["Driver", "DriverOption"]
         },
       },
       LABELS: {
@@ -257,6 +261,17 @@ export namespace ConstantsInfo {
           details: "Details",
           actions: "Actions",
           viewTransactions: "View Transactions",
+
+          CONTACT: {
+            contact: "Contact ",
+            call: "Call",
+            textMessage: "Text Message",
+            cancel: "Cancel",
+
+            callIcon: "md-call",
+            textIcon: "md-text",
+            cancelIcon: "md-close"
+          },
 
           STATUS: {
             COLOR: {
@@ -460,6 +475,12 @@ export namespace ConstantsInfo {
               paymentEdit: ["Payment", "EditPaymentLink"]
             }
           },
+          cancelConfirmSnackbar: {
+            message: "Scheduled payment has been cancelled",
+            important: true,
+            duration: 3000
+          },
+
           title:         "Payment Details",
           amount:        "Amount",
           bankAccount:   "Bank Account",

@@ -1,3 +1,20 @@
 page-add-payment-selection {
   @extend %ui-options;
+
+  #custom-input {
+    text-align: left !important;
+  }
+
+  #custom-input-item {
+    .item-inner {
+      border-bottom: 0;
+    }
+
+    input {
+      border: none;
+      padding: 0;
+    }
+
+    @extend .item-radio-checked;
+  }
 }

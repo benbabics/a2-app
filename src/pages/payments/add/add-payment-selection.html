@@ -1,30 +1,48 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>{{pageTitle}}</ion-title>
+    <ion-title>{{ pageTitle }}</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <div id="options-list" [ngSwitch]="selectionType">
-    <ion-list radio-group
-              *ngSwitchCase="'amount'"
-              [(ngModel)]="selectedItem"
-              [ngSwitch]="selectionType"
-              [ngClass]="{ 'inset-items': platform.isIos }">
-      <option-amount *ngFor="let option of options" [option]="option" [inFocus]="inFocus" (otherAmountEmit)="otherAmount = $event"></option-amount>
-    </ion-list>
+  <div id="options-list">
+    <ion-list radio-group [(ngModel)]="selectedItem" [ngClass]="{ 'inset-items': platform.isIos }">
+      <ng-template ngFor [ngForOf]="items" let-item>
+        
+        <button 
+          ion-item
+          (tap)="select(item)"
+          [hidden]="isOtherAmount(item) && isOtherAmountSelected">
+          <ion-label *ngIf="isPaymentAmount">
+            <h2>{{ getPaymentAmountLabel(item) }}</h2>
+            <p>{{ item.value | wexCurrency }}</p>
+          </ion-label>
 
-    <ion-list radio-group
-              *ngSwitchCase="'bankAccount'"
-              [(ngModel)]="selectedItem"
-              [ngSwitch]="selectionType"
-              [ngClass]="{ 'inset-items': platform.isIos }">
-      <option-bank-account *ngFor="let option of options" [option]="option"></option-bank-account>
+          <ion-label *ngIf="isBankAccount">
+            <h2>{{ item.details.name }}</h2>
+            <p>...{{ item.details.lastFourDigits }}</p>
+          </ion-label>
+
+          <ion-radio [hidden]="true" [value]="item"></ion-radio>
+        </button>
+
+        <ion-item *ngIf="isOtherAmount(item) && isOtherAmountSelected" id="custom-input-item">
+          <label>
+            <h2>{{ getPaymentAmountLabel(item) }}</h2>
+          </label>
+
+          <input id="custom-input"
+            [Autofocus]="focusOnOtherAmount"
+            type="tel"
+            currencyMask [options]="{ prefix: '$', thousands: '', decimal: '.' }"
+            [(ngModel)]="selectedItemValue">
+        </ion-item>
+      </ng-template>
     </ion-list>
   </div>
 
   <div id="action-list" padding>
-    <button [disabled]="disableSubmit" ion-button block class="button-gradient" (click)="handleSubmit($event)">
+    <button [disabled]="!isSubmitEnabled" ion-button block class="button-gradient" (click)="onSubmit()">
       {{ CONSTANTS.LABELS.select }}
     </button>
     <p *ngIf="instructionalText" class="text-instructions" [innerHTML]="instructionalText"></p>

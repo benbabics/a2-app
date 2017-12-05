@@ -12,14 +12,14 @@
   </section>
 
   <ion-item-group class="details-list" [ngClass]="{ 'inset-items': platform.isIos }">
-    <button ion-item (click)="changeStatus()">
+    <button *ngIf="!driver.details.shared" ion-item (click)="changeStatus()">
       <ion-icon *wexIfPlatformAndroid item-left name="person"></ion-icon>
       <ion-label>{{ CONSTANTS.LABELS.changeStatus }}</ion-label>
       <div item-content>{{ driver.statusDisplayName }}</div>
       <ion-icon item-right ios="ios-arrow-forward" md=""></ion-icon>
     </button>
 
-    <button ion-item *ngIf="areFieldsAccessible">
+    <button ion-item *ngIf="showCellPhoneNumber" (click)="contactDriver()">
       <ion-icon *wexIfPlatformAndroid item-left name="call"></ion-icon>
 
       <ion-label *wexIfPlatformAndroid>{{ driver.details.cellPhoneNumber }}</ion-label>
@@ -27,9 +27,13 @@
 
       <ion-label *wexIfPlatformIos>{{ CONSTANTS.LABELS.cellPhoneNumber }}</ion-label>
       <div item-content *wexIfPlatformIos>{{ driver.details.cellPhoneNumber }}</div>
+
+      <!-- Invisible elements which are clicked by the script in response to action sheet events. -->
+      <a #sms hidden [href]="cleanPhone('sms:', driver.details.cellPhoneNumber)"></a>
+      <a #tel hidden [href]="cleanPhone('tel:', driver.details.cellPhoneNumber)"></a>
     </button>
 
-    <button ion-item *ngIf="areFieldsAccessible">
+    <button ion-item *ngIf="showEmailAddress">
       <ion-icon *wexIfPlatformAndroid item-left name="mail"></ion-icon>
 
       <ion-label *wexIfPlatformAndroid>{{ driver.details.emailAddress }}</ion-label>
@@ -39,7 +43,7 @@
       <div item-content *wexIfPlatformIos>{{ driver.details.emailAddress }}</div>
     </button>
 
-    <button ion-item (click)="viewTransactions()">
+    <button ion-item (click)="onViewTransactions()">
       <ion-icon *wexIfPlatformAndroid item-left name="ios-list"></ion-icon>
       <ion-label>{{ CONSTANTS.viewTransactions }}</ion-label>
       <ion-icon item-right ios="ios-arrow-forward" md=""></ion-icon>

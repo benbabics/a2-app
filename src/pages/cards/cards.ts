@@ -1,21 +1,29 @@
-import { Observable } from "rxjs";
-import { CardsDetailsPage } from "./details/cards-details";
-import { Component, Injector, DoCheck } from "@angular/core";
-import { NavParams, NavController, Events, App } from "ionic-angular";
-import { StaticListPage, GroupedList, FetchOptions } from "../static-list-page";
+import { Component, Injector } from "@angular/core";
+import { NavParams, NavController } from "ionic-angular";
+import { StaticListPage, GroupedList } from "../static-list-page";
 import { Card, CardStatus } from "@angular-wex/models";
 import { Session } from "../../models";
 import { TabPage } from "../../decorators/tab-page";
-import { TransactionsPage } from "../transactions/transactions";
-import { TransactionSearchFilterBy } from "@angular-wex/api-providers";
-import { TransactionDateSublist } from "../transactions/transactions-date-view/transactions-date-view";
-import { PageParams } from "../page";
+import { Reactive, StateEmitter } from "angular-rxjs-extensions";
+import { Observable } from "rxjs";
+import { TransactionsDateView } from "../transactions/transactions-date-view/transactions-date-view";
+import { CardsDetailsPage } from "./details/cards-details";
 
-@TabPage()
+export type CardsPageNavParams = keyof {
+  transactionListMode
+};
+
+export namespace CardsPageNavParams {
+
+  export const TransactionListMode: CardsPageNavParams = "transactionListMode";
+}
+
 @Component({
   selector: "page-cards",
   templateUrl: "cards.html"
 })
+@Reactive()
+@TabPage()
 export class CardsPage extends StaticListPage<Card, Card.Details> {
 
   private static readonly CARD_STATUSES: CardStatus[] = [CardStatus.ACTIVE, CardStatus.SUSPENDED, CardStatus.TERMINATED];
@@ -25,24 +33,39 @@ export class CardsPage extends StaticListPage<Card, Card.Details> {
     "embossedCardNumber"
   ];
 
-  protected readonly listGroupDisplayOrder: string[] = CardsPage.CARD_STATUSES;
-  public readonly dividerLabels: string[] = CardsPage.CARD_STATUSES.map(CardStatus.displayName);
-  public readonly contentOnly: boolean = false;
+  @StateEmitter.Alias("navParams.data." + CardsPageNavParams.TransactionListMode)
+  private transactionListMode$: Observable<boolean>;
 
-  public constructor(
+  constructor(
+    injector: Injector,
     public navCtrl: NavController,
-    public navParams: NavParams,
-    protected app: App,
-    events: Events,
-    injector: Injector
+    public navParams: NavParams
   ) {
-    super("Cards", injector, CardsPage.SEARCH_FILTER_FIELDS);
+    super({
+      pageName: "Cards",
+      listData: Session.Field.Cards,
+      listGroupDisplayOrder: CardsPage.CARD_STATUSES,
+      dividerLabels: CardsPage.CARD_STATUSES.map(CardStatus.displayName),
+      searchFilterFields: CardsPage.SEARCH_FILTER_FIELDS
+    }, injector);
 
-    events.subscribe("cards:statusUpdate", () => this.updateList());
-  }
+    this.transactionListMode$
+      .take(1)
+      .filter(Boolean)
+      .subscribe(() => this.params.trackView = false);
 
-  protected fetch(options?: FetchOptions): Observable<Card[]> {
-    return this.sessionCache.getSessionDetail(Session.Field.Cards, options);
+    this.onItemSelected$
+      .withLatestFrom(this.transactionListMode$)
+      .subscribe((args) => {
+        let [card, transactionListMode] = args;
+
+        if (transactionListMode) {
+          navCtrl.parent.push(TransactionsDateView, { filterItem: card });
+        }
+        else {
+          navCtrl.push(CardsDetailsPage, { card });
+        }
+      });
   }
 
   protected groupItems(cards: Card[]): GroupedList<Card> {
@@ -51,29 +74,5 @@ export class CardsPage extends StaticListPage<Card, Card.Details> {
 
   protected sortItems(cards: Card[]): Card[] {
     return StaticListPage.defaultItemSort<Card, Card.Details>(cards, "cardId", "asc");
-  }
-
-  public goToDetailPage(card: Card) {
-    this.navCtrl.push(CardsDetailsPage, { card });
-  }
-}
-
-export class TransactionCardView extends CardsPage implements DoCheck {
-  public readonly contentOnly: boolean = true;
-  private heightHasBeenSet: boolean;
-  public params: PageParams = {
-    pageName: this.pageName,
-    trackView: false
-  };
-
-  public ngDoCheck() {
-    this.heightHasBeenSet = TransactionsPage.ResizeContentForTransactionHeader(this.content, this.heightHasBeenSet);
-  }
-
-  public goToDetailPage(item: Card): Promise<any> {
-    return this.navCtrl.parent.push(TransactionDateSublist, {
-      filter: [TransactionSearchFilterBy.Card, item.details.cardId ],
-      item
-    });
   }
 }

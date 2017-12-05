@@ -6,14 +6,14 @@ import { Dialogs } from "@ionic-native/dialogs";
 import { WexCardNumberPipe } from "./../pipes/wex-card-number";
 import { Http, XHRBackend, RequestOptions, HttpModule } from "@angular/http";
 import { NgModule, ErrorHandler, APP_INITIALIZER } from "@angular/core";
-import { IonicApp, IonicModule, IonicErrorHandler } from "ionic-angular";
+import { IonicApp, IonicModule, IonicErrorHandler, Spinner } from "ionic-angular";
 import { MyApp } from "./app.component";
 import { LoginPage } from "../pages/login/login";
 import { OptionsPage } from "../pages/options/options";
 import { FingerprintAuthenticationTermsPage } from "../pages/login/fingerprint-auth-terms/fingerprint-auth-terms";
 import { LandingPage } from "../pages/landing/landing";
-import { CardsPage, TransactionCardView } from "../pages/cards/cards";
-import { TransactionDateView, TransactionDateSublist } from "../pages/transactions/transactions-date-view/transactions-date-view";
+import { CardsPage } from "../pages/cards/cards";
+import { TransactionsDateView } from "../pages/transactions/transactions-date-view/transactions-date-view";
 import { CardsDetailsPage } from "./../pages/cards/details/cards-details";
 import { CardChangeStatusPage } from "../pages/cards/details/change-status/change-status";
 import { DriversPage, TransactionDriverView } from "./../pages/drivers/drivers";
@@ -21,7 +21,6 @@ import { DriversDetailsPage } from "./../pages/drivers/details/drivers-details";
 import { DriverChangeStatusPage } from "./../pages/drivers/details/change-status/change-status";
 import { UserEnrollmentFlow } from "../pages/login/user-enrollment-flow/user-enrollment-flow";
 import {
-  ActionIndicator,
   WexList,
   WexListItem,
   WexNavBar,
@@ -79,6 +78,7 @@ import { ApiProviders } from "@angular-wex/api-providers";
 import { GetCurrentEnvironmentConstants } from "./app.constants";
 import { ContactUsPage } from "../pages/contact-us/contact-us";
 import {
+  ActionIndicatorDirective,
   WexIfPlatformDirective,
   WexIfPlatformAndroidDirective,
   WexIfPlatformIosDirective,
@@ -89,8 +89,6 @@ import {
 import { InAppBrowser } from "@ionic-native/in-app-browser";
 import { AddPaymentPage } from "../pages/payments/add/add-payment";
 import { AddPaymentSelectionPage } from "../pages/payments/add/add-payment-selection";
-import { OptionAmount } from "../pages/payments/add/options/option-amount";
-import { OptionBankAccount } from "../pages/payments/add/options/option-bank-account";
 import { AngularWexValidatorsModule } from "@angular-wex/validators";
 import { AddPaymentConfirmationPage } from "../pages/payments/add/confirmation/add-payment-confirmation";
 import { Network } from "@ionic-native/network";
@@ -140,8 +138,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     LandingPage,
     UserEnrollmentFlow,
     CardsPage,
-    TransactionDateView,
-    TransactionDateSublist,
+    TransactionsDateView,
     CardsDetailsPage,
     CardsReissuePage,
     DriversPage,
@@ -153,15 +150,10 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     TermsOfUsePage,
     PrivacyPolicyPage,
     TransactionsPage,
-    TransactionDriverView,
-    TransactionCardView,
     AddPaymentPage,
     AddPaymentSelectionPage,
-    OptionAmount,
-    OptionBankAccount,
     AddPaymentConfirmationPage,
     TransactionDetailsPage,
-    ActionIndicator,
     TransactionAmountPipe,
     WexCurrency,
     WexDate,
@@ -178,6 +170,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     WexInfoCard,
     WexSvgPipe,
     WexTrustedHtmlPipe,
+    ActionIndicatorDirective,
     WexIfPlatformDirective,
     WexIfPlatformAndroidDirective,
     WexIfPlatformIosDirective,
@@ -225,8 +218,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     LandingPage,
     UserEnrollmentFlow,
     CardsPage,
-    TransactionDateView,
-    TransactionDateSublist,
+    TransactionsDateView,
     CardsDetailsPage,
     CardsReissuePage,
     DriversPage,
@@ -239,17 +231,14 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     WexNavBar,
     TermsOfUsePage,
     TransactionsPage,
-    TransactionDriverView,
-    TransactionCardView,
     TransactionDetailsPage,
     ContactUsPage,
     PrivacyPolicyPage,
     AddPaymentPage,
     AddPaymentSelectionPage,
-    OptionAmount,
-    OptionBankAccount,
     AddPaymentConfirmationPage,
-    PrivacyPolicyPage
+    PrivacyPolicyPage,
+    Spinner
   ],
   providers: [
     //# angular
@@ -301,7 +290,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     {
       provide: PaymentService,
       useClass: PaymentService,
-      deps: [SessionManager, SessionCache]
+      deps: [SessionCache]
     },
     UserIdle.PROVIDER_DEFINITION,
     SessionManager,

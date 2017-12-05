@@ -1,17 +1,13 @@
 @mixin action-indicator-color($color) {
-  .action-indicator {
-    ion-spinner.action-spinner * {
-      stroke: $color;
-    }
+  ion-spinner.action-spinner * {
+    stroke: $color;
   }
 }
 
-action-indicator {
-
+[actionIndicator] {
   @at-root
     button[ion-only] &,
-    button[ion-fab] &  {
-
+    button[ion-fab] & {
     @extend ion-icon;
   }
 

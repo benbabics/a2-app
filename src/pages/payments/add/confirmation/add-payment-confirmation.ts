@@ -1,11 +1,9 @@
 import { Component, Injector } from "@angular/core";
-import {
-  NavParams,
-  NavController
-} from "ionic-angular";
+import { NavParams, NavController } from "ionic-angular";
 import { SecurePage } from "../../../secure-page";
-import { NavBarController } from "../../../../providers";
 import { Payment } from "@angular-wex/models";
+import { Reactive, StateEmitter, EventSource } from "angular-rxjs-extensions";
+import { Observable, Subject } from "rxjs";
 import * as _ from "lodash";
 
 export type AddPaymentConfirmationNavParams = keyof {
@@ -22,34 +20,33 @@ export namespace AddPaymentConfirmationNavParams {
   selector: "page-add-payment-confirmation",
   templateUrl: "add-payment-confirmation.html"
 })
+@Reactive()
 export class AddPaymentConfirmationPage extends SecurePage {
 
-  public payment: Payment;
   public readonly DATE_FORMAT: string = "MMMM D, YYYY";
-  public isEditingPayment: boolean;
-  public pageTitle: string;
 
-  constructor(
-    injector: Injector,
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    public navBarCtrl: NavBarController
-  ) {
+  @EventSource() private onFinish$: Observable<any>;
+
+  @StateEmitter() private pageTitle$: Subject<string>;
+
+  @StateEmitter.Alias("navParams.data." + AddPaymentConfirmationNavParams.Payment)
+  public /** @template */ payment$: Observable<Payment>;
+
+  @StateEmitter.Alias("navParams.data." + AddPaymentConfirmationNavParams.IsEditingPayment)
+  public /** @template */ isEditingPayment$: Observable<boolean>;
+
+  constructor(injector: Injector, navCtrl: NavController, public navParams: NavParams) {
     super({ pageName: "Payments.Add.Confirmation", trackView: false }, injector);
 
-    this.payment = this.navParams.get(AddPaymentConfirmationNavParams.Payment);
-    this.isEditingPayment = this.navParams.get(AddPaymentConfirmationNavParams.IsEditingPayment);
+    this.isEditingPayment$.subscribe((isEditingPayment) => {
+      let scheduledOrUpdated = isEditingPayment ? this.CONSTANTS.title.updated : this.CONSTANTS.title.scheduled;
 
-    this.pageTitle = this.buildTitle();
-  }
+      this.pageTitle$.next(_.template(this.CONSTANTS.title.template)({ scheduledOrUpdated }));
+    });
 
-  public finish() {
-    this.navCtrl.pop({ direction: "forward" });
-    this.trackAnalyticsEvent("confirmationOk");
-  }
-
-  private buildTitle(): string {
-    let scheduledOrUpdated = this.isEditingPayment ? this.CONSTANTS.title.updated : this.CONSTANTS.title.scheduled;
-    return _.template(this.CONSTANTS.title.template)({ scheduledOrUpdated });
+    this.onFinish$.subscribe(() => {
+      navCtrl.pop({ direction: "forward" });
+      this.trackAnalyticsEvent("confirmationOk");
+    });
   }
 }

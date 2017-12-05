@@ -79,7 +79,7 @@ export abstract class FingerprintController extends SecurePage {
 
           return this.fingerprint.verify({ id, secret })
             .then(() => this.uiNotificationsController.presentFingerprintProfileSuccessMessage())
-            .then(() => this.sessionCache.getSessionDetail(Session.Field.User).toPromise())
+            .then(() => this.sessionCache.require$(Session.Field.User).toPromise())
             .then(() => this.localStorageService.set(this.USERNAME_KEY, id));
         }
         return Promise.reject("Terms rejected.");
