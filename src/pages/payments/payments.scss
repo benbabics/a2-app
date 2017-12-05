@@ -1,6 +1,23 @@
 page-payments {
   @include page-background-white;
 
+  ion-header > ion-toolbar.toolbar {
+    display: none;
+  }
+
+  .ios & ion-content {
+    > div {
+      &.fixed-content, &.scroll-content {
+        margin-top: 20px !important;
+        margin-top: constant(safe-area-inset-top);
+      }
+    }
+
+    &.has-refresher > .scroll-content {
+      border-top: 0;
+    }
+  }
+
   #pay-now-section-spinner {
     height: 45%;
     @include flexbox();
