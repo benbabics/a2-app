@@ -108,21 +108,3 @@
     }
   }
 }
-
-%ui-management-details-old {
-  ion-card-header {
-    font-weight: bold;
-  }
-
-  #card-details {
-    #controls {
-      @include flexbox();
-      @include flex-direction(column);
-      @include align-items(center);
-      @include justify-content(space-between);
-
-      margin-bottom: 2rem;
-      > * { margin-bottom: 1.5rem; }
-    }
-  }
-}

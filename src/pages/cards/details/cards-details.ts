@@ -1,8 +1,9 @@
+import { WexPlatform } from "./../../../providers";
 import { WexAlertController } from "./../../../components/wex-alert-controller/wex-alert-controller";
 import { CardProvider, TransactionSearchFilterBy } from "@angular-wex/api-providers";
 import { CardsReissuePage } from "./../reissue/cards-reissue";
 import { Component, Injector } from "@angular/core";
-import { NavParams, ActionSheetController, Events, ToastOptions, Platform, NavController } from "ionic-angular";
+import { NavParams, ActionSheetController, Events, ToastOptions, NavController } from "ionic-angular";
 import { ActionSheetOptions, ActionSheetButton } from "ionic-angular/components/action-sheet/action-sheet-options";
 import { DetailsPage } from "../../details-page";
 import { Card, CardStatus } from "@angular-wex/models";
@@ -52,7 +53,7 @@ export class CardsDetailsPage extends DetailsPage {
     private events: Events,
     private wexAlertController: WexAlertController,
     private navController: NavController,
-    private platform: Platform
+    private platform: WexPlatform
   ) {
     super("Cards.Details", injector);
 
@@ -69,6 +70,10 @@ export class CardsDetailsPage extends DetailsPage {
         position: "top",
       }).present();
     }
+  }
+
+  public get lastFiveEmbossedCardNumber(): string {
+    return String(this.card.details.embossedCardNumber).slice(-5);
   }
 
   public get canChangeStatus(): boolean {

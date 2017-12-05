@@ -1,23 +1,71 @@
 page-cards-details {
-  @extend %ui-management-details-old;
-
+  @extend %ui-management-details;
   @include action-indicator-color(white);
-}
 
-.action-sheet-icon {
-  &.ion-md-checkmark-circle {
-    color: color($colors, success-dark);
+  .details-header {
+    padding-top: .7rem; // allow for shadow above .card-placeholder
   }
 
-  &.ion-md-information-circle {
-    color: color($colors, warning-dark);
-  }
+  .card-placeholder {
+    @include flexbox();
+    @include flex-direction(column);
+    @include justify-content(flex-end);
+    @include align-items(flex-start);
 
-  &.ion-md-close-circle {
-    color: color($colors, danger-dark);
-  }
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+    padding: 5%;
+    max-width: 30rem;
+    min-height: 20rem;
+    border-radius: 14px;
+    background-size: 92%;
+    background-color: color($colors, white);
+    background-image: url("../assets/pages/cards/card-background-map.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    box-shadow: 0 2px 16px 0 rgba(83, 67, 194, 0.14);
 
-  &.ion-md-close {
-    color: #757575;
+    p.card-num-label {
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: color($colors, primary);
+      text-transform: uppercase;
+    }
+    p.card-num-value {
+      font-size: 2.2rem;
+
+      .num-mask {
+        color: lighten(#6b798e, 20%);
+      }
+    }
+
+    .embossing-values {
+      margin: 2rem 0 0;
+      padding-left: 0;
+      list-style: none;
+      text-align: left;
+      font-size: 1.4rem;
+      font-weight: 600;
+      text-transform: uppercase;
+
+      li + li {
+        margin-top: .9rem;
+      }
+    }
+
+    &::after {
+      position: absolute;
+      top:   -7rem;
+      right: -7rem;
+      width:  12rem;
+      height: 12rem;
+      transform: rotate(45deg);
+      content: "";
+      box-shadow: 0 .8rem 0 rgba(222, 226,231, .3);
+    }
+    &.ACTIVE::after     { background-color: rgb(30, 200, 125); }
+    &.TERMINATED::after { background-color: rgb(250, 130, 130); }
+    &.SUSPENDED::after  { background-color: rgb(140, 140, 140); }
   }
 }
