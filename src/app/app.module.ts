@@ -15,6 +15,7 @@ import { LandingPage } from "../pages/landing/landing";
 import { CardsPage, TransactionCardView } from "../pages/cards/cards";
 import { TransactionDateView, TransactionDateSublist } from "../pages/transactions/transactions-date-view/transactions-date-view";
 import { CardsDetailsPage } from "./../pages/cards/details/cards-details";
+import { CardChangeStatusPage } from "../pages/cards/details/change-status/change-status";
 import { DriversPage, TransactionDriverView } from "./../pages/drivers/drivers";
 import { DriversDetailsPage } from "./../pages/drivers/details/drivers-details";
 import { DriverChangeStatusPage } from "./../pages/drivers/details/change-status/change-status";
@@ -146,6 +147,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     DriversPage,
     DriversDetailsPage,
     DriverChangeStatusPage,
+    CardChangeStatusPage,
     PaymentsPage,
     PaymentsDetailsPage,
     TermsOfUsePage,
@@ -230,6 +232,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     DriversPage,
     DriversDetailsPage,
     DriverChangeStatusPage,
+    CardChangeStatusPage,
     PaymentsPage,
     PaymentsDetailsPage,
     OptionsPage,

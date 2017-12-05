@@ -1,26 +1,18 @@
-import { WexPlatform } from "./../../../providers";
-import { WexAlertController } from "./../../../components/wex-alert-controller/wex-alert-controller";
-import { CardProvider, TransactionSearchFilterBy } from "@angular-wex/api-providers";
+import { TransactionSearchFilterBy } from "@angular-wex/api-providers";
 import { CardsReissuePage } from "./../reissue/cards-reissue";
 import { Component, Injector } from "@angular/core";
-import { NavParams, ActionSheetController, Events, ToastOptions, NavController } from "ionic-angular";
-import { ActionSheetOptions, ActionSheetButton } from "ionic-angular/components/action-sheet/action-sheet-options";
+import { NavParams, NavController } from "ionic-angular";
 import { DetailsPage } from "../../details-page";
-import { Card, CardStatus } from "@angular-wex/models";
+import { Card } from "@angular-wex/models";
 import { WexAppSnackbarController } from "../../../components";
-import * as _ from "lodash";
 import { TransactionDateSublist } from "../../transactions/transactions-date-view/transactions-date-view";
+import { CardChangeStatusPage } from "./change-status/change-status";
+import { WexPlatform } from "../../../providers";
 
 export type CardsDetailsNavParams = keyof {
   card,
   reissued
 };
-interface CardStatusDetails {
-  id: CardStatus;
-  label: string;
-  trackingId: string;
-  icon: string;
-}
 
 export namespace CardsDetailsNavParams {
   export const Card: CardsDetailsNavParams = "card";
@@ -46,14 +38,10 @@ export class CardsDetailsPage extends DetailsPage {
 
   constructor(
     public navParams: NavParams,
+    public platform: WexPlatform,
     private wexAppSnackbarController: WexAppSnackbarController,
     injector: Injector,
-    private actionSheetController: ActionSheetController,
-    private cardProvider: CardProvider,
-    private events: Events,
-    private wexAlertController: WexAlertController,
-    private navController: NavController,
-    private platform: WexPlatform
+    private navController: NavController
   ) {
     super("Cards.Details", injector);
 
@@ -91,102 +79,8 @@ export class CardsDetailsPage extends DetailsPage {
   }
 
   public changeStatus() {
-    if (this.canChangeStatus) {
-      let actions = this.availableCardStatuses;
-      if (!actions || _.isEmpty(actions)) { return; }
-
-      this.actionSheetController.create(this.buildActionSheet(actions)).present();
-    }
-  }
-
-  public cannotChangeStatusMessage() {
-    this.wexAlertController.alert(this.CONSTANTS.noReactivation);
-  }
-
-  private buildActionSheet(actions: CardStatusDetails[]): ActionSheetOptions {
-
-    let buttons: ActionSheetButton[] = actions.map((action) => ({
-      text: action.label,
-      icon: !this.platform.is("ios") ? action.icon : null,
-      handler: () => {
-        if (action.id === this.CONSTANTS.statuses.TERMINATED) {
-          this.confirmTermination();
-        } else {
-          this.updateCardStatus(action.id);
-        }
-      }
-    })
-    );
-
-    return {
-      title: this.CONSTANTS.actionStatusTitle,
-      buttons: [
-        ...buttons,
-        {
-          text: this.CONSTANTS.actionStatusCancel,
-          role: "cancel",
-          icon: !this.platform.is("ios") ? "close" : null,
-        }
-      ]
-    };
-  }
-
-  private confirmTermination() {
-    let message = this.CONSTANTS.confirmMessageTerminate;
-    let yesHandler = () => this.updateCardStatus(this.CONSTANTS.statuses.TERMINATED);
-    this.wexAlertController.confirmation(message, yesHandler);
-  }
-
-  private updateCardStatus(newStatus: CardStatus) {
-    if (newStatus === this.card.details.status) {
-      return;
-    }
-
-    this.isChangingStatus = true;
-
-    let accountId = this.session.user.billingCompany.details.accountId;
-    let cardId = this.card.details.cardId;
-
-    let toastOptions: ToastOptions = {
-      message: null,
-      duration: this.CONSTANTS.reissueMessageDuration,
-      position: "top",
-    };
-
-    this.cardProvider.updateStatus(accountId, cardId, newStatus).subscribe(
-      (card: Card) => {
-        this.card.details.status = card.details.status;
-        this.isChangingStatus = false;
-        this.events.publish("cards:statusUpdate");
-
-        toastOptions.message = this.CONSTANTS.bannerStatusChangeSuccess;
-        this.wexAppSnackbarController.createQueued(toastOptions).present();
-      }, () => {
-        this.isChangingStatus = false;
-        toastOptions.message = this.CONSTANTS.bannerStatusChangeFailure;
-        this.wexAppSnackbarController.createQueued(toastOptions).present();
-      });
-  }
-
-  private get availableCardStatuses(): Array<CardStatusDetails> {
-    let statuses: CardStatusDetails[] = this.CONSTANTS.statusOptions;
-    let isWOLNP = this.session.user.isWolNp;
-    let rejectionAttrs;
-    // Only WOL_NP with "Active" status can "Suspended" Cards
-    if (!isWOLNP && this.card.isActive) {
-      rejectionAttrs = { id: "SUSPENDED" };
-    }
-
-    // will not reject an iteratee when rejectionAttrs is false
-    return _.reject(statuses, rejectionAttrs || false);
-  }
-
-  public get statusColor(): string {
-    return this.CONSTANTS.STATUS.COLOR[this.card.details.status] || "warning";
-  }
-
-  public get statusIcon(): string {
-    return this.CONSTANTS.STATUS.ICON[this.card.details.status] || "information-circled";
+    const card = this.card;
+    this.navController.push(CardChangeStatusPage, { card });
   }
 
   public goToReissuePage() {

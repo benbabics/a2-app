@@ -22,9 +22,9 @@
   </section>
 
   <ion-item-group class="details-list" [ngClass]="{ 'inset-items': platform.isIos }">
-    <button ion-item>
+    <button ion-item *ngIf="canChangeStatus" (click)="changeStatus()">
       <ion-icon *wexIfPlatformAndroid item-left name="ios-card"></ion-icon>
-      <ion-label>Change Status</ion-label>
+      <ion-label>{{ CONSTANTS.changeStatus }}</ion-label>
       <div item-content>{{ card.statusDisplayName }}</div>
       <ion-icon item-right ios="ios-arrow-forward" md=""></ion-icon>
     </button>
@@ -33,7 +33,7 @@
       <ion-icon *wexIfPlatformAndroid item-left name="person"></ion-icon>
       <ion-label>
         <h2>{{ CONSTANTS.reissueCard }}</h2>
-        <p>For lost, stolen or damaged cards</p>
+        <p>{{ CONSTANTS.reissueCardSubText }}</p>
       </ion-label>
       <ion-icon item-right ios="ios-arrow-forward" md=""></ion-icon>
     </button>
