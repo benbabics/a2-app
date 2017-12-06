@@ -132,13 +132,13 @@ ion-icon.icon-ios.tab-button-icon[aria-label*="fa"] {
 .ios {
   ion-list, ion-item-group {
     @extend %ios-item-border;
-    border-width: 1px; // Needed to fix border rendering glitch in some builds of Chrome
+    border-width: 0.55px; // Needed to fix border rendering glitch in some builds of Chrome
 
     > .item.item-ios {
 
       &.item-divider {
         border-top: 0;
-        border-top: 1px solid color($colors, border) !important;
+        border-top: 0.55px solid color($colors, border) !important;
       }
 
       &:not(.item-divider) {

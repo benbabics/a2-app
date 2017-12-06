@@ -10,7 +10,7 @@ options-page {
     }
 
     ion-item-group {
-      border-bottom: 1px solid color($colors, light-border);
+      border-bottom: 0.55px solid color($colors, light-border);
     }
     
     ion-item .list-md .item-block .item-inner{
@@ -23,7 +23,7 @@ options-page {
       }
 
       > .item-block:last-child {
-        border-top: 1px solid color($colors, light-border);
+        border-top: 0.55px solid color($colors, light-border);
         padding-top: 15px;
       }
     }
