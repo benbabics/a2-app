@@ -399,3 +399,7 @@ ion-item-divider {
   0%{opacity:1;visibility:visible;}
   100%{opacity:0;visibility: hidden;}
 }
+
+.ios ion-nav > .ion-page > ion-content.transactionListMode.statusbar-padding:first-child .scroll-content {
+  padding-top: 0;
+}
