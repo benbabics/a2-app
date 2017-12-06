@@ -29,8 +29,8 @@ wex-list-item {
 
   &:not([data-active]), &[data-active=false] {
 
-    .ion-icon {
-      display: none;
+    ion-icon {
+      color: transparent;
     }
 
     .item, .button-effect {
