@@ -12,7 +12,7 @@
   </section>
 
   <ion-item-group class="details-list" [ngClass]="{ 'inset-items': platform.isIos }">
-    <button *ngIf="!driver.details.shared" ion-item (click)="changeStatus()">
+    <button *ngIf="!driver.details.shared" ion-item (click)="onChangeStatus()">
       <ion-icon *wexIfPlatformAndroid item-left name="person"></ion-icon>
       <ion-label>{{ CONSTANTS.LABELS.changeStatus }}</ion-label>
       <div item-content>{{ driver.statusDisplayName }}</div>

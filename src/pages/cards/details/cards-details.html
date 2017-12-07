@@ -22,7 +22,7 @@
   </section>
 
   <ion-item-group class="details-list" [ngClass]="{ 'inset-items': platform.isIos }">
-    <button ion-item *ngIf="canChangeStatus" (click)="changeStatus()">
+    <button ion-item *ngIf="canChangeStatus" (click)="onChangeStatus()">
       <ion-icon *wexIfPlatformAndroid item-left name="ios-card"></ion-icon>
       <ion-label>{{ CONSTANTS.changeStatus }}</ion-label>
       <div item-content>{{ card.statusDisplayName }}</div>

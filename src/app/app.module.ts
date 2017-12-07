@@ -16,7 +16,7 @@ import { CardsPage } from "../pages/cards/cards";
 import { TransactionsDateView } from "../pages/transactions/transactions-date-view/transactions-date-view";
 import { CardsDetailsPage } from "./../pages/cards/details/cards-details";
 import { CardChangeStatusPage } from "../pages/cards/details/change-status/change-status";
-import { DriversPage, TransactionDriverView } from "./../pages/drivers/drivers";
+import { DriversPage } from "./../pages/drivers/drivers";
 import { DriversDetailsPage } from "./../pages/drivers/details/drivers-details";
 import { DriverChangeStatusPage } from "./../pages/drivers/details/change-status/change-status";
 import { UserEnrollmentFlow } from "../pages/login/user-enrollment-flow/user-enrollment-flow";

@@ -8,7 +8,7 @@
   <div id="options-list">
     <ion-list radio-group [(ngModel)]="cardStatus" [ngClass]="{ 'inset-items': platform.isIos }">
 
-      <ion-item *ngFor="let option of statusOptions">
+      <ion-item *ngFor="let option of availableCardStatuses">
         <ion-label>
           <h2>{{ displayOptionLabel(option) }}</h2>
         </ion-label>
@@ -19,8 +19,8 @@
   </div>
 
   <div id="action-list" padding>
-    <button id="submit-button" [disabled]="disableChangeStatus" class="button-gradient" ion-button block (click)="handleSelectStatus()">
-      <action-indicator large [when]="isChangingStatus">{{ CONSTANTS.LABELS.select }}</action-indicator>
+    <button id="submit-button" [disabled]="disableChangeStatus" class="button-gradient" ion-button block (click)="onChangeStatus()" actionIndicator="isChangingStatus">
+      {{ CONSTANTS.LABELS.select }}
     </button>
   </div>
 </ion-content>
