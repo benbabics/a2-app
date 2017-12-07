@@ -210,9 +210,13 @@ ion-icon.icon-ios.tab-button-icon[aria-label*="fa"] {
  * To apply to an .ios button, just add class="button-gradient"
  */
 .ios .button-ios.button-gradient {
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+  margin: auto;
   background: linear-gradient(to right, #21b3fe, #007cbb);
   border-radius: 3px;
   font-weight: 600;
+  width: 80%;
 
   &:after {
     position: absolute;
