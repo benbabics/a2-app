@@ -42,13 +42,13 @@ export class CardsDetailsPage extends DetailsPage {
   constructor(
     injector: Injector,
     navController: NavController,
-    public navParams: NavParams,
+    navParams: NavParams,
     private wexAppSnackbarController: WexAppSnackbarController,
     private wexAlertController: WexAlertController
   ) {
     super("Cards.Details", injector);
 
-    if (this.navParams.get(CardsDetailsNavParams.Reissued)) {
+    if (navParams.get(CardsDetailsNavParams.Reissued)) {
       this.wexAppSnackbarController.createQueued({
         important: true,
         message: this.CONSTANTS.reissueMessage,
