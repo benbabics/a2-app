@@ -108,7 +108,7 @@ export class CardChangeStatusPage extends SecurePage {
       })
       .finally(() => {
         this.isChangingStatus$.next(false);
-        this.wexAppSnackbarController.createQueued({ ...toastOptions, important: true }).present();
+        this.wexAppSnackbarController.createQueued(toastOptions).present();
       });
   }
 
