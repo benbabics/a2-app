@@ -8,7 +8,7 @@ page-payments {
   .ios & ion-content {
     > div {
       &.fixed-content, &.scroll-content {
-        margin-top: 20px !important;
+        margin-top: $legacy-ios-status-bar-height;
         margin-top: constant(safe-area-inset-top);
       }
     }
@@ -90,7 +90,7 @@ page-payments {
       }
 
       #pending {
-        border-left: 0.55px solid color($colors, border);
+        border-left: $border-width solid color($colors, border);
       }
     }
   }

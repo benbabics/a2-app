@@ -3,7 +3,7 @@
   </wex-static-list-page-header>
 </ion-header>
 
-<ion-content [ngClass]="{ transactionListMode : transactionListMode }" #content>
+<ion-content class="transactionListMode" #content>
   <ion-refresher (ionRefresh)="onRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>

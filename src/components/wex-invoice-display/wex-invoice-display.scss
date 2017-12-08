@@ -34,7 +34,7 @@ wex-invoice-display {
 
   .invoice-display-details-list {
     margin: 0;
-    border-top: 0.55px solid #dedede;
+    border-top: $border-width solid #dedede;
 
     wex-list-item {
 

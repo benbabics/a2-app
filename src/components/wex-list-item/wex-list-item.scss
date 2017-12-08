@@ -30,7 +30,7 @@ wex-list-item {
   &:not([data-active]), &[data-active=false] {
 
     ion-icon {
-      color: transparent;
+      visibility: hidden;
     }
 
     .item, .button-effect {

@@ -24,7 +24,8 @@ wex-title-with-subheader {
     @at-root .md & {
       margin-top: $header-height-md - .1rem;
     } @at-root .ios & {
-      margin-top: calc(#{$header-height-ios} - .1rem + 20px);
+      margin-top: calc(#{$header-height-ios} - .1rem + #{$legacy-ios-status-bar-height});
+      margin-top: calc(#{$header-height-ios} - .1rem + constant(safe-area-inset-top));
     }
   }
   

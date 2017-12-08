@@ -122,23 +122,23 @@ ion-icon.icon-ios.tab-button-icon[aria-label*="fa"] {
 //# Lists/Items
 // --------------------------------------------------
 %ios-item-border {
-  border-bottom: 0.55px solid color($colors, border);
+  border-bottom: $border-width solid color($colors, border);
 }
 
 %ios-list-top-border {
-  border-top: 0.55px solid color($colors, border);
+  border-top: $border-width solid color($colors, border);
 }
 
 .ios {
   ion-list, ion-item-group {
     @extend %ios-item-border;
-    border-width: 0.55px; // Needed to fix border rendering glitch in some builds of Chrome
+    border-width: $border-width; // Needed to fix border rendering glitch in some builds of Chrome
 
     > .item.item-ios {
 
       &.item-divider {
         border-top: 0;
-        border-top: 0.55px solid color($colors, border) !important;
+        border-top: $border-width solid color($colors, border) !important;
       }
 
       &:not(.item-divider) {
@@ -323,7 +323,7 @@ ion-item-divider {
 
     border-style: solid;
     border-color: color($colors, border);
-    border-width: 0.55px 0;
+    border-width: $border-width 0;
   }
 
   @at-root .md & {
@@ -350,7 +350,7 @@ ion-item-divider {
 //# Items
 // --------------------------------------------------
 %md-item-border {
-  border-bottom: 0.55px solid color($colors, light-border);
+  border-bottom: $border-width solid color($colors, light-border);
 }
 
 .md {
