@@ -15,8 +15,10 @@ import { LandingPage } from "../pages/landing/landing";
 import { CardsPage } from "../pages/cards/cards";
 import { TransactionsDateView } from "../pages/transactions/transactions-date-view/transactions-date-view";
 import { CardsDetailsPage } from "./../pages/cards/details/cards-details";
+import { CardChangeStatusPage } from "../pages/cards/details/change-status/change-status";
 import { DriversPage } from "./../pages/drivers/drivers";
 import { DriversDetailsPage } from "./../pages/drivers/details/drivers-details";
+import { DriverChangeStatusPage } from "./../pages/drivers/details/change-status/change-status";
 import { UserEnrollmentFlow } from "../pages/login/user-enrollment-flow/user-enrollment-flow";
 import {
   WexList,
@@ -141,6 +143,8 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     CardsReissuePage,
     DriversPage,
     DriversDetailsPage,
+    DriverChangeStatusPage,
+    CardChangeStatusPage,
     PaymentsPage,
     PaymentsDetailsPage,
     TermsOfUsePage,
@@ -219,6 +223,8 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     CardsReissuePage,
     DriversPage,
     DriversDetailsPage,
+    DriverChangeStatusPage,
+    CardChangeStatusPage,
     PaymentsPage,
     PaymentsDetailsPage,
     OptionsPage,

@@ -1,42 +1,48 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>{{ CONSTANTS.title }}</ion-title>
+    <ion-title *wexIfPlatformIos>{{ CONSTANTS.title }}</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-card id="card-details">
-    <ion-card-header>{{ CONSTANTS.details }}</ion-card-header>
+  <section class="details-header">
+    <div class="card-placeholder" [ngClass]="card.details.status">
+      <p class="card-num-label">{{ CONSTANTS.cardNumber }}</p>
 
-    <div id="controls">
-      <h1 id="card-number">{{ CONSTANTS.cardNumber }} {{ card.details.embossedCardNumber | wexCardNumber }}</h1>
+      <p class="card-num-value">
+        <span class="num-mask">••••</span>
+        <span class="num-value">{{ lastFiveEmbossedCardNumber }}</span>
+      </p>
 
-      <button ion-button icon-left round large id="card-status" (click)="onChangeStatus()" [color]="statusColor + '-dark'" [actionIndicator]="isChangingStatus">
-        <ion-icon [name]="statusIcon" [color]="statusColor"></ion-icon>
-        {{ card.statusDisplayName }}
-      </button>
+      <ul class="embossing-values">
+        <li>{{ card.details.embossingValue2 }}</li>
+        <li>{{ card.details.embossingValue1 }}</li>
+      </ul>
     </div>
+  </section>
 
-    <ion-card-content>
-      <wex-details-view [model]="card"
-                        [includedFields]="CONSTANTS.LIST.includedFields"
-                        [mappedFieldNames]="CONSTANTS.LIST.mappedFieldNames">
-      </wex-details-view>
-    </ion-card-content>
-  </ion-card>
+  <ion-item-group class="details-list" [ngClass]="{ 'inset-items': platform.isIos }">
+    <button ion-item *ngIf="canChangeStatus" (click)="onChangeStatus()">
+      <ion-icon *wexIfPlatformAndroid item-left name="ios-card"></ion-icon>
+      <ion-label>{{ CONSTANTS.changeStatus }}</ion-label>
+      <div item-content>{{ card.statusDisplayName }}</div>
+      <ion-icon item-right ios="ios-arrow-forward" md=""></ion-icon>
+    </button>
 
-  <ion-card id="card-actions">
-    <ion-card-header>{{ CONSTANTS.actions }}</ion-card-header>
+    <button ion-item (click)="goToReissuePage()">
+      <ion-icon *wexIfPlatformAndroid item-left name="person"></ion-icon>
+      <ion-label>
+        <h2>{{ CONSTANTS.reissueCard }}</h2>
+        <p>{{ CONSTANTS.reissueCardSubText }}</p>
+      </ion-label>
+      <ion-icon item-right ios="ios-arrow-forward" md=""></ion-icon>
+    </button>
 
-    <ion-list id="action-list" padding>
-      <button ion-button icon-left block (click)="onViewTransactions()">
-        <ion-icon class="fa fa-exchange"></ion-icon>
-        {{ CONSTANTS.viewTransactions }}
-      </button>
-      <button *ngIf="card.isActive" ion-button icon-left block (click)="onReissue()">
-        <ion-icon class="fa fa-refresh"></ion-icon>
-        {{ CONSTANTS.reissueCard }}
-      </button>
-    </ion-list>
-  </ion-card>
+    <button ion-item (click)="viewTransactions()">
+      <ion-icon *wexIfPlatformAndroid item-left name="md-list-box"></ion-icon>
+      <ion-label>{{ CONSTANTS.viewTransactions }}</ion-label>
+      <ion-icon item-right ios="ios-arrow-forward" md=""></ion-icon>
+    </button>
+  </ion-item-group>
+
 </ion-content>

@@ -1,25 +1,5 @@
 page-add-payment-selection {
-
-  .item-radio-checked {
-    &.item-ios, &.item-md {
-      ion-label {
-        color: black;
-      }
-    }
-  }
-
-  .item-radio-checked {
-    .item-inner {
-      &::after {
-        font-family: "Ionicons";
-        font-size: 3rem;
-        font-weight: 600;
-        color: color($colors, primary);
-        content: "\f3ff";
-        margin-right: 1rem;
-      }
-    }
-  }
+  @extend %ui-options;
 
   #custom-input {
     text-align: left !important;
@@ -36,23 +16,5 @@ page-add-payment-selection {
     }
 
     @extend .item-radio-checked;
-  }
-
-  #action-list button {
-    @at-root .md & {
-      height: 5rem;
-    }
-  }
-
-  #options-list > ion-list {
-    @at-root .md & {
-      margin-top: 1rem;
-    } @at-root .ios & {
-      margin-top: 2rem;
-    }
-  }
-
-  .radio-checked, .radio-icon {
-    display: none !important;
   }
 }

@@ -146,10 +146,11 @@ export namespace ConstantsInfo {
           title: "Card Details",
           details: "Details",
           actions: "Actions",
+          changeStatus: "Change Status",
           viewTransactions: "View Transactions",
           reissueCard: "Reissue Card",
+          reissueCardSubText: "For lost, stolen or damaged cards",
           reissueMessage: "Your card has been reissued.",
-          reissueMessageDuration: 5000, //ms
           actionStatusTitle: "Select Card Status",
           noReactivation: "Terminated status is final and cannot be changed",
           actionStatusCancel: "Cancel",
@@ -187,9 +188,18 @@ export namespace ConstantsInfo {
             SUSPENDED: "SUSPENDED",
             TERMINATED: "TERMINATED"
           },
-          bannerStatusChangeSuccess: "Status change successful.",
+        },
+
+        //# Driver Change Status page
+        CHANGE_STATUS: {
+          title: "Change Card Status",
+          bannerStatusChangeSuccess: "Status successfully changed",
           bannerStatusChangeFailure: "Status change failed. Please try again.",
           confirmMessageTerminate:   "Are you sure you want to terminate this card?",
+          statusUpdateMessageDuration: 5000,
+          LABELS: {
+            select: "Select"
+          }
         },
 
         //# Card Reissue page
@@ -277,6 +287,7 @@ export namespace ConstantsInfo {
           },
 
           LABELS: {
+            changeStatus:    "Change Status",
             promptId:        "Driver ID",
             cellPhoneNumber: "Mobile Phone",
             emailAddress:    "Email Address"
@@ -289,12 +300,17 @@ export namespace ConstantsInfo {
             ACTIVE: "ACTIVE",
             TERMINATED: "TERMINATED"
           },
-          actionStatusTitle:         "Select Driver Status",
-          actionStatusCancel:        "Cancel",
-          bannerStatusChangeSuccess: "Status change successful.",
+        },
+
+        //# Driver Change Status page
+        CHANGE_STATUS: {
+          title: "Change Driver Status",
+          bannerStatusChangeSuccess: "Status successfully changed",
           bannerStatusChangeFailure: "Status change failed. Please try again.",
-          confirmMessageTerminate:   "Are you sure you want to terminate this driver?",
-          statusUpdateMessageDuration: 5000
+          statusUpdateMessageDuration: 5000,
+          LABELS: {
+            select: "Select"
+          }
         }
       },
 
