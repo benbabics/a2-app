@@ -194,7 +194,7 @@ export class LoginPage extends Page {
       this.sessionManager.initSession(this.user, { authenticationMethod })
         .flatMap(() => this.sessionManager.cache.update$(Session.Field.User)) //Pre-fetch the user object for the landing page
         .finally(() => this.isLoggingIn = false)
-        .subscribe(() => {
+        .subscribe((session: Session) => {
           this.rememberUsername(this.rememberMe, this.user.username);
 
           if (useFingerprintAuth) {
@@ -202,6 +202,10 @@ export class LoginPage extends Page {
           }
           else {
             this.trackAnalyticsEvent("loginManual");
+          }
+
+          if (session.user.details.brand) {
+            this.setCustomDimension(2, session.user.details.brand);
           }
 
           //Transition to the main app
@@ -344,7 +348,17 @@ export class LoginPage extends Page {
     }, 500));
   }
 
+  private trackUserId() {
+    let userId = this.localStorageService.get<string>(this.USERNAME_KEY);
+    if (!userId) {
+      userId = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
+        let r = Math.random() * 16 | 0, v = c === "x" ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
 
+    this.setCustomDimension(1, userId);
+  }
 
   ionViewDidEnter() {
     this.wexAppBackButtonController.deregisterAction();
@@ -356,6 +370,8 @@ export class LoginPage extends Page {
           this.presentVersionModal();
         }
       });
+
+    this.trackUserId();
   }
 
   ionViewDidLeave() {
