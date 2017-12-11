@@ -72,6 +72,10 @@ export abstract class Page implements OnInit {
     return this.googleAnalytics.trackEvent.apply(this.googleAnalytics, eventInfo);
   }
 
+  protected setCustomDimension(key: number, value: string) {
+    this.googleAnalytics.addCustomDimension(key, value);
+  }
+
   public resolvePlatformConstant(constant: any): string {
     return _.get(constant, Constants.PLATFORM.CURRENT, null);
   }
