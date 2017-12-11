@@ -62,10 +62,12 @@ import {
   AuthenticationManager,
   UiNotificationsController,
   WexNavigationController,
+  SelectionPageController,
   PaymentService
 } from "../providers";
 import { TransactionAmountPipe, WexCurrency, WexDate, WexDateTime, WexSvgPipe, WexTrustedHtmlPipe } from "../pipes";
 import { PaymentsPage } from "../pages/payments/payments";
+import { SelectionPage } from "../pages/generic/";
 import { PaymentsDetailsPage } from "../pages/payments/details/payments-details";
 import { LocalStorageModule } from "angular-2-local-storage";
 import { CardsReissuePage } from "../pages/cards/reissue/cards-reissue";
@@ -146,6 +148,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     DriverChangeStatusPage,
     CardChangeStatusPage,
     PaymentsPage,
+    SelectionPage,
     PaymentsDetailsPage,
     TermsOfUsePage,
     PrivacyPolicyPage,
@@ -226,6 +229,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
     DriverChangeStatusPage,
     CardChangeStatusPage,
     PaymentsPage,
+    SelectionPage,
     PaymentsDetailsPage,
     OptionsPage,
     WexNavBar,
@@ -292,6 +296,7 @@ export function HTTP_FACTORY(xhrBackend: XHRBackend, mockBackend: MockBackend, n
       useClass: PaymentService,
       deps: [SessionCache]
     },
+    SelectionPageController,
     UserIdle.PROVIDER_DEFINITION,
     SessionManager,
     AuthenticationManager,

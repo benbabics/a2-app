@@ -14,3 +14,4 @@ export * from "./wex-google-analytics-events";
 export * from "./wex-app-back-button-controller";
 export * from "./user-idle";
 export * from "./payment-service";
+export * from "./selection-page-controller";
