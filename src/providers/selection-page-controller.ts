@@ -12,7 +12,7 @@ export class SelectionPageController {
     this.app.getActiveNav().push(SelectionPage, navParams);
 
     return navParams.submittedItem$.asObservable()
-      .take(2)
-      .last();
+      .skip(1)
+      .take(1);
   }
 }

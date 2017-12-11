@@ -5,7 +5,6 @@ import { PageParams, Page } from "../../page";
 import { Injector } from "@angular/core";
 import { Subject } from "rxjs/Subject";
 import { NavController } from "ionic-angular/navigation/nav-controller";
-import { Observable } from "rxjs/Observable";
 import { WexPlatform } from "../../../providers/index";
 
 export type EqualityTestFunction<T> = (a: T, b: T) => boolean;
@@ -36,13 +35,7 @@ export namespace SelectionPageNavParamKey {
   export const EqualityTest: SelectionPageNavParamKey = "equalityTest";
 }
 
-const defaultComparator: EqualityTestFunction<any> = (a: any, b: any) => {
-  if (a === b) {
-    return true;
-  } else {
-    return false;
-  }
-};
+const defaultEqualityTest: EqualityTestFunction<any> = (a: any, b: any) => a === b;
 
 @Component({
   selector: "selection-page",
@@ -53,40 +46,28 @@ export class SelectionPage extends Page {
   @StateEmitter.Alias("navParams.data." + SelectionPageNavParamKey.SubmittedItem) submittedItem$: Subject<any>;
   @StateEmitter.From("navParams.data." + SelectionPageNavParamKey.SubmittedItem) currentItem$: Subject<any>;
   @StateEmitter({ initialValue: true }) disableSubmit$: Subject<boolean>;
-  public options: SelectionItem<any>;
-  public instructionalText: string;
-  public submitButtonText: string;
-  public equalityTest: EqualityTestFunction<any>;
+  public readonly options: SelectionItem<any> = this.navParams.get(SelectionPageNavParamKey.Options);
+  public readonly instructionalText: string = this.navParams.get(SelectionPageNavParamKey.InstructionalText);
+  public readonly submitButtonText: string = this.navParams.get(SelectionPageNavParamKey.SubmitButtonText);
+  public readonly equalityTest: EqualityTestFunction<any> = this.navParams.get(SelectionPageNavParamKey.EqualityTest) || defaultEqualityTest;
 
   constructor(public navParams: NavParams, navCtrl: NavController, public platform: WexPlatform, injector: Injector) {
     super(navParams.data, injector);
 
-    this.options = navParams.get(SelectionPageNavParamKey.Options);
-    this.instructionalText = navParams.get(SelectionPageNavParamKey.InstructionalText);
-    this.submitButtonText = navParams.get(SelectionPageNavParamKey.SubmitButtonText);
-
-    this.equalityTest = navParams.get(SelectionPageNavParamKey.EqualityTest);
-    if (!this.equalityTest) {
-      this.equalityTest = defaultComparator;
+    // Default to true by typesafe checking against false
+    const selfDismiss = navParams.get(SelectionPageNavParamKey.SelfDismiss) !== false;
+    if (selfDismiss) {
+      this.submittedItem$.asObservable()
+        .skip(1)
+        .take(1)
+        .subscribe(() => navCtrl.pop());
     }
 
     this.currentItem$.asObservable()
-      .flatMap(item => Observable.combineLatest(Observable.of(item), this.submittedItem$))
+      .withLatestFrom(this.submittedItem$)
       .subscribe((args: [SelectionItem<any>, SelectionItem<any>]) => {
         let [current, initial] = args;
         this.disableSubmit$.next(this.equalityTest(current, initial));
       });
-
-    this.submittedItem$.asObservable()
-      .take(1)
-      .subscribe(item => this.currentItem$.next(item));
-
-    this.submittedItem$.asObservable()
-      .take(2)
-      .last()
-      .map(() => navParams.get(SelectionPageNavParamKey.SelfDismiss) as boolean)
-      // Default to true by typesafe checking against false.
-      .filter(selfDismiss => selfDismiss !== false)
-      .subscribe(() => navCtrl.pop());
   }
 }
