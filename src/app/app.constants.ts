@@ -300,18 +300,17 @@ export namespace ConstantsInfo {
             ACTIVE: "ACTIVE",
             TERMINATED: "TERMINATED"
           },
-        },
-
-        //# Driver Change Status page
-        CHANGE_STATUS: {
-          title: "Change Driver Status",
-          bannerStatusChangeSuccess: "Status successfully changed",
-          bannerStatusChangeFailure: "Status change failed. Please try again.",
-          statusUpdateMessageDuration: 5000,
-          LABELS: {
-            select: "Select"
+          //# Driver Change Status page
+          CHANGE_STATUS: {
+            title: "Change Driver Status",
+            bannerStatusChangeSuccess: "Status successfully changed",
+            bannerStatusChangeFailure: "Status change failed. Please try again.",
+            statusUpdateMessageDuration: 5000,
+            LABELS: {
+              select: "Select"
+            }
           }
-        }
+        },
       },
 
       //# Landing page

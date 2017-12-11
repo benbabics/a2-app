@@ -16,7 +16,7 @@ export interface SelectionItem<T> {
 }
 
 export interface SelectionPageNavParams<T> extends PageParams {
-  submittedItem$: Subject<T>;
+  submittedItem: T | Subject<T>;
   options: SelectionItem<T>[];
   submitButtonText: string;
   selfDismiss?: boolean;
@@ -27,7 +27,7 @@ export interface SelectionPageNavParams<T> extends PageParams {
 export type SelectionPageNavParamKey = keyof SelectionPageNavParams<void>;
 
 export namespace SelectionPageNavParamKey {
-  export const SubmittedItem: SelectionPageNavParamKey = "submittedItem$";
+  export const SubmittedItem: SelectionPageNavParamKey = "submittedItem";
   export const Options: SelectionPageNavParamKey = "options";
   export const SelfDismiss: SelectionPageNavParamKey = "selfDismiss";
   export const InstructionalText: SelectionPageNavParamKey = "instructionalText";
