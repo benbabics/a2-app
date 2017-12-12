@@ -8,7 +8,7 @@ import {
 import { Observable } from "rxjs/Observable";
 import { SecurePage } from "../../secure-page";
 import { BankAccount, Payment, Company } from "@angular-wex/models";
-import { PaymentService, PaymentSelectionOption } from "./../../../providers/payment-service";
+import { PaymentService } from "./../../../providers/payment-service";
 import { AddPaymentSelectionPage } from "./add-payment-selection";
 import { UserPayment, UserPaymentAmount, Session } from "../../../models";
 import { Value } from "../../../decorators/value";
@@ -130,7 +130,7 @@ export class AddPaymentPage extends SecurePage {
     this.onUpdateAmount$
       .flatMap(() => this.payment$.asObservable().take(1))
       .subscribe((payment) => {
-        this.navigateToSelectionPage(payment, "amount");
+        this.navigateToPaymentSelectionPage(payment);
       });
 
     this.onUpdateBankAccount$
@@ -138,6 +138,7 @@ export class AddPaymentPage extends SecurePage {
       .withLatestFrom(paymentService.bankAccounts$.take(1))
       .flatMap(args => {
         let [payment, bankAccounts] = args;
+        this.trackAnalyticsPageView(`BankAccount${this.existingPayment ? "Edit" : "Schedule"}`);
         return selectionPageController.presentSelectionPage({
           pageName: this.CONSTANTS.SELECTION.LABELS.bankAccount,
           submittedItem: payment.bankAccount,
@@ -193,23 +194,19 @@ export class AddPaymentPage extends SecurePage {
     return this.navParams.get(AddPaymentNavParams.Payment);
   }
 
-  private navigateToSelectionPage(payment: UserPayment, listType: keyof UserPayment) {
-    ((): Observable<PaymentSelectionOption[]> => {
-      switch (listType) {
-        case "amount": return this.paymentService.amountOptions$.take(1);
-        case "bankAccount": return this.paymentService.bankAccounts$.take(1);
-        default: return Observable.throw(`Unsupported list selection type: ${listType}`);
-      }
-    })()
+  private navigateToPaymentSelectionPage(payment: UserPayment) {
+    this.paymentService.amountOptions$.take(1)
       .flatMap((items) => {
-        let selectedItem$ = new BehaviorSubject(payment[listType]);
-
-        this.navCtrl.push(AddPaymentSelectionPage, { listType, items, selectedItem$ });
-        this.trackAnalyticsPageView(`${listType}${this.existingPayment ? "Edit" : "Schedule"}`);
+        let selectedItem$ = new BehaviorSubject(payment.amount);
+        this.navCtrl.push(AddPaymentSelectionPage, { items, selectedItem$ });
+        this.trackAnalyticsPageView(`Payment${this.existingPayment ? "Edit" : "Schedule"}`);
         return selectedItem$;
       })
       .skip(1).take(1)
-      .subscribe(selectedItem => this.payment$.next(Object.assign(payment, { [listType]: selectedItem })));
+      .subscribe(newAmount => {
+        payment.amount = newAmount;
+        this.payment$.next(payment);
+      });
   }
 
   private schedulePayment(accountId: string, paymentRequest: PaymentRequest): Observable<Payment> {
