@@ -329,7 +329,7 @@ ion-item-divider {
   @at-root .md & {
     font-weight: 500;
     background-color: color($colors, separator-md);
-    border: solid color($colors, light-border);
+    border: solid color($colors, border);
     border-width: 1px 0;
   }
 }
@@ -350,14 +350,14 @@ ion-item-divider {
 //# Items
 // --------------------------------------------------
 %md-item-border {
-  border-bottom: $border-width solid color($colors, light-border);
+  border-bottom: $border-width solid color($colors, border);
 }
 
 .md {
   ion-list, ion-item-group {
 
     .item.item-divider {
-      border-top: 1px solid color($colors, light-border) !important;
+      border-top: 1px solid color($colors, border) !important;
     }
 
     ion-item-group {
