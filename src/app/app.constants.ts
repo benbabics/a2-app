@@ -188,18 +188,18 @@ export namespace ConstantsInfo {
             SUSPENDED: "SUSPENDED",
             TERMINATED: "TERMINATED"
           },
-        },
 
-        //# Driver Change Status page
-        CHANGE_STATUS: {
-          title: "Change Card Status",
-          bannerStatusChangeSuccess: "Status successfully changed",
-          bannerStatusChangeFailure: "Status change failed. Please try again.",
-          confirmMessageTerminate:   "Are you sure you want to terminate this card?",
-          statusUpdateMessageDuration: 5000,
-          LABELS: {
-            select: "Select"
-          }
+          //# Driver Change Status page
+          CHANGE_STATUS: {
+            title: "Change Card Status",
+            bannerStatusChangeSuccess: "Status successfully changed",
+            bannerStatusChangeFailure: "Status change failed. Please try again.",
+            confirmMessageTerminate:   "Are you sure you want to terminate this card?",
+            statusUpdateMessageDuration: 5000,
+            LABELS: {
+              select: "Select"
+            }
+          },
         },
 
         //# Card Reissue page

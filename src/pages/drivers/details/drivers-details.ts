@@ -71,13 +71,13 @@ export class DriversDetailsPage extends DetailsPage {
     this.onChangeStatus$
       .flatMap(() => this.driver$.asObservable().take(1))
       .flatMap(driver => selectionPageController.presentSelectionPage({
-        pageName: this.CONSTANTS.CHANGE_STATUS.title as string,
+        pageName: this.CONSTANTS.CHANGE_STATUS.title,
         options: [
           { value: DriverStatus.ACTIVE, label: DriverStatus.displayName(DriverStatus.ACTIVE) },
           { value: DriverStatus.TERMINATED, label: DriverStatus.displayName(DriverStatus.TERMINATED) }
         ],
         submittedItem: driver.details.status,
-        submitButtonText: this.CONSTANTS.CHANGE_STATUS.LABELS.select as string
+        submitButtonText: this.CONSTANTS.CHANGE_STATUS.LABELS.select
       }))
       .withLatestFrom(this.driver$, this.sessionCache.session$)
       .flatMap(args => {

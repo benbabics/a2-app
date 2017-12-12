@@ -18,7 +18,6 @@ export class SelectionPageController {
     this.app.getActiveNav().push(SelectionPage, navParams);
 
     return navParams.submittedItem.asObservable()
-      .skip(1)
-      .take(1);
+      .skip(1);
   }
 }

@@ -44,8 +44,10 @@ const defaultEqualityTest: EqualityTestFunction<any> = (a: any, b: any) => a ===
 @Reactive()
 export class SelectionPage extends Page {
   @StateEmitter.Alias("navParams.data." + SelectionPageNavParamKey.SubmittedItem) submittedItem$: Subject<any>;
+  @StateEmitter.From("navParams.data." + SelectionPageNavParamKey.SubmittedItem) originalSelection$: Subject<any>;
   @StateEmitter.From("navParams.data." + SelectionPageNavParamKey.SubmittedItem) currentItem$: Subject<any>;
   @StateEmitter({ initialValue: true }) disableSubmit$: Subject<boolean>;
+
   public readonly options: SelectionItem<any> = this.navParams.get(SelectionPageNavParamKey.Options);
   public readonly instructionalText: string = this.navParams.get(SelectionPageNavParamKey.InstructionalText);
   public readonly submitButtonText: string = this.navParams.get(SelectionPageNavParamKey.SubmitButtonText);
@@ -64,7 +66,7 @@ export class SelectionPage extends Page {
     }
 
     this.currentItem$.asObservable()
-      .withLatestFrom(this.submittedItem$)
+      .withLatestFrom(this.originalSelection$)
       .subscribe((args: [SelectionItem<any>, SelectionItem<any>]) => {
         let [current, initial] = args;
         this.disableSubmit$.next(this.equalityTest(current, initial));

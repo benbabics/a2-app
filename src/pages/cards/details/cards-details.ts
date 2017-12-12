@@ -2,13 +2,17 @@ import { WexAlertController } from "./../../../components/wex-alert-controller/w
 import { CardsReissuePage } from "./../reissue/cards-reissue";
 import { Component, Injector } from "@angular/core";
 import { DetailsPage } from "../../details-page";
-import { Card } from "@angular-wex/models";
+import { Card, CardStatus } from "@angular-wex/models";
 import { WexAppSnackbarController } from "../../../components";
 import { TransactionsDateView } from "../../transactions/transactions-date-view/transactions-date-view";
 import { Reactive, StateEmitter, EventSource } from "angular-rxjs-extensions";
 import { Subject, Observable, BehaviorSubject } from "rxjs";
 import { NavParams, NavController } from "ionic-angular";
-import { CardChangeStatusPage } from "./change-status/change-status";
+import { SelectionPageController } from "../../../providers/index";
+import { Session } from "../../../models/index";
+import { SelectionItem } from "../../generic/index";
+import { ToastOptions } from "ionic-angular/components/toast/toast-options";
+import { CardProvider } from "@angular-wex/api-providers";
 
 export type CardsDetailsNavParams = keyof {
   card,
@@ -41,8 +45,10 @@ export class CardsDetailsPage extends DetailsPage {
 
   constructor(
     injector: Injector,
+    selectionPageController: SelectionPageController,
     navController: NavController,
     wexAppSnackbarController: WexAppSnackbarController,
+    cardProvider: CardProvider,
     private navParams: NavParams,
     private wexAlertController: WexAlertController
   ) {
@@ -73,11 +79,61 @@ export class CardsDetailsPage extends DetailsPage {
         this.canReissue$.next(cardNumberSuffix < 9);
       });
 
+    let toastOptions: ToastOptions = {
+      message: null,
+      duration: this.CONSTANTS.reissueMessageDuration,
+      position: "top"
+    };
+
     this.onChangeStatus$
       .flatMap(() => this.canChangeStatus$.asObservable().take(1))
       .filter(Boolean)
       .flatMap(() => this.card$.asObservable().take(1))
-      .subscribe((card) => navController.push(CardChangeStatusPage, { card }));
+      .withLatestFrom(this.sessionCache.session$)
+      .flatMap(args => {
+        let [card, session]: [Card, Session] = args;
+        let options: SelectionItem<CardStatus>[] = [];
+        options.push({ value: CardStatus.ACTIVE, label: CardStatus.displayName(CardStatus.ACTIVE) });
+        if (session.user.isWolNp) {
+          options.push({ value: CardStatus.SUSPENDED, label: CardStatus.displayName(CardStatus.SUSPENDED) });
+        }
+        options.push({ value: CardStatus.TERMINATED, label: CardStatus.displayName(CardStatus.TERMINATED) });
+        return selectionPageController.presentSelectionPage({
+          pageName: this.CONSTANTS.CHANGE_STATUS.title,
+          options,
+          submittedItem: card.details.status,
+          submitButtonText: this.CONSTANTS.CHANGE_STATUS.LABELS.select,
+          selfDismiss: false
+        });
+      })
+      .flatMap(status => {
+        if (status === CardStatus.TERMINATED) {
+          return this.wexAlertController
+            .confirmation$(this.CONSTANTS.CHANGE_STATUS.confirmMessageTerminate)
+            .filter(Boolean)
+            .flatMapTo(Observable.of(status));
+        } else {
+          return Observable.of(status);
+        }})
+      .withLatestFrom(this.card$, this.sessionCache.session$)
+      .flatMap((args) => {
+        let [status, card, session] = args;
+        let accountId = session.user.billingCompany.details.accountId;
+        let cardId = card.details.cardId;
+
+        navController.pop();
+        return cardProvider.updateStatus(accountId, cardId, status);
+      })
+      .map(updatedCard => {
+        toastOptions.message = this.CONSTANTS.CHANGE_STATUS.bannerStatusChangeSuccess;
+        this.card$.next(updatedCard);
+      })
+      .catch(() => {
+        toastOptions.message = this.CONSTANTS.CHANGE_STATUS.bannerStatusChangeFailure;
+        return Observable.empty<Card>();
+      })
+      .finally(() => wexAppSnackbarController.createQueued(toastOptions).present())
+      .subscribe();
 
     this.onChangeStatus$
       .flatMap(() => this.canChangeStatus$.asObservable().take(1))
