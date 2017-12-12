@@ -122,23 +122,23 @@ ion-icon.icon-ios.tab-button-icon[aria-label*="fa"] {
 //# Lists/Items
 // --------------------------------------------------
 %ios-item-border {
-  border-bottom: 0.55px solid color($colors, border);
+  border-bottom: $border-width solid color($colors, border);
 }
 
 %ios-list-top-border {
-  border-top: 0.55px solid color($colors, border);
+  border-top: $border-width solid color($colors, border);
 }
 
 .ios {
   ion-list, ion-item-group {
     @extend %ios-item-border;
-    border-width: 1px; // Needed to fix border rendering glitch in some builds of Chrome
+    border-width: $border-width; // Needed to fix border rendering glitch in some builds of Chrome
 
     > .item.item-ios {
 
       &.item-divider {
         border-top: 0;
-        border-top: 1px solid color($colors, border) !important;
+        border-top: $border-width solid color($colors, border) !important;
       }
 
       &:not(.item-divider) {
@@ -218,9 +218,13 @@ ion-icon.icon-ios.tab-button-icon[aria-label*="fa"] {
  * To apply to an .ios button, just add class="button-gradient"
  */
 .ios .button-ios.button-gradient {
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+  margin: auto;
   background: linear-gradient(to right, #21b3fe, #007cbb);
   border-radius: 3px;
   font-weight: 600;
+  width: 80%;
 
   &:after {
     position: absolute;
@@ -327,13 +331,13 @@ ion-item-divider {
 
     border-style: solid;
     border-color: color($colors, border);
-    border-width: 0.55px 0;
+    border-width: $border-width 0;
   }
 
   @at-root .md & {
     font-weight: 500;
     background-color: color($colors, separator-md);
-    border: solid color($colors, light-border);
+    border: solid color($colors, border);
     border-width: 1px 0;
   }
 }
@@ -354,14 +358,14 @@ ion-item-divider {
 //# Items
 // --------------------------------------------------
 %md-item-border {
-  border-bottom: 0.55px solid color($colors, light-border);
+  border-bottom: $border-width solid color($colors, border);
 }
 
 .md {
   ion-list, ion-item-group {
 
     .item.item-divider {
-      border-top: 1px solid color($colors, light-border) !important;
+      border-top: 1px solid color($colors, border) !important;
     }
 
     ion-item-group {
@@ -406,4 +410,8 @@ ion-item-divider {
 @keyframes fadeout {
   0%{opacity:1;visibility:visible;}
   100%{opacity:0;visibility: hidden;}
+}
+
+.ios ion-nav > .ion-page > ion-content.transactionListMode.statusbar-padding:first-child .scroll-content {
+  padding-top: 0;
 }

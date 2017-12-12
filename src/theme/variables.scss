@@ -55,11 +55,13 @@ $colors: (
   tabs-selected: #088dd1,
 
   separator-md:  #f4f4f4,
+
   border:        #c8c7cc,
-  light-border:  #dedede,
 
   light-header-text: rgba(#000, .65)
 );
+
+$border-width: .55px;
 
 $text-input-ios-show-focus-highlight: false !default;
 $text-input-md-show-focus-highlight: false !default;
@@ -68,6 +70,7 @@ $text-input-md-show-focus-highlight: false !default;
 // --------------------------------------------------
 // iOS only Sass variables can go here
 $item-ios-detail-push-show: false;
+$legacy-ios-status-bar-height: 20px;
 
 
 

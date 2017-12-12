@@ -2,7 +2,7 @@
   <wex-title-with-subheader [title]="CONSTANTS.title" [subheader]="filterSubheader"></wex-title-with-subheader>
 </ion-header>
 
-<ion-content #content>
+<ion-content class="transactionListMode" #content>
   <ion-refresher (ionRefresh)="onRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
