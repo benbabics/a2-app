@@ -9,7 +9,7 @@
     <ion-list radio-group [(ngModel)]="currentItem" [ngClass]="{ 'inset-items': platform.isIos }">
       <ng-template ngFor [ngForOf]="options" let-item>
         
-        <button ion-item (tap)="currentItem = item.value">
+        <button ion-item (click)="currentItem = item.value">
           <ion-label>
             <h2>{{ item.label }}</h2>
             <p *ngIf="!!item.subtext">{{ item.subtext }}</p>
@@ -25,6 +25,6 @@
     <button [disabled]="disableSubmit" ion-button block class="button-gradient" (click)="submittedItem = currentItem">
       {{ submitButtonText }}
     </button>
-    <p *ngIf="instructionalText" class="text-instructions">{{ instructionalText }}</p>
+    <p *ngIf="instructionalText" class="text-instructions" [innerHTML]="instructionalText"></p>
   </div>
 </ion-content>

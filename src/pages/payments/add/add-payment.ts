@@ -20,6 +20,7 @@ import { NavBarController } from "../../../providers/nav-bar-controller";
 import { Reactive, StateEmitter, EventSource, OnDestroy } from "angular-rxjs-extensions";
 import { Subject, BehaviorSubject } from "rxjs";
 import { ViewDidEnter, ViewDidLeave, ViewWillEnter } from "angular-rxjs-extensions-ionic";
+import { SelectionPageController } from "../../../providers/index";
 
 export type AddPaymentNavParams = keyof {
   payment
@@ -75,6 +76,7 @@ export class AddPaymentPage extends SecurePage {
 
   constructor(
     injector: Injector,
+    selectionPageController: SelectionPageController,
     private navParams: NavParams,
     public navCtrl: NavController,
     private viewController: ViewController,
@@ -133,8 +135,27 @@ export class AddPaymentPage extends SecurePage {
 
     this.onUpdateBankAccount$
       .flatMap(() => this.payment$.asObservable().take(1))
-      .subscribe((payment) => {
-        this.navigateToSelectionPage(payment, "bankAccount");
+      .withLatestFrom(paymentService.bankAccounts$.take(1))
+      .flatMap(args => {
+        let [payment, bankAccounts] = args;
+        return selectionPageController.presentSelectionPage({
+          pageName: this.CONSTANTS.SELECTION.LABELS.bankAccount,
+          submittedItem: payment.bankAccount,
+          options: bankAccounts.map(account => ({
+            value: account,
+            label: account.details.name,
+            subtext: `...${account.details.lastFourDigits}`
+          })),
+          submitButtonText: this.CONSTANTS.SELECTION.LABELS.select,
+          equalityTest: (a, b) => a.details.id === b.details.id,
+          instructionalText: this.CONSTANTS.SELECTION.INSTRUCTIONAL_TEXT.bankAccount
+        });
+      })
+      .withLatestFrom(this.payment$)
+      .subscribe(args => {
+        const [bankAccount, payment] = args;
+        payment.bankAccount = bankAccount;
+        this.payment$.next(payment);
       });
 
     this.onUpdateDate$
