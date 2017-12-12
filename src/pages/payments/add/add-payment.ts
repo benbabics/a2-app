@@ -9,7 +9,7 @@ import { Observable } from "rxjs/Observable";
 import { SecurePage } from "../../secure-page";
 import { BankAccount, Payment, Company } from "@angular-wex/models";
 import { PaymentService } from "./../../../providers/payment-service";
-import { AddPaymentSelectionPage } from "./add-payment-selection";
+import { AmountSelectionPage } from "./amount-selection/amount-selection";
 import { UserPayment, UserPaymentAmount, Session } from "../../../models";
 import { Value } from "../../../decorators/value";
 import { AddPaymentConfirmationPage } from "./confirmation/add-payment-confirmation";
@@ -198,7 +198,7 @@ export class AddPaymentPage extends SecurePage {
     this.paymentService.amountOptions$.take(1)
       .flatMap((items) => {
         let selectedItem$ = new BehaviorSubject(payment.amount);
-        this.navCtrl.push(AddPaymentSelectionPage, { items, selectedItem$ });
+        this.navCtrl.push(AmountSelectionPage, { items, selectedItem$ });
         this.trackAnalyticsPageView(`Payment${this.existingPayment ? "Edit" : "Schedule"}`);
         return selectedItem$;
       })

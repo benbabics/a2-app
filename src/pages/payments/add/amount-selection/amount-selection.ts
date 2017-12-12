@@ -1,13 +1,13 @@
 import * as _ from "lodash";
 import { Component, Injector } from "@angular/core";
 import { NavParams, NavController } from "ionic-angular";
-import { SecurePage } from "../../secure-page";
-import { PaymentSelectionOption } from "./../../../providers/payment-service";
-import { UserPaymentAmount, UserPaymentAmountType } from "../../../models/user-payment";
-import { WexPlatform } from "../../../providers";
+import { SecurePage } from "../../../secure-page";
+import { PaymentSelectionOption } from "../../../../providers/payment-service";
+import { UserPaymentAmount, UserPaymentAmountType } from "../../../../models/user-payment";
+import { WexPlatform } from "../../../../providers";
 import { StateEmitter, Reactive, EventSource } from "angular-rxjs-extensions";
 import { Subject, Observable } from "rxjs";
-import { Value } from "../../../decorators/value";
+import { Value } from "../../../../decorators/value";
 import { ViewDidEnter, ViewWillLeave } from "angular-rxjs-extensions-ionic";
 
 export type AddPaymentSelectionNavParams = keyof {
@@ -21,11 +21,11 @@ export namespace AddPaymentSelectionNavParams {
 }
 
 @Component({
-  selector: "page-add-payment-selection",
-  templateUrl: "add-payment-selection.html"
+  selector: "page-amount-selection",
+  templateUrl: "amount-selection.html"
 })
 @Reactive()
-export class AddPaymentSelectionPage extends SecurePage {
+export class AmountSelectionPage extends SecurePage {
 
   @Value("PAGES.PAYMENTS.ADD.LABELS") private readonly PAYMENT_LABELS: any;
 
