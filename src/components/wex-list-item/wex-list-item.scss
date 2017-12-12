@@ -24,8 +24,8 @@ wex-list-item {
 
   &:not([data-active]), &[data-active=false] {
 
-    .ion-icon {
-      display: none;
+    ion-icon {
+      visibility: hidden;
     }
 
     .item, .button-effect {

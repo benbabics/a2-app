@@ -17,9 +17,9 @@ import { PaymentProvider, PaymentRequest } from "@angular-wex/api-providers";
 import { Calendar } from "../../../components/calendar/calendar";
 import { WexAlertController } from "../../../components/wex-alert-controller/wex-alert-controller";
 import { NavBarController } from "../../../providers/nav-bar-controller";
-import { Reactive, StateEmitter, EventSource } from "angular-rxjs-extensions";
+import { Reactive, StateEmitter, EventSource, OnDestroy } from "angular-rxjs-extensions";
 import { Subject, BehaviorSubject } from "rxjs";
-import { ViewDidEnter, ViewDidLeave } from "angular-rxjs-extensions-ionic";
+import { ViewDidEnter, ViewDidLeave, ViewWillEnter } from "angular-rxjs-extensions-ionic";
 
 export type AddPaymentNavParams = keyof {
   payment
@@ -47,6 +47,8 @@ export class AddPaymentPage extends SecurePage {
 
   @ViewDidEnter() viewDidEnter$: Observable<void>;
   @ViewDidLeave() viewDidLeave$: Observable<void>;
+  @ViewWillEnter() viewWillEnter$: Observable<void>;
+  @OnDestroy() onDestroy$: Observable<void>;
   @EventSource() onUpdateAmount$: Observable<any>;
   @EventSource() onUpdateBankAccount$: Observable<any>;
   @EventSource() onUpdateDate$: Observable<any>;
@@ -112,14 +114,16 @@ export class AddPaymentPage extends SecurePage {
       this.displayDueDateWarning$.next(paymentDueDate < paymentDate && hasMinimumPaymentDue);
     });
 
+    this.viewWillEnter$
+      .subscribe(() => this.navBarController.show(false));
+
+    this.onDestroy$
+      .subscribe(() => this.navBarController.show(true));
+
     this.viewDidEnter$
       .subscribe(() => {
-        this.navBarController.show(false);
         this.trackAnalyticsPageView(this.existingPayment ? "makePaymentEdit" : "makePaymentInitial");
       });
-
-    this.viewDidLeave$
-      .subscribe(() => this.navBarController.show(true));
 
     this.onUpdateAmount$
       .flatMap(() => this.payment$.asObservable().take(1))

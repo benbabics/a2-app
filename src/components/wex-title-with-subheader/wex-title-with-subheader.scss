@@ -1,4 +1,10 @@
+.status-bar-padding {
+  @extend .toolbar.statusbar-padding:first-child;
+}
+
 wex-title-with-subheader {
+  @extend .status-bar-padding;
+  
   $header-height-md: 1rem;
   $header-height-ios: .5rem;
   $margin-right-ios: 1.7rem;
@@ -18,7 +24,8 @@ wex-title-with-subheader {
     @at-root .md & {
       margin-top: $header-height-md - .1rem;
     } @at-root .ios & {
-      margin-top: $header-height-ios - .1rem;
+      margin-top: calc(#{$header-height-ios} - .1rem + #{$legacy-ios-status-bar-height});
+      margin-top: calc(#{$header-height-ios} - .1rem + constant(safe-area-inset-top));
     }
   }
   
