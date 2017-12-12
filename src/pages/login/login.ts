@@ -66,6 +66,7 @@ export class LoginPage extends Page {
   @ViewChild("titleHeadingBar") titleHeadingBar: ElementRef;
 
   @Value("STORAGE.KEYS.USERNAME") private readonly USERNAME_KEY: string;
+  @Value("STORAGE.KEYS.REMEMBER_ME") private readonly REMEMBER_ME: string;
 
   private _onKeyboardOpen = event => this.onKeyboardOpen(event);
   private _onKeyboardClose = () => this.onKeyboardClose();
@@ -195,7 +196,8 @@ export class LoginPage extends Page {
         .flatMap(() => this.sessionManager.cache.update$(Session.Field.User)) //Pre-fetch the user object for the landing page
         .finally(() => this.isLoggingIn = false)
         .subscribe((session: Session) => {
-          this.rememberUsername(this.rememberMe, this.user.username);
+          this.trackUserId(this.user.username);
+          this.rememberUsername(this.rememberMe);
 
           if (useFingerprintAuth) {
             this.trackAnalyticsEvent("loginBiometric");
@@ -205,7 +207,7 @@ export class LoginPage extends Page {
           }
 
           if (session.user.details.brand) {
-            this.setCustomDimension(2, session.user.details.brand);
+            this.setCustomDimension(this.CONSTANTS.dimensionUserBrand, session.user.details.brand);
           }
 
           //Transition to the main app
@@ -254,12 +256,12 @@ export class LoginPage extends Page {
     return _.get(this.CONSTANTS.serverErrors, errorCode, this.CONSTANTS.serverErrors.DEFAULT);
   }
 
-  private rememberUsername(shouldRemember: boolean, username?: string) {
+  private rememberUsername(shouldRemember: boolean) {
     if (shouldRemember) {
-      this.localStorageService.set(this.USERNAME_KEY, username);
+      this.localStorageService.set(this.REMEMBER_ME, true);
     }
     else {
-      this.localStorageService.remove(this.USERNAME_KEY);
+      this.localStorageService.remove(this.REMEMBER_ME);
     }
   }
 
@@ -318,7 +320,7 @@ export class LoginPage extends Page {
     }
 
     // Check the status of remember me
-    if (this.localStorageService.get(this.USERNAME_KEY)) {
+    if (this.localStorageService.get(this.REMEMBER_ME)) {
       this.user.username = this.localStorageService.get<string>(this.USERNAME_KEY);
       this.rememberMe = true;
     }
@@ -348,16 +350,22 @@ export class LoginPage extends Page {
     }, 500));
   }
 
-  private trackUserId() {
-    let userId = this.localStorageService.get<string>(this.USERNAME_KEY);
-    if (!userId) {
-      userId = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
-        let r = Math.random() * 16 | 0, v = c === "x" ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-      });
+  private trackUserId(username?: string) {
+    let userId;
+
+    // set userId from password; only exec with new username after login
+    if (username && username !== this.localStorageService.get<string>(this.USERNAME_KEY)) {
+      userId = username;
+      this.localStorageService.set(this.USERNAME_KEY, userId);
+    }
+    // get userId from storage; only exec during app start
+    else if (!username) {
+      userId = this.localStorageService.get<string>(this.USERNAME_KEY);
     }
 
-    this.setCustomDimension(1, userId);
+    if (userId) {
+      this.setCustomDimension(this.CONSTANTS.dimensionUserId, userId);
+    }
   }
 
   ionViewDidEnter() {
