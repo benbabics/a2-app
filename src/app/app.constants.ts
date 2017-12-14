@@ -18,6 +18,7 @@ export namespace ConstantsInfo {
     STORAGE: {
       ID: "FLEET_MANAGER-",
       KEYS: {
+        REMEMBER_ME: "REMEMBER_ME",
         USERNAME: "USERNAME",
         AUTH_TOKEN: "AUTH_TOKEN",
         LAST_TRANSACTION_VIEW: "LAST_TRANSACTION_VIEW"
@@ -346,6 +347,8 @@ export namespace ConstantsInfo {
             loginBiometric: ["Login", "LoginSuccessfulBiometric"],
           }
         },
+        dimensionUserId: 1,
+        dimensionUserBrand: 2,
         userName: {
           label: "Username",
           maxLength: 30
