@@ -40,6 +40,7 @@ export class UserEnrollmentFlow extends Page {
   private loadOnlineEnrollmentApp() {
     this.isLoading = false;
     let browser = this.inAppBrowser.create(this.ENROLLMENT_URL, "_blank");
+    browser.on("loadstart").subscribe(() => this.trackAnalyticsEvent("EnrollmentAvailable"));
     browser.on("loaderror").subscribe(() => this.closeOnlineEnrollmentAppWithErrorAlert(browser));
   }
 
@@ -60,5 +61,7 @@ export class UserEnrollmentFlow extends Page {
       buttons: [ConstantsInfo.Common.BUTTONS.OK]
     }).present();
     this.isLoading = false;
+
+    this.trackAnalyticsEvent("EnrollmentNotAvailable");
   }
 }
