@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>{{ pageTitle }}</ion-title>
+    <ion-title>{{ CONSTANTS.LABELS.amount }}</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -13,14 +13,9 @@
           ion-item
           (tap)="select(item)"
           [hidden]="isOtherAmount(item) && isOtherAmountSelected">
-          <ion-label *ngIf="isPaymentAmount">
+          <ion-label>
             <h2>{{ getPaymentAmountLabel(item) }}</h2>
             <p>{{ item.value | wexCurrency }}</p>
-          </ion-label>
-
-          <ion-label *ngIf="isBankAccount">
-            <h2>{{ item.details.name }}</h2>
-            <p>...{{ item.details.lastFourDigits }}</p>
           </ion-label>
 
           <ion-radio [hidden]="true" [value]="item"></ion-radio>
@@ -45,6 +40,5 @@
     <button [disabled]="!isSubmitEnabled" ion-button block class="button-gradient" (click)="onSubmit()">
       {{ CONSTANTS.LABELS.select }}
     </button>
-    <p *ngIf="instructionalText" class="text-instructions" [innerHTML]="instructionalText"></p>
   </div>
 </ion-content>
